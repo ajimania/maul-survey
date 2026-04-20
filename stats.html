@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>설문 통계 대시보드</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      background: #f4f6f0;
+      color: #333;
+      padding: 40px 20px;
+    }
+
+    .container { max-width: 700px; margin: 0 auto; }
+
+    header {
+      background: #4a7c59;
+      color: white;
+      padding: 28px 32px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 { font-size: 1.3rem; }
+    header span { font-size: 0.85rem; opacity: 0.8; }
+
+    .total-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px 32px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .total-card .number {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #4a7c59;
+      line-height: 1;
+    }
+
+    .total-card .label { color: #666; font-size: 0.95rem; }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 28px 32px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #2c2c2c;
+    }
+
+    .bar-row {
+      margin-bottom: 14px;
+    }
+
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      color: #444;
+      margin-bottom: 6px;
+    }
+
+    .bar-track {
+      background: #eef2ec;
+      border-radius: 999px;
+      height: 10px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: #4a7c59;
+      border-radius: 999px;
+      transition: width 0.8s ease;
+      width: 0%;
+    }
+
+    .bar-fill.culture { background: #7c6a4a; }
+    .bar-fill.environment { background: #4a6a7c; }
+
+    .loading {
+      text-align: center;
+      color: #aaa;
+      padding: 60px;
+      font-size: 0.95rem;
+    }
+
+    .refresh-btn {
+      background: white;
+      border: 1.5px solid #4a7c59;
+      color: #4a7c59;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .refresh-btn:hover { background: #f0f5f1; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>설문 통계 대시보드</h1>
+      <button class="refresh-btn" onclick="load()">새로고침</button>
+    </header>
+
+    <div id="content">
+      <div class="loading">데이터를 불러오는 중...</div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    const supabase = createClient(
+      'https://hncuvjrghniwihhfpata.supabase.co',
+      'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
+    );
+
+    const intentionLabels = {
+      yes_active: '적극 참여하고 싶다',
+      yes_passive: '기회가 되면 참여하고 싶다',
+      undecided: '아직 잘 모르겠다',
+      no: '참여하기 어려울 것 같다',
+    };
+
+    const fieldLabels = {
+      education: '교육',
+      environment: '환경',
+      culture: '문화',
+    };
+
+    window.load = async function() {
+      const { data, error } = await supabase.from('responses').select('*');
+
+      if (error) {
+        document.getElementById('content').innerHTML =
+          `<div class="loading">오류: ${error.message}</div>`;
+        return;
+      }
+
+      const total = data.length;
+
+      const intentionCount = {};
+      const fieldCount = { education: 0, environment: 0, culture: 0 };
+
+      data.forEach(row => {
+        intentionCount[row.intention] = (intentionCount[row.intention] || 0) + 1;
+        (row.fields || []).forEach(f => { if (fieldCount[f] !== undefined) fieldCount[f]++; });
+      });
+
+      const intentionOrder = ['yes_active', 'yes_passive', 'undecided', 'no'];
+
+      const intentionBars = intentionOrder.map(key => {
+        const count = intentionCount[key] || 0;
+        const pct = total ? Math.round(count / total * 100) : 0;
+        return `
+          <div class="bar-row">
+            <div class="bar-label"><span>${intentionLabels[key]}</span><span>${count}명 (${pct}%)</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+          </div>`;
+      }).join('');
+
+      const fieldBars = Object.entries(fieldCount).map(([key, count]) => {
+        const pct = total ? Math.round(count / total * 100) : 0;
+        return `
+          <div class="bar-row">
+            <div class="bar-label"><span>${fieldLabels[key]}</span><span>${count}명 (${pct}%)</span></div>
+            <div class="bar-track"><div class="bar-fill ${key}" style="width:${pct}%"></div></div>
+          </div>`;
+      }).join('');
+
+      document.getElementById('content').innerHTML = `
+        <div class="total-card">
+          <div class="number">${total}</div>
+          <div class="label">총 응답 수</div>
+        </div>
+        <div class="card">
+          <h2>Q1. 마을공동체 활동 참여 의향</h2>
+          ${intentionBars}
+        </div>
+        <div class="card">
+          <h2>Q2. 관심 활동 분야 (복수 선택)</h2>
+          ${fieldBars}
+        </div>
+      `;
+    };
+
+    load();
+  </script>
+</body>
+</html>

@@ -211,9 +211,22 @@
     </div>
   </div>
 
-  <script>
-    document.getElementById('surveyForm').addEventListener('submit', function(e) {
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    const supabase = createClient(
+      'https://hncuvjrghniwihhfpata.supabase.co',
+      'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
+    );
+
+    document.getElementById('surveyForm').addEventListener('submit', async function(e) {
       e.preventDefault();
+
+      const intention = document.querySelector('input[name="intention"]:checked')?.value;
+      const fields = [...document.querySelectorAll('input[name="field"]:checked')].map(el => el.value);
+
+      await supabase.from('responses').insert({ intention, fields });
+
       this.style.display = 'none';
       document.getElementById('thankYou').style.display = 'block';
     });
