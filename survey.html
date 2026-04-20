@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마을공동체 참여 의사 설문조사</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      background: #f4f6f0;
+      color: #333;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: #4a7c59;
+      color: white;
+      padding: 36px 32px;
+      border-radius: 12px 12px 0 0;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 0.9rem;
+      opacity: 0.85;
+      line-height: 1.6;
+    }
+
+    .form-body {
+      background: white;
+      padding: 32px;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    .section {
+      margin-bottom: 36px;
+    }
+
+    .section-label {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #2c2c2c;
+      margin-bottom: 6px;
+    }
+
+    .section-desc {
+      font-size: 0.82rem;
+      color: #888;
+      margin-bottom: 16px;
+    }
+
+    .radio-group, .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .radio-group label, .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      font-size: 0.95rem;
+    }
+
+    .radio-group label:hover, .checkbox-group label:hover {
+      border-color: #4a7c59;
+      background: #f0f5f1;
+    }
+
+    input[type="radio"]:checked + span,
+    input[type="checkbox"]:checked + span {
+      color: #4a7c59;
+      font-weight: 600;
+    }
+
+    input[type="radio"], input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #4a7c59;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1.5px solid #f0f0f0;
+      margin: 32px 0;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: #4a7c59;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .submit-btn:hover {
+      background: #3a6348;
+    }
+
+    .thank-you {
+      display: none;
+      text-align: center;
+      padding: 48px 32px;
+      background: white;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    .thank-you .icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+
+    .thank-you h2 {
+      font-size: 1.3rem;
+      color: #4a7c59;
+      margin-bottom: 8px;
+    }
+
+    .thank-you p {
+      color: #666;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>마을공동체 참여 의사 설문조사</h1>
+      <p>우리 마을을 함께 만들어가기 위한 설문입니다.<br>소중한 의견을 남겨주세요.</p>
+    </header>
+
+    <form class="form-body" id="surveyForm">
+
+      <!-- Q1 -->
+      <div class="section">
+        <div class="section-label">Q1. 마을공동체 활동에 참여할 의향이 있으신가요?</div>
+        <div class="section-desc">하나만 선택해주세요.</div>
+        <div class="radio-group">
+          <label>
+            <input type="radio" name="intention" value="yes_active" required>
+            <span>적극 참여하고 싶다</span>
+          </label>
+          <label>
+            <input type="radio" name="intention" value="yes_passive">
+            <span>기회가 되면 참여하고 싶다</span>
+          </label>
+          <label>
+            <input type="radio" name="intention" value="undecided">
+            <span>아직 잘 모르겠다</span>
+          </label>
+          <label>
+            <input type="radio" name="intention" value="no">
+            <span>참여하기 어려울 것 같다</span>
+          </label>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Q2 -->
+      <div class="section">
+        <div class="section-label">Q2. 관심 있는 활동 분야는 무엇인가요?</div>
+        <div class="section-desc">해당하는 것을 모두 선택해주세요.</div>
+        <div class="checkbox-group">
+          <label>
+            <input type="checkbox" name="field" value="education">
+            <span>교육 — 아이들 교육, 부모 교육, 마을 배움 모임 등</span>
+          </label>
+          <label>
+            <input type="checkbox" name="field" value="environment">
+            <span>환경 — 환경 정화, 텃밭, 재활용·업사이클링 등</span>
+          </label>
+          <label>
+            <input type="checkbox" name="field" value="culture">
+            <span>문화 — 마을 축제, 공연, 전통문화 행사 등</span>
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">설문 제출하기</button>
+    </form>
+
+    <div class="thank-you" id="thankYou">
+      <div class="icon">🌿</div>
+      <h2>참여해주셔서 감사합니다!</h2>
+      <p>소중한 의견이 더 좋은 마을을 만드는 데 쓰이겠습니다.</p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('surveyForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      this.style.display = 'none';
+      document.getElementById('thankYou').style.display = 'block';
+    });
+  </script>
+</body>
+</html>
