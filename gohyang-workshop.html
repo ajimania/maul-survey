@@ -708,12 +708,24 @@ function renderAdmin() {
 }
 
 async function geocode(hometown) {
-  try {
-    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(hometown)}&format=json&limit=1&countrycodes=kr`;
-    const res  = await fetch(url, { headers: { 'Accept-Language': 'ko' } });
-    const data = await res.json();
-    if (data.length > 0) return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
-  } catch(_) {}
+  const nmt = async (q) => {
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1&countrycodes=kr`,
+        { headers: { 'Accept-Language': 'ko' } }
+      );
+      const d = await res.json();
+      if (d.length > 0) return { lat: parseFloat(d[0].lat), lng: parseFloat(d[0].lon) };
+    } catch(_) {}
+    return null;
+  };
+  let r = await nmt(hometown);
+  if (r) return r;
+  const parts = hometown.trim().split(/\s+/);
+  if (parts.length > 1) {
+    r = await nmt(parts[parts.length - 1]);
+    if (r) return r;
+  }
   return { lat: null, lng: null };
 }
 
