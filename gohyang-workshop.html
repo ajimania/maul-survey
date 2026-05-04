@@ -375,6 +375,7 @@
         <input type="text" id="ap-hometown" placeholder="고향 이름"/>
         <button class="a-add" onclick="addParticipant()">+ 추가</button>
       </div>
+      <button class="a-add" style="margin-top:8px;width:100%;background:#5a7a5a" onclick="fixMissingCoords()">📍 좌표 누락 참가자 지도 복구</button>
     </div>
 
     <!-- 질문카드 -->
@@ -704,6 +705,35 @@ function renderAdmin() {
   // 등록 링크
   const regUrl = location.href.replace('gohyang-workshop.html','gohyang-register.html');
   document.getElementById('reg-link-url').textContent = regUrl;
+}
+
+async function geocode(hometown) {
+  try {
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(hometown)}&format=json&limit=1&countrycodes=kr`;
+    const res  = await fetch(url, { headers: { 'Accept-Language': 'ko' } });
+    const data = await res.json();
+    if (data.length > 0) return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+  } catch(_) {}
+  return { lat: null, lng: null };
+}
+
+async function fixMissingCoords() {
+  const missing = participants.filter(p => !p.lat && p.hometown_name);
+  if (missing.length === 0) { alert('좌표 누락 참가자 없음'); return; }
+  let fixed = 0;
+  for (const p of missing) {
+    const { lat, lng } = await geocode(p.hometown_name);
+    if (lat && lng) {
+      await sb.from('gohyang_participants').update({ lat, lng }).eq('id', p.id);
+      p.lat = lat; p.lng = lng;
+      addMarker(p);
+      fixed++;
+    }
+    await new Promise(r => setTimeout(r, 1100)); // Nominatim rate limit
+  }
+  alert(`${fixed}/${missing.length}명 복구 완료`);
+  await refreshAll();
+  renderAdmin();
 }
 
 async function addParticipant() {

@@ -483,10 +483,8 @@ function compress(file) {
 // ── 지오코딩 (Nominatim) ───────────────────────────────
 async function geocode(hometown) {
   try {
-    const res  = await fetch(
-      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(hometown + ' 대한민국')}&format=json&limit=1`,
-      { headers: { 'Accept-Language': 'ko' } }
-    );
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(hometown)}&format=json&limit=1&countrycodes=kr`;
+    const res  = await fetch(url, { headers: { 'Accept-Language': 'ko' } });
     const data = await res.json();
     if (data.length > 0) return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
   } catch(_) {}
