@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>내 고향 자랑대회 | 도시쥐정거장 실험 프로젝트</title>
+  <style>
+    :root {
+      --cream: #faf6ef;
+      --brown: #3d2b1f;
+      --orange: #d4622a;
+      --orange-light: #e8855a;
+      --tan: #c9a97a;
+      --tan-light: #e8d5b7;
+      --green: #4a6741;
+      --green-light: #d4e6d0;
+      --text: #2c1f14;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: var(--brown);
+      color: var(--cream);
+      padding: 80px 24px 64px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 60%, rgba(212,98,42,0.25) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 30%, rgba(74,103,65,0.2) 0%, transparent 50%);
+    }
+
+    .hero-badge {
+      position: relative;
+      display: inline-block;
+      background: var(--orange);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      position: relative;
+      font-size: clamp(36px, 8vw, 72px);
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--tan);
+    }
+
+    .hero-subtitle {
+      position: relative;
+      font-size: clamp(15px, 2.5vw, 18px);
+      color: rgba(250,246,239,0.8);
+      max-width: 560px;
+      margin: 0 auto 36px;
+    }
+
+    .hero-meta {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .hero-meta span {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 20px;
+      padding: 7px 16px;
+      font-size: 14px;
+    }
+
+    /* ─── SECTION BASE ─── */
+    section { padding: 64px 24px; }
+    .container { max-width: 720px; margin: 0 auto; }
+
+    .section-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: clamp(24px, 4vw, 32px);
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 20px;
+    }
+
+    /* ─── INTRO ─── */
+    .intro { background: #fff; }
+
+    .intro-text {
+      font-size: 17px;
+      color: #4a3728;
+      border-left: 3px solid var(--orange);
+      padding-left: 20px;
+      line-height: 1.9;
+    }
+
+    /* ─── FOR WHOM ─── */
+    .for-whom { background: var(--green-light); }
+
+    .whom-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .whom-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-size: 15px;
+    }
+
+    .whom-item::before {
+      content: '✓';
+      color: var(--green);
+      font-weight: 900;
+      font-size: 16px;
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+
+    /* ─── TIMETABLE ─── */
+    .timetable { background: var(--cream); }
+
+    .timeline {
+      display: grid;
+      gap: 0;
+      margin-top: 8px;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 84px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--tan-light);
+    }
+
+    .tl-item {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 20px;
+      padding: 20px 0;
+      position: relative;
+    }
+
+    .tl-item::after {
+      content: '';
+      position: absolute;
+      left: 79px;
+      top: 28px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--orange);
+      border: 2px solid var(--cream);
+    }
+
+    .tl-time {
+      text-align: right;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--orange);
+      padding-top: 2px;
+      line-height: 1.4;
+    }
+
+    .tl-content {
+      padding-left: 20px;
+    }
+
+    .tl-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--tan);
+      margin-bottom: 3px;
+    }
+
+    .tl-title {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+
+    .tl-desc {
+      font-size: 14px;
+      color: #5a4535;
+      line-height: 1.7;
+    }
+
+    /* ─── WHAT WE DO ─── */
+    .activities { background: #fff; }
+
+    .act-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .act-card {
+      background: var(--cream);
+      border-radius: 16px;
+      padding: 24px 20px;
+      border: 1px solid var(--tan-light);
+    }
+
+    .act-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .act-card h3 {
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .act-card p {
+      font-size: 13px;
+      color: #5a4535;
+      line-height: 1.7;
+    }
+
+    /* ─── BRING ─── */
+    .bring { background: var(--tan-light); }
+
+    .bring-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .bring-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .bring-card .emoji { font-size: 24px; margin-bottom: 8px; }
+    .bring-card strong { display: block; font-size: 14px; margin-bottom: 6px; }
+    .bring-card p { font-size: 13px; color: #5a4535; line-height: 1.6; }
+
+    /* ─── TICKET ─── */
+    .ticket-section { background: var(--brown); color: var(--cream); }
+
+    .ticket {
+      border: 2px dashed rgba(250,246,239,0.3);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      position: relative;
+    }
+
+    .ticket-price {
+      font-size: clamp(44px, 8vw, 64px);
+      font-weight: 900;
+      color: var(--tan);
+      line-height: 1;
+      margin: 12px 0 6px;
+    }
+
+    .ticket-price span {
+      font-size: 0.45em;
+      font-weight: 400;
+      color: rgba(250,246,239,0.6);
+      vertical-align: super;
+    }
+
+    .ticket-includes {
+      margin: 20px auto;
+      max-width: 400px;
+    }
+
+    .ticket-includes li {
+      list-style: none;
+      font-size: 14px;
+      color: rgba(250,246,239,0.8);
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .ticket-includes li::before {
+      content: '✦ ';
+      color: var(--tan);
+    }
+
+    .ticket-info {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .ticket-info-item {
+      background: rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .ticket-info-item strong {
+      display: block;
+      color: var(--tan);
+      font-size: 16px;
+      margin-bottom: 2px;
+    }
+
+    /* ─── CTA ─── */
+    .cta-section {
+      background: var(--orange);
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .cta-section p {
+      color: rgba(255,255,255,0.85);
+      font-size: 15px;
+      margin-bottom: 28px;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #fff;
+      color: var(--orange);
+      font-weight: 800;
+      font-size: 16px;
+      padding: 16px 40px;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.2);
+    }
+
+    /* ─── HOST ─── */
+    .host-section { background: var(--cream); }
+
+    .host-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px;
+      border: 1px solid var(--tan-light);
+    }
+
+    .host-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .host-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--brown);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .host-name { font-size: 18px; font-weight: 800; }
+    .host-role { font-size: 13px; color: var(--orange); }
+    .host-desc { font-size: 14px; color: #4a3728; line-height: 1.8; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--brown);
+      color: rgba(250,246,239,0.6);
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 13px;
+    }
+
+    footer a {
+      color: var(--tan);
+      text-decoration: none;
+    }
+
+    @media (max-width: 480px) {
+      .bring-cards { grid-template-columns: 1fr; }
+      .timeline::before { left: 72px; }
+      .tl-item { grid-template-columns: 68px 1fr; }
+      .tl-item::after { left: 67px; }
+      .ticket { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-badge">도시쥐정거장 실험 프로젝트</div>
+  <h1>내 <em>고향</em><br>자랑대회</h1>
+  <p class="hero-subtitle">
+    누군가에겐 떠나고 싶었던 곳, 누군가에겐 돌아가고 싶은 곳.<br>
+    내가 머물렀던 기억이 머무는 곳, 그곳에 대해 이야기해요.
+  </p>
+  <div class="hero-meta">
+    <span>📅 2026년 5월 24일 (일)</span>
+    <span>🕖 19:00 — 21:00</span>
+    <span>👥 최대 6명</span>
+  </div>
+</header>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="container">
+    <p class="section-tag">어떤 모임인가요</p>
+    <h2>고향의 기억을<br>함께 꺼내 봐요</h2>
+    <p class="intro-text">
+      나에게 고향 같았던 곳이라면 어디라도 좋아요.<br>
+      장소에 깃든 기쁨, 위로, 만남, 맛있는 것과<br>
+      다시 보고 싶은 풍경에 대해 이야기해요.<br><br>
+      지역 이야기를 나누다 보면 결국 <strong>'나라는 사람이 어떻게 구성되었는가'</strong>에 대한
+      이야기를 하게 됩니다. 내밀한 이야기인데, 고향 이야기를 곁들이면 더 쉽게 말을 꺼낼 수 있어요.
+    </p>
+  </div>
+</section>
+
+<!-- FOR WHOM -->
+<section class="for-whom">
+  <div class="container">
+    <p class="section-tag">이런 분과 함께하고 싶어요</p>
+    <h2>당신을 기다립니다</h2>
+    <div class="whom-grid">
+      <div class="whom-item">고향에 대한 기억을 가지고 도시에서 살아가는 사람</div>
+      <div class="whom-item">로컬에 관심 갖고 지역 이야기 수다를 떨고 싶은 사람</div>
+      <div class="whom-item">다른 사람의 고향 기억은 나와 어떻게 다를까 궁금한 사람</div>
+      <div class="whom-item">서울에서 '애향심'을 가지고 살아가는 성북과 주변 지역 사람</div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMETABLE -->
+<section class="timetable">
+  <div class="container">
+    <p class="section-tag">타임테이블</p>
+    <h2>이렇게 진행해요</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-time">18:30</div>
+        <div class="tl-content">
+          <div class="tl-label">환대</div>
+          <div class="tl-title">참여 접수 & 공간 안내</div>
+          <div class="tl-desc">오시는 분들을 맞이하고 자리를 안내해 드려요.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">19:00</div>
+        <div class="tl-content">
+          <div class="tl-label">오프닝</div>
+          <div class="tl-title">프로그램 취지 & 운영 안내</div>
+          <div class="tl-desc">오늘의 모임이 어떻게 진행되는지 소개합니다.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">19:10</div>
+        <div class="tl-content">
+          <div class="tl-label">1라운드 · 50분</div>
+          <div class="tl-title">나의 살던 고향은</div>
+          <div class="tl-desc">
+            전국 지도를 활용해 내 고향 지점들을 표시하고,
+            질문 카드를 통해 필수 질문과 선택 질문 하나씩을 이야기합니다.
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">20:00</div>
+        <div class="tl-content">
+          <div class="tl-label">2라운드 · 40분</div>
+          <div class="tl-title">내 고향 자랑대회</div>
+          <div class="tl-desc">
+            페차쿠차 스타일로 사전에 준비한 3장의 슬라이드로
+            고향의 음식, 장소, 사람 등을 자랑해요.
+            자랑한 내용을 스티커로 만들어 지도에 붙입니다.
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">20:40</div>
+        <div class="tl-content">
+          <div class="tl-label">마무리 · 20분</div>
+          <div class="tl-title">로컬 푸드와 대화</div>
+          <div class="tl-desc">
+            자랑에 나온 지역 음식을 함께 나누고,
+            간단한 다과와 함께 오늘의 이야기를 소소하게 마무리합니다.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACTIVITIES -->
+<section class="activities">
+  <div class="container">
+    <p class="section-tag">무엇을 해볼까요</p>
+    <h2>오늘 함께할 것들</h2>
+    <div class="act-grid">
+      <div class="act-card">
+        <div class="act-icon">🗺️</div>
+        <h3>지도와 질문카드</h3>
+        <p>전국 지도 위에 내 고향을 표시하고, 질문 카드로 이야기를 꺼내요.</p>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">📸</div>
+        <h3>3장의 슬라이드</h3>
+        <p>고향의 음식·장소·사람을 담은 사진 3장으로 나만의 자랑을 펼쳐요.</p>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">🍱</div>
+        <h3>로컬 푸드 나눔</h3>
+        <p>내 고향의 맛을 가져와 함께 나누며 대화를 이어가요.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRING -->
+<section class="bring">
+  <div class="container">
+    <p class="section-tag">참가자 준비물</p>
+    <h2>이것만 준비해 오세요</h2>
+    <div class="bring-cards">
+      <div class="bring-card">
+        <div class="emoji">📷</div>
+        <strong>고향 자랑 사진 3장</strong>
+        <p>음식, 장소, 사람 — 내 고향의 자랑거리를 담은 사진 3장을 PPT로 준비해 오세요.</p>
+      </div>
+      <div class="bring-card">
+        <div class="emoji">🧡</div>
+        <strong>고향 음식 (선택)</strong>
+        <p>가볍게 나누고 싶은 지역 음식이 있다면 가져와도 좋아요. 없어도 괜찮아요!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKET -->
+<section class="ticket-section">
+  <div class="container">
+    <p class="section-tag" style="color: var(--tan);">참가비</p>
+    <div class="ticket">
+      <p style="font-size: 14px; color: rgba(250,246,239,0.6);">참가비</p>
+      <div class="ticket-price"><span>₩</span>19,999</div>
+      <ul class="ticket-includes">
+        <li>음료 포함</li>
+        <li>로컬 다과 포함 (호스트 준비)</li>
+        <li>워크샵 자료 (질문 카드, 지도 등)</li>
+      </ul>
+      <div class="ticket-info">
+        <div class="ticket-info-item">
+          <strong>최소 1명</strong>
+          취소 없이 진행
+        </div>
+        <div class="ticket-info-item">
+          <strong>최대 6명</strong>
+          소규모 모임
+        </div>
+        <div class="ticket-info-item">
+          <strong>2시간</strong>
+          (30분 연장 가능)
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2>함께 이야기 나눠요</h2>
+    <p>2026년 5월 24일 (일) 오후 7시, 성북에서 만나요.</p>
+    <a href="mailto:cityg.stop@gmail.com" class="btn">참가 신청하기</a>
+  </div>
+</section>
+
+<!-- HOST -->
+<section class="host-section">
+  <div class="container">
+    <p class="section-tag">호스트 소개</p>
+    <h2>함께하는 사람들</h2>
+    <div class="host-card">
+      <div class="host-header">
+        <div class="host-avatar">🐭</div>
+        <div>
+          <div class="host-name">도시쥐정거장 실험 프로젝트</div>
+          <div class="host-role">로컬 · 문화 기획자</div>
+        </div>
+      </div>
+      <p class="host-desc">
+        도시살이와 지역살이를 주제로 사람들이 모여 이야기를 나누는 실험적인 커뮤니티 프로젝트입니다.
+        서울 성북을 기반으로 도시에서 고향을 찾아가는 사람들의 이야기를 모읍니다.<br><br>
+        문의: <a href="mailto:cityg.stop@gmail.com" style="color: var(--orange);">cityg.stop@gmail.com</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 도시쥐정거장 실험 프로젝트 · <a href="mailto:cityg.stop@gmail.com">cityg.stop@gmail.com</a></p>
+  <p style="margin-top: 8px; font-size: 12px;">성북, 서울 | 팝업 운영: 2026.5.4 — 5.28</p>
+</footer>
+
+</body>
+</html>

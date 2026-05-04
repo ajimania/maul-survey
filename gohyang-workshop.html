@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>내 고향 자랑대회 | 워크샵</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    :root {
+      --bg: #1c1410;
+      --surface: #2b1f18;
+      --surface2: #3a2920;
+      --orange: #d4622a;
+      --orange2: #e8855a;
+      --tan: #c9a97a;
+      --cream: #f5ede0;
+      --text: #f0e4d4;
+      --muted: rgba(240,228,212,.45);
+      --border: rgba(255,255,255,.07);
+      --green: #5d9e56;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ═══ 상단 내비 ═══ */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      height: 50px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .nav-logo {
+      font-size: 13px; font-weight: 900; color: var(--tan);
+      margin-right: 12px; white-space: nowrap; letter-spacing: -.01em;
+    }
+    .nav-tabs { display: flex; gap: 3px; flex: 1; }
+    .nav-tab {
+      padding: 7px 14px;
+      background: none; border: none;
+      color: var(--muted); font-size: 13px; font-weight: 600;
+      cursor: pointer; border-radius: 7px;
+      transition: all .15s; font-family: inherit;
+    }
+    .nav-tab:hover { background: rgba(255,255,255,.06); color: var(--text); }
+    .nav-tab.on { background: var(--orange); color: #fff; }
+    .nav-count {
+      font-size: 12px; color: var(--muted); white-space: nowrap;
+      padding: 5px 12px; background: var(--surface2);
+      border-radius: 20px; cursor: pointer;
+    }
+    .nav-count b { color: var(--tan); }
+
+    /* ═══ 패널 공통 ═══ */
+    .panel { display: none; flex: 1; overflow: hidden; min-height: 0; }
+    .panel.on { display: flex; flex-direction: column; }
+
+    /* ═══ [탭1] 지도 ═══ */
+    #p-map { position: relative; }
+    #main-map { flex: 1; }
+
+    .map-controls {
+      position: absolute; top: 12px; right: 12px; z-index: 1000;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .map-ctrl-btn {
+      background: rgba(28,20,16,.88); backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      color: var(--text); font-size: 12px;
+      padding: 7px 13px; border-radius: 7px;
+      cursor: pointer; font-family: inherit;
+    }
+    .map-ctrl-btn:hover { background: var(--orange); border-color: var(--orange); }
+
+    /* 참가자 상세 슬라이드 패널 */
+    .detail-panel {
+      position: absolute; top: 0; right: 0; bottom: 0; width: 300px;
+      background: var(--surface); border-left: 1px solid var(--border);
+      z-index: 900; overflow-y: auto;
+      transform: translateX(100%); transition: transform .25s ease;
+      padding: 16px;
+    }
+    .detail-panel.open { transform: translateX(0); }
+    .dp-close {
+      float: right; background: none; border: none;
+      color: var(--muted); font-size: 18px; cursor: pointer; padding: 0;
+    }
+    .dp-name { font-size: 20px; font-weight: 900; margin: 2px 0 3px; }
+    .dp-hometown { font-size: 13px; color: var(--tan); margin-bottom: 12px; }
+    .dp-story { font-size: 13px; color: rgba(240,228,212,.7); line-height: 1.85; margin-bottom: 14px; }
+    .dp-photos { display: flex; flex-direction: column; gap: 10px; }
+    .dp-photo { border-radius: 8px; overflow: hidden; background: var(--surface2); }
+    .dp-photo img { width: 100%; max-height: 150px; object-fit: cover; display: block; }
+    .dp-photo-cap { font-size: 11px; color: var(--muted); padding: 6px 10px; }
+
+    /* ═══ [탭2] 질문카드 ═══ */
+    #p-cards {
+      align-items: center; justify-content: center;
+      padding: 24px 20px; gap: 20px;
+    }
+    .card-wrap {
+      display: flex; align-items: center; justify-content: center;
+      flex: 1; width: 100%;
+    }
+    .q-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 22px; padding: 44px 36px;
+      max-width: 580px; width: 100%; text-align: center;
+      box-shadow: 0 24px 60px rgba(0,0,0,.5);
+    }
+    .q-badge {
+      display: inline-block; padding: 4px 14px;
+      border-radius: 20px; font-size: 11px; font-weight: 700;
+      letter-spacing: .1em; margin-bottom: 22px;
+    }
+    .q-badge.required { background: rgba(212,98,42,.2); color: var(--orange); border: 1px solid rgba(212,98,42,.35); }
+    .q-badge.optional { background: rgba(93,158,86,.18); color: #7dce76; border: 1px solid rgba(93,158,86,.3); }
+    .q-text {
+      font-size: clamp(17px, 2.8vw, 24px); font-weight: 800;
+      line-height: 1.6; color: var(--cream); margin-bottom: 28px;
+    }
+    .q-counter { font-size: 12px; color: var(--muted); }
+
+    .card-controls { display: flex; gap: 10px; align-items: center; }
+    .c-btn {
+      padding: 12px 24px; border: none; border-radius: 10px;
+      font-size: 14px; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+      transition: opacity .15s, transform .1s;
+    }
+    .c-btn:active { transform: scale(.97); }
+    .c-btn-primary { background: var(--orange); color: #fff; }
+    .c-btn-ghost { background: rgba(255,255,255,.07); color: var(--text); }
+
+    .used-area { max-width: 580px; width: 100%; }
+    .used-label { font-size: 11px; color: var(--muted); margin-bottom: 7px; }
+    .used-list { display: flex; flex-wrap: wrap; gap: 5px; }
+    .used-chip {
+      background: rgba(255,255,255,.05); border: 1px solid var(--border);
+      border-radius: 5px; padding: 3px 9px;
+      font-size: 11px; color: var(--muted);
+    }
+
+    /* ═══ [탭3] 자랑대회 ═══ */
+    #p-gallery { padding: 16px 20px; gap: 14px; }
+
+    .gallery-selector {
+      display: flex; gap: 7px; flex-wrap: wrap; flex-shrink: 0;
+    }
+    .sel-btn {
+      padding: 7px 16px; border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: none; color: var(--muted);
+      font-size: 13px; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: all .15s;
+    }
+    .sel-btn:hover { border-color: var(--tan); color: var(--tan); }
+    .sel-btn.on { background: var(--orange); border-color: var(--orange); color: #fff; }
+
+    .gallery-stage {
+      flex: 1; display: flex; align-items: center;
+      justify-content: center; gap: 16px; min-height: 0;
+    }
+    .gallery-main {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; gap: 12px; min-height: 0;
+    }
+    .g-presenter { text-align: center; }
+    .g-pname { font-size: 22px; font-weight: 900; }
+    .g-phometown { font-size: 13px; color: var(--tan); margin-top: 3px; }
+    .g-dots { display: flex; gap: 6px; justify-content: center; margin-top: 10px; }
+    .g-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,.18); transition: background .2s;
+    }
+    .g-dot.on { background: var(--orange); }
+    .g-photo-frame {
+      width: 100%; max-width: 640px;
+      background: var(--surface); border-radius: 14px;
+      overflow: hidden; border: 1px solid var(--border);
+    }
+    .g-photo-frame img {
+      width: 100%; max-height: 52vh; object-fit: contain; display: block;
+    }
+    .g-caption {
+      padding: 10px 16px; font-size: 13px;
+      color: var(--muted); text-align: center; min-height: 36px;
+    }
+    .g-arrow {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: rgba(255,255,255,.08); border: none;
+      color: var(--text); font-size: 22px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s; flex-shrink: 0;
+    }
+    .g-arrow:hover { background: var(--orange); }
+    .g-arrow:disabled { opacity: .2; cursor: default; }
+    .gallery-empty { color: var(--muted); font-size: 14px; }
+
+    /* ═══ [탭4] 관리 ═══ */
+    #p-admin { overflow-y: auto; padding: 20px; }
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px; max-width: 900px;
+    }
+    @media (max-width: 650px) { .admin-grid { grid-template-columns: 1fr; } }
+
+    .a-section {
+      background: var(--surface); border-radius: 14px;
+      padding: 18px; border: 1px solid var(--border);
+    }
+    .a-section h3 {
+      font-size: 11px; font-weight: 700; color: var(--tan);
+      letter-spacing: .12em; text-transform: uppercase; margin-bottom: 14px;
+    }
+    .a-list {
+      display: flex; flex-direction: column; gap: 6px;
+      max-height: 280px; overflow-y: auto; margin-bottom: 14px;
+    }
+    .a-item {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.04); border-radius: 7px;
+      padding: 9px 11px; font-size: 13px;
+    }
+    .a-item-info { flex: 1; min-width: 0; }
+    .a-item-name { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .a-item-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+    .a-del {
+      background: none; border: 1px solid rgba(255,100,100,.3);
+      color: rgba(255,120,120,.7); border-radius: 5px;
+      padding: 3px 8px; font-size: 11px; cursor: pointer; flex-shrink: 0;
+    }
+    .a-del:hover { background: rgba(255,100,100,.12); }
+
+    .a-form { display: flex; flex-direction: column; gap: 7px; }
+    .a-form input, .a-form select, .a-form textarea {
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+      border-radius: 7px; padding: 8px 11px;
+      color: var(--text); font-size: 13px; font-family: inherit;
+    }
+    .a-form input::placeholder, .a-form textarea::placeholder { color: var(--muted); }
+    .a-form input:focus, .a-form select:focus, .a-form textarea:focus {
+      outline: none; border-color: var(--orange);
+    }
+    .a-form select option { background: #1c1410; }
+    .a-form textarea { resize: vertical; min-height: 60px; }
+    .a-add {
+      background: var(--orange); border: none; color: #fff;
+      border-radius: 7px; padding: 9px; font-size: 13px;
+      font-weight: 700; cursor: pointer; font-family: inherit;
+    }
+
+    .db-section {
+      background: var(--surface); border-radius: 14px;
+      padding: 18px; border: 1px solid var(--border);
+      grid-column: 1 / -1;
+    }
+    .db-section h3 {
+      font-size: 11px; font-weight: 700; color: var(--tan);
+      letter-spacing: .12em; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .db-section pre {
+      background: rgba(0,0,0,.35); border-radius: 8px;
+      padding: 14px; font-size: 11.5px; color: #8fcf8a;
+      overflow-x: auto; line-height: 1.7;
+    }
+    .db-status { font-size: 12px; color: var(--muted); margin-top: 10px; }
+    .ok  { color: var(--green); }
+    .err { color: #ff8080; }
+
+    /* 링크 정보 */
+    .reg-link {
+      background: var(--surface); border-radius: 14px;
+      padding: 18px; border: 1px solid var(--border);
+      grid-column: 1 / -1;
+    }
+    .reg-link h3 {
+      font-size: 11px; font-weight: 700; color: var(--tan);
+      letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px;
+    }
+    .link-url {
+      background: rgba(0,0,0,.3); border-radius: 7px;
+      padding: 10px 14px; font-size: 13px; color: var(--orange2);
+      word-break: break-all; margin-bottom: 8px;
+      cursor: pointer; border: 1px solid var(--border);
+    }
+    .link-note { font-size: 12px; color: var(--muted); }
+
+    /* 공통 스크롤바 */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 3px; }
+
+    .leaflet-control-attribution { font-size: 9px !important; opacity: .4; }
+  </style>
+</head>
+<body>
+
+<!-- 상단 내비 -->
+<nav class="nav">
+  <div class="nav-logo">🐭 고향 자랑대회</div>
+  <div class="nav-tabs">
+    <button class="nav-tab on"  onclick="switchTab('map',   this)">🗺️ 지도</button>
+    <button class="nav-tab"     onclick="switchTab('cards', this)">🃏 질문카드</button>
+    <button class="nav-tab"     onclick="switchTab('gallery',this)">📸 자랑대회</button>
+    <button class="nav-tab"     onclick="switchTab('admin', this)">⚙️ 관리</button>
+  </div>
+  <div class="nav-count" onclick="refreshAll()" title="클릭하여 새로고침">
+    참가자 <b id="cnt">0</b>명
+  </div>
+</nav>
+
+<!-- ── 탭1: 지도 ───────────────────────────────── -->
+<div class="panel on" id="p-map">
+  <div id="main-map"></div>
+  <div class="map-controls">
+    <button class="map-ctrl-btn" onclick="fitKorea()">🇰🇷 전체 보기</button>
+    <button class="map-ctrl-btn" onclick="refreshAll()">↻ 새로고침</button>
+  </div>
+  <div class="detail-panel" id="detail-panel">
+    <button class="dp-close" onclick="closeDetail()">✕</button>
+    <div id="dp-body"></div>
+  </div>
+</div>
+
+<!-- ── 탭2: 질문카드 ─────────────────────────── -->
+<div class="panel" id="p-cards">
+  <div class="card-wrap">
+    <div class="q-card">
+      <div class="q-badge required" id="q-badge">필수</div>
+      <div class="q-text" id="q-text">카드를 불러오는 중…</div>
+      <div class="q-counter" id="q-counter">0 / 0</div>
+    </div>
+  </div>
+  <div class="card-controls">
+    <button class="c-btn c-btn-ghost"    onclick="prevCard()">← 이전</button>
+    <button class="c-btn c-btn-primary"  onclick="nextCard()">다음 카드 →</button>
+    <button class="c-btn c-btn-ghost"    onclick="shuffleCards()">🔀 섞기</button>
+  </div>
+  <div class="used-area" id="used-area"></div>
+</div>
+
+<!-- ── 탭3: 자랑대회 ─────────────────────────── -->
+<div class="panel" id="p-gallery">
+  <div class="gallery-selector" id="g-selector">
+    <span style="color:var(--muted);font-size:13px">참가자를 선택하세요</span>
+  </div>
+  <div class="gallery-stage" id="g-stage">
+    <div class="gallery-empty">참가자를 선택하면 사진이 표시됩니다</div>
+  </div>
+</div>
+
+<!-- ── 탭4: 관리 ──────────────────────────────── -->
+<div class="panel" id="p-admin">
+  <div class="admin-grid">
+
+    <!-- 참가자 -->
+    <div class="a-section">
+      <h3>👥 참가자</h3>
+      <div class="a-list" id="a-participants"></div>
+      <div class="a-form">
+        <input type="text" id="ap-name"     placeholder="이름"/>
+        <input type="text" id="ap-hometown" placeholder="고향 이름"/>
+        <button class="a-add" onclick="addParticipant()">+ 추가</button>
+      </div>
+    </div>
+
+    <!-- 질문카드 -->
+    <div class="a-section">
+      <h3>🃏 질문카드</h3>
+      <div class="a-list" id="a-cards"></div>
+      <div class="a-form">
+        <textarea id="ac-q" placeholder="질문 내용" rows="2"></textarea>
+        <select id="ac-type">
+          <option value="required">필수 질문</option>
+          <option value="optional" selected>선택 질문</option>
+        </select>
+        <button class="a-add" onclick="addCard()">+ 추가</button>
+      </div>
+    </div>
+
+    <!-- 참가 등록 링크 -->
+    <div class="reg-link">
+      <h3>🔗 참가자 등록 링크</h3>
+      <div class="link-url" id="reg-link-url" onclick="copyLink()">
+        로딩 중…
+      </div>
+      <div class="link-note">클릭하면 클립보드에 복사됩니다. 참가자에게 공유하세요.</div>
+    </div>
+
+    <!-- DB 설정 -->
+    <div class="db-section">
+      <h3>🛠️ DB 초기 설정 (Supabase SQL Editor에서 1회 실행)</h3>
+      <pre>CREATE TABLE IF NOT EXISTS gohyang_participants (
+  id              uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  name            text NOT NULL,
+  hometown_name   text,
+  lat             float,
+  lng             float,
+  story           text,
+  photo1_data     text,
+  photo1_caption  text,
+  photo2_data     text,
+  photo2_caption  text,
+  photo3_data     text,
+  photo3_caption  text,
+  created_at      timestamptz DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS gohyang_cards (
+  id         uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  question   text NOT NULL,
+  type       text DEFAULT 'optional',
+  created_at timestamptz DEFAULT now()
+);
+
+ALTER TABLE gohyang_participants ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "anon_all" ON gohyang_participants FOR ALL TO anon USING (true) WITH CHECK (true);
+
+ALTER TABLE gohyang_cards ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "anon_all" ON gohyang_cards FOR ALL TO anon USING (true) WITH CHECK (true);</pre>
+      <div class="db-status" id="db-status">연결 상태 확인 중…</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const sb = createClient(
+  'https://hncuvjrghniwihhfpata.supabase.co',
+  'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
+);
+
+// ── 상태 ──────────────────────────────────────────
+let map, participants = [], markers = {};
+let cards = [], cardIdx = 0;
+let curParticipant = null, curPhotoIdx = 0;
+
+const DEFAULT_CARDS = [
+  { question: '당신의 고향은 어디인가요? 지도에 표시해 주세요.', type: 'required' },
+  { question: '고향 하면 가장 먼저 떠오르는 장면이나 기억은 무엇인가요?', type: 'required' },
+  { question: '고향 음식 중 가장 그리운 것은 무엇인가요?', type: 'optional' },
+  { question: '고향에서 이곳으로 오게 된 이야기를 들려주세요.', type: 'optional' },
+  { question: '고향이 지금의 나를 어떻게 만들었다고 생각하나요?', type: 'optional' },
+  { question: '지금 살고 있는 이곳이 고향처럼 느껴지는 순간이 있나요?', type: 'optional' },
+  { question: '언젠가 고향으로 돌아가고 싶은 마음이 있나요?', type: 'optional' },
+  { question: '도시에서 고향을 느끼는 순간이 있다면 언제인가요?', type: 'optional' },
+  { question: '고향의 계절 중 가장 좋아하는 때는 언제인가요?', type: 'optional' },
+  { question: '서울 살이를 고향 사람들에게 어떻게 설명하시나요?', type: 'optional' },
+  { question: '고향에 있는 가족이나 친구 중 생각나는 사람이 있나요?', type: 'optional' },
+  { question: '고향에서 가져오고 싶은 것이 있다면 무엇인가요?', type: 'optional' },
+];
+
+// 전역 노출
+Object.assign(window, {
+  switchTab, fitKorea, refreshAll, closeDetail,
+  prevCard, nextCard, shuffleCards,
+  addParticipant, addCard, deleteParticipant, deleteCard,
+  selectParticipant, galleryPrev, galleryNext, copyLink
+});
+
+// ── 탭 전환 ──────────────────────────────────────
+function switchTab(tab, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('on'));
+  document.getElementById('p-' + tab).classList.add('on');
+  btn.classList.add('on');
+  if (tab === 'map') map?.invalidateSize();
+  if (tab === 'admin') renderAdmin();
+  if (tab === 'gallery') renderGallerySelector();
+}
+
+// ── 지도 ─────────────────────────────────────────
+function initMap() {
+  map = L.map('main-map', { zoomControl: true }).setView([36.5, 127.8], 7);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© OpenStreetMap © CartoDB', subdomains: 'abcd', maxZoom: 19
+  }).addTo(map);
+}
+
+function fitKorea() { map?.setView([36.5, 127.8], 7); }
+
+function addMarker(p) {
+  if (!map || !p.lat || !p.lng) return;
+  markers[p.id]?.remove();
+
+  const icon = p.photo1_data
+    ? L.divIcon({
+        html: `<div style="width:40px;height:40px;border-radius:50%;overflow:hidden;
+                border:3px solid #d4622a;box-shadow:0 2px 10px rgba(0,0,0,.4)">
+                <img src="${p.photo1_data}" style="width:100%;height:100%;object-fit:cover"/></div>`,
+        iconSize: [40, 40], iconAnchor: [20, 20], className: ''
+      })
+    : L.divIcon({
+        html: `<div style="width:36px;height:36px;border-radius:50%;background:#d4622a;
+                border:3px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,.4);
+                display:flex;align-items:center;justify-content:center;
+                font-size:14px;font-weight:800;color:#fff;font-family:sans-serif">
+                ${p.name.slice(0,1)}</div>`,
+        iconSize: [36, 36], iconAnchor: [18, 18], className: ''
+      });
+
+  markers[p.id] = L.marker([p.lat, p.lng], { icon }).addTo(map)
+    .bindTooltip(`${p.name}${p.hometown_name ? ' · ' + p.hometown_name : ''}`,
+      { permanent: false, direction: 'top', offset: [0, -22] })
+    .on('click', () => showDetail(p));
+}
+
+function showDetail(p) {
+  const photos = [
+    { data: p.photo1_data, cap: p.photo1_caption },
+    { data: p.photo2_data, cap: p.photo2_caption },
+    { data: p.photo3_data, cap: p.photo3_caption },
+  ].filter(x => x.data);
+
+  document.getElementById('dp-body').innerHTML = `
+    <div class="dp-name">${p.name}</div>
+    <div class="dp-hometown">📍 ${p.hometown_name || '고향 미표시'}</div>
+    ${p.story ? `<div class="dp-story">${p.story.replace(/\n/g,'<br/>')}</div>` : ''}
+    <div class="dp-photos">
+      ${photos.length
+        ? photos.map(ph => `<div class="dp-photo">
+            <img src="${ph.data}" loading="lazy"/>
+            ${ph.cap ? `<div class="dp-photo-cap">${ph.cap}</div>` : ''}
+          </div>`).join('')
+        : '<div style="color:var(--muted);font-size:12px">사진 없음</div>'
+      }
+    </div>`;
+  document.getElementById('detail-panel').classList.add('open');
+}
+
+function closeDetail() {
+  document.getElementById('detail-panel').classList.remove('open');
+}
+
+// ── 질문카드 ─────────────────────────────────────
+async function loadCards() {
+  const { data, error } = await sb.from('gohyang_cards').select('*').order('created_at');
+  if (!error && data && data.length > 0) {
+    cards = data;
+  } else {
+    // 기본 카드가 없으면 DB에 삽입
+    if (!error && data?.length === 0) {
+      await sb.from('gohyang_cards').insert(DEFAULT_CARDS);
+      const { data: seeded } = await sb.from('gohyang_cards').select('*').order('created_at');
+      cards = seeded ?? DEFAULT_CARDS;
+    } else {
+      cards = [...DEFAULT_CARDS];
+    }
+  }
+  cardIdx = 0;
+  renderCard();
+}
+
+function renderCard() {
+  if (!cards.length) return;
+  const c = cards[cardIdx];
+  document.getElementById('q-text').textContent    = c.question;
+  document.getElementById('q-counter').textContent = `${cardIdx + 1} / ${cards.length}`;
+  const badge = document.getElementById('q-badge');
+  badge.textContent  = c.type === 'required' ? '필수' : '선택';
+  badge.className    = 'q-badge ' + (c.type === 'required' ? 'required' : 'optional');
+
+  const used = cards.slice(0, cardIdx);
+  const area = document.getElementById('used-area');
+  area.innerHTML = used.length
+    ? `<div class="used-label">지나간 카드 (${used.length})</div>
+       <div class="used-list">${used.map(c =>
+         `<div class="used-chip">${c.question.slice(0, 18)}…</div>`).join('')}</div>`
+    : '';
+}
+
+function nextCard()    { if (cardIdx < cards.length - 1) { cardIdx++; renderCard(); } }
+function prevCard()    { if (cardIdx > 0)                { cardIdx--; renderCard(); } }
+function shuffleCards() {
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cards[i], cards[j]] = [cards[j], cards[i]];
+  }
+  cardIdx = 0; renderCard();
+}
+
+// ── 자랑대회 ─────────────────────────────────────
+function renderGallerySelector() {
+  const sel = document.getElementById('g-selector');
+  if (!participants.length) {
+    sel.innerHTML = '<span style="color:var(--muted);font-size:13px">등록된 참가자가 없습니다</span>';
+    return;
+  }
+  sel.innerHTML = participants.map(p =>
+    `<button class="sel-btn${curParticipant?.id === p.id ? ' on' : ''}"
+       onclick="selectParticipant('${p.id}')">${p.name}</button>`
+  ).join('');
+}
+
+function selectParticipant(id) {
+  curParticipant = participants.find(p => p.id === id);
+  curPhotoIdx = 0;
+  renderGallerySelector();
+  renderGalleryStage();
+}
+
+function renderGalleryStage() {
+  const stage = document.getElementById('g-stage');
+  if (!curParticipant) {
+    stage.innerHTML = '<div class="gallery-empty">참가자를 선택하면 사진이 표시됩니다</div>';
+    return;
+  }
+  const p = curParticipant;
+  const photos = [
+    { data: p.photo1_data, cap: p.photo1_caption },
+    { data: p.photo2_data, cap: p.photo2_caption },
+    { data: p.photo3_data, cap: p.photo3_caption },
+  ].filter(x => x.data);
+
+  if (!photos.length) {
+    stage.innerHTML = `<div style="text-align:center">
+      <div style="font-size:20px;font-weight:900;margin-bottom:8px">${p.name}</div>
+      <div style="color:var(--muted);font-size:14px">등록된 사진이 없습니다</div></div>`;
+    return;
+  }
+
+  const ph   = photos[curPhotoIdx];
+  const dots = photos.map((_,i) =>
+    `<div class="g-dot${i===curPhotoIdx?' on':''}"></div>`).join('');
+
+  stage.innerHTML = `
+    <button class="g-arrow" onclick="galleryPrev()" ${curPhotoIdx===0?'disabled':''}>‹</button>
+    <div class="gallery-main">
+      <div class="g-presenter">
+        <div class="g-pname">${p.name}</div>
+        <div class="g-phometown">📍 ${p.hometown_name||'고향 미표시'}</div>
+        <div class="g-dots">${dots}</div>
+      </div>
+      <div class="g-photo-frame">
+        <img src="${ph.data}" alt=""/>
+        <div class="g-caption">${ph.cap||''}</div>
+      </div>
+    </div>
+    <button class="g-arrow" onclick="galleryNext()" ${curPhotoIdx===photos.length-1?'disabled':''}>›</button>`;
+}
+
+function galleryPrev() {
+  if (curPhotoIdx > 0) { curPhotoIdx--; renderGalleryStage(); }
+}
+function galleryNext() {
+  const photos = [curParticipant?.photo1_data, curParticipant?.photo2_data, curParticipant?.photo3_data].filter(Boolean);
+  if (curPhotoIdx < photos.length - 1) { curPhotoIdx++; renderGalleryStage(); }
+}
+
+// ── 참가자 로드 ──────────────────────────────────
+async function refreshAll() {
+  const { data } = await sb.from('gohyang_participants').select('*').order('created_at');
+  participants = data ?? [];
+  document.getElementById('cnt').textContent = participants.length;
+  if (map) participants.forEach(p => { if (!markers[p.id]) addMarker(p); });
+  renderGallerySelector();
+}
+
+// ── 관리 탭 ──────────────────────────────────────
+function renderAdmin() {
+  // 참가자 목록
+  const pList = document.getElementById('a-participants');
+  pList.innerHTML = participants.length === 0
+    ? '<div style="color:var(--muted);font-size:12px">등록된 참가자 없음</div>'
+    : participants.map(p => `
+        <div class="a-item">
+          <div class="a-item-info">
+            <div class="a-item-name">${p.name}</div>
+            <div class="a-item-sub">${p.hometown_name||'고향 미표시'} · 사진 ${
+              [p.photo1_data,p.photo2_data,p.photo3_data].filter(Boolean).length}장</div>
+          </div>
+          <button class="a-del" onclick="deleteParticipant('${p.id}')">삭제</button>
+        </div>`).join('');
+
+  // 질문카드 목록
+  const cList = document.getElementById('a-cards');
+  const displayCards = cards.length ? cards : DEFAULT_CARDS;
+  cList.innerHTML = displayCards.map(c => `
+    <div class="a-item">
+      <div class="a-item-info">
+        <div class="a-item-name">${c.question.slice(0,28)}…</div>
+        <div class="a-item-sub">${c.type==='required'?'필수':'선택'}</div>
+      </div>
+      ${c.id ? `<button class="a-del" onclick="deleteCard('${c.id}')">삭제</button>` : ''}
+    </div>`).join('');
+
+  // 등록 링크
+  const regUrl = location.href.replace('gohyang-workshop.html','gohyang-register.html');
+  document.getElementById('reg-link-url').textContent = regUrl;
+}
+
+async function addParticipant() {
+  const name = document.getElementById('ap-name').value.trim();
+  if (!name) return;
+  const hometown = document.getElementById('ap-hometown').value.trim();
+  await sb.from('gohyang_participants').insert({ name, hometown_name: hometown||null });
+  document.getElementById('ap-name').value = '';
+  document.getElementById('ap-hometown').value = '';
+  await refreshAll();
+  renderAdmin();
+}
+
+async function addCard() {
+  const q = document.getElementById('ac-q').value.trim();
+  if (!q) return;
+  const type = document.getElementById('ac-type').value;
+  await sb.from('gohyang_cards').insert({ question: q, type });
+  document.getElementById('ac-q').value = '';
+  await loadCards();
+  renderAdmin();
+}
+
+async function deleteParticipant(id) {
+  if (!confirm('참가자를 삭제할까요?')) return;
+  await sb.from('gohyang_participants').delete().eq('id', id);
+  markers[id]?.remove(); delete markers[id];
+  await refreshAll();
+  renderAdmin();
+}
+
+async function deleteCard(id) {
+  await sb.from('gohyang_cards').delete().eq('id', id);
+  await loadCards();
+  renderAdmin();
+}
+
+function copyLink() {
+  const url = location.href.replace('gohyang-workshop.html','gohyang-register.html');
+  navigator.clipboard?.writeText(url).then(() => alert('링크가 복사됐어요!'));
+}
+
+// ── 실시간 구독 ──────────────────────────────────
+function subscribe() {
+  sb.channel('gohyang-live')
+    .on('postgres_changes',
+      { event: 'INSERT', schema: 'public', table: 'gohyang_participants' },
+      payload => {
+        participants.push(payload.new);
+        document.getElementById('cnt').textContent = participants.length;
+        addMarker(payload.new);
+        renderGallerySelector();
+      })
+    .subscribe();
+}
+
+// ── DB 상태 확인 ─────────────────────────────────
+async function checkDb() {
+  const { error } = await sb.from('gohyang_participants').select('id').limit(1);
+  const el = document.getElementById('db-status');
+  el.innerHTML = error
+    ? '<span class="err">⚠️ 테이블 없음 — 위 SQL을 실행해 주세요</span>'
+    : '<span class="ok">✓ DB 연결됨</span>';
+}
+
+// ── 초기화 ───────────────────────────────────────
+async function init() {
+  initMap();
+  await Promise.all([refreshAll(), loadCards()]);
+  subscribe();
+  checkDb();
+}
+
+init();
+</script>
+</body>
+</html>
