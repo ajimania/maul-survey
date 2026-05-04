@@ -104,52 +104,110 @@
     .dp-photo-cap { font-size: 11px; color: var(--muted); padding: 6px 10px; }
 
     /* ═══ [탭2] 질문카드 ═══ */
-    #p-cards {
-      align-items: center; justify-content: center;
-      padding: 24px 20px; gap: 20px;
-    }
-    .card-wrap {
-      display: flex; align-items: center; justify-content: center;
-      flex: 1; width: 100%;
-    }
-    .q-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 22px; padding: 44px 36px;
-      max-width: 580px; width: 100%; text-align: center;
-      box-shadow: 0 24px 60px rgba(0,0,0,.5);
-    }
-    .q-badge {
-      display: inline-block; padding: 4px 14px;
-      border-radius: 20px; font-size: 11px; font-weight: 700;
-      letter-spacing: .1em; margin-bottom: 22px;
-    }
-    .q-badge.required { background: rgba(212,98,42,.2); color: var(--orange); border: 1px solid rgba(212,98,42,.35); }
-    .q-badge.optional { background: rgba(93,158,86,.18); color: #7dce76; border: 1px solid rgba(93,158,86,.3); }
-    .q-text {
-      font-size: clamp(17px, 2.8vw, 24px); font-weight: 800;
-      line-height: 1.6; color: var(--cream); margin-bottom: 28px;
-    }
-    .q-counter { font-size: 12px; color: var(--muted); }
+    :root { --cw:100px; --ch:162px; }
 
-    .card-controls { display: flex; gap: 10px; align-items: center; }
-    .c-btn {
-      padding: 12px 24px; border: none; border-radius: 10px;
-      font-size: 14px; font-weight: 700;
-      cursor: pointer; font-family: inherit;
-      transition: opacity .15s, transform .1s;
-    }
-    .c-btn:active { transform: scale(.97); }
-    .c-btn-primary { background: var(--orange); color: #fff; }
-    .c-btn-ghost { background: rgba(255,255,255,.07); color: var(--text); }
+    #p-cards { padding: 0; overflow: hidden; }
 
-    .used-area { max-width: 580px; width: 100%; }
-    .used-label { font-size: 11px; color: var(--muted); margin-bottom: 7px; }
-    .used-list { display: flex; flex-wrap: wrap; gap: 5px; }
-    .used-chip {
-      background: rgba(255,255,255,.05); border: 1px solid var(--border);
-      border-radius: 5px; padding: 3px 9px;
+    /* 필수 카드 줄 */
+    .req-row {
+      flex-shrink: 0; display: flex; align-items: center;
+      gap: 16px; padding: 16px 20px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .req-row-label {
+      font-size: 10px; font-weight: 800; letter-spacing: .12em;
+      color: var(--muted); text-transform: uppercase; white-space: nowrap;
+    }
+    #req-cards { display: flex; gap: 14px; }
+
+    /* 선택 카드 스프레드 영역 */
+    .spread-zone {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      padding-bottom: 28px; gap: 14px;
+      position: relative;
+    }
+    .spread-label {
+      position: absolute; top: 14px;
+      font-size: 11px; color: var(--muted); pointer-events: none;
+    }
+    .spread-container {
+      position: relative;
+      width: 100%; height: calc(var(--ch) + 50px);
+      overflow: visible;
+    }
+    .spread-hint {
       font-size: 11px; color: var(--muted);
     }
+    #reset-btn {
+      display: none; padding: 10px 28px;
+      background: var(--orange); color: #fff; border: none;
+      border-radius: 10px; font-size: 14px; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+    }
+    #reset-btn:hover { opacity: .85; }
+
+    /* ─── 카드 공통 3D ─── */
+    .card-shell {
+      width: var(--cw); height: var(--ch);
+      cursor: pointer; position: relative;
+      perspective: 700px;
+    }
+    .card-inner {
+      width: 100%; height: 100%;
+      transform-style: preserve-3d;
+      transition: transform .55s cubic-bezier(.4,0,.2,1);
+      border-radius: 10px;
+    }
+    .card-shell.flipped .card-inner { transform: rotateY(180deg); }
+    .card-face {
+      position: absolute; inset: 0; border-radius: 10px;
+      backface-visibility: hidden; overflow: hidden;
+    }
+    /* 카드 뒷면 */
+    .card-back {
+      background: linear-gradient(150deg,#2e1c10 0%,#180e06 100%);
+      border: 1.5px solid rgba(201,169,122,.28);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .card-back::before {
+      content: ''; position: absolute; inset: 6px;
+      border: 1px solid rgba(201,169,122,.14); border-radius: 6px;
+    }
+    .card-back::after { content: '✦'; font-size: 22px; color: rgba(201,169,122,.32); }
+    /* 카드 앞면 */
+    .card-front {
+      transform: rotateY(180deg);
+      background: #f6ead8;
+      border: 1.5px solid rgba(180,140,90,.45);
+      padding: 12px 10px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 9px; text-align: center;
+    }
+    .cf-badge {
+      font-size: 9px; font-weight: 800; letter-spacing: .12em;
+      padding: 2px 9px; border-radius: 20px; flex-shrink: 0;
+    }
+    .cf-badge.req { background: rgba(212,98,42,.14); color: #b84d1a; border: 1px solid rgba(212,98,42,.22); }
+    .cf-badge.opt { background: rgba(80,140,74,.12); color: #3a7834; border: 1px solid rgba(80,140,74,.2); }
+    .cf-text {
+      font-size: clamp(9px,2vw,12px); font-weight: 700;
+      line-height: 1.55; color: #1e0e04;
+    }
+
+    /* 스프레드 카드 (선택 질문) */
+    .opt-card {
+      position: absolute;
+      left: calc(50% - var(--cw)/2);
+      bottom: 0;
+      transform-origin: center center;
+      transition: transform .3s ease, opacity .3s;
+      will-change: transform;
+    }
+    .opt-card.dimmed { opacity: .15; pointer-events: none; }
+
+    /* 필수 카드 (줄에 나란히) */
+    .req-card { flex-shrink: 0; perspective: 700px; }
 
     /* ═══ [탭3] 자랑대회 ═══ */
     #p-gallery { padding: 16px 20px; gap: 14px; }
@@ -337,19 +395,18 @@
 
 <!-- ── 탭2: 질문카드 ─────────────────────────── -->
 <div class="panel" id="p-cards">
-  <div class="card-wrap">
-    <div class="q-card">
-      <div class="q-badge required" id="q-badge">필수</div>
-      <div class="q-text" id="q-text">카드를 불러오는 중…</div>
-      <div class="q-counter" id="q-counter">0 / 0</div>
-    </div>
+  <!-- 필수 질문 줄 -->
+  <div class="req-row">
+    <span class="req-row-label">필수 질문</span>
+    <div id="req-cards"></div>
   </div>
-  <div class="card-controls">
-    <button class="c-btn c-btn-ghost"    onclick="prevCard()">← 이전</button>
-    <button class="c-btn c-btn-primary"  onclick="nextCard()">다음 카드 →</button>
-    <button class="c-btn c-btn-ghost"    onclick="shuffleCards()">🔀 섞기</button>
+  <!-- 선택 질문 스프레드 -->
+  <div class="spread-zone">
+    <span class="spread-label">선택 질문 — 카드를 하나 골라보세요</span>
+    <div class="spread-container" id="spread-container"></div>
+    <div class="spread-hint" id="spread-hint">카드를 클릭하면 질문이 공개됩니다</div>
+    <button id="reset-btn" onclick="resetSpread()">🔀 다음 사람 · 카드 다시 섞기</button>
   </div>
-  <div class="used-area" id="used-area"></div>
 </div>
 
 <!-- ── 탭3: 자랑대회 ─────────────────────────── -->
@@ -450,7 +507,8 @@ const sb = createClient(
 
 // ── 상태 ──────────────────────────────────────────
 let map, participants = [], markers = {};
-let cards = [], cardIdx = 0;
+let cards = [], reqCards = [], optCards = [];
+let pickedEl = null;
 let curParticipant = null, curPhotoIdx = 0;
 
 const DEFAULT_CARDS = [
@@ -471,7 +529,7 @@ const DEFAULT_CARDS = [
 // 전역 노출
 Object.assign(window, {
   switchTab, fitKorea, refreshAll, closeDetail,
-  prevCard, nextCard, shuffleCards,
+  resetSpread,
   addParticipant, addCard, deleteParticipant, deleteCard,
   selectParticipant, galleryPrev, galleryNext, copyLink
 });
@@ -485,6 +543,7 @@ function switchTab(tab, btn) {
   if (tab === 'map') map?.invalidateSize();
   if (tab === 'admin') renderAdmin();
   if (tab === 'gallery') renderGallerySelector();
+  if (tab === 'cards' && !pickedEl) buildSpread();
 }
 
 // ── 지도 ─────────────────────────────────────────
@@ -551,50 +610,128 @@ function closeDetail() {
 }
 
 // ── 질문카드 ─────────────────────────────────────
+function shuffleArr(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
 async function loadCards() {
   const { data, error } = await sb.from('gohyang_cards').select('*').order('created_at');
   if (!error && data && data.length > 0) {
     cards = data;
+  } else if (!error && data?.length === 0) {
+    await sb.from('gohyang_cards').insert(DEFAULT_CARDS);
+    const { data: seeded } = await sb.from('gohyang_cards').select('*').order('created_at');
+    cards = seeded ?? DEFAULT_CARDS;
   } else {
-    // 기본 카드가 없으면 DB에 삽입
-    if (!error && data?.length === 0) {
-      await sb.from('gohyang_cards').insert(DEFAULT_CARDS);
-      const { data: seeded } = await sb.from('gohyang_cards').select('*').order('created_at');
-      cards = seeded ?? DEFAULT_CARDS;
-    } else {
-      cards = [...DEFAULT_CARDS];
-    }
+    cards = [...DEFAULT_CARDS];
   }
-  cardIdx = 0;
-  renderCard();
+  initCardUI();
 }
 
-function renderCard() {
-  if (!cards.length) return;
-  const c = cards[cardIdx];
-  document.getElementById('q-text').textContent    = c.question;
-  document.getElementById('q-counter').textContent = `${cardIdx + 1} / ${cards.length}`;
-  const badge = document.getElementById('q-badge');
-  badge.textContent  = c.type === 'required' ? '필수' : '선택';
-  badge.className    = 'q-badge ' + (c.type === 'required' ? 'required' : 'optional');
-
-  const used = cards.slice(0, cardIdx);
-  const area = document.getElementById('used-area');
-  area.innerHTML = used.length
-    ? `<div class="used-label">지나간 카드 (${used.length})</div>
-       <div class="used-list">${used.map(c =>
-         `<div class="used-chip">${c.question.slice(0, 18)}…</div>`).join('')}</div>`
-    : '';
+function initCardUI() {
+  reqCards = cards.filter(c => c.type === 'required');
+  optCards = cards.filter(c => c.type === 'optional');
+  shuffleArr(optCards);
+  renderReqCards();
+  buildSpread();
 }
 
-function nextCard()    { if (cardIdx < cards.length - 1) { cardIdx++; renderCard(); } }
-function prevCard()    { if (cardIdx > 0)                { cardIdx--; renderCard(); } }
-function shuffleCards() {
-  for (let i = cards.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [cards[i], cards[j]] = [cards[j], cards[i]];
-  }
-  cardIdx = 0; renderCard();
+function renderReqCards() {
+  const wrap = document.getElementById('req-cards');
+  wrap.innerHTML = '';
+  reqCards.forEach((card, i) => {
+    const shell = document.createElement('div');
+    shell.className = 'card-shell req-card';
+    shell.style.perspective = '700px';
+    shell.innerHTML = `
+      <div class="card-inner">
+        <div class="card-face card-back"></div>
+        <div class="card-face card-front">
+          <span class="cf-badge req">필수</span>
+          <span class="cf-text">${card.question}</span>
+        </div>
+      </div>`;
+    shell.addEventListener('click', () => shell.classList.toggle('flipped'));
+    wrap.appendChild(shell);
+  });
+}
+
+function buildSpread() {
+  const container = document.getElementById('spread-container');
+  container.innerHTML = '';
+  pickedEl = null;
+  document.getElementById('reset-btn').style.display = 'none';
+  document.getElementById('spread-hint').style.display = '';
+
+  const n = optCards.length;
+  if (!n) return;
+
+  const ch = 162; // card height
+  const totalAngle = Math.min(44, n * 4.5);
+
+  optCards.forEach((card, i) => {
+    const t = n === 1 ? 0.5 : i / (n - 1);
+    const angle = -totalAngle / 2 + totalAngle * t;
+    // Equivalent of transform-origin:bottom center using center origin
+    const baseTransform = `translateY(${ch / 2}px) rotate(${angle}deg) translateY(${-ch / 2}px)`;
+
+    const shell = document.createElement('div');
+    shell.className = 'opt-card card-shell';
+    shell.style.transform = baseTransform;
+    shell.style.zIndex = i + 1;
+    shell.innerHTML = `
+      <div class="card-inner">
+        <div class="card-face card-back"></div>
+        <div class="card-face card-front">
+          <span class="cf-badge opt">선택</span>
+          <span class="cf-text">${card.question}</span>
+        </div>
+      </div>`;
+
+    shell.addEventListener('mouseenter', () => {
+      if (!pickedEl) shell.style.transform =
+        `translateY(${ch / 2}px) rotate(${angle}deg) translateY(${-ch / 2 - 18}px)`;
+    });
+    shell.addEventListener('mouseleave', () => {
+      if (!pickedEl) shell.style.transform = baseTransform;
+    });
+    shell.addEventListener('click', () => {
+      if (!pickedEl) pickCard(shell, angle);
+    });
+
+    container.appendChild(shell);
+  });
+}
+
+function pickCard(shell, angle) {
+  pickedEl = shell;
+
+  // 나머지 카드 흐리게
+  document.querySelectorAll('.opt-card').forEach(c => {
+    if (c !== shell) c.classList.add('dimmed');
+  });
+
+  // 위로 올리고 크게
+  shell.style.transition = 'transform .5s cubic-bezier(.4,0,.2,1)';
+  shell.style.zIndex = 100;
+  shell.style.transform = `translateY(-80px) rotate(0deg) scale(1.85)`;
+
+  // 플립
+  setTimeout(() => {
+    shell.querySelector('.card-inner').style.transition = 'transform .55s cubic-bezier(.4,0,.2,1)';
+    shell.querySelector('.card-inner').style.transform = 'rotateY(180deg)';
+    document.getElementById('spread-hint').style.display = 'none';
+    document.getElementById('reset-btn').style.display = 'block';
+  }, 420);
+}
+
+function resetSpread() {
+  shuffleArr(optCards);
+  buildSpread();
+  document.querySelectorAll('.req-card').forEach(c => c.classList.remove('flipped'));
 }
 
 // ── 자랑대회 ─────────────────────────────────────
