@@ -68,6 +68,22 @@
     /* ═══ [탭1] 지도 ═══ */
     #p-map { position: relative; }
     #main-map { flex: 1; }
+    .map-question {
+      position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+      z-index: 800; pointer-events: none;
+      text-align: center; padding: 14px 28px;
+      background: rgba(28,20,16,.72); backdrop-filter: blur(10px);
+      border: 1px solid rgba(201,169,122,.2); border-radius: 14px;
+      max-width: 560px; width: calc(100% - 48px);
+    }
+    .map-question-label {
+      font-size: 10px; font-weight: 800; letter-spacing: .14em;
+      color: var(--tan); text-transform: uppercase; margin-bottom: 6px;
+    }
+    .map-question-text {
+      font-size: clamp(13px, 2.2vw, 17px); font-weight: 700;
+      color: rgba(245,237,224,.75); line-height: 1.6;
+    }
 
     .map-controls {
       position: absolute; top: 12px; right: 12px; z-index: 1000;
@@ -383,6 +399,10 @@
 <!-- ── 탭1: 지도 ───────────────────────────────── -->
 <div class="panel on" id="p-map">
   <div id="main-map"></div>
+  <div class="map-question">
+    <div class="map-question-label">오늘의 질문</div>
+    <div class="map-question-text">당신의 고향은 어디인가요, 고향과 얽힌 당신의 가장 좋았던 기억을 이야기해주세요.</div>
+  </div>
   <div class="map-controls">
     <button class="map-ctrl-btn" onclick="fitKorea()">🇰🇷 전체 보기</button>
     <button class="map-ctrl-btn" onclick="refreshAll()">↻ 새로고침</button>
@@ -395,14 +415,8 @@
 
 <!-- ── 탭2: 질문카드 ─────────────────────────── -->
 <div class="panel" id="p-cards">
-  <!-- 필수 질문 줄 -->
-  <div class="req-row">
-    <span class="req-row-label">필수 질문</span>
-    <div id="req-cards"></div>
-  </div>
-  <!-- 선택 질문 스프레드 -->
   <div class="spread-zone">
-    <span class="spread-label">선택 질문 — 카드를 하나 골라보세요</span>
+    <span class="spread-label">카드를 하나 골라보세요</span>
     <div class="spread-container" id="spread-container"></div>
     <div class="spread-hint" id="spread-hint">카드를 클릭하면 질문이 공개됩니다</div>
     <button id="reset-btn" onclick="resetSpread()">🔀 다음 사람 · 카드 다시 섞기</button>
@@ -512,8 +526,7 @@ let pickedEl = null;
 let curParticipant = null, curPhotoIdx = 0;
 
 const DEFAULT_CARDS = [
-  { question: '당신의 고향은 어디인가요? 지도에 표시해 주세요.', type: 'required' },
-  { question: '고향 하면 가장 먼저 떠오르는 장면이나 기억은 무엇인가요?', type: 'required' },
+  { question: '당신의 고향은 어디인가요, 고향과 얽힌 당신의 가장 좋았던 기억을 이야기해주세요.', type: 'required' },
   { question: '고향 음식 중 가장 그리운 것은 무엇인가요?', type: 'optional' },
   { question: '고향에서 이곳으로 오게 된 이야기를 들려주세요.', type: 'optional' },
   { question: '고향이 지금의 나를 어떻게 만들었다고 생각하나요?', type: 'optional' },
