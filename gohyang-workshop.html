@@ -372,6 +372,40 @@
     }
     .link-note { font-size: 12px; color: var(--muted); }
 
+    /* ═══ 리액션 오버레이 ═══ */
+    #reaction-layer {
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 9999;
+      overflow: hidden;
+    }
+    .rx-emoji {
+      position: absolute; bottom: 12%;
+      font-size: 40px; line-height: 1;
+      animation: rxFloat 3s ease-out forwards;
+      pointer-events: none; user-select: none;
+    }
+    @keyframes rxFloat {
+      0%   { transform: translateY(0) scale(1); opacity: 1; }
+      70%  { opacity: 1; }
+      100% { transform: translateY(-65vh) scale(.4); opacity: 0; }
+    }
+    .rx-comment {
+      position: absolute; right: 16px;
+      background: rgba(28,20,16,.88); backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.1); border-radius: 14px;
+      padding: 10px 14px; font-size: 14px; color: #f0e4d4;
+      max-width: 220px; word-break: break-all;
+      animation: rxSlide .3s ease, rxFade .4s ease 3.2s forwards;
+      pointer-events: none;
+    }
+    @keyframes rxSlide {
+      from { transform: translateX(16px); opacity: 0; }
+      to   { transform: translateX(0);    opacity: 1; }
+    }
+    @keyframes rxFade {
+      from { opacity: 1; } to { opacity: 0; }
+    }
+
     /* 공통 스크롤바 */
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -466,10 +500,15 @@
     <!-- 참가 등록 링크 -->
     <div class="reg-link">
       <h3>🔗 참가자 등록 링크</h3>
-      <div class="link-url" id="reg-link-url" onclick="copyLink()">
-        로딩 중…
-      </div>
-      <div class="link-note">클릭하면 클립보드에 복사됩니다. 참가자에게 공유하세요.</div>
+      <div class="link-url" id="reg-link-url" onclick="copyLink()">로딩 중…</div>
+      <div class="link-note">클릭하면 클립보드에 복사됩니다.</div>
+    </div>
+
+    <!-- 청중 반응 링크 -->
+    <div class="reg-link">
+      <h3>🎉 청중 반응 링크</h3>
+      <div class="link-url" id="aud-link-url" onclick="copyAudLink()">로딩 중…</div>
+      <div class="link-note">발표 중 청중에게 공유하면 이모지·댓글을 실시간으로 받아요.</div>
     </div>
 
     <!-- DB 설정 -->
@@ -509,6 +548,8 @@ CREATE POLICY "anon_all" ON gohyang_cards FOR ALL TO anon USING (true) WITH CHEC
   </div>
 </div>
 
+<div id="reaction-layer"></div>
+
 <!-- ════════════════════════════════════════════ -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script type="module">
@@ -544,7 +585,7 @@ Object.assign(window, {
   switchTab, fitKorea, refreshAll, closeDetail,
   resetSpread,
   addParticipant, addCard, deleteParticipant, deleteCard,
-  selectParticipant, galleryPrev, galleryNext, copyLink
+  selectParticipant, galleryPrev, galleryNext, copyLink, copyAudLink
 });
 
 // ── 탭 전환 ──────────────────────────────────────
@@ -855,6 +896,8 @@ function renderAdmin() {
   // 등록 링크
   const regUrl = location.href.replace('gohyang-workshop.html','gohyang-register.html');
   document.getElementById('reg-link-url').textContent = regUrl;
+  const audUrl = location.href.replace('gohyang-workshop.html','gohyang-audience.html');
+  document.getElementById('aud-link-url').textContent = audUrl;
 }
 
 async function geocode(hometown) {
@@ -938,6 +981,45 @@ function copyLink() {
   navigator.clipboard?.writeText(url).then(() => alert('링크가 복사됐어요!'));
 }
 
+function copyAudLink() {
+  const url = location.href.replace('gohyang-workshop.html','gohyang-audience.html');
+  navigator.clipboard?.writeText(url).then(() => alert('청중 링크가 복사됐어요!'));
+}
+
+// ── 리액션 ───────────────────────────────────────
+let commentBottom = 80;
+
+function spawnEmoji(emoji) {
+  const layer = document.getElementById('reaction-layer');
+  const el = document.createElement('div');
+  el.className = 'rx-emoji';
+  el.textContent = emoji;
+  el.style.left = (8 + Math.random() * 84) + '%';
+  layer.appendChild(el);
+  el.addEventListener('animationend', () => el.remove());
+}
+
+function spawnComment(text) {
+  const layer = document.getElementById('reaction-layer');
+  const el = document.createElement('div');
+  el.className = 'rx-comment';
+  el.textContent = text;
+  el.style.bottom = commentBottom + 'px';
+  layer.appendChild(el);
+  commentBottom += 54;
+  setTimeout(() => {
+    el.remove();
+    commentBottom = Math.max(80, commentBottom - 54);
+  }, 3700);
+}
+
+function subscribeReactions() {
+  sb.channel('gohyang-reactions')
+    .on('broadcast', { event: 'emoji' },   ({ payload }) => spawnEmoji(payload.emoji))
+    .on('broadcast', { event: 'comment' }, ({ payload }) => spawnComment(payload.text))
+    .subscribe();
+}
+
 // ── 실시간 구독 ──────────────────────────────────
 function subscribe() {
   sb.channel('gohyang-live')
@@ -966,6 +1048,7 @@ async function init() {
   initMap();
   await Promise.all([refreshAll(), loadCards()]);
   subscribe();
+  subscribeReactions();
   checkDb();
 }
 

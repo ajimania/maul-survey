@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>내 고향 자랑대회 | 반응 보내기</title>
+  <style>
+    :root {
+      --bg: #1c1410; --surface: #2b1f18;
+      --orange: #d4622a; --tan: #c9a97a;
+      --text: #f0e4d4; --muted: rgba(240,228,212,.45);
+      --border: rgba(255,255,255,.07);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      background: var(--bg); color: var(--text);
+      display: flex; flex-direction: column;
+      align-items: center; padding: 32px 20px 40px;
+      gap: 28px; max-width: 480px; margin: 0 auto;
+    }
+    header { text-align: center; }
+    header h1 { font-size: 20px; font-weight: 900; color: var(--tan); }
+    header p { font-size: 13px; color: var(--muted); margin-top: 5px; }
+
+    .emoji-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 12px; width: 100%;
+    }
+    .emoji-btn {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 18px; padding: 22px 12px;
+      cursor: pointer; display: flex; flex-direction: column;
+      align-items: center; gap: 7px;
+      transition: transform .1s, background .12s, border-color .12s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .emoji-btn:active { transform: scale(.88); background: rgba(212,98,42,.18); border-color: var(--orange); }
+    .emoji-btn span:first-child { font-size: 38px; line-height: 1; }
+    .emoji-label { font-size: 11px; color: var(--muted); font-weight: 600; }
+
+    .section-label {
+      font-size: 11px; font-weight: 800; letter-spacing: .1em;
+      color: var(--muted); text-transform: uppercase; align-self: flex-start;
+    }
+    .comment-row { display: flex; gap: 8px; width: 100%; }
+    .comment-input {
+      flex: 1; background: var(--surface);
+      border: 1.5px solid var(--border); border-radius: 12px;
+      padding: 13px 15px; color: var(--text); font-size: 15px;
+      font-family: inherit;
+    }
+    .comment-input::placeholder { color: var(--muted); }
+    .comment-input:focus { outline: none; border-color: var(--orange); }
+    .send-btn {
+      background: var(--orange); border: none; border-radius: 12px;
+      padding: 13px 20px; color: #fff; font-size: 18px;
+      font-weight: 900; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .send-btn:active { opacity: .8; }
+
+    .toast {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: rgba(212,98,42,.95); color: #fff;
+      padding: 10px 24px; border-radius: 20px;
+      font-size: 14px; font-weight: 700;
+      transition: transform .28s cubic-bezier(.4,0,.2,1);
+      pointer-events: none;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🏠 내 고향 자랑대회</h1>
+  <p>발표에 반응을 보내보세요!</p>
+</header>
+
+<div class="emoji-grid">
+  <button class="emoji-btn" onclick="send('emoji','❤️')">
+    <span>❤️</span><span class="emoji-label">좋아요</span>
+  </button>
+  <button class="emoji-btn" onclick="send('emoji','👏')">
+    <span>👏</span><span class="emoji-label">박수</span>
+  </button>
+  <button class="emoji-btn" onclick="send('emoji','🔥')">
+    <span>🔥</span><span class="emoji-label">대박</span>
+  </button>
+  <button class="emoji-btn" onclick="send('emoji','😮')">
+    <span>😮</span><span class="emoji-label">놀라워요</span>
+  </button>
+  <button class="emoji-btn" onclick="send('emoji','😂')">
+    <span>😂</span><span class="emoji-label">재밌어요</span>
+  </button>
+  <button class="emoji-btn" onclick="send('emoji','🎉')">
+    <span>🎉</span><span class="emoji-label">최고예요</span>
+  </button>
+</div>
+
+<div class="section-label">💬 댓글 남기기</div>
+<div class="comment-row">
+  <input class="comment-input" id="comment-input" placeholder="한 마디 남겨보세요…" maxlength="60"/>
+  <button class="send-btn" onclick="sendComment()">↑</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const sb = createClient(
+  'https://hncuvjrghniwihhfpata.supabase.co',
+  'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
+);
+
+const ch = sb.channel('gohyang-reactions');
+ch.subscribe();
+
+window.send = async function(event, emoji) {
+  await ch.send({ type: 'broadcast', event, payload: { emoji } });
+  showToast(emoji + ' 보냈어요!');
+};
+
+window.sendComment = async function() {
+  const input = document.getElementById('comment-input');
+  const text = input.value.trim();
+  if (!text) return;
+  await ch.send({ type: 'broadcast', event: 'comment', payload: { text } });
+  input.value = '';
+  showToast('댓글 보냈어요!');
+};
+
+document.getElementById('comment-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') window.sendComment();
+});
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1600);
+}
+</script>
+</body>
+</html>
