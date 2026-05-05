@@ -541,7 +541,19 @@ ALTER TABLE gohyang_participants ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "anon_all" ON gohyang_participants FOR ALL TO anon USING (true) WITH CHECK (true);
 
 ALTER TABLE gohyang_cards ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "anon_all" ON gohyang_cards FOR ALL TO anon USING (true) WITH CHECK (true);</pre>
+CREATE POLICY "anon_all" ON gohyang_cards FOR ALL TO anon USING (true) WITH CHECK (true);
+
+CREATE TABLE IF NOT EXISTS gohyang_reactions (
+  id         uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  type       text NOT NULL,
+  content    text NOT NULL,
+  created_at timestamptz DEFAULT now()
+);
+
+ALTER TABLE gohyang_reactions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "anon_all" ON gohyang_reactions FOR ALL TO anon USING (true) WITH CHECK (true);
+
+ALTER PUBLICATION supabase_realtime ADD TABLE gohyang_reactions;</pre>
       <div class="db-status" id="db-status">연결 상태 확인 중…</div>
     </div>
 
@@ -1014,9 +1026,13 @@ function spawnComment(text) {
 }
 
 function subscribeReactions() {
-  sb.channel('gohyang-reactions')
-    .on('broadcast', { event: 'emoji' },   ({ payload }) => spawnEmoji(payload.emoji))
-    .on('broadcast', { event: 'comment' }, ({ payload }) => spawnComment(payload.text))
+  sb.channel('gohyang-live-reactions')
+    .on('postgres_changes',
+      { event: 'INSERT', schema: 'public', table: 'gohyang_reactions' },
+      ({ new: row }) => {
+        if (row.type === 'emoji') spawnEmoji(row.content);
+        else if (row.type === 'comment') spawnComment(row.content);
+      })
     .subscribe();
 }
 

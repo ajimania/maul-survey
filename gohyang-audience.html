@@ -24,6 +24,19 @@
     header h1 { font-size: 20px; font-weight: 900; color: var(--tan); }
     header p { font-size: 13px; color: var(--muted); margin-top: 5px; }
 
+    .status-bar {
+      display: flex; align-items: center; gap: 6px;
+      justify-content: center; margin-top: 10px;
+      font-size: 12px; color: var(--muted);
+    }
+    .status-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #555; flex-shrink: 0;
+      transition: background .3s;
+    }
+    .status-dot.ok  { background: #4ade80; }
+    .status-dot.err { background: #f87171; }
+
     .emoji-grid {
       display: grid; grid-template-columns: repeat(3, 1fr);
       gap: 12px; width: 100%;
@@ -68,7 +81,7 @@
       padding: 10px 24px; border-radius: 20px;
       font-size: 14px; font-weight: 700;
       transition: transform .28s cubic-bezier(.4,0,.2,1);
-      pointer-events: none;
+      pointer-events: none; white-space: nowrap;
     }
     .toast.show { transform: translateX(-50%) translateY(0); }
   </style>
@@ -78,25 +91,29 @@
 <header>
   <h1>🏠 내 고향 자랑대회</h1>
   <p>발표에 반응을 보내보세요!</p>
+  <div class="status-bar">
+    <span class="status-dot" id="sdot"></span>
+    <span id="stext">연결 중…</span>
+  </div>
 </header>
 
 <div class="emoji-grid">
-  <button class="emoji-btn" onclick="send('emoji','❤️')">
+  <button class="emoji-btn" onclick="sendReaction('emoji','❤️')">
     <span>❤️</span><span class="emoji-label">좋아요</span>
   </button>
-  <button class="emoji-btn" onclick="send('emoji','👏')">
+  <button class="emoji-btn" onclick="sendReaction('emoji','👏')">
     <span>👏</span><span class="emoji-label">박수</span>
   </button>
-  <button class="emoji-btn" onclick="send('emoji','🔥')">
+  <button class="emoji-btn" onclick="sendReaction('emoji','🔥')">
     <span>🔥</span><span class="emoji-label">대박</span>
   </button>
-  <button class="emoji-btn" onclick="send('emoji','😮')">
+  <button class="emoji-btn" onclick="sendReaction('emoji','😮')">
     <span>😮</span><span class="emoji-label">놀라워요</span>
   </button>
-  <button class="emoji-btn" onclick="send('emoji','😂')">
+  <button class="emoji-btn" onclick="sendReaction('emoji','😂')">
     <span>😂</span><span class="emoji-label">재밌어요</span>
   </button>
-  <button class="emoji-btn" onclick="send('emoji','🎉')">
+  <button class="emoji-btn" onclick="sendReaction('emoji','🎉')">
     <span>🎉</span><span class="emoji-label">최고예요</span>
   </button>
 </div>
@@ -117,21 +134,31 @@ const sb = createClient(
   'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
 );
 
-const ch = sb.channel('gohyang-reactions');
-ch.subscribe();
+const dot = document.getElementById('sdot');
+const stxt = document.getElementById('stext');
 
-window.send = async function(event, emoji) {
-  await ch.send({ type: 'broadcast', event, payload: { emoji } });
-  showToast(emoji + ' 보냈어요!');
+// Check DB connectivity
+sb.from('gohyang_reactions').select('id').limit(1).then(({ error }) => {
+  if (error) {
+    dot.className = 'status-dot err';
+    stxt.textContent = '연결 오류 — 워크샵 페이지에서 SQL을 실행해주세요';
+  } else {
+    dot.className = 'status-dot ok';
+    stxt.textContent = '연결됨';
+  }
+});
+
+window.sendReaction = async function(type, content) {
+  const { error } = await sb.from('gohyang_reactions').insert({ type, content });
+  showToast(error ? '전송 실패 😢' : (type === 'emoji' ? content + ' 보냈어요!' : '댓글 보냈어요!'));
 };
 
 window.sendComment = async function() {
   const input = document.getElementById('comment-input');
   const text = input.value.trim();
   if (!text) return;
-  await ch.send({ type: 'broadcast', event: 'comment', payload: { text } });
+  await window.sendReaction('comment', text);
   input.value = '';
-  showToast('댓글 보냈어요!');
 };
 
 document.getElementById('comment-input').addEventListener('keydown', e => {
