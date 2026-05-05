@@ -1026,13 +1026,9 @@ function spawnComment(text) {
 }
 
 function subscribeReactions() {
-  sb.channel('gohyang-live-reactions')
-    .on('postgres_changes',
-      { event: 'INSERT', schema: 'public', table: 'gohyang_reactions' },
-      ({ new: row }) => {
-        if (row.type === 'emoji') spawnEmoji(row.content);
-        else if (row.type === 'comment') spawnComment(row.content);
-      })
+  sb.channel('gohyang-reactions')
+    .on('broadcast', { event: 'emoji' },   ({ payload }) => spawnEmoji(payload.emoji))
+    .on('broadcast', { event: 'comment' }, ({ payload }) => spawnComment(payload.text))
     .subscribe();
 }
 

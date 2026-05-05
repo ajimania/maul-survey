@@ -136,21 +136,30 @@ const sb = createClient(
 
 const dot = document.getElementById('sdot');
 const stxt = document.getElementById('stext');
+let isReady = false;
 
-// Check DB connectivity
-sb.from('gohyang_reactions').select('id').limit(1).then(({ error }) => {
-  if (error) {
-    dot.className = 'status-dot err';
-    stxt.textContent = '연결 오류 — 워크샵 페이지에서 SQL을 실행해주세요';
-  } else {
+const ch = sb.channel('gohyang-reactions', {
+  config: { broadcast: { ack: true } }
+});
+
+ch.subscribe((status) => {
+  if (status === 'SUBSCRIBED') {
+    isReady = true;
     dot.className = 'status-dot ok';
     stxt.textContent = '연결됨';
+  } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+    dot.className = 'status-dot err';
+    stxt.textContent = '연결 오류';
   }
 });
 
 window.sendReaction = async function(type, content) {
-  const { error } = await sb.from('gohyang_reactions').insert({ type, content });
-  showToast(error ? '전송 실패 😢' : (type === 'emoji' ? content + ' 보냈어요!' : '댓글 보냈어요!'));
+  if (!isReady) { showToast('연결 중… 잠시 후 눌러주세요'); return; }
+  const payload = type === 'emoji' ? { emoji: content } : { text: content };
+  const result = await ch.send({ type: 'broadcast', event: type, payload });
+  showToast(result === 'ok'
+    ? (type === 'emoji' ? content + ' 보냈어요!' : '댓글 보냈어요!')
+    : '전송 실패 😢');
 };
 
 window.sendComment = async function() {
