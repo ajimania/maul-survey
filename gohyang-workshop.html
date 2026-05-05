@@ -707,6 +707,7 @@ function initCardUI() {
 
 function renderReqCards() {
   const wrap = document.getElementById('req-cards');
+  if (!wrap) return;
   wrap.innerHTML = '';
   reqCards.forEach((card, i) => {
     const shell = document.createElement('div');
@@ -1025,11 +1026,27 @@ function spawnComment(text) {
   }, 3700);
 }
 
-function subscribeReactions() {
-  sb.channel('gohyang-reactions')
-    .on('broadcast', { event: 'emoji' },   ({ payload }) => spawnEmoji(payload.emoji))
-    .on('broadcast', { event: 'comment' }, ({ payload }) => spawnComment(payload.text))
-    .subscribe();
+async function subscribeReactions() {
+  const { data: latest } = await sb
+    .from('gohyang_reactions')
+    .select('created_at')
+    .order('created_at', { ascending: false })
+    .limit(1);
+  let since = latest?.[0]?.created_at ?? new Date(0).toISOString();
+
+  setInterval(async () => {
+    const { data } = await sb
+      .from('gohyang_reactions')
+      .select('*')
+      .gt('created_at', since)
+      .order('created_at');
+    if (!data || data.length === 0) return;
+    since = data[data.length - 1].created_at;
+    data.forEach(row => {
+      if (row.type === 'emoji') spawnEmoji(row.content);
+      else if (row.type === 'comment') spawnComment(row.content);
+    });
+  }, 2000);
 }
 
 // ── 실시간 구독 ──────────────────────────────────
