@@ -372,39 +372,39 @@
     }
     .link-note { font-size: 12px; color: var(--muted); }
 
-    /* ═══ 리액션 오버레이 ═══ */
-    #reaction-layer {
-      position: fixed; inset: 0;
-      pointer-events: none; z-index: 9999;
-      overflow: hidden;
+    /* ═══ 리액션 패널 ═══ */
+    #p-gallery { flex-direction: column; }
+    .gallery-body {
+      display: flex; flex: 1; gap: 12px; min-height: 0;
     }
-    .rx-emoji {
-      position: absolute; bottom: 12%;
-      font-size: 40px; line-height: 1;
-      animation: rxFloat 3s ease-out forwards;
-      pointer-events: none; user-select: none;
+    .gallery-body .gallery-stage { flex: 1; min-height: 0; }
+    .reaction-panel {
+      width: 220px; flex-shrink: 0;
+      display: flex; flex-direction: column;
+      background: var(--surface); border-radius: 14px;
+      border: 1px solid var(--border); overflow: hidden;
     }
-    @keyframes rxFloat {
-      0%   { transform: translateY(0) scale(1); opacity: 1; }
-      70%  { opacity: 1; }
-      100% { transform: translateY(-65vh) scale(.4); opacity: 0; }
+    .rp-header {
+      padding: 10px 14px; font-size: 11px; font-weight: 800;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--tan); border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
     }
-    .rx-comment {
-      position: absolute; right: 16px;
-      background: rgba(28,20,16,.88); backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,.1); border-radius: 14px;
-      padding: 10px 14px; font-size: 14px; color: #f0e4d4;
-      max-width: 220px; word-break: break-all;
-      animation: rxSlide .3s ease, rxFade .4s ease 3.2s forwards;
-      pointer-events: none;
+    .rp-feed {
+      flex: 1; overflow-y: auto; padding: 10px 10px;
+      display: flex; flex-direction: column; gap: 6px;
     }
-    @keyframes rxSlide {
-      from { transform: translateX(16px); opacity: 0; }
-      to   { transform: translateX(0);    opacity: 1; }
+    .rp-item {
+      display: flex; align-items: flex-start; gap: 7px;
+      background: rgba(255,255,255,.04); border-radius: 10px;
+      padding: 8px 10px; animation: rpIn .25s ease;
     }
-    @keyframes rxFade {
-      from { opacity: 1; } to { opacity: 0; }
+    @keyframes rpIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
+    .rp-emoji-icon { font-size: 22px; line-height: 1; flex-shrink: 0; }
+    .rp-text { font-size: 13px; color: var(--text); word-break: break-all; line-height: 1.4; }
 
     /* 공통 스크롤바 */
     ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -462,8 +462,14 @@
   <div class="gallery-selector" id="g-selector">
     <span style="color:var(--muted);font-size:13px">참가자를 선택하세요</span>
   </div>
-  <div class="gallery-stage" id="g-stage">
-    <div class="gallery-empty">참가자를 선택하면 사진이 표시됩니다</div>
+  <div class="gallery-body">
+    <div class="gallery-stage" id="g-stage">
+      <div class="gallery-empty">참가자를 선택하면 사진이 표시됩니다</div>
+    </div>
+    <div class="reaction-panel">
+      <div class="rp-header">💬 실시간 반응</div>
+      <div class="rp-feed" id="rp-feed"></div>
+    </div>
   </div>
 </div>
 
@@ -560,7 +566,6 @@ ALTER PUBLICATION supabase_realtime ADD TABLE gohyang_reactions;</pre>
   </div>
 </div>
 
-<div id="reaction-layer"></div>
 
 <!-- ════════════════════════════════════════════ -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -1000,30 +1005,21 @@ function copyAudLink() {
 }
 
 // ── 리액션 ───────────────────────────────────────
-let commentBottom = 80;
+function addReactionItem(icon, text) {
+  const feed = document.getElementById('rp-feed');
+  if (!feed) return;
+  const el = document.createElement('div');
+  el.className = 'rp-item';
+  el.innerHTML = `<span class="rp-emoji-icon">${icon}</span><span class="rp-text">${text}</span>`;
+  feed.prepend(el);
+}
 
 function spawnEmoji(emoji) {
-  const layer = document.getElementById('reaction-layer');
-  const el = document.createElement('div');
-  el.className = 'rx-emoji';
-  el.textContent = emoji;
-  el.style.left = (8 + Math.random() * 84) + '%';
-  layer.appendChild(el);
-  el.addEventListener('animationend', () => el.remove());
+  addReactionItem(emoji, '');
 }
 
 function spawnComment(text) {
-  const layer = document.getElementById('reaction-layer');
-  const el = document.createElement('div');
-  el.className = 'rx-comment';
-  el.textContent = text;
-  el.style.bottom = commentBottom + 'px';
-  layer.appendChild(el);
-  commentBottom += 54;
-  setTimeout(() => {
-    el.remove();
-    commentBottom = Math.max(80, commentBottom - 54);
-  }, 3700);
+  addReactionItem('💬', text);
 }
 
 async function subscribeReactions() {
