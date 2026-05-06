@@ -406,6 +406,13 @@
     .rp-emoji-icon { font-size: 22px; line-height: 1; flex-shrink: 0; }
     .rp-text { font-size: 13px; color: var(--text); word-break: break-all; line-height: 1.4; }
 
+    /* 모바일: 자랑대회 탭 상하 스택 */
+    @media (max-width: 600px) {
+      .gallery-body { flex-direction: column; }
+      .reaction-panel { width: 100%; height: 200px; flex-shrink: 0; }
+      .rp-feed { flex-direction: row; flex-wrap: wrap; align-content: flex-start; }
+    }
+
     /* 공통 스크롤바 */
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
