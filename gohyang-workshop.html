@@ -406,8 +406,11 @@
     .rp-emoji-icon { font-size: 22px; line-height: 1; flex-shrink: 0; }
     .rp-text { font-size: 13px; color: var(--text); word-break: break-all; line-height: 1.4; }
 
-    /* 모바일: 자랑대회 탭 상하 스택 */
+    /* 모바일 */
     @media (max-width: 600px) {
+      .nav-logo { display: none; }
+      .nav-tab { padding: 7px 10px; font-size: 18px; }
+      .tab-text { display: none; }
       .gallery-body { flex-direction: column; }
       .reaction-panel { width: 100%; height: 200px; flex-shrink: 0; }
       .rp-feed { flex-direction: row; flex-wrap: wrap; align-content: flex-start; }
@@ -427,10 +430,10 @@
 <nav class="nav">
   <div class="nav-logo">🐭 고향 자랑대회</div>
   <div class="nav-tabs">
-    <button class="nav-tab on"  onclick="switchTab('map',   this)">🗺️ 지도</button>
-    <button class="nav-tab"     onclick="switchTab('cards', this)">🃏 질문카드</button>
-    <button class="nav-tab"     onclick="switchTab('gallery',this)">📸 자랑대회</button>
-    <button class="nav-tab"     onclick="switchTab('admin', this)">⚙️ 관리</button>
+    <button class="nav-tab on"  onclick="switchTab('map',   this)">🗺️<span class="tab-text"> 지도</span></button>
+    <button class="nav-tab"     onclick="switchTab('cards', this)">🃏<span class="tab-text"> 질문카드</span></button>
+    <button class="nav-tab"     onclick="switchTab('gallery',this)">📸<span class="tab-text"> 자랑대회</span></button>
+    <button class="nav-tab"     onclick="switchTab('admin', this)">⚙️<span class="tab-text"> 관리</span></button>
   </div>
   <div class="nav-count" onclick="refreshAll()" title="클릭하여 새로고침">
     참가자 <b id="cnt">0</b>명
