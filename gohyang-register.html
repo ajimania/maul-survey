@@ -548,24 +548,30 @@ function goBack() {
   if (step > 1) setStep(step - 1);
 }
 
+// ── Google Sheets 웹앱 URL (배포 후 여기에 입력) ────────
+const SHEETS_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+
 // ── 제출 ───────────────────────────────────────────────
 async function submit() {
   const btn = document.getElementById('btn-next');
   btn.textContent = '저장 중...';
   btn.disabled    = true;
 
-  const hometown = document.getElementById('f-hometown').value.trim();
+  const name         = document.getElementById('f-name').value.trim();
+  const phone        = document.getElementById('f-phone').value.trim();
+  const email        = document.getElementById('f-email').value.trim() || null;
+  const hometown     = document.getElementById('f-hometown').value.trim();
+  const story        = document.getElementById('f-story').value.trim() || null;
+  const apply_reason = document.getElementById('f-reason').value.trim() || null;
+  const host_question= document.getElementById('f-question').value.trim() || null;
+
   const { lat, lng } = await geocode(hometown);
 
   const { error } = await sb.from('gohyang_participants').insert({
-    name:              document.getElementById('f-name').value.trim(),
-    phone:             document.getElementById('f-phone').value.trim(),
-    email:             document.getElementById('f-email').value.trim() || null,
+    name, phone, email,
     hometown_name:     hometown || null,
     lat, lng,
-    story:             document.getElementById('f-story').value.trim() || null,
-    apply_reason:      document.getElementById('f-reason').value.trim() || null,
-    host_question:     document.getElementById('f-question').value.trim() || null,
+    story, apply_reason, host_question,
     photo1_data:       photos[1] || null,
     photo1_caption:    document.getElementById('cap1').value.trim() || null,
     photo2_data:       photos[2] || null,
@@ -583,11 +589,34 @@ async function submit() {
     return;
   }
 
+  // Google Sheets 전송 (실패해도 신청은 완료)
+  if (SHEETS_URL && SHEETS_URL !== 'YOUR_APPS_SCRIPT_URL_HERE') {
+    fetch(SHEETS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        신청일시:    new Date().toLocaleString('ko-KR'),
+        이름:        name,
+        전화번호:    phone,
+        이메일:      email || '',
+        고향:        hometown,
+        고향이야기:  story || '',
+        신청이유:    apply_reason || '',
+        운영자질문:  host_question || '',
+        입금여부:    checks.payment ? '완료' : (checks.later ? '예정' : ''),
+        사진1:       photos[1] ? '있음' : '',
+        사진2:       photos[2] ? '있음' : '',
+        사진3:       photos[3] ? '있음' : '',
+      }),
+    }).catch(() => {});
+  }
+
   // 완료 화면
   document.querySelectorAll('.step').forEach(el => el.style.display = 'none');
   document.getElementById('prog').style.display    = 'none';
   document.getElementById('btn-row').style.display = 'none';
-  document.getElementById('done-name').textContent = document.getElementById('f-name').value.trim();
+  document.getElementById('done-name').textContent = name;
   document.getElementById('done-screen').style.display = 'block';
 }
 
