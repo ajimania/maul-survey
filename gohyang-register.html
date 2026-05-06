@@ -220,7 +220,7 @@
 
 <div class="app-header">
   <h1>🏡 내 고향 자랑대회</h1>
-  <p>도시쥐정거장 실험 프로젝트 · 참가 신청</p>
+  <p>돌고돌아 성북천 · 도시쥐정거장 실험 프로젝트</p>
 </div>
 
 <div class="progress" id="prog">
@@ -235,6 +235,20 @@
   <div class="step-title">참가자 정보 👤</div>
   <div class="step-desc">신청 확인 및 연락을 위해 사용돼요.<br>워크샵 외부에 공개되지 않아요.</div>
   <div class="private-badge">🔒 관리자만 열람 가능</div>
+
+  <div style="background:#fff;border:1.5px solid #e8d5b7;border-radius:12px;padding:16px 18px;margin-bottom:22px;">
+    <div style="font-size:12px;font-weight:800;color:#c9a97a;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;">이런 모임이에요</div>
+    <p style="font-size:13px;line-height:1.9;color:#5a3e2b;">
+      각자의 <strong>고향 이야기를 사진과 함께 짧게 발표</strong>하는 모임이에요.<br>
+      페차쿠차 형식으로 진행되고, 지도·질문카드로 서로를 알아가는 시간도 있어요.<br>
+      고향을 떠나 도시에 살고 있는 사람이라면 누구든 환영해요.
+    </p>
+    <div style="margin-top:12px;display:flex;flex-direction:column;gap:5px;">
+      <div style="font-size:12px;color:#888;display:flex;gap:8px;"><span style="min-width:44px;color:#c9a97a;font-weight:700;">📅 일시</span><span>2026년 5월 24일 (일) 오후 7시</span></div>
+      <div style="font-size:12px;color:#888;display:flex;gap:8px;"><span style="min-width:44px;color:#c9a97a;font-weight:700;">📍 장소</span><span>성북구 삼양로 41 공업사 (길음역 도보 6분)</span></div>
+      <div style="font-size:12px;color:#888;display:flex;gap:8px;"><span style="min-width:44px;color:#c9a97a;font-weight:700;">💰 참가비</span><span>15,000원 (음료·다과 포함)</span></div>
+    </div>
+  </div>
   <div class="field">
     <label>이름 <span style="color:#f00;font-size:11px">*</span></label>
     <input type="text" id="f-name" placeholder="홍길동" maxlength="20" autocomplete="name"/>
@@ -262,6 +276,15 @@
   <div class="field">
     <label>자랑하고 싶은 고향 이야기</label>
     <textarea id="f-story" placeholder="고향의 음식, 장소, 사람, 기억...&#10;&#10;어떤 이야기든 좋아요. 워크샵에서 함께 나눌 거예요."></textarea>
+  </div>
+  <div class="field">
+    <label>이 모임에 참가하고 싶은 이유 <span style="color:#f00;font-size:11px">*</span></label>
+    <textarea id="f-reason" placeholder="어떤 계기로 신청하셨나요? 모임에서 기대하는 것이 있다면 자유롭게 적어주세요." style="min-height:110px;"></textarea>
+  </div>
+  <div class="field">
+    <label>운영자에게 묻고 싶은 점</label>
+    <textarea id="f-question" placeholder="궁금한 점, 전달하고 싶은 말이 있다면 편하게 적어주세요. (선택)" style="min-height:90px;"></textarea>
+    <div class="hint">선택 사항이에요.</div>
   </div>
 </div>
 
@@ -315,12 +338,13 @@
   <!-- 참가비 안내 -->
   <div class="payment-info">
     <h3>💰 참가비 안내</h3>
-    <div class="payment-amount">19,999원</div>
-    <div class="payment-note">음료 및 로컬 다과 포함</div>
+    <div class="payment-amount">15,000원</div>
+    <div class="payment-note">음료(커피·차) · 수제 쿠키 · 다과 포함</div>
     <div style="height:14px"></div>
-    <div class="payment-row"><span class="label">입금 계좌</span><span class="value">카카오뱅크 000-0000-0000</span></div>
-    <div class="payment-row"><span class="label">예금주</span><span class="value">도시쥐정거장</span></div>
+    <div class="payment-row"><span class="label">입금 계좌</span><span class="value">우리은행 1005604804332</span></div>
+    <div class="payment-row"><span class="label">예금주</span><span class="value">조정묵 (도굴꾼컴퍼니)</span></div>
     <div class="payment-row"><span class="label">입금자명</span><span class="value">신청자 이름으로 입금</span></div>
+    <div class="payment-row"><span class="label">취소 기한</span><span class="value">행사 이틀 전까지</span></div>
   </div>
 
   <!-- 개인정보 동의 -->
@@ -345,7 +369,7 @@
     <h3>💳 입금 확인</h3>
     <div class="check-row" id="chk-payment" onclick="toggleCheck('payment')">
       <div class="check-box" id="box-payment"></div>
-      <div class="check-label">참가비 19,999원을 입금했습니다 <span>(필수)</span></div>
+      <div class="check-label">참가비 15,000원을 입금했습니다 <span>(필수)</span></div>
     </div>
     <div class="check-row" id="chk-later" onclick="toggleCheck('later')">
       <div class="check-box" id="box-later"></div>
@@ -366,8 +390,10 @@
     <div class="done-detail">
       <p>
         <strong>📅 일시</strong>: 2026년 5월 24일 (일) 오후 7시<br>
-        <strong>💰 참가비</strong>: 19,999원 (미입금 시 워크샵 전 입금)<br>
-        <strong>📸 사진</strong>: 사진을 아직 올리지 않으셨다면 운영자에게 따로 보내주세요.<br>
+        <strong>📍 장소</strong>: 성북구 삼양로 41 공업사 (길음역 도보 6분)<br>
+        <strong>💰 참가비</strong>: 15,000원 (미입금 시 행사 전까지 입금)<br>
+        <strong>🏦 계좌</strong>: 우리은행 1005604804332 조정묵<br>
+        <strong>📸 사진</strong>: 아직 못 올리셨다면 운영자에게 따로 보내주세요.<br>
         <strong>📬 문의</strong>: cityg.stop@gmail.com
       </p>
     </div>
@@ -425,6 +451,9 @@ function validate() {
   if (step === 2) {
     if (!document.getElementById('f-hometown').value.trim()) {
       alert('고향 지명을 입력해 주세요.'); return false;
+    }
+    if (!document.getElementById('f-reason').value.trim()) {
+      alert('참가 신청 이유를 적어주세요.'); return false;
     }
   }
   if (step === 4) {
@@ -532,6 +561,8 @@ async function submit() {
     hometown_name:     hometown || null,
     lat, lng,
     story:             document.getElementById('f-story').value.trim() || null,
+    apply_reason:      document.getElementById('f-reason').value.trim() || null,
+    host_question:     document.getElementById('f-question').value.trim() || null,
     photo1_data:       photos[1] || null,
     photo1_caption:    document.getElementById('cap1').value.trim() || null,
     photo2_data:       photos[2] || null,
