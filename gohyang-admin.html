@@ -199,6 +199,7 @@
     <div class="top-bar-right">
       <span class="count-badge" id="cnt-badge">0명</span>
       <button class="refresh-btn" onclick="load()">↺ 새로고침</button>
+      <button class="refresh-btn" onclick="signOut()">로그아웃</button>
     </div>
   </div>
 
@@ -229,19 +230,41 @@ const sb = createClient(
   'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
 );
 
-const PASS = 'gohyang2026';
+// 어드민 계정 이메일 (Supabase Auth에 등록된 계정)
+const ADMIN_EMAIL = 'cityg.stop@gmail.com';
 
 let all = [], filter = 'all';
 
-window.unlock = function() {
-  const v = document.getElementById('pw-input').value;
-  if (v === PASS) {
+// 기존 세션이 있으면 바로 입장
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
     document.getElementById('lock-screen').style.display = 'none';
     document.getElementById('admin-body').style.display  = 'block';
     load();
-  } else {
-    document.getElementById('pw-err').style.display = 'block';
   }
+})();
+
+window.unlock = async function() {
+  const pw  = document.getElementById('pw-input').value;
+  const btn = document.querySelector('.lock-btn');
+  btn.textContent = '확인 중…'; btn.disabled = true;
+
+  const { error } = await sb.auth.signInWithPassword({ email: ADMIN_EMAIL, password: pw });
+
+  if (error) {
+    document.getElementById('pw-err').style.display = 'block';
+    btn.textContent = '입장'; btn.disabled = false;
+  } else {
+    document.getElementById('lock-screen').style.display = 'none';
+    document.getElementById('admin-body').style.display  = 'block';
+    load();
+  }
+};
+
+window.signOut = async function() {
+  await sb.auth.signOut();
+  location.reload();
 };
 
 window.load = async function() {
