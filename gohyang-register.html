@@ -278,7 +278,7 @@
     <div class="hint">시·군·구 단위로 적어주세요. 지명 사이는 콤마(,)를 찍어주세요. 지도에 자동으로 표시돼요.</div>
   </div>
   <div class="field">
-    <label>각 지역에는 어떤 기억이 남아있나요?</label>
+    <label>각 지역에는 어떤 기억이 남아있나요? <span style="color:#f00;font-size:11px">*</span></label>
     <div style="font-size:12px;color:#7a5840;margin-bottom:8px">그 지역을 떠올리면 생각나는, 나누고 싶은 이야기를 간략히 적어주세요.</div>
     <textarea id="f-story" placeholder="고향의 음식, 장소, 사람, 기억...&#10;&#10;어떤 이야기든 좋아요. 워크샵에서 함께 나눌 거예요."></textarea>
   </div>
@@ -456,6 +456,9 @@ function validate() {
   if (step === 2) {
     if (!document.getElementById('f-hometown').value.trim()) {
       alert('고향 지명을 입력해 주세요.'); return false;
+    }
+    if (!document.getElementById('f-story').value.trim()) {
+      alert('지역 기억을 간략히 적어주세요.'); return false;
     }
     if (!document.getElementById('f-reason').value.trim()) {
       alert('참가 신청 이유를 적어주세요.'); return false;

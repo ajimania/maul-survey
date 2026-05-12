@@ -515,10 +515,10 @@
 
     /* ── 외국 지명 라벨 ── */
     .foreign-label {
-      background: rgba(28,20,16,.88); backdrop-filter: blur(6px);
-      border: 1px solid rgba(201,169,122,.35); border-radius: 8px;
-      color: var(--tan); font-size: 11px; font-weight: 700;
+      background: #c9a97a; border-radius: 6px;
+      color: #1c1410; font-size: 12px; font-weight: 800;
       padding: 4px 10px; white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0,0,0,.45);
     }
   </style>
 </head>
@@ -846,7 +846,7 @@ function addParticipantMarkers(p) {
     } else if (loc.is_foreign && loc.lat) {
       const fIdx = foreignLabelList.length;
       const fIcon = L.divIcon({
-        html: `<div class="foreign-label">🌍 ${loc.name}</div>`,
+        html: `<div class="foreign-label">${loc.name}</div>`,
         className: '', iconSize: [0, 0], iconAnchor: [0, 10]
       });
       const fm = L.marker([37.5 - (fIdx % 7) * 1.1, 132.8], { icon: fIcon, interactive: false }).addTo(map);
