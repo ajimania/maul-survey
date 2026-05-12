@@ -272,12 +272,14 @@
   <div class="step-title">고향 자랑 정보 🗺️</div>
   <div class="step-desc">워크샵 지도와 진행에 사용되는 정보예요.</div>
   <div class="field">
-    <label>고향 지명 <span style="color:#f00;font-size:11px">*</span></label>
-    <input type="text" id="f-hometown" placeholder="예: 목포시, 음성군, 밀양시" maxlength="60"/>
-    <div class="hint">시·군·구 단위로 적어주세요. 지도에 자동으로 표시돼요.</div>
+    <label>당신이 소개하고 싶은 고향, 혹은 거쳐온 지역의 여정을 적어주세요 <span style="color:#f00;font-size:11px">*</span></label>
+    <div style="font-size:12px;color:#7a5840;margin-bottom:8px">(적어주신 지역에 대한 이야기를 나눕니다.)</div>
+    <input type="text" id="f-hometown" placeholder="예: 목포시, 서울 성북구, 도쿄" maxlength="200"/>
+    <div class="hint">시·군·구 단위로 적어주세요. 지명 사이는 콤마(,)를 찍어주세요. 지도에 자동으로 표시돼요.</div>
   </div>
   <div class="field">
-    <label>자랑하고 싶은 고향 이야기</label>
+    <label>각 지역에는 어떤 기억이 남아있나요?</label>
+    <div style="font-size:12px;color:#7a5840;margin-bottom:8px">그 지역을 떠올리면 생각나는, 나누고 싶은 이야기를 간략히 적어주세요.</div>
     <textarea id="f-story" placeholder="고향의 음식, 장소, 사람, 기억...&#10;&#10;어떤 이야기든 좋아요. 워크샵에서 함께 나눌 거예요."></textarea>
   </div>
   <div class="field">
@@ -513,28 +515,51 @@ function compress(file) {
 }
 
 // ── 지오코딩 (Nominatim) ───────────────────────────────
-async function geocode(hometown) {
-  const nmt = async (q) => {
-    try {
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1&countrycodes=kr`,
-        { headers: { 'Accept-Language': 'ko' } }
-      );
-      const d = await res.json();
-      if (d.length > 0) return { lat: parseFloat(d[0].lat), lng: parseFloat(d[0].lon) };
-    } catch(_) {}
-    return null;
-  };
-  // 1차: 전체 이름
-  let r = await nmt(hometown);
-  if (r) return r;
-  // 2차: 마지막 단어만 (시/군/구)
-  const parts = hometown.trim().split(/\s+/);
-  if (parts.length > 1) {
-    r = await nmt(parts[parts.length - 1]);
-    if (r) return r;
+const KR = { minLat: 33, maxLat: 38.7, minLng: 124.5, maxLng: 132.5 };
+
+async function nmtFetch(q, koreaOnly) {
+  try {
+    const url = koreaOnly
+      ? `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1&countrycodes=kr`
+      : `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1`;
+    const d = await (await fetch(url, { headers: { 'Accept-Language': 'ko' } })).json();
+    if (d.length > 0) return { lat: parseFloat(d[0].lat), lng: parseFloat(d[0].lon) };
+  } catch(_) {}
+  return null;
+}
+
+async function geocodeSingle(name) {
+  let r = await nmtFetch(name, true);
+  if (!r) {
+    const parts = name.trim().split(/\s+/);
+    if (parts.length > 1) r = await nmtFetch(parts[parts.length - 1], true);
   }
-  return { lat: null, lng: null };
+  if (r) return { lat: r.lat, lng: r.lng, is_foreign: false };
+  r = await nmtFetch(name, false);
+  if (r) {
+    const isKorea = r.lat >= KR.minLat && r.lat <= KR.maxLat && r.lng >= KR.minLng && r.lng <= KR.maxLng;
+    return { lat: r.lat, lng: r.lng, is_foreign: !isKorea };
+  }
+  return { lat: null, lng: null, is_foreign: false };
+}
+
+async function geocodeAll(hometownStr) {
+  const names = hometownStr.split(',').map(s => s.trim()).filter(Boolean);
+  const results = [];
+  for (let i = 0; i < names.length; i++) {
+    const loc = await geocodeSingle(names[i]);
+    results.push({ name: names[i], ...loc });
+    if (i < names.length - 1) await new Promise(r => setTimeout(r, 1100));
+  }
+  return results;
+}
+
+function encodeLocations(results) {
+  return results.map(r =>
+    r.lat !== null
+      ? `${r.name}|${r.lat.toFixed(5)}|${r.lng.toFixed(5)}${r.is_foreign ? '|foreign' : ''}`
+      : r.name
+  ).join(',');
 }
 
 // ── 네비게이션 ─────────────────────────────────────────
@@ -565,11 +590,17 @@ async function submit() {
   const apply_reason = document.getElementById('f-reason').value.trim() || null;
   const host_question= document.getElementById('f-question').value.trim() || null;
 
-  const { lat, lng } = await geocode(hometown);
+  btn.textContent = '위치 확인 중…';
+  const locResults   = await geocodeAll(hometown);
+  const hometownEncoded = encodeLocations(locResults);
+  const firstKorea   = locResults.find(r => r.lat && !r.is_foreign);
+  const lat          = firstKorea?.lat ?? null;
+  const lng          = firstKorea?.lng ?? null;
 
+  btn.textContent = '저장 중…';
   const { error } = await sb.from('gohyang_participants').insert({
     name, phone, email,
-    hometown_name:     hometown || null,
+    hometown_name:     hometownEncoded || null,
     lat, lng,
     story,
     photo1_data:       photos[1] || null,

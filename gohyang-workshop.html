@@ -496,6 +496,30 @@
     ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 3px; }
 
     .leaflet-control-attribution { font-size: 9px !important; opacity: .4; }
+
+    /* ── 참가자 필터 바 ── */
+    .p-filter-bar {
+      position: absolute; left: 10px; top: 80px; z-index: 900;
+      display: flex; flex-direction: column; gap: 4px;
+      max-height: calc(100% - 200px); overflow-y: auto;
+    }
+    .p-filter-btn {
+      background: rgba(28,20,16,.88); backdrop-filter: blur(8px);
+      border: 1px solid var(--border); color: var(--muted);
+      font-size: 11px; font-weight: 700; padding: 5px 10px;
+      border-radius: 6px; cursor: pointer; font-family: inherit;
+      white-space: nowrap; text-align: left; transition: all .15s;
+    }
+    .p-filter-btn:hover { color: var(--text); border-color: rgba(255,255,255,.2); }
+    .p-filter-btn.on { background: var(--orange); border-color: var(--orange); color: #fff; }
+
+    /* ── 외국 지명 라벨 ── */
+    .foreign-label {
+      background: rgba(28,20,16,.88); backdrop-filter: blur(6px);
+      border: 1px solid rgba(201,169,122,.35); border-radius: 8px;
+      color: var(--tan); font-size: 11px; font-weight: 700;
+      padding: 4px 10px; white-space: nowrap;
+    }
   </style>
 </head>
 <body>
@@ -584,6 +608,9 @@
   <div class="detail-panel" id="detail-panel">
     <button class="dp-close" onclick="closeDetail()">✕</button>
     <div id="dp-body"></div>
+  </div>
+  <div class="p-filter-bar" id="p-filter-bar">
+    <button class="p-filter-btn on" id="pf-all" onclick="filterMap(null)">🗺 전체</button>
   </div>
 </div>
 
@@ -720,7 +747,8 @@ const sb = createClient(
 );
 
 // ── 상태 ──────────────────────────────────────────
-let map, participants = [], markers = {};
+let map, participants = [];
+let pMarkers = {}, pLines = {}, foreignLabelList = [], activeFilter = null;
 let cards = [], reqCards = [], optCards = [];
 let pickedEl = null;
 let curParticipant = null, curPhotoIdx = 0;
@@ -742,8 +770,8 @@ const DEFAULT_CARDS = [
 // 전역 노출
 Object.assign(window, {
   switchTab, fitKorea, refreshAll, closeDetail,
-  resetSpread,
-  addParticipant, addCard, deleteParticipant, deleteCard,
+  resetSpread, filterMap,
+  addParticipant, addCard, deleteParticipant, deleteCard, fixMissingCoords,
   selectParticipant, galleryPrev, galleryNext, copyLink, copyAudLink
 });
 
@@ -769,22 +797,106 @@ function initMap() {
 
 function fitKorea() { map?.setView([36.5, 127.8], 7); }
 
-function addMarker(p) {
-  if (!map || !p.lat || !p.lng) return;
-  markers[p.id]?.remove();
+const P_COLORS = ['#d4622a','#4a90d9','#5d9e56','#9b59b6','#e67e22','#1abc9c','#c0392b','#2980b9','#8e44ad','#27ae60'];
 
-  const icon = L.divIcon({
-      html: `<div style="width:36px;height:36px;border-radius:50%;background:#d4622a;
-              border:3px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,.4);
-              display:flex;align-items:center;justify-content:center;
-              font-size:14px;font-weight:800;color:#fff;font-family:sans-serif">
-              ${p.name.slice(0,1)}</div>`,
-      iconSize: [36, 36], iconAnchor: [18, 18], className: ''
+function parseLocations(p) {
+  const hn = p.hometown_name;
+  if (!hn) return [];
+  if (hn.includes('|')) {
+    return hn.split(',').map(part => {
+      const pcs = part.trim().split('|');
+      const name = pcs[0].trim();
+      if (pcs.length >= 3) return { name, lat: parseFloat(pcs[1]), lng: parseFloat(pcs[2]), is_foreign: pcs[3] === 'foreign' };
+      return { name, lat: null, lng: null, is_foreign: false };
     });
+  }
+  // 구형식: 단일 이름 + stored lat/lng
+  return [{ name: hn, lat: p.lat || null, lng: p.lng || null, is_foreign: false }];
+}
 
-  markers[p.id] = L.marker([p.lat, p.lng], { icon }).addTo(map)
-    .bindTooltip(`${p.name}${p.hometown_name ? ' · ' + p.hometown_name : ''}`,
-      { permanent: false, direction: 'top', offset: [0, -22] });
+function addParticipantMarkers(p) {
+  if (!map) return;
+  // 기존 마커·선·외국라벨 제거
+  (pMarkers[p.id] || []).forEach(m => m.remove());
+  pLines[p.id]?.remove();
+  const keep = foreignLabelList.filter(f => f.pid !== p.id);
+  foreignLabelList.filter(f => f.pid === p.id).forEach(f => f.marker?.remove());
+  foreignLabelList.length = 0; keep.forEach(f => foreignLabelList.push(f));
+  pMarkers[p.id] = []; delete pLines[p.id];
+
+  const locs  = parseLocations(p);
+  const pIdx  = participants.findIndex(x => x.id === p.id);
+  const color = P_COLORS[pIdx % P_COLORS.length];
+  const koreaLatLngs = [];
+
+  locs.forEach(loc => {
+    if (loc.lat && !loc.is_foreign) {
+      const icon = L.divIcon({
+        html: `<div style="width:34px;height:34px;border-radius:50%;background:${color};
+                border:3px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,.4);
+                display:flex;align-items:center;justify-content:center;
+                font-size:13px;font-weight:800;color:#fff;font-family:sans-serif">
+                ${p.name.slice(0,1)}</div>`,
+        iconSize: [34, 34], iconAnchor: [17, 17], className: ''
+      });
+      const m = L.marker([loc.lat, loc.lng], { icon }).addTo(map)
+        .bindTooltip(`${p.name} · ${loc.name}`, { permanent: false, direction: 'top', offset: [0, -20] });
+      pMarkers[p.id].push(m);
+      koreaLatLngs.push([loc.lat, loc.lng]);
+    } else if (loc.is_foreign && loc.lat) {
+      const fIdx = foreignLabelList.length;
+      const fIcon = L.divIcon({
+        html: `<div class="foreign-label">🌍 ${loc.name}</div>`,
+        className: '', iconSize: [0, 0], iconAnchor: [0, 10]
+      });
+      const fm = L.marker([37.5 - (fIdx % 7) * 1.1, 132.8], { icon: fIcon, interactive: false }).addTo(map);
+      foreignLabelList.push({ pid: p.id, name: loc.name, marker: fm });
+    }
+  });
+
+  if (koreaLatLngs.length > 1) {
+    pLines[p.id] = L.polyline(koreaLatLngs, { color, weight: 2.5, opacity: 0.5, dashArray: '7,5' }).addTo(map);
+  }
+
+  // 현재 필터 적용
+  if (activeFilter !== null && activeFilter !== p.id) {
+    (pMarkers[p.id] || []).forEach(m => m.remove());
+    pLines[p.id]?.remove();
+    foreignLabelList.filter(f => f.pid === p.id).forEach(f => f.marker?.remove());
+  }
+}
+
+function filterMap(pid) {
+  activeFilter = pid;
+  document.querySelectorAll('.p-filter-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById(pid ? 'pf-' + pid : 'pf-all')?.classList.add('on');
+
+  participants.forEach(p => {
+    const vis = pid === null || pid === p.id;
+    (pMarkers[p.id] || []).forEach(m => vis ? m.addTo(map) : m.remove());
+    if (pLines[p.id]) vis ? pLines[p.id].addTo(map) : pLines[p.id].remove();
+  });
+  foreignLabelList.forEach(f => {
+    const vis = pid === null || pid === f.pid;
+    vis ? f.marker?.addTo(map) : f.marker?.remove();
+  });
+
+  if (pid) {
+    const ms = pMarkers[pid] || [];
+    if (ms.length === 1) map.setView(ms[0].getLatLng(), 10);
+    else if (ms.length > 1) map.fitBounds(L.featureGroup(ms).getBounds().pad(0.3));
+  } else {
+    fitKorea();
+  }
+}
+
+function updateFilterBar() {
+  const bar = document.getElementById('p-filter-bar');
+  if (!bar) return;
+  bar.innerHTML = `<button class="p-filter-btn ${activeFilter===null?'on':''}" id="pf-all" onclick="filterMap(null)">🗺 전체</button>`;
+  participants.forEach(p => {
+    bar.innerHTML += `<button class="p-filter-btn ${activeFilter===p.id?'on':''}" id="pf-${p.id}" onclick="filterMap('${p.id}')">${p.name}</button>`;
+  });
 }
 
 function showDetail(p) {
@@ -1013,7 +1125,10 @@ async function refreshAll() {
   const { data } = await sb.from('gohyang_participants').select('*').order('created_at');
   participants = data ?? [];
   document.getElementById('cnt').textContent = participants.length;
-  if (map) participants.forEach(p => { if (!markers[p.id]) addMarker(p); });
+  if (map) {
+    participants.forEach(p => addParticipantMarkers(p));
+    updateFilterBar();
+  }
   renderGallerySelector();
 }
 
@@ -1052,45 +1167,51 @@ function renderAdmin() {
   document.getElementById('aud-link-url').textContent = audUrl;
 }
 
-async function geocode(hometown) {
-  const nmt = async (q) => {
+
+async function geocodeSingle(name) {
+  const nmtFetch = async (q, koreaOnly) => {
     try {
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1&countrycodes=kr`,
-        { headers: { 'Accept-Language': 'ko' } }
-      );
-      const d = await res.json();
+      const url = koreaOnly
+        ? `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1&countrycodes=kr`
+        : `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1`;
+      const d = await (await fetch(url, { headers: { 'Accept-Language': 'ko' } })).json();
       if (d.length > 0) return { lat: parseFloat(d[0].lat), lng: parseFloat(d[0].lon) };
     } catch(_) {}
     return null;
   };
-  let r = await nmt(hometown);
-  if (r) return r;
-  const parts = hometown.trim().split(/\s+/);
-  if (parts.length > 1) {
-    r = await nmt(parts[parts.length - 1]);
-    if (r) return r;
-  }
-  return { lat: null, lng: null };
+  const KR = { minLat: 33, maxLat: 38.7, minLng: 124.5, maxLng: 132.5 };
+  let r = await nmtFetch(name, true);
+  if (!r) { const pts = name.trim().split(/\s+/); if (pts.length>1) r = await nmtFetch(pts[pts.length-1], true); }
+  if (r) return { lat: r.lat, lng: r.lng, is_foreign: false };
+  r = await nmtFetch(name, false);
+  if (r) { const ok = r.lat>=KR.minLat&&r.lat<=KR.maxLat&&r.lng>=KR.minLng&&r.lng<=KR.maxLng; return { lat: r.lat, lng: r.lng, is_foreign: !ok }; }
+  return { lat: null, lng: null, is_foreign: false };
 }
 
 async function fixMissingCoords() {
-  const missing = participants.filter(p => !p.lat && p.hometown_name);
+  const missing = participants.filter(p => p.hometown_name && !p.hometown_name.includes('|'));
   if (missing.length === 0) { alert('좌표 누락 참가자 없음'); return; }
   let fixed = 0;
   for (const p of missing) {
-    const { lat, lng } = await geocode(p.hometown_name);
-    if (lat && lng) {
-      await sb.from('gohyang_participants').update({ lat, lng }).eq('id', p.id);
-      p.lat = lat; p.lng = lng;
-      addMarker(p);
-      fixed++;
+    const names = p.hometown_name.split(',').map(s => s.trim()).filter(Boolean);
+    const encoded = [];
+    for (let i = 0; i < names.length; i++) {
+      const r = await geocodeSingle(names[i]);
+      encoded.push(r.lat !== null ? `${names[i]}|${r.lat.toFixed(5)}|${r.lng.toFixed(5)}${r.is_foreign?'|foreign':''}` : names[i]);
+      if (i < names.length - 1) await new Promise(r => setTimeout(r, 1100));
     }
-    await new Promise(r => setTimeout(r, 1100)); // Nominatim rate limit
+    const hometownEncoded = encoded.join(',');
+    const firstKorea = encoded.find(e => e.includes('|') && !e.endsWith('|foreign'));
+    const coords = firstKorea ? firstKorea.split('|') : [];
+    const lat = coords[1] ? parseFloat(coords[1]) : null;
+    const lng = coords[2] ? parseFloat(coords[2]) : null;
+    await sb.from('gohyang_participants').update({ hometown_name: hometownEncoded, lat, lng }).eq('id', p.id);
+    p.hometown_name = hometownEncoded; p.lat = lat; p.lng = lng;
+    addParticipantMarkers(p); fixed++;
+    await new Promise(r => setTimeout(r, 1100));
   }
-  alert(`${fixed}/${missing.length}명 복구 완료`);
-  await refreshAll();
-  renderAdmin();
+  alert(`${fixed}/${missing.length}명 인코딩 완료`);
+  await refreshAll(); renderAdmin();
 }
 
 async function addParticipant() {
@@ -1117,7 +1238,11 @@ async function addCard() {
 async function deleteParticipant(id) {
   if (!confirm('참가자를 삭제할까요?')) return;
   await sb.from('gohyang_participants').delete().eq('id', id);
-  markers[id]?.remove(); delete markers[id];
+  (pMarkers[id] || []).forEach(m => m.remove()); delete pMarkers[id];
+  pLines[id]?.remove(); delete pLines[id];
+  const keep = foreignLabelList.filter(f => f.pid !== id);
+  foreignLabelList.filter(f => f.pid === id).forEach(f => f.marker?.remove());
+  foreignLabelList.length = 0; keep.forEach(f => foreignLabelList.push(f));
   await refreshAll();
   renderAdmin();
 }
@@ -1225,7 +1350,8 @@ function subscribe() {
       payload => {
         participants.push(payload.new);
         document.getElementById('cnt').textContent = participants.length;
-        addMarker(payload.new);
+        addParticipantMarkers(payload.new);
+        updateFilterBar();
         renderGallerySelector();
       })
     .subscribe();
