@@ -87,31 +87,25 @@
 
     /* ── 쥐 타이머 ── */
     .rat-timer {
-      position: absolute; top: 12px; left: 12px; z-index: 1000;
-      background: rgba(28,20,16,.88); backdrop-filter: blur(8px);
+      position: absolute; bottom: 110px; left: 12px; right: 12px; z-index: 1000;
+      background: rgba(28,20,16,.82); backdrop-filter: blur(8px);
       border: 1px solid var(--border); border-radius: 12px;
-      padding: 10px 14px; width: 220px;
-    }
-    .rat-time {
-      font-size: 28px; font-weight: 900; color: var(--tan);
-      text-align: center; letter-spacing: .05em; line-height: 1;
-      margin-bottom: 8px;
+      padding: 10px 14px;
     }
     .rat-track {
-      position: relative; height: 28px;
-      background: rgba(255,255,255,.06); border-radius: 14px;
-      margin-bottom: 8px; overflow: hidden;
+      position: relative; height: 32px;
+      background: rgba(255,255,255,.06); border-radius: 16px;
+      margin-bottom: 8px;
     }
     .rat-progress {
       position: absolute; left: 0; top: 0; bottom: 0;
-      background: linear-gradient(90deg, rgba(212,98,42,.3), rgba(212,98,42,.15));
-      border-radius: 14px; transition: width .5s linear;
-      width: 0%;
+      background: linear-gradient(90deg, rgba(212,98,42,.35), rgba(212,98,42,.1));
+      border-radius: 16px; width: 0%;
     }
     .rat-icon {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      font-size: 20px; line-height: 1;
-      transition: left .5s linear;
+      position: absolute; top: 50%;
+      transform: translateY(-50%);
+      font-size: 22px; line-height: 1;
       left: 4px;
     }
     .rat-icon.done { animation: ratDance .4s ease infinite alternate; }
@@ -119,13 +113,11 @@
       from { transform: translateY(-60%) rotate(-10deg); }
       to   { transform: translateY(-40%) rotate(10deg); }
     }
-    .rat-btns {
-      display: flex; gap: 5px; justify-content: center;
-    }
+    .rat-btns { display: flex; gap: 6px; }
     .rat-btn {
       flex: 1; background: rgba(255,255,255,.07);
       border: 1px solid var(--border); border-radius: 7px;
-      color: var(--text); font-size: 13px; padding: 5px 0;
+      color: var(--text); font-size: 13px; padding: 6px 0;
       cursor: pointer; font-family: inherit; font-weight: 700;
       transition: background .15s;
     }
@@ -497,15 +489,14 @@
   </div>
   <!-- 쥐 타이머 -->
   <div class="rat-timer">
-    <div class="rat-time" id="rat-time">7:00</div>
     <div class="rat-track">
       <div class="rat-progress" id="rat-progress"></div>
       <div class="rat-icon" id="rat-icon">🐭</div>
     </div>
     <div class="rat-btns">
-      <button class="rat-btn" id="rat-start" onclick="ratStart()">▶ 시작</button>
-      <button class="rat-btn" onclick="ratPause()">⏸ 정지</button>
-      <button class="rat-btn" onclick="ratReset()">↺ 리셋</button>
+      <button class="rat-btn" id="rat-start-btn">▶ 시작</button>
+      <button class="rat-btn" id="rat-pause-btn">⏸ 정지</button>
+      <button class="rat-btn" id="rat-reset-btn">↺ 리셋</button>
     </div>
   </div>
 
@@ -1113,45 +1104,41 @@ async function subscribeReactions() {
 }
 
 // ── 쥐 타이머 ────────────────────────────────────
-const RAT_TOTAL = 7 * 60; // 420초
+const RAT_TOTAL = 7 * 60;
 let ratRemain = RAT_TOTAL, ratTicker = null, ratRunning = false;
 
 function ratRender() {
-  const m = String(Math.floor(ratRemain / 60)).padStart(1,'0');
-  const s = String(ratRemain % 60).padStart(2,'0');
-  document.getElementById('rat-time').textContent = m + ':' + s;
   const pct = (RAT_TOTAL - ratRemain) / RAT_TOTAL;
   document.getElementById('rat-progress').style.width = (pct * 100) + '%';
-  const trackW = document.querySelector('.rat-track').offsetWidth;
   const icon = document.getElementById('rat-icon');
-  icon.style.left = Math.max(4, pct * (trackW - 28)) + 'px';
+  icon.style.left = `calc(${pct * 100}% - ${pct * 26}px + 4px)`;
   icon.classList.toggle('done', ratRemain === 0);
-  document.getElementById('rat-start').classList.toggle('active', ratRunning);
+  document.getElementById('rat-start-btn').classList.toggle('active', ratRunning);
 }
 
-function ratStart() {
+document.getElementById('rat-start-btn').addEventListener('click', () => {
   if (ratRunning || ratRemain === 0) return;
   ratRunning = true;
+  ratRender();
   ratTicker = setInterval(() => {
     ratRemain--;
     ratRender();
     if (ratRemain <= 0) { clearInterval(ratTicker); ratRunning = false; }
   }, 1000);
-  ratRender();
-}
+});
 
-function ratPause() {
+document.getElementById('rat-pause-btn').addEventListener('click', () => {
   clearInterval(ratTicker);
   ratRunning = false;
   ratRender();
-}
+});
 
-function ratReset() {
+document.getElementById('rat-reset-btn').addEventListener('click', () => {
   clearInterval(ratTicker);
   ratRunning = false;
   ratRemain = RAT_TOTAL;
   ratRender();
-}
+});
 
 // ── 실시간 구독 ──────────────────────────────────
 function subscribe() {
