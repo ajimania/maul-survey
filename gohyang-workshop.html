@@ -108,6 +108,16 @@
       font-size: 22px; line-height: 1;
       left: 4px;
     }
+    .rat-icon.running {
+      animation: ratRun .28s steps(1) infinite;
+    }
+    @keyframes ratRun {
+      0%   { transform: translateY(-65%) rotate(-8deg) scaleY(1.05); }
+      25%  { transform: translateY(-45%) rotate(0deg)  scaleY(.95); }
+      50%  { transform: translateY(-65%) rotate(8deg)  scaleY(1.05); }
+      75%  { transform: translateY(-45%) rotate(0deg)  scaleY(.95); }
+      100% { transform: translateY(-65%) rotate(-8deg) scaleY(1.05); }
+    }
     .rat-icon.done { animation: ratDance .4s ease infinite alternate; }
     @keyframes ratDance {
       from { transform: translateY(-60%) rotate(-10deg); }
@@ -1112,6 +1122,7 @@ function ratRender() {
   document.getElementById('rat-progress').style.width = (pct * 100) + '%';
   const icon = document.getElementById('rat-icon');
   icon.style.left = `calc(${pct * 100}% - ${pct * 26}px + 4px)`;
+  icon.classList.toggle('running', ratRunning && ratRemain > 0);
   icon.classList.toggle('done', ratRemain === 0);
   document.getElementById('rat-start-btn').classList.toggle('active', ratRunning);
 }
