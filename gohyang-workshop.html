@@ -109,19 +109,17 @@
       left: 4px;
     }
     .rat-icon.running {
-      animation: ratRun .28s steps(1) infinite;
+      animation: ratRun .55s ease-in-out infinite;
     }
     @keyframes ratRun {
-      0%   { transform: translateY(-65%) rotate(-8deg) scaleY(1.05); }
-      25%  { transform: translateY(-45%) rotate(0deg)  scaleY(.95); }
-      50%  { transform: translateY(-65%) rotate(8deg)  scaleY(1.05); }
-      75%  { transform: translateY(-45%) rotate(0deg)  scaleY(.95); }
-      100% { transform: translateY(-65%) rotate(-8deg) scaleY(1.05); }
+      0%   { transform: translateY(-44%) rotate(-3deg); }
+      50%  { transform: translateY(-62%) rotate(3deg); }
+      100% { transform: translateY(-44%) rotate(-3deg); }
     }
-    .rat-icon.done { animation: ratDance .4s ease infinite alternate; }
+    .rat-icon.done { animation: ratDance .6s ease-in-out infinite alternate; }
     @keyframes ratDance {
-      from { transform: translateY(-60%) rotate(-10deg); }
-      to   { transform: translateY(-40%) rotate(10deg); }
+      from { transform: translateY(-50%) rotate(-12deg) scale(1.1); }
+      to   { transform: translateY(-50%) rotate(12deg)  scale(1.1); }
     }
     .rat-btns { display: flex; gap: 6px; }
     .rat-btn {
@@ -501,7 +499,7 @@
   <div class="rat-timer">
     <div class="rat-track">
       <div class="rat-progress" id="rat-progress"></div>
-      <div class="rat-icon" id="rat-icon">🐭</div>
+      <div class="rat-icon" id="rat-icon">🐀</div>
     </div>
     <div class="rat-btns">
       <button class="rat-btn" id="rat-start-btn">▶ 시작</button>
