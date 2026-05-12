@@ -1179,6 +1179,7 @@ async function checkDb() {
 // ── 초기화 ───────────────────────────────────────
 async function init() {
   initMap();
+  ratRender();
   await Promise.all([refreshAll(), loadCards()]);
   subscribe();
   subscribeReactions();
