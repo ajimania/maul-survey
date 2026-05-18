@@ -223,7 +223,25 @@
   <p>돌고돌아 성북천 · 도시쥐정거장 실험 프로젝트</p>
 </div>
 
-<div class="progress" id="prog">
+<div id="closed-screen" style="
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  min-height:70dvh; padding:40px 24px; text-align:center; max-width:420px; margin:0 auto;
+">
+  <div style="font-size:56px; margin-bottom:20px">🔒</div>
+  <div style="font-size:24px; font-weight:900; color:var(--brown); margin-bottom:12px">참가 신청이 마감되었습니다</div>
+  <div style="font-size:15px; color:#7a5840; line-height:1.9;">
+    내 고향 자랑대회 참가 신청이 마감되었어요.<br>
+    다음 모임에서 만나요! 🐭
+  </div>
+  <div style="margin-top:28px; background:#fff; border-radius:12px; padding:18px 22px;
+    border:1px solid var(--tan-light); font-size:13px; color:#7a5840; line-height:1.8; text-align:left;">
+    <strong style="color:var(--brown)">📅 일시</strong>: 2026년 5월 24일 (일) 오후 7시<br>
+    <strong style="color:var(--brown)">📍 장소</strong>: 성북구 삼양로 41 공업사<br>
+    <strong style="color:var(--brown)">📬 문의</strong>: cityg.stop@gmail.com
+  </div>
+</div>
+
+<div class="progress" id="prog" style="display:none">
   <div class="ps active" id="ps1"><div class="ps-dot">1</div><div class="ps-label">개인정보</div></div>
   <div class="ps"        id="ps2"><div class="ps-dot">2</div><div class="ps-label">참가 정보</div></div>
   <div class="ps"        id="ps3"><div class="ps-dot">3</div><div class="ps-label">사진</div></div>
@@ -405,7 +423,7 @@
   </div>
 </div>
 
-<div class="btn-row" id="btn-row">
+<div class="btn-row" id="btn-row" style="display:none">
   <button class="btn btn-back" id="btn-back" onclick="goBack()" style="display:none">← 이전</button>
   <button class="btn btn-next" id="btn-next" onclick="goNext()">다음 →</button>
 </div>
