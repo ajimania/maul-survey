@@ -542,8 +542,8 @@
 <div class="panel on" id="p-map">
   <div id="main-map"></div>
   <div class="map-question">
-    <div class="map-question-label">오늘의 질문</div>
-    <div class="map-question-text">당신의 고향은 어디인가요, 고향과 얽힌 당신의 가장 좋았던 기억을 이야기해주세요.</div>
+    <div class="map-question-label">지역으로 하는 소개</div>
+    <div class="map-question-text">내가 좋아하는 지역에 얽힌 이야기로 나를 소개해요</div>
   </div>
   <!-- 쥐 타이머 -->
   <div class="rat-timer">
@@ -1305,7 +1305,7 @@ async function subscribeReactions() {
 }
 
 // ── 쥐 타이머 ────────────────────────────────────
-const RAT_TOTAL = 7 * 60;
+const RAT_TOTAL = 5 * 60;
 let ratRemain = RAT_TOTAL, ratTicker = null, ratRunning = false;
 
 function ratRender() {
