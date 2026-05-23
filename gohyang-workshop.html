@@ -904,6 +904,9 @@ function showDetail(p) {
     { data: p.photo1_data, cap: p.photo1_caption },
     { data: p.photo2_data, cap: p.photo2_caption },
     { data: p.photo3_data, cap: p.photo3_caption },
+    { data: p.photo4_data, cap: p.photo4_caption },
+    { data: p.photo5_data, cap: p.photo5_caption },
+    { data: p.photo6_data, cap: p.photo6_caption },
   ].filter(x => x.data);
 
   document.getElementById('dp-body').innerHTML = `
@@ -1083,6 +1086,9 @@ function renderGalleryStage() {
     { data: p.photo1_data, cap: p.photo1_caption },
     { data: p.photo2_data, cap: p.photo2_caption },
     { data: p.photo3_data, cap: p.photo3_caption },
+    { data: p.photo4_data, cap: p.photo4_caption },
+    { data: p.photo5_data, cap: p.photo5_caption },
+    { data: p.photo6_data, cap: p.photo6_caption },
   ].filter(x => x.data);
 
   if (!photos.length) {
@@ -1116,7 +1122,7 @@ function galleryPrev() {
   if (curPhotoIdx > 0) { curPhotoIdx--; renderGalleryStage(); }
 }
 function galleryNext() {
-  const photos = [curParticipant?.photo1_data, curParticipant?.photo2_data, curParticipant?.photo3_data].filter(Boolean);
+  const photos = [curParticipant?.photo1_data, curParticipant?.photo2_data, curParticipant?.photo3_data, curParticipant?.photo4_data, curParticipant?.photo5_data, curParticipant?.photo6_data].filter(Boolean);
   if (curPhotoIdx < photos.length - 1) { curPhotoIdx++; renderGalleryStage(); }
 }
 
@@ -1143,7 +1149,7 @@ function renderAdmin() {
           <div class="a-item-info">
             <div class="a-item-name">${p.name}</div>
             <div class="a-item-sub">${p.hometown_name||'고향 미표시'} · 사진 ${
-              [p.photo1_data,p.photo2_data,p.photo3_data].filter(Boolean).length}장</div>
+              [p.photo1_data,p.photo2_data,p.photo3_data,p.photo4_data,p.photo5_data,p.photo6_data].filter(Boolean).length}장</div>
           </div>
           <button class="a-del" onclick="deleteParticipant('${p.id}')">삭제</button>
         </div>`).join('');

@@ -206,6 +206,39 @@
         <img id="img3" class="pslot-img"/>
         <div class="pslot-cap"><input type="text" id="cap3" placeholder="한 줄 설명 (선택)"/></div>
       </div>
+      <div class="pslot" id="slot4">
+        <div class="pslot-head">
+          <div class="pslot-num">4</div>
+          <div class="pslot-title">네 번째 사진</div>
+          <label class="pslot-upload" for="file4">📷 선택</label>
+          <input type="file" id="file4" accept="image/*" style="display:none" onchange="onPhoto(4,this)"/>
+          <button class="pslot-del" onclick="delPhoto(4)">삭제</button>
+        </div>
+        <img id="img4" class="pslot-img"/>
+        <div class="pslot-cap"><input type="text" id="cap4" placeholder="한 줄 설명 (선택)"/></div>
+      </div>
+      <div class="pslot" id="slot5">
+        <div class="pslot-head">
+          <div class="pslot-num">5</div>
+          <div class="pslot-title">다섯 번째 사진</div>
+          <label class="pslot-upload" for="file5">📷 선택</label>
+          <input type="file" id="file5" accept="image/*" style="display:none" onchange="onPhoto(5,this)"/>
+          <button class="pslot-del" onclick="delPhoto(5)">삭제</button>
+        </div>
+        <img id="img5" class="pslot-img"/>
+        <div class="pslot-cap"><input type="text" id="cap5" placeholder="한 줄 설명 (선택)"/></div>
+      </div>
+      <div class="pslot" id="slot6">
+        <div class="pslot-head">
+          <div class="pslot-num">6</div>
+          <div class="pslot-title">여섯 번째 사진</div>
+          <label class="pslot-upload" for="file6">📷 선택</label>
+          <input type="file" id="file6" accept="image/*" style="display:none" onchange="onPhoto(6,this)"/>
+          <button class="pslot-del" onclick="delPhoto(6)">삭제</button>
+        </div>
+        <img id="img6" class="pslot-img"/>
+        <div class="pslot-cap"><input type="text" id="cap6" placeholder="한 줄 설명 (선택)"/></div>
+      </div>
     </div>
   </div>
 
@@ -281,7 +314,7 @@ function loadEditForm(p) {
   document.getElementById('e-hometown').value = names;
   document.getElementById('e-story').value    = p.story || '';
 
-  [1, 2, 3].forEach(n => {
+  [1, 2, 3, 4, 5, 6].forEach(n => {
     const data = p['photo' + n + '_data'];
     const cap  = p['photo' + n + '_caption'] || '';
     if (data) {
@@ -322,6 +355,12 @@ async function doSave() {
     photo2_caption: document.getElementById('cap2').value.trim() || null,
     photo3_data:    photos[3] ?? null,
     photo3_caption: document.getElementById('cap3').value.trim() || null,
+    photo4_data:    photos[4] ?? null,
+    photo4_caption: document.getElementById('cap4').value.trim() || null,
+    photo5_data:    photos[5] ?? null,
+    photo5_caption: document.getElementById('cap5').value.trim() || null,
+    photo6_data:    photos[6] ?? null,
+    photo6_caption: document.getElementById('cap6').value.trim() || null,
   };
 
   const { error } = await sb
