@@ -113,6 +113,18 @@
       font-size: clamp(13px, 2.2vw, 17px); font-weight: 700;
       color: rgba(245,237,224,.75); line-height: 1.6;
     }
+    .map-story {
+      display: none; margin-top: 12px;
+      padding-top: 12px; border-top: 1px solid rgba(201,169,122,.2);
+      font-size: clamp(12px, 1.9vw, 14px); color: rgba(245,237,224,.8);
+      line-height: 1.75; text-align: left; max-height: 180px;
+      overflow-y: auto;
+    }
+    .map-story.show { display: block; }
+    .map-story-name {
+      font-size: 11px; font-weight: 900; color: var(--tan);
+      letter-spacing: .08em; margin-bottom: 6px;
+    }
 
     /* ── 쥐 타이머 ── */
     .rat-timer {
@@ -613,6 +625,10 @@
   <div class="map-question">
     <div class="map-question-label">지역으로 하는 소개</div>
     <div class="map-question-text">내가 거쳐온 지역, 좋아하는 지역에 얽힌 이야기로 나를 소개해요</div>
+    <div class="map-story" id="map-story">
+      <div class="map-story-name" id="map-story-name"></div>
+      <div id="map-story-text"></div>
+    </div>
   </div>
   <!-- 쥐 타이머 -->
   <div class="rat-timer">
@@ -954,8 +970,18 @@ function filterMap(pid) {
     const ms = pMarkers[pid] || [];
     if (ms.length === 1) map.setView(ms[0].getLatLng(), 10);
     else if (ms.length > 1) map.fitBounds(L.featureGroup(ms).getBounds().pad(0.3));
+    const p = participants.find(p => p.id === pid);
+    const storyEl = document.getElementById('map-story');
+    if (p?.story) {
+      document.getElementById('map-story-name').textContent = p.name;
+      document.getElementById('map-story-text').innerHTML = p.story.replace(/\n/g, '<br/>');
+      storyEl.classList.add('show');
+    } else {
+      storyEl.classList.remove('show');
+    }
   } else {
     fitKorea();
+    document.getElementById('map-story').classList.remove('show');
   }
 }
 
