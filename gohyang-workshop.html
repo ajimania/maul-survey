@@ -118,7 +118,7 @@
       padding-top: 12px; border-top: 1px solid rgba(201,169,122,.2);
       font-size: clamp(12px, 1.9vw, 14px); color: rgba(245,237,224,.8);
       line-height: 1.75; text-align: left; max-height: 234px;
-      overflow-y: auto;
+      overflow-y: auto; pointer-events: auto;
     }
     .map-story.show { display: block; }
     .map-story-name {
@@ -1475,6 +1475,12 @@ async function init() {
   subscribe();
   subscribeReactions();
   checkDb();
+
+  // 지역기억 스크롤이 지도로 전파되지 않도록 차단
+  const storyEl = document.getElementById('map-story');
+  ['wheel', 'touchmove', 'mousewheel'].forEach(evt => {
+    storyEl.addEventListener(evt, e => e.stopPropagation(), { passive: false });
+  });
 }
 
 init();
