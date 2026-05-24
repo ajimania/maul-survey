@@ -65,6 +65,35 @@
     .panel { display: none; flex: 1; overflow: hidden; min-height: 0; }
     .panel.on { display: flex; flex-direction: column; }
 
+    /* ═══ [탭0] 공지사항 ═══ */
+    #p-notice { overflow-y: auto; padding: 28px 20px 60px; }
+    .notice-wrap { max-width: 540px; margin: 0 auto; }
+    .notice-title {
+      font-size: 22px; font-weight: 900; color: var(--tan);
+      margin-bottom: 28px; text-align: center; line-height: 1.4;
+    }
+    .notice-section {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 22px 20px; margin-bottom: 16px;
+    }
+    .notice-section-title {
+      font-size: 13px; font-weight: 900; color: var(--orange);
+      letter-spacing: .05em; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .notice-item {
+      display: flex; gap: 10px; margin-bottom: 14px; align-items: flex-start;
+    }
+    .notice-item:last-child { margin-bottom: 0; }
+    .notice-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--orange); flex-shrink: 0; margin-top: 7px;
+    }
+    .notice-item-text {
+      font-size: 14px; line-height: 1.75; color: var(--text);
+    }
+    .notice-item-text strong { color: var(--tan); font-weight: 900; }
+
     /* ═══ [탭1] 지도 ═══ */
     #p-map { position: relative; }
     #main-map { flex: 1; }
@@ -528,7 +557,8 @@
 <nav class="nav">
   <div class="nav-logo">🐭 고향 자랑대회</div>
   <div class="nav-tabs">
-    <button class="nav-tab on"  onclick="switchTab('map',   this)">🗺️<span class="tab-text"> 지도</span></button>
+    <button class="nav-tab on"  onclick="switchTab('notice', this)">📋<span class="tab-text"> 그라운드룰</span></button>
+    <button class="nav-tab"     onclick="switchTab('map',   this)">🗺️<span class="tab-text"> 지도</span></button>
     <button class="nav-tab"     onclick="switchTab('cards', this)">🃏<span class="tab-text"> 질문카드</span></button>
     <button class="nav-tab"     onclick="switchTab('gallery',this)">📸<span class="tab-text"> 자랑대회</span></button>
     <button class="nav-tab"     onclick="switchTab('admin', this)">⚙️<span class="tab-text"> 관리</span></button>
@@ -538,8 +568,47 @@
   </div>
 </nav>
 
+<!-- ── 탭0: 그라운드룰 ──────────────────────────── -->
+<div class="panel on" id="p-notice">
+  <div class="notice-wrap">
+    <div class="notice-title">🏡 내고향 자랑대회<br>그라운드 룰</div>
+
+    <div class="notice-section">
+      <div class="notice-section-title">🎤 말하는 사람에게</div>
+      <div class="notice-item">
+        <div class="notice-dot"></div>
+        <div class="notice-item-text"><strong>"잘 말해야 한다"는 부담은 내려놓기.</strong> 유창하지 않아도 괜찮아요. 더듬더듬 기억을 꺼내는 그 모습 자체가 진짜 이야기예요.</div>
+      </div>
+      <div class="notice-item">
+        <div class="notice-dot"></div>
+        <div class="notice-item-text"><strong>기억 속 장면 하나를 꺼내오듯 이야기해요.</strong> 설명하려 하지 않아도, 장면이 살아있으면 듣는 사람도 거기 있는 것 같아지니까요.</div>
+      </div>
+      <div class="notice-item">
+        <div class="notice-dot"></div>
+        <div class="notice-item-text"><strong>자랑이 아닌 고백도 환영.</strong> 떠나고 싶었던 마음, 아쉬운 기억도 그 고향의 일부니까요.</div>
+      </div>
+    </div>
+
+    <div class="notice-section">
+      <div class="notice-section-title">👂 듣는 사람에게</div>
+      <div class="notice-item">
+        <div class="notice-dot"></div>
+        <div class="notice-item-text"><strong>비교하지 않기.</strong> "우리 동네는~"으로 받아치면 상대방의 이야기가 닫혀버려요.</div>
+      </div>
+      <div class="notice-item">
+        <div class="notice-dot"></div>
+        <div class="notice-item-text"><strong>판단 대신 질문.</strong> 고개를 끄덕이고, 궁금한 게 생기면 "거기서 뭐가 제일 좋았어요?" 한 마디면 충분해요.</div>
+      </div>
+      <div class="notice-item">
+        <div class="notice-dot"></div>
+        <div class="notice-item-text"><strong>폰은 잠깐 내려놓기.</strong> 눈이 마주쳐야 이야기가 살아나요.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ── 탭1: 지도 ───────────────────────────────── -->
-<div class="panel on" id="p-map">
+<div class="panel" id="p-map">
   <div id="main-map"></div>
   <div class="map-question">
     <div class="map-question-label">지역으로 하는 소개</div>
@@ -781,7 +850,7 @@ function switchTab(tab, btn) {
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('on'));
   document.getElementById('p-' + tab).classList.add('on');
   btn.classList.add('on');
-  if (tab === 'map') map?.invalidateSize();
+  if (tab === 'map') setTimeout(() => map?.invalidateSize(), 50);
   if (tab === 'admin') renderAdmin();
   if (tab === 'gallery') renderGallerySelector();
   if (tab === 'cards' && !pickedEl) buildSpread();
