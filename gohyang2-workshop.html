@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>내 고향 자랑 | 워크숍</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    :root {
+      --bg: #1c1410; --surface: #2b1f18; --surface2: #3a2a20;
+      --orange: #d4622a; --tan: #c9a97a;
+      --text: #f0e4d4; --muted: rgba(240,228,212,.5);
+      --border: rgba(255,255,255,.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      background: var(--bg); color: var(--text);
+      display: flex; flex-direction: column;
+    }
+
+    /* ── 탭 바 ── */
+    .nav {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      display: flex; flex-shrink: 0; overflow-x: auto;
+    }
+    .nav-tab {
+      flex: 1; padding: 13px 8px; border: none;
+      background: none; color: var(--muted);
+      font-size: 13px; font-weight: 700; cursor: pointer;
+      font-family: inherit; white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color .15s, border-color .15s;
+    }
+    .nav-tab.on { color: var(--orange); border-bottom-color: var(--orange); }
+
+    /* ── 패널 ── */
+    .panel { display: none; flex: 1; overflow: hidden; flex-direction: column; }
+    .panel.on { display: flex; }
+
+    /* ── 지도 ── */
+    #p-map { position: relative; }
+    #main-map { flex: 1; }
+
+    /* 이름 필터 */
+    .p-filter-bar {
+      position: absolute; left: 10px; top: 10px; z-index: 900;
+      display: flex; flex-direction: column; gap: 6px;
+      max-height: calc(100% - 80px); overflow-y: auto;
+    }
+    .p-filter-btn {
+      background: rgba(28,20,16,.85); border: 1px solid var(--border);
+      color: var(--muted); border-radius: 20px;
+      padding: 6px 14px; font-size: 12px; font-weight: 700;
+      cursor: pointer; font-family: inherit; white-space: nowrap;
+      backdrop-filter: blur(8px); transition: all .15s;
+    }
+    .p-filter-btn.on { background: var(--orange); border-color: var(--orange); color: #fff; }
+
+    /* 핀 */
+    .map-pin {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 2.5px solid #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 900; color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,.4);
+    }
+
+    /* ── 사진 갤러리 ── */
+    #p-photos { overflow-y: auto; }
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0;
+    }
+    .photo-item {
+      position: relative; aspect-ratio: 1;
+      overflow: hidden; cursor: pointer;
+    }
+    .photo-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .2s;
+    }
+    .photo-item:hover img { transform: scale(1.05); }
+    .photo-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20px 10px 8px;
+      background: linear-gradient(transparent, rgba(0,0,0,.7));
+      color: #fff; font-size: 12px; font-weight: 800;
+    }
+    .photo-hometown {
+      font-size: 10px; font-weight: 500; opacity: .8;
+    }
+    .no-photo {
+      text-align: center; padding: 80px 20px;
+      color: var(--muted); font-size: 14px;
+    }
+
+    /* ── 라이트박스 ── */
+    #lightbox {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.94); z-index: 9999;
+      flex-direction: column; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    #lightbox.show { display: flex; }
+    #lightbox img { max-width: 90vw; max-height: 70vh; border-radius: 10px; object-fit: contain; }
+    #lb-name { color: var(--tan); font-size: 16px; font-weight: 900; margin-top: 16px; }
+    #lb-hometown { color: var(--muted); font-size: 13px; margin-top: 4px; }
+    #lb-reason { color: var(--text); font-size: 14px; margin-top: 10px; line-height: 1.7; max-width: 480px; text-align: center; }
+    #lb-close {
+      position: absolute; top: 16px; right: 20px;
+      font-size: 28px; color: #fff; cursor: pointer; line-height: 1;
+    }
+
+    /* Leaflet 오버라이드 */
+    .leaflet-control-zoom { margin-right: 10px !important; margin-bottom: 10px !important; }
+  </style>
+</head>
+<body>
+
+<!-- 탭 -->
+<nav class="nav">
+  <button class="nav-tab on"  onclick="switchTab('map',    this)">🗺 지도</button>
+  <button class="nav-tab"     onclick="switchTab('photos', this)">📸 사진</button>
+</nav>
+
+<!-- 탭1: 지도 -->
+<div class="panel on" id="p-map">
+  <div id="main-map"></div>
+  <div class="p-filter-bar" id="p-filter-bar">
+    <button class="p-filter-btn on" id="pf-all" onclick="filterMap(null)">🗺 전체</button>
+  </div>
+</div>
+
+<!-- 탭2: 사진 -->
+<div class="panel" id="p-photos">
+  <div class="photo-grid" id="photo-grid">
+    <div class="no-photo">불러오는 중…</div>
+  </div>
+</div>
+
+<!-- 라이트박스 -->
+<div id="lightbox" onclick="closeLb()">
+  <span id="lb-close">✕</span>
+  <img id="lb-img" src="" alt=""/>
+  <div id="lb-name"></div>
+  <div id="lb-hometown"></div>
+  <div id="lb-reason"></div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const sb = createClient(
+  'https://hncuvjrghniwihhfpata.supabase.co',
+  'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
+);
+
+const COLORS = ['#d4622a','#4a90d9','#5d9e56','#9b59b6','#e67e22','#1abc9c','#c0392b','#2980b9','#8e44ad','#27ae60','#e74c3c','#16a085'];
+
+let participants = [];
+let map, activeFilter = null;
+const pMarkers = {};
+
+// ── 탭 전환 ──────────────────────────────────
+window.switchTab = function(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('on'));
+  document.getElementById('p-' + id).classList.add('on');
+  btn.classList.add('on');
+  if (id === 'map') setTimeout(() => map?.invalidateSize(), 50);
+};
+
+// ── 지도 초기화 ───────────────────────────────
+map = L.map('main-map', { zoomControl: false }).setView([36.5, 127.5], 7);
+L.control.zoom({ position: 'bottomright' }).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap © CARTO', maxZoom: 19
+}).addTo(map);
+
+// ── 데이터 로드 ───────────────────────────────
+async function load() {
+  const { data, error } = await sb
+    .from('gohyang2_participants')
+    .select('*')
+    .order('created_at', { ascending: true });
+  if (error) { console.error(error); return; }
+  participants = data || [];
+  participants.forEach((p, i) => { p._color = COLORS[i % COLORS.length]; });
+  renderMap();
+  renderPhotos();
+  renderFilterBar();
+}
+
+// ── 지도 렌더 ─────────────────────────────────
+function renderMap() {
+  participants.forEach(p => {
+    if (!p.lat || !p.lng) return;
+    const icon = L.divIcon({
+      className: '',
+      html: `<div class="map-pin" style="background:${p._color}">${p.name.slice(0,1)}</div>`,
+      iconSize: [36, 36], iconAnchor: [18, 18]
+    });
+    const marker = L.marker([p.lat, p.lng], { icon }).addTo(map);
+    marker.bindTooltip(p.name, { permanent: false, direction: 'top', offset: [0, -20] });
+    marker.on('click', () => filterMap(p.id));
+    pMarkers[p.id] = marker;
+  });
+  fitAll();
+}
+
+function fitAll() {
+  const pts = participants.filter(p => p.lat && p.lng).map(p => [p.lat, p.lng]);
+  if (pts.length > 1) map.fitBounds(pts, { padding: [40, 40] });
+  else if (pts.length === 1) map.setView(pts[0], 9);
+}
+
+window.filterMap = function(pid) {
+  activeFilter = pid;
+  document.querySelectorAll('.p-filter-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById(pid ? 'pf-' + pid : 'pf-all')?.classList.add('on');
+
+  participants.forEach(p => {
+    const vis = pid === null || pid === p.id;
+    if (pMarkers[p.id]) vis ? pMarkers[p.id].addTo(map) : pMarkers[p.id].remove();
+  });
+
+  if (pid) {
+    const p = participants.find(x => x.id === pid);
+    if (p?.lat) map.setView([p.lat, p.lng], 10);
+  } else {
+    fitAll();
+  }
+};
+
+function renderFilterBar() {
+  const bar = document.getElementById('p-filter-bar');
+  bar.innerHTML = `<button class="p-filter-btn on" id="pf-all" onclick="filterMap(null)">🗺 전체</button>`;
+  participants.forEach(p => {
+    bar.innerHTML += `<button class="p-filter-btn" id="pf-${p.id}"
+      style="border-left: 3px solid ${p._color}"
+      onclick="filterMap('${p.id}')">${p.name}</button>`;
+  });
+}
+
+// ── 사진 갤러리 ───────────────────────────────
+function renderPhotos() {
+  const grid = document.getElementById('photo-grid');
+  const withPhoto = participants.filter(p => p.photo_data);
+  if (!withPhoto.length) {
+    grid.innerHTML = '<div class="no-photo">아직 사진이 없어요.</div>';
+    return;
+  }
+  grid.innerHTML = withPhoto.map(p => `
+    <div class="photo-item" onclick="openLb('${p.id}')">
+      <img src="${p.photo_data}" loading="lazy" alt="${p.name}"/>
+      <div class="photo-label">
+        <div>${p.name}</div>
+        <div class="photo-hometown">📍 ${p.hometown || ''}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── 라이트박스 ───────────────────────────────
+window.openLb = function(pid) {
+  const p = participants.find(x => x.id === pid);
+  if (!p?.photo_data) return;
+  document.getElementById('lb-img').src = p.photo_data;
+  document.getElementById('lb-name').textContent = p.name;
+  document.getElementById('lb-hometown').textContent = '📍 ' + (p.hometown || '');
+  document.getElementById('lb-reason').textContent = p.reason || '';
+  document.getElementById('lightbox').classList.add('show');
+};
+window.closeLb = function() {
+  document.getElementById('lightbox').classList.remove('show');
+};
+
+// ── 실시간 구독 ───────────────────────────────
+sb.channel('gohyang2-live')
+  .on('postgres_changes',
+    { event: 'INSERT', schema: 'public', table: 'gohyang2_participants' },
+    payload => {
+      const p = payload.new;
+      p._color = COLORS[participants.length % COLORS.length];
+      participants.push(p);
+      if (p.lat && p.lng) {
+        const icon = L.divIcon({
+          className: '',
+          html: `<div class="map-pin" style="background:${p._color}">${p.name.slice(0,1)}</div>`,
+          iconSize: [36, 36], iconAnchor: [18, 18]
+        });
+        const marker = L.marker([p.lat, p.lng], { icon }).addTo(map);
+        marker.bindTooltip(p.name, { permanent: false, direction: 'top', offset: [0, -20] });
+        marker.on('click', () => filterMap(p.id));
+        pMarkers[p.id] = marker;
+      }
+      renderPhotos();
+      renderFilterBar();
+    })
+  .subscribe();
+
+load();
+</script>
+</body>
+</html>

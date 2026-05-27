@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>내 고향 자랑 | 설문</title>
+  <style>
+    :root {
+      --cream: #faf6ef;
+      --brown: #3d2b1f;
+      --orange: #d4622a;
+      --tan: #c9a97a;
+      --tan-light: #e8d5b7;
+      --text: #2c1f14;
+      --muted: #9a7a5a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      background: var(--cream); color: var(--text); min-height: 100dvh;
+    }
+
+    /* ── 헤더 ── */
+    .app-header {
+      background: var(--brown); color: #fff;
+      padding: 20px 20px 18px; text-align: center;
+    }
+    .app-header h1 { font-size: 20px; font-weight: 900; }
+    .app-header p  { font-size: 12px; opacity: .6; margin-top: 4px; }
+
+    /* ── 폼 ── */
+    .wrap { max-width: 540px; margin: 0 auto; padding: 32px 20px 120px; }
+
+    .field { margin-bottom: 24px; }
+    .field > label {
+      display: block; font-size: 14px; font-weight: 800;
+      color: var(--brown); margin-bottom: 8px;
+    }
+    .field .req { color: var(--orange); }
+    .field .hint { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.6; }
+    .field input[type=text],
+    .field textarea {
+      width: 100%; padding: 14px 16px;
+      border: 1.5px solid #ddd; border-radius: 12px;
+      font-size: 16px; font-family: inherit;
+      background: #fff; transition: border-color .2s;
+      -webkit-appearance: none;
+    }
+    .field input:focus, .field textarea:focus {
+      outline: none; border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(212,98,42,.1);
+    }
+    .field textarea { min-height: 130px; resize: vertical; line-height: 1.7; }
+
+    /* ── 고향 geocode 상태 ── */
+    .geo-status {
+      font-size: 12px; margin-top: 7px; min-height: 18px;
+    }
+    .geo-ok  { color: #4a7a40; }
+    .geo-err { color: #c0392b; }
+    .geo-ing { color: var(--muted); }
+
+    /* ── 사진 업로드 ── */
+    .photo-box {
+      border: 2px dashed #ccc; border-radius: 14px;
+      background: #fff; overflow: hidden;
+      transition: border-color .2s;
+    }
+    .photo-box.filled { border: 2px solid var(--orange); }
+    .photo-placeholder {
+      padding: 32px 20px; text-align: center;
+      cursor: pointer; color: var(--muted);
+    }
+    .photo-placeholder .icon { font-size: 36px; margin-bottom: 8px; }
+    .photo-placeholder p { font-size: 14px; }
+    .photo-preview {
+      width: 100%; max-height: 300px; object-fit: cover; display: none;
+    }
+    .photo-remove {
+      display: none; width: 100%; padding: 10px;
+      background: #fff3f0; border: none; border-top: 1px solid #fdd;
+      color: #c0392b; font-size: 13px; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+    }
+    .photo-box.filled .photo-remove { display: block; }
+
+    /* ── 제출 버튼 ── */
+    .btn-row {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: #fff; border-top: 1px solid #eee;
+      padding: 12px 20px 20px;
+      box-shadow: 0 -4px 20px rgba(0,0,0,.07); z-index: 300;
+    }
+    .btn-submit {
+      width: 100%; padding: 16px;
+      background: var(--orange); border: none; border-radius: 14px;
+      color: #fff; font-size: 17px; font-weight: 900;
+      cursor: pointer; font-family: inherit;
+      transition: opacity .15s, transform .1s;
+    }
+    .btn-submit:active { transform: scale(.98); }
+    .btn-submit:disabled { opacity: .4; cursor: default; }
+
+    /* ── 완료 화면 ── */
+    #done-screen {
+      display: none; text-align: center;
+      padding: 80px 24px;
+    }
+    #done-screen .done-icon { font-size: 64px; margin-bottom: 20px; }
+    #done-screen h2 { font-size: 24px; font-weight: 900; color: var(--brown); margin-bottom: 10px; }
+    #done-screen p  { font-size: 15px; color: var(--muted); line-height: 1.8; }
+  </style>
+</head>
+<body>
+
+<div class="app-header">
+  <h1>🏡 내 고향 자랑</h1>
+  <p>좋아하는 지역 이야기를 들려주세요</p>
+</div>
+
+<div class="wrap">
+
+  <div id="form-section">
+
+    <div class="field">
+      <label>이름 <span class="req">*</span></label>
+      <input type="text" id="f-name" placeholder="이름을 입력해주세요" maxlength="30"/>
+    </div>
+
+    <div class="field">
+      <label>고향 / 좋아하는 도시 <span class="req">*</span></label>
+      <input type="text" id="f-hometown" placeholder="예: 부산, 전주, 제주시…" maxlength="50"
+             oninput="onHometownInput()"/>
+      <div class="geo-status" id="geo-status"></div>
+      <div class="hint">도시 이름을 입력하면 지도에 자동으로 표시돼요.</div>
+    </div>
+
+    <div class="field">
+      <label>그 지역이 좋은 이유 <span class="req">*</span></label>
+      <textarea id="f-reason" placeholder="어떤 기억, 장소, 음식, 사람이 떠오르나요?&#10;짧아도 괜찮아요."></textarea>
+    </div>
+
+    <div class="field">
+      <label>사진 (선택)</label>
+      <div class="photo-box" id="photo-box">
+        <div class="photo-placeholder" onclick="document.getElementById('file-input').click()">
+          <div class="icon">📷</div>
+          <p>사진을 선택하세요</p>
+        </div>
+        <img id="photo-preview" class="photo-preview" alt=""/>
+        <button class="photo-remove" onclick="removePhoto()">✕ 사진 삭제</button>
+      </div>
+      <input type="file" id="file-input" accept="image/*" style="display:none" onchange="onPhoto(this)"/>
+      <div class="hint">고향 풍경, 음식, 추억이 담긴 사진이면 무엇이든 좋아요.</div>
+    </div>
+
+  </div>
+
+  <div id="done-screen">
+    <div class="done-icon">🎉</div>
+    <h2 id="done-name">감사해요!</h2>
+    <p>소중한 이야기가<br>지도에 담겼어요 🗺</p>
+  </div>
+
+</div>
+
+<!-- 제출 버튼 -->
+<div class="btn-row" id="btn-row">
+  <button class="btn-submit" id="btn-submit" onclick="submit()">제출하기 →</button>
+</div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const sb = createClient(
+  'https://hncuvjrghniwihhfpata.supabase.co',
+  'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
+);
+
+let photoData = null;
+let geoResult = null;
+let geoTimer  = null;
+
+// ── 사진 ──────────────────────────────────────
+window.onPhoto = function(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    // 리사이즈
+    const img = new Image();
+    img.onload = () => {
+      const max = 900;
+      let w = img.width, h = img.height;
+      if (w > max || h > max) {
+        if (w > h) { h = h * max / w; w = max; }
+        else       { w = w * max / h; h = max; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      photoData = canvas.toDataURL('image/jpeg', 0.78);
+      document.getElementById('photo-preview').src = photoData;
+      document.getElementById('photo-preview').style.display = 'block';
+      document.getElementById('photo-box').classList.add('filled');
+      document.querySelector('.photo-placeholder').style.display = 'none';
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+};
+
+window.removePhoto = function() {
+  photoData = null;
+  document.getElementById('photo-preview').style.display = 'none';
+  document.getElementById('photo-preview').src = '';
+  document.getElementById('photo-box').classList.remove('filled');
+  document.querySelector('.photo-placeholder').style.display = '';
+  document.getElementById('file-input').value = '';
+};
+
+// ── 지오코딩 ──────────────────────────────────
+window.onHometownInput = function() {
+  clearTimeout(geoTimer);
+  geoResult = null;
+  const val = document.getElementById('f-hometown').value.trim();
+  const st  = document.getElementById('geo-status');
+  if (!val) { st.textContent = ''; st.className = 'geo-status'; return; }
+  st.textContent = '위치 확인 중…'; st.className = 'geo-status geo-ing';
+  geoTimer = setTimeout(() => geocode(val), 900);
+};
+
+async function geocode(name) {
+  const st = document.getElementById('geo-status');
+  try {
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(name)}&format=json&limit=3&accept-language=ko&countrycodes=kr`;
+    let res = await (await fetch(url, { headers: { 'Accept-Language': 'ko' } })).json();
+    if (!res.length) {
+      // 전 세계 검색
+      const url2 = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(name)}&format=json&limit=1&accept-language=ko`;
+      res = await (await fetch(url2, { headers: { 'Accept-Language': 'ko' } })).json();
+    }
+    if (res.length) {
+      geoResult = { lat: parseFloat(res[0].lat), lng: parseFloat(res[0].lon), label: res[0].display_name.split(',')[0] };
+      st.textContent = `📍 ${geoResult.label}`;
+      st.className = 'geo-status geo-ok';
+    } else {
+      geoResult = null;
+      st.textContent = '위치를 찾지 못했어요. 다르게 입력해보세요.';
+      st.className = 'geo-status geo-err';
+    }
+  } catch {
+    st.textContent = '네트워크 오류';
+    st.className = 'geo-status geo-err';
+  }
+}
+
+// ── 제출 ──────────────────────────────────────
+window.submit = async function() {
+  const name     = document.getElementById('f-name').value.trim();
+  const hometown = document.getElementById('f-hometown').value.trim();
+  const reason   = document.getElementById('f-reason').value.trim();
+
+  if (!name)     { alert('이름을 입력해주세요.'); return; }
+  if (!hometown) { alert('고향/도시 이름을 입력해주세요.'); return; }
+  if (!reason)   { alert('좋아하는 이유를 적어주세요.'); return; }
+
+  const btn = document.getElementById('btn-submit');
+  btn.textContent = '저장 중…'; btn.disabled = true;
+
+  // geocode가 아직 안됐으면 시도
+  if (!geoResult && hometown) {
+    btn.textContent = '위치 확인 중…';
+    await geocode(hometown);
+  }
+
+  const { error } = await sb.from('gohyang2_participants').insert({
+    name,
+    hometown,
+    lat:        geoResult?.lat ?? null,
+    lng:        geoResult?.lng ?? null,
+    reason,
+    photo_data: photoData,
+  });
+
+  if (error) {
+    alert('저장 실패: ' + error.message);
+    btn.textContent = '제출하기 →'; btn.disabled = false;
+    return;
+  }
+
+  // 완료
+  document.getElementById('form-section').style.display = 'none';
+  document.getElementById('btn-row').style.display = 'none';
+  document.getElementById('done-name').textContent = `${name}님, 감사해요!`;
+  document.getElementById('done-screen').style.display = 'block';
+};
+</script>
+</body>
+</html>
