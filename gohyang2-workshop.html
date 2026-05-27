@@ -129,10 +129,6 @@
     .g-counter {
       font-size: 14px; color: var(--muted); min-width: 50px; text-align: center;
     }
-    .no-photo {
-      text-align: center; padding: 80px 20px;
-      color: var(--muted); font-size: 14px;
-    }
     .no-select {
       flex: 1; display: flex; align-items: center; justify-content: center;
       color: var(--muted); font-size: 14px;
@@ -182,11 +178,25 @@ const COLORS = ['#d4622a','#4a90d9','#5d9e56','#9b59b6','#e67e22','#1abc9c','#c0
 
 let participants = [];
 let activeFilter = null;
-const pMarkers = {};
+const pMarkers = {}; // pid → [circleMarker, ...]
 
 // 갤러리 상태
 let curParticipant = null;
 let curPhotoIdx = 0;
+
+// ── 위치 파싱 ─────────────────────────────────
+// locations 필드: "도시명|lat|lng,도시명|lat|lng"
+// 없으면 lat/lng 단일값으로 폴백
+function getLocations(p) {
+  if (p.locations) {
+    return p.locations.split(',').map(s => {
+      const parts = s.split('|');
+      return { name: parts[0], lat: parseFloat(parts[1]), lng: parseFloat(parts[2]) };
+    }).filter(l => !isNaN(l.lat) && !isNaN(l.lng));
+  }
+  if (p.lat && p.lng) return [{ name: p.hometown || '', lat: p.lat, lng: p.lng }];
+  return [];
+}
 
 // ── 탭 전환 ──────────────────────────────────
 window.switchTab = function(id, btn) {
@@ -205,21 +215,26 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r
 }).addTo(map);
 
 function addMarker(p) {
-  if (!p.lat || !p.lng) return;
-  const marker = L.circleMarker([p.lat, p.lng], {
-    radius: 17,
-    fillColor: p._color,
-    color: 'rgba(255,255,255,0.9)',
-    weight: 2.5,
-    fillOpacity: 1
-  }).addTo(map);
-  marker.bindTooltip(p.name, { permanent: false, direction: 'top', offset: [0, -20] });
-  marker.on('click', () => filterMap(p.id));
-  pMarkers[p.id] = marker;
+  const locs = getLocations(p);
+  if (!locs.length) return;
+  pMarkers[p.id] = [];
+  locs.forEach(loc => {
+    const marker = L.circleMarker([loc.lat, loc.lng], {
+      radius: 17,
+      fillColor: p._color,
+      color: 'rgba(255,255,255,0.9)',
+      weight: 2.5,
+      fillOpacity: 1
+    }).addTo(map);
+    marker.bindTooltip(`${p.name} · ${loc.name}`, { permanent: false, direction: 'top', offset: [0, -20] });
+    marker.on('click', () => filterMap(p.id));
+    pMarkers[p.id].push(marker);
+  });
 }
 
 function fitAll() {
-  const pts = participants.filter(p => p.lat && p.lng).map(p => [p.lat, p.lng]);
+  const pts = [];
+  participants.forEach(p => getLocations(p).forEach(l => pts.push([l.lat, l.lng])));
   if (pts.length > 1) map.fitBounds(pts, { padding: [50, 50] });
   else if (pts.length === 1) map.setView(pts[0], 9);
 }
@@ -231,13 +246,20 @@ window.filterMap = function(pid) {
 
   participants.forEach(p => {
     const vis = !pid || pid === p.id;
-    if (pMarkers[p.id]) { pMarkers[p.id].remove(); if (vis) pMarkers[p.id].addTo(map); }
+    if (pMarkers[p.id]) {
+      pMarkers[p.id].forEach(m => { m.remove(); if (vis) m.addTo(map); });
+    }
   });
 
   const reasonEl = document.getElementById('map-reason');
   if (pid) {
     const p = participants.find(x => x.id === pid);
-    if (p?.lat) map.setView([p.lat, p.lng], 10);
+    const locs = getLocations(p);
+    if (locs.length === 1) {
+      map.setView([locs[0].lat, locs[0].lng], 10);
+    } else if (locs.length > 1) {
+      map.fitBounds(locs.map(l => [l.lat, l.lng]), { padding: [60, 60] });
+    }
     if (p?.reason) {
       document.getElementById('map-reason-name').textContent = p.name + ' · ' + (p.hometown || '');
       document.getElementById('map-reason-text').textContent = p.reason;
@@ -292,7 +314,7 @@ function renderGalleryStage() {
   }
   const photos = photosOf(curParticipant);
   if (!photos.length) {
-    stage.innerHTML = '<div class="no-photo">사진이 없어요.</div>';
+    stage.innerHTML = '<div class="no-select">사진이 없어요.</div>';
     return;
   }
   const src = photos[curPhotoIdx];
@@ -304,23 +326,22 @@ function renderGalleryStage() {
       <div class="g-caption">${curParticipant.name} · 📍${curParticipant.hometown || ''}</div>
     </div>
     <div class="g-nav">
-      <button class="g-arrow" id="g-prev" onclick="galleryPrev()" ${curPhotoIdx === 0 ? 'disabled' : ''}>‹</button>
+      <button class="g-arrow" onclick="galleryPrev()" ${curPhotoIdx === 0 ? 'disabled' : ''}>‹</button>
       <span class="g-counter">${curPhotoIdx + 1} / ${photos.length}</span>
-      <button class="g-arrow" id="g-next" onclick="galleryNext()" ${curPhotoIdx === photos.length - 1 ? 'disabled' : ''}>›</button>
+      <button class="g-arrow" onclick="galleryNext()" ${curPhotoIdx === photos.length - 1 ? 'disabled' : ''}>›</button>
     </div>
   `;
 }
 
 window.galleryPrev = function() {
-  if (!curParticipant) return;
-  const photos = photosOf(curParticipant);
-  if (curPhotoIdx > 0) { curPhotoIdx--; renderGalleryStage(); }
+  if (!curParticipant || curPhotoIdx <= 0) return;
+  curPhotoIdx--;
+  renderGalleryStage();
 };
 
 window.galleryNext = function() {
   if (!curParticipant) return;
-  const photos = photosOf(curParticipant);
-  if (curPhotoIdx < photos.length - 1) { curPhotoIdx++; renderGalleryStage(); }
+  if (curPhotoIdx < photosOf(curParticipant).length - 1) { curPhotoIdx++; renderGalleryStage(); }
 };
 
 // ── 데이터 로드 ───────────────────────────────

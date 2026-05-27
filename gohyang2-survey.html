@@ -54,7 +54,7 @@
 
     /* ── 고향 geocode 상태 ── */
     .geo-status {
-      font-size: 12px; margin-top: 7px; min-height: 18px;
+      font-size: 12px; margin-top: 7px; min-height: 18px; line-height: 1.7;
     }
     .geo-ok  { color: #4a7a40; }
     .geo-err { color: #c0392b; }
@@ -129,10 +129,10 @@
 
     <div class="field">
       <label>고향 / 좋아하는 도시 <span class="req">*</span></label>
-      <input type="text" id="f-hometown" placeholder="예: 부산, 전주, 제주시…" maxlength="50"
+      <input type="text" id="f-hometown" placeholder="예: 부산, 전주, 제주시…" maxlength="100"
              oninput="onHometownInput()"/>
       <div class="geo-status" id="geo-status"></div>
-      <div class="hint">도시 이름을 입력하면 지도에 자동으로 표시돼요.</div>
+      <div class="hint">여러 도시는 쉼표로 구분하세요. 도시 이름을 입력하면 지도에 자동으로 표시돼요.</div>
     </div>
 
     <div class="field">
@@ -197,7 +197,7 @@ const sb = createClient(
 );
 
 const photoData = { 1: null, 2: null, 3: null };
-let geoResult = null;
+let geoResults = []; // [{ lat, lng, label, cityName }]
 let geoTimer  = null;
 
 // ── 사진 ──────────────────────────────────────
@@ -244,35 +244,49 @@ window.removePhoto = function(n) {
 // ── 지오코딩 ──────────────────────────────────
 window.onHometownInput = function() {
   clearTimeout(geoTimer);
-  geoResult = null;
+  geoResults = [];
   const val = document.getElementById('f-hometown').value.trim();
   const st  = document.getElementById('geo-status');
   if (!val) { st.textContent = ''; st.className = 'geo-status'; return; }
   st.textContent = '위치 확인 중…'; st.className = 'geo-status geo-ing';
-  geoTimer = setTimeout(() => geocode(val), 900);
+  geoTimer = setTimeout(() => geocodeAll(val), 900);
 };
 
-async function geocode(name) {
-  const st = document.getElementById('geo-status');
+async function geocodeOne(name) {
   try {
     const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(name)}&format=json&limit=3&accept-language=ko&countrycodes=kr`;
     let res = await (await fetch(url, { headers: { 'Accept-Language': 'ko' } })).json();
     if (!res.length) {
-      // 전 세계 검색
       const url2 = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(name)}&format=json&limit=1&accept-language=ko`;
       res = await (await fetch(url2, { headers: { 'Accept-Language': 'ko' } })).json();
     }
     if (res.length) {
-      geoResult = { lat: parseFloat(res[0].lat), lng: parseFloat(res[0].lon), label: res[0].display_name.split(',')[0] };
-      st.textContent = `📍 ${geoResult.label}`;
-      st.className = 'geo-status geo-ok';
-    } else {
-      geoResult = null;
-      st.textContent = '위치를 찾지 못했어요. 다르게 입력해보세요.';
-      st.className = 'geo-status geo-err';
+      return {
+        lat: parseFloat(res[0].lat),
+        lng: parseFloat(res[0].lon),
+        label: res[0].display_name.split(',')[0],
+        cityName: name
+      };
     }
-  } catch {
-    st.textContent = '네트워크 오류';
+  } catch {}
+  return null;
+}
+
+async function geocodeAll(input) {
+  const st = document.getElementById('geo-status');
+  const cities = input.split(/[,，、]/).map(s => s.trim()).filter(Boolean);
+  const results = [];
+  for (const city of cities) {
+    const r = await geocodeOne(city);
+    if (r) results.push(r);
+  }
+  geoResults = results;
+  if (results.length > 0) {
+    st.textContent = results.map(r => '📍 ' + r.label).join('　');
+    st.className = 'geo-status geo-ok';
+  } else {
+    geoResults = [];
+    st.textContent = '위치를 찾지 못했어요. 다르게 입력해보세요.';
     st.className = 'geo-status geo-err';
   }
 }
@@ -291,16 +305,23 @@ window.submit = async function() {
   btn.textContent = '저장 중…'; btn.disabled = true;
 
   // geocode가 아직 안됐으면 시도
-  if (!geoResult && hometown) {
+  if (!geoResults.length && hometown) {
     btn.textContent = '위치 확인 중…';
-    await geocode(hometown);
+    await geocodeAll(hometown);
+  }
+
+  // locations 인코딩: 도시명|lat|lng,도시명|lat|lng
+  let locationsStr = null;
+  if (geoResults.length > 0) {
+    locationsStr = geoResults.map(r => `${r.cityName}|${r.lat}|${r.lng}`).join(',');
   }
 
   const { error } = await sb.from('gohyang2_participants').insert({
     name,
     hometown,
-    lat:         geoResult?.lat ?? null,
-    lng:         geoResult?.lng ?? null,
+    lat:         geoResults[0]?.lat ?? null,
+    lng:         geoResults[0]?.lng ?? null,
+    locations:   locationsStr,
     reason,
     photo_data:  photoData[1] || null,
     photo2_data: photoData[2] || null,
