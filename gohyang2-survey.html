@@ -132,7 +132,7 @@
       <input type="text" id="f-hometown" placeholder="예: 부산, 전주, 제주시…" maxlength="100"
              oninput="onHometownInput()"/>
       <div class="geo-status" id="geo-status"></div>
-      <div class="hint">여러 도시는 쉼표로 구분하세요. 도시 이름을 입력하면 지도에 자동으로 표시돼요.</div>
+      <div class="hint">여러 도시는 쉼표나 마침표로 구분하세요. 도시 이름을 입력하면 지도에 자동으로 표시돼요.</div>
     </div>
 
     <div class="field">
@@ -274,7 +274,7 @@ async function geocodeOne(name) {
 
 async function geocodeAll(input) {
   const st = document.getElementById('geo-status');
-  const cities = input.split(/[,，、]/).map(s => s.trim()).filter(Boolean);
+  const cities = input.split(/[,，、·．.。\/]/).map(s => s.trim()).filter(Boolean);
   const results = [];
   for (const city of cities) {
     const r = await geocodeOne(city);
