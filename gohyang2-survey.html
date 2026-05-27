@@ -141,16 +141,35 @@
     </div>
 
     <div class="field">
-      <label>사진 (선택)</label>
-      <div class="photo-box" id="photo-box">
-        <div class="photo-placeholder" onclick="document.getElementById('file-input').click()">
-          <div class="icon">📷</div>
-          <p>사진을 선택하세요</p>
+      <label>사진 (선택 · 최대 3장)</label>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div class="photo-box" id="photo-box-1">
+          <div class="photo-placeholder" onclick="document.getElementById('file-input-1').click()">
+            <div class="icon">📷</div><p>첫 번째 사진</p>
+          </div>
+          <img id="photo-preview-1" class="photo-preview" alt=""/>
+          <button class="photo-remove" onclick="removePhoto(1)">✕ 삭제</button>
         </div>
-        <img id="photo-preview" class="photo-preview" alt=""/>
-        <button class="photo-remove" onclick="removePhoto()">✕ 사진 삭제</button>
+        <input type="file" id="file-input-1" accept="image/*" style="display:none" onchange="onPhoto(1,this)"/>
+
+        <div class="photo-box" id="photo-box-2">
+          <div class="photo-placeholder" onclick="document.getElementById('file-input-2').click()">
+            <div class="icon">📷</div><p>두 번째 사진</p>
+          </div>
+          <img id="photo-preview-2" class="photo-preview" alt=""/>
+          <button class="photo-remove" onclick="removePhoto(2)">✕ 삭제</button>
+        </div>
+        <input type="file" id="file-input-2" accept="image/*" style="display:none" onchange="onPhoto(2,this)"/>
+
+        <div class="photo-box" id="photo-box-3">
+          <div class="photo-placeholder" onclick="document.getElementById('file-input-3').click()">
+            <div class="icon">📷</div><p>세 번째 사진</p>
+          </div>
+          <img id="photo-preview-3" class="photo-preview" alt=""/>
+          <button class="photo-remove" onclick="removePhoto(3)">✕ 삭제</button>
+        </div>
+        <input type="file" id="file-input-3" accept="image/*" style="display:none" onchange="onPhoto(3,this)"/>
       </div>
-      <input type="file" id="file-input" accept="image/*" style="display:none" onchange="onPhoto(this)"/>
       <div class="hint">고향 풍경, 음식, 추억이 담긴 사진이면 무엇이든 좋아요.</div>
     </div>
 
@@ -177,17 +196,14 @@ const sb = createClient(
   'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
 );
 
-let photoData = null;
+const photoData = { 1: null, 2: null, 3: null };
 let geoResult = null;
 let geoTimer  = null;
 
 // ── 사진 ──────────────────────────────────────
-window.onPhoto = function(input) {
-  const file = input.files[0];
-  if (!file) return;
+function resizeAndStore(n, file) {
   const reader = new FileReader();
   reader.onload = e => {
-    // 리사이즈
     const img = new Image();
     img.onload = () => {
       const max = 900;
@@ -199,24 +215,30 @@ window.onPhoto = function(input) {
       const canvas = document.createElement('canvas');
       canvas.width = w; canvas.height = h;
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      photoData = canvas.toDataURL('image/jpeg', 0.78);
-      document.getElementById('photo-preview').src = photoData;
-      document.getElementById('photo-preview').style.display = 'block';
-      document.getElementById('photo-box').classList.add('filled');
-      document.querySelector('.photo-placeholder').style.display = 'none';
+      photoData[n] = canvas.toDataURL('image/jpeg', 0.78);
+      document.getElementById(`photo-preview-${n}`).src = photoData[n];
+      document.getElementById(`photo-preview-${n}`).style.display = 'block';
+      document.getElementById(`photo-box-${n}`).classList.add('filled');
+      document.getElementById(`photo-box-${n}`).querySelector('.photo-placeholder').style.display = 'none';
     };
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
+}
+
+window.onPhoto = function(n, input) {
+  const file = input.files[0];
+  if (!file) return;
+  resizeAndStore(n, file);
 };
 
-window.removePhoto = function() {
-  photoData = null;
-  document.getElementById('photo-preview').style.display = 'none';
-  document.getElementById('photo-preview').src = '';
-  document.getElementById('photo-box').classList.remove('filled');
-  document.querySelector('.photo-placeholder').style.display = '';
-  document.getElementById('file-input').value = '';
+window.removePhoto = function(n) {
+  photoData[n] = null;
+  document.getElementById(`photo-preview-${n}`).style.display = 'none';
+  document.getElementById(`photo-preview-${n}`).src = '';
+  document.getElementById(`photo-box-${n}`).classList.remove('filled');
+  document.getElementById(`photo-box-${n}`).querySelector('.photo-placeholder').style.display = '';
+  document.getElementById(`file-input-${n}`).value = '';
 };
 
 // ── 지오코딩 ──────────────────────────────────
@@ -277,10 +299,12 @@ window.submit = async function() {
   const { error } = await sb.from('gohyang2_participants').insert({
     name,
     hometown,
-    lat:        geoResult?.lat ?? null,
-    lng:        geoResult?.lng ?? null,
+    lat:         geoResult?.lat ?? null,
+    lng:         geoResult?.lng ?? null,
     reason,
-    photo_data: photoData,
+    photo_data:  photoData[1] || null,
+    photo2_data: photoData[2] || null,
+    photo3_data: photoData[3] || null,
   });
 
   if (error) {

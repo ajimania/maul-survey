@@ -249,14 +249,19 @@ function renderFilterBar() {
 // ── 사진 갤러리 ───────────────────────────────
 function renderPhotos() {
   const grid = document.getElementById('photo-grid');
-  const withPhoto = participants.filter(p => p.photo_data);
-  if (!withPhoto.length) {
+  const items = [];
+  participants.forEach(p => {
+    [p.photo_data, p.photo2_data, p.photo3_data].forEach((src, i) => {
+      if (src) items.push({ src, p, idx: i + 1 });
+    });
+  });
+  if (!items.length) {
     grid.innerHTML = '<div class="no-photo">아직 사진이 없어요.</div>';
     return;
   }
-  grid.innerHTML = withPhoto.map(p => `
-    <div class="photo-item" onclick="openLb('${p.id}')">
-      <img src="${p.photo_data}" loading="lazy" alt="${p.name}"/>
+  grid.innerHTML = items.map(({ src, p }) => `
+    <div class="photo-item" onclick="openLb('${p.id}', '${src.slice(0,30)}')">
+      <img src="${src}" loading="lazy" alt="${p.name}"/>
       <div class="photo-label">
         <div>${p.name}</div>
         <div class="photo-hometown">📍 ${p.hometown || ''}</div>
@@ -266,10 +271,12 @@ function renderPhotos() {
 }
 
 // ── 라이트박스 ───────────────────────────────
-window.openLb = function(pid) {
+window.openLb = function(pid, srcPrefix) {
   const p = participants.find(x => x.id === pid);
-  if (!p?.photo_data) return;
-  document.getElementById('lb-img').src = p.photo_data;
+  if (!p) return;
+  const src = [p.photo_data, p.photo2_data, p.photo3_data].find(s => s?.startsWith(srcPrefix)) || p.photo_data;
+  if (!src) return;
+  document.getElementById('lb-img').src = src;
   document.getElementById('lb-name').textContent = p.name;
   document.getElementById('lb-hometown').textContent = '📍 ' + (p.hometown || '');
   document.getElementById('lb-reason').textContent = p.reason || '';
