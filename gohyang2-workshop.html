@@ -179,7 +179,7 @@ const COLORS = ['#d4622a','#4a90d9','#5d9e56','#9b59b6','#e67e22','#1abc9c','#c0
 let participants = [];
 let activeFilter = null;
 const pMarkers = {}; // pid → [marker, ...]
-let activeLine = null; // 현재 표시된 연결선
+const pLines   = {}; // pid → L.polyline
 
 // 갤러리 상태
 let curParticipant = null;
@@ -219,6 +219,12 @@ function addMarker(p) {
   const locs = getLocations(p);
   if (!locs.length) return;
   pMarkers[p.id] = [];
+  // 여러 위치면 점선으로 연결
+  if (locs.length >= 2) {
+    pLines[p.id] = L.polyline(locs.map(l => [l.lat, l.lng]), {
+      color: p._color, weight: 2, dashArray: '8, 10', opacity: 0.75
+    }).addTo(map);
+  }
   locs.forEach(loc => {
     const icon = L.divIcon({
       html: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
@@ -253,22 +259,15 @@ window.filterMap = function(pid) {
     }
   });
 
-  // 기존 연결선 제거
-  if (activeLine) { activeLine.remove(); activeLine = null; }
+  participants.forEach(p => {
+    const vis = !pid || pid === p.id;
+    if (pLines[p.id]) { pLines[p.id].remove(); if (vis) pLines[p.id].addTo(map); }
+  });
 
   const reasonEl = document.getElementById('map-reason');
   if (pid) {
     const p = participants.find(x => x.id === pid);
     const locs = getLocations(p);
-    // 여러 위치 점선으로 연결
-    if (locs.length >= 2) {
-      activeLine = L.polyline(locs.map(l => [l.lat, l.lng]), {
-        color: p._color,
-        weight: 2,
-        dashArray: '8, 10',
-        opacity: 0.75
-      }).addTo(map);
-    }
     if (locs.length === 1) {
       map.setView([locs[0].lat, locs[0].lng], 10);
     } else if (locs.length > 1) {
