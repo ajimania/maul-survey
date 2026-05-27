@@ -219,14 +219,15 @@ function addMarker(p) {
   if (!locs.length) return;
   pMarkers[p.id] = [];
   locs.forEach(loc => {
-    const marker = L.circleMarker([loc.lat, loc.lng], {
-      radius: 17,
-      fillColor: p._color,
-      color: 'rgba(255,255,255,0.9)',
-      weight: 2.5,
-      fillOpacity: 1
-    }).addTo(map);
-    marker.bindTooltip(`${p.name} · ${loc.name}`, { permanent: false, direction: 'top', offset: [0, -20] });
+    const icon = L.divIcon({
+      html: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
+        <circle cx="14" cy="14" r="12" fill="${p._color}" stroke="white" stroke-width="2"/>
+        <text x="14" y="19" text-anchor="middle" font-size="12" font-weight="900" fill="white" font-family="Apple SD Gothic Neo,Noto Sans KR,sans-serif">${p.name.slice(0,1)}</text>
+      </svg>`,
+      iconSize: [28, 28], iconAnchor: [14, 14], className: ''
+    });
+    const marker = L.marker([loc.lat, loc.lng], { icon }).addTo(map);
+    marker.bindTooltip(`${p.name} · ${loc.name}`, { permanent: false, direction: 'top', offset: [0, -16] });
     marker.on('click', () => filterMap(p.id));
     pMarkers[p.id].push(marker);
   });
