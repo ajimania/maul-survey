@@ -68,11 +68,21 @@
     }
     .map-reason.show { display: block; }
     .map-reason-name {
-      font-size: 13px; font-weight: 900; color: var(--tan); margin-bottom: 6px;
+      font-size: 13px; font-weight: 900; color: var(--tan); margin-bottom: 10px;
+    }
+    .map-reason-section { margin-bottom: 10px; }
+    .map-reason-section:last-child { margin-bottom: 0; }
+    .map-reason-label {
+      font-size: 11px; font-weight: 800; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px;
     }
     .map-reason-text {
       font-size: 13px; color: var(--text); line-height: 1.75;
-      max-height: 200px; overflow-y: auto;
+      max-height: 120px; overflow-y: auto;
+    }
+    .map-reason-divider {
+      border: none; border-top: 1px solid rgba(255,255,255,.08);
+      margin: 10px 0;
     }
 
     /* ── 사진 갤러리 ── */
@@ -152,7 +162,15 @@
   </div>
   <div class="map-reason" id="map-reason">
     <div class="map-reason-name" id="map-reason-name"></div>
-    <div class="map-reason-text" id="map-reason-text"></div>
+    <div class="map-reason-section" id="map-reason-section1" style="display:none">
+      <div class="map-reason-label">좋아하는 이유</div>
+      <div class="map-reason-text" id="map-reason-text"></div>
+    </div>
+    <hr class="map-reason-divider" id="map-reason-divider" style="display:none"/>
+    <div class="map-reason-section" id="map-reason-section2" style="display:none">
+      <div class="map-reason-label">요즘 나의 고민</div>
+      <div class="map-reason-text" id="map-concern-text"></div>
+    </div>
   </div>
 </div>
 
@@ -273,9 +291,20 @@ window.filterMap = function(pid) {
     } else if (locs.length > 1) {
       map.fitBounds(locs.map(l => [l.lat, l.lng]), { padding: [60, 60] });
     }
-    if (p?.reason) {
+    if (p?.reason || p?.concern) {
       document.getElementById('map-reason-name').textContent = p.name + ' · ' + (p.hometown || '');
-      document.getElementById('map-reason-text').textContent = p.reason;
+      const sec1 = document.getElementById('map-reason-section1');
+      const sec2 = document.getElementById('map-reason-section2');
+      const div  = document.getElementById('map-reason-divider');
+      if (p.reason) {
+        document.getElementById('map-reason-text').textContent = p.reason;
+        sec1.style.display = '';
+      } else { sec1.style.display = 'none'; }
+      if (p.concern) {
+        document.getElementById('map-concern-text').textContent = p.concern;
+        sec2.style.display = '';
+      } else { sec2.style.display = 'none'; }
+      div.style.display = (p.reason && p.concern) ? '' : 'none';
       reasonEl.classList.add('show');
     } else { reasonEl.classList.remove('show'); }
   } else {

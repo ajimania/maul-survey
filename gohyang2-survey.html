@@ -123,12 +123,12 @@
   <div id="form-section">
 
     <div class="field">
-      <label>이름 <span class="req">*</span></label>
-      <input type="text" id="f-name" placeholder="이름을 입력해주세요" maxlength="30"/>
+      <label>이름(닉네임) <span class="req">*</span></label>
+      <input type="text" id="f-name" placeholder="불리고 싶은 이름을 입력해주세요" maxlength="30"/>
     </div>
 
     <div class="field">
-      <label>고향 / 좋아하는 도시 <span class="req">*</span></label>
+      <label>좋아하는 지역 <span class="req">*</span></label>
       <input type="text" id="f-hometown" placeholder="예: 부산, 전주, 제주시…" maxlength="100"
              oninput="onHometownInput()"/>
       <div class="geo-status" id="geo-status"></div>
@@ -138,6 +138,11 @@
     <div class="field">
       <label>그 지역이 좋은 이유 <span class="req">*</span></label>
       <textarea id="f-reason" placeholder="어떤 기억, 장소, 음식, 사람이 떠오르나요?&#10;짧아도 괜찮아요."></textarea>
+    </div>
+
+    <div class="field">
+      <label>요즘 나의 고민 <span class="req">*</span></label>
+      <textarea id="f-concern" placeholder="환경, 개인사 등 자유롭게 적어주세요."></textarea>
     </div>
 
     <div class="field">
@@ -296,10 +301,12 @@ window.submit = async function() {
   const name     = document.getElementById('f-name').value.trim();
   const hometown = document.getElementById('f-hometown').value.trim();
   const reason   = document.getElementById('f-reason').value.trim();
+  const concern  = document.getElementById('f-concern').value.trim();
 
   if (!name)     { alert('이름을 입력해주세요.'); return; }
-  if (!hometown) { alert('고향/도시 이름을 입력해주세요.'); return; }
-  if (!reason)   { alert('좋아하는 이유를 적어주세요.'); return; }
+  if (!hometown) { alert('좋아하는 지역을 입력해주세요.'); return; }
+  if (!reason)   { alert('그 지역이 좋은 이유를 적어주세요.'); return; }
+  if (!concern)  { alert('요즘 나의 고민을 적어주세요.'); return; }
 
   const btn = document.getElementById('btn-submit');
   btn.textContent = '저장 중…'; btn.disabled = true;
@@ -323,6 +330,7 @@ window.submit = async function() {
     lng:         geoResults[0]?.lng ?? null,
     locations:   locationsStr,
     reason,
+    concern,
     photo_data:  photoData[1] || null,
     photo2_data: photoData[2] || null,
     photo3_data: photoData[3] || null,
