@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>함양, 이런 맛이었어? — 나의 함양 취향 찾기</title>
+<meta name="description" content="지리산 첫 줄기 함양의 나물, 산양삼, 어탕국수, 갈비찜, 산머루와인. 5개의 질문으로 나의 함양 미각 유형을 찾아보세요. by 남가좌439 프로젝트">
+<meta property="og:title" content="함양, 이런 맛이었어? — 나의 함양 취향 찾기">
+<meta property="og:description" content="5개의 질문으로 찾는 나의 함양 미각 유형. 산나물부터 산머루와인까지, 당신의 함양을 매칭해드립니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gaegu:wght@400;700&family=Gowun+Dodum&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --grey:#A9A59C;          /* 매거진 커버 웜그레이 */
+  --grey-deep:#98948B;
+  --paper:#F6F3EC;         /* 본문 크림 */
+  --card:#FFFEFA;
+  --crayon:#211F1C;        /* 크레용 블랙 */
+  --white:#FDFCF8;
+  --amber:#E8A13D;         /* 젤리 앰버 */
+  --amber-deep:#D4882A;
+  --green:#5F7F4E;         /* 나물 그린 */
+  --green-soft:#8FA97E;
+  --wine:#9A5A6B;
+  --text:#33312C;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Gowun Dodum',sans-serif;
+  color:var(--text);
+  background:var(--paper);
+  background-image:radial-gradient(circle, rgba(33,31,28,.05) 1px, transparent 1.4px);
+  background-size:16px 16px;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+.jua{font-family:'Jua',sans-serif;font-weight:400;}
+.hand{font-family:'Gaegu',cursive;}
+.serif{font-family:'Noto Serif KR',serif;}
+
+.wrap{max-width:680px;margin:0 auto;padding:0 18px;position:relative;z-index:1;}
+
+/* ===== 크레용 낙서 헬퍼 ===== */
+.wobble{
+  border:3px solid var(--crayon);
+  border-radius:255px 18px 225px 18px / 18px 225px 18px 255px;
+}
+.wobble2{
+  border:3px solid var(--crayon);
+  border-radius:18px 225px 18px 255px / 255px 18px 225px 18px;
+}
+.sticker{
+  display:inline-block;
+  background:var(--white);
+  padding:7px 14px 5px;
+  font-family:'Gaegu',cursive;
+  font-weight:700;
+  font-size:1.05rem;
+  box-shadow:3px 3px 0 rgba(33,31,28,.85);
+}
+.circled{
+  display:inline-block;
+  border:2.5px solid currentColor;
+  border-radius:50% 46% 52% 48% / 48% 52% 46% 54%;
+  padding:2px 12px;
+  transform:rotate(-4deg);
+}
+
+/* ============================================================
+   HERO — 매거진 커버
+============================================================ */
+.cover{
+  background:var(--grey);
+  color:var(--white);
+  position:relative;
+  padding:34px 0 44px;
+  overflow:hidden;
+}
+.cover-inner{position:relative;max-width:680px;margin:0 auto;padding:0 20px;}
+.cover .kicker{
+  font-family:'Noto Serif KR',serif;
+  font-size:.78rem;
+  letter-spacing:.22em;
+  opacity:.92;
+  text-align:center;
+  margin-bottom:6px;
+}
+.cover h1{
+  font-family:'Jua',sans-serif;
+  font-size:clamp(3.4rem, 15vw, 6rem);
+  line-height:1.02;
+  text-align:center;
+  transform:rotate(-2deg);
+  text-shadow:4px 4px 0 rgba(33,31,28,.28);
+  margin:4px 0 2px;
+}
+.cover .sub{
+  font-family:'Jua',sans-serif;
+  font-size:clamp(1.3rem, 5.5vw, 1.9rem);
+  text-align:center;
+  transform:rotate(-1.5deg);
+  margin-bottom:10px;
+}
+.bg-deco{
+  position:absolute;
+  opacity:.13;
+  pointer-events:none;
+}
+.bg-deco svg{width:100%;height:100%;display:block;}
+.corner.tr{top:10px;right:20px;text-align:right;}
+.corner.tl{top:10px;left:20px;}
+.doodle-note{
+  font-family:'Gaegu',cursive;
+  font-weight:700;
+  position:absolute;
+  line-height:1.25;
+}
+.hero-stage{
+  position:relative;
+  width:min(310px, 74vw);
+  margin:14px auto 8px;
+}
+.hero-stage svg{width:100%;height:auto;display:block;}
+.note-l{left:2px;bottom:120px;font-size:1.15rem;transform:rotate(-7deg);}
+.note-r{right:0;bottom:88px;font-size:1.05rem;transform:rotate(5deg);}
+.note-yum{right:26px;bottom:8px;font-size:1.1rem;}
+.cover-cta{
+  display:block;
+  width:fit-content;
+  margin:22px auto 0;
+  background:var(--white);
+  color:var(--crayon);
+  font-family:'Jua',sans-serif;
+  font-size:1.25rem;
+  padding:14px 30px 12px;
+  text-decoration:none;
+  border:3px solid var(--crayon);
+  border-radius:255px 18px 225px 18px / 18px 225px 18px 255px;
+  box-shadow:4px 4px 0 rgba(33,31,28,.85);
+  transform:rotate(-1deg);
+  transition:transform .15s;
+}
+.cover-cta:hover{transform:rotate(1deg) scale(1.04);}
+.cover .credit{
+  text-align:center;
+  font-family:'Noto Serif KR',serif;
+  font-size:.72rem;
+  letter-spacing:.14em;
+  margin-top:24px;
+  opacity:.85;
+}
+
+/* ============================================================
+   섹션 공통
+============================================================ */
+section{padding:56px 0;position:relative;overflow:hidden;}
+.sec-title{
+  font-family:'Jua',sans-serif;
+  font-size:clamp(1.7rem, 7vw, 2.3rem);
+  text-align:center;
+  color:var(--crayon);
+  margin-bottom:8px;
+  transform:rotate(-.6deg);
+}
+.sec-desc{
+  text-align:center;
+  font-size:1rem;
+  line-height:1.75;
+  color:#5a574f;
+  max-width:480px;
+  margin:0 auto 30px;
+}
+.hl{
+  background:linear-gradient(transparent 62%, rgba(232,161,61,.55) 62%);
+  padding:0 2px;
+}
+
+/* ===== 키워드 스티커 ===== */
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px 10px;
+  justify-content:center;
+  max-width:560px;
+  margin:0 auto;
+}
+.chips .sticker{cursor:default;}
+.chips .sticker:nth-child(odd){transform:rotate(-2.5deg);}
+.chips .sticker:nth-child(even){transform:rotate(2deg);}
+.chips .sticker:nth-child(3n){transform:rotate(-1deg);}
+.chip-note{
+  text-align:center;
+  font-family:'Gaegu',cursive;
+  font-weight:700;
+  font-size:1.1rem;
+  color:var(--green);
+  margin-top:22px;
+  transform:rotate(-1.5deg);
+}
+
+/* ============================================================
+   퀴즈
+============================================================ */
+#quiz-sec{background:var(--grey);color:var(--white);position:relative;}
+#quiz-sec .sec-title{color:var(--white);text-shadow:3px 3px 0 rgba(33,31,28,.25);}
+#quiz-sec .sec-desc{color:rgba(253,252,248,.92);}
+.quiz-box{
+  background:var(--card);
+  color:var(--text);
+  max-width:560px;
+  margin:0 auto;
+  padding:30px 24px 26px;
+  box-shadow:5px 5px 0 rgba(33,31,28,.8);
+  position:relative;
+}
+.q-progress{
+  display:flex;
+  gap:8px;
+  justify-content:center;
+  margin-bottom:18px;
+}
+.q-dot{
+  width:14px;height:14px;
+  border:2.5px solid var(--crayon);
+  border-radius:50% 46% 52% 48%/48% 52% 46% 54%;
+  background:transparent;
+  transition:background .2s;
+}
+.q-dot.on{background:var(--amber);}
+.q-num{
+  font-family:'Gaegu',cursive;
+  font-weight:700;
+  font-size:1rem;
+  color:var(--amber-deep);
+  text-align:center;
+  margin-bottom:4px;
+}
+.q-text{
+  font-family:'Jua',sans-serif;
+  font-size:1.35rem;
+  text-align:center;
+  line-height:1.4;
+  margin-bottom:20px;
+}
+.q-opts{display:flex;flex-direction:column;gap:11px;}
+.q-opt{
+  font-family:'Gowun Dodum',sans-serif;
+  font-size:.98rem;
+  text-align:left;
+  background:var(--white);
+  border:2.5px solid var(--crayon);
+  border-radius:255px 14px 225px 14px / 14px 225px 14px 255px;
+  padding:12px 16px;
+  cursor:pointer;
+  line-height:1.45;
+  transition:transform .12s, background .12s;
+}
+.q-opt:hover{background:#FBEFD8;transform:translateX(4px) rotate(-.4deg);}
+
+/* ============================================================
+   결과 카드 — 미니 매거진 커버
+============================================================ */
+#result{display:none;}
+.result-cover{
+  background:var(--grey);
+  color:var(--white);
+  max-width:560px;
+  margin:0 auto 26px;
+  padding:30px 24px 26px;
+  position:relative;
+  box-shadow:6px 6px 0 rgba(33,31,28,.8);
+  text-align:center;
+}
+.result-kicker{
+  font-family:'Noto Serif KR',serif;
+  font-size:.74rem;
+  letter-spacing:.22em;
+  margin-bottom:10px;
+}
+.result-emoji{display:flex;justify-content:center;margin-bottom:14px;}
+.result-emoji svg{
+  width:120px;height:120px;
+  background:var(--white);
+  border:3px solid var(--crayon);
+  border-radius:50% 46% 52% 48% / 48% 52% 46% 54%;
+  padding:18px;
+  box-shadow:4px 4px 0 rgba(33,31,28,.4);
+  transform:rotate(-3deg);
+}
+.result-name{
+  font-family:'Jua',sans-serif;
+  font-size:clamp(1.8rem, 8vw, 2.4rem);
+  transform:rotate(-1.5deg);
+  text-shadow:3px 3px 0 rgba(33,31,28,.3);
+  margin-bottom:6px;
+}
+.result-title{
+  font-family:'Gaegu',cursive;
+  font-weight:700;
+  font-size:1.25rem;
+  margin-bottom:14px;
+}
+.result-desc{
+  font-size:.96rem;
+  line-height:1.8;
+  text-align:left;
+  background:rgba(253,252,248,.14);
+  border:2.5px dashed rgba(253,252,248,.7);
+  border-radius:16px;
+  padding:16px 18px;
+}
+.result-body{max-width:560px;margin:0 auto;}
+.course-box{
+  background:var(--card);
+  color:var(--text);
+  padding:24px 22px;
+  margin-bottom:18px;
+  box-shadow:4px 4px 0 rgba(33,31,28,.8);
+}
+.course-box h3{
+  font-family:'Jua',sans-serif;
+  font-size:1.25rem;
+  margin-bottom:14px;
+  color:var(--crayon);
+}
+.course-step{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  padding:9px 0;
+  font-size:.95rem;
+  line-height:1.6;
+}
+.step-no{
+  flex:none;
+  font-family:'Gaegu',cursive;
+  font-weight:700;
+  width:30px;height:30px;
+  display:flex;align-items:center;justify-content:center;
+  border:2.5px solid var(--crayon);
+  border-radius:50% 46% 52% 48%/48% 52% 46% 54%;
+  background:var(--amber);
+  color:var(--crayon);
+  font-size:1rem;
+}
+.meta-row{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+.meta-card{
+  flex:1;
+  min-width:200px;
+  background:var(--card);
+  color:var(--text);
+  padding:16px 18px;
+  box-shadow:4px 4px 0 rgba(33,31,28,.8);
+  font-size:.92rem;
+  line-height:1.65;
+}
+.meta-card b{font-family:'Gaegu',cursive;font-weight:700;font-size:1.05rem;display:block;margin-bottom:4px;color:var(--green);}
+.result-actions{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:6px;
+}
+.btn{
+  font-family:'Jua',sans-serif;
+  font-size:1.05rem;
+  padding:12px 22px 10px;
+  background:var(--white);
+  color:var(--crayon);
+  border:3px solid var(--crayon);
+  border-radius:255px 18px 225px 18px / 18px 225px 18px 255px;
+  box-shadow:4px 4px 0 rgba(33,31,28,.85);
+  cursor:pointer;
+  transition:transform .15s;
+  text-decoration:none;
+  display:inline-block;
+}
+.btn:hover{transform:rotate(-1deg) scale(1.04);}
+.btn.amber{background:var(--amber);}
+
+/* ============================================================
+   누리는 경로
+============================================================ */
+.routes{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  max-width:560px;
+  margin:0 auto;
+}
+.route-card{
+  background:var(--card);
+  padding:22px 22px 20px;
+  box-shadow:4px 4px 0 rgba(33,31,28,.8);
+  position:relative;
+}
+.route-card:nth-child(odd){transform:rotate(-.5deg);}
+.route-card:nth-child(even){transform:rotate(.5deg);}
+.route-tag{
+  position:absolute;
+  top:-14px;left:18px;
+  background:var(--amber);
+  font-family:'Gaegu',cursive;
+  font-weight:700;
+  font-size:.95rem;
+  padding:4px 12px 2px;
+  border:2.5px solid var(--crayon);
+  border-radius:255px 12px 225px 12px/12px 225px 12px 255px;
+  transform:rotate(-2deg);
+}
+.route-card h3{
+  font-family:'Jua',sans-serif;
+  font-size:1.2rem;
+  margin:6px 0 8px;
+}
+.route-card p{font-size:.93rem;line-height:1.75;color:#4c4a43;}
+.route-card .path{
+  font-family:'Gaegu',cursive;
+  font-weight:700;
+  font-size:1.02rem;
+  color:var(--green);
+  margin-top:8px;
+  line-height:1.6;
+}
+
+/* ============================================================
+   남가좌439 CTA
+============================================================ */
+#nam439{background:var(--grey);color:var(--white);position:relative;}
+#nam439 .sec-title{color:var(--white);text-shadow:3px 3px 0 rgba(33,31,28,.25);}
+#nam439 .sec-desc{color:rgba(253,252,248,.94);}
+.form-box{
+  background:var(--card);
+  color:var(--text);
+  max-width:480px;
+  margin:0 auto;
+  padding:28px 24px;
+  box-shadow:5px 5px 0 rgba(33,31,28,.8);
+}
+.form-box label{
+  display:block;
+  font-family:'Gaegu',cursive;
+  font-weight:700;
+  font-size:1.08rem;
+  margin:14px 0 6px;
+  color:var(--crayon);
+}
+.form-box label:first-child{margin-top:0;}
+.form-box input, .form-box textarea{
+  width:100%;
+  font-family:'Gowun Dodum',sans-serif;
+  font-size:.95rem;
+  padding:11px 14px;
+  background:var(--white);
+  border:2.5px solid var(--crayon);
+  border-radius:255px 12px 225px 12px/12px 225px 12px 255px;
+  outline:none;
+}
+.form-box textarea{min-height:80px;resize:vertical;border-radius:14px 200px 14px 220px/220px 14px 200px 14px;}
+.form-box input:focus, .form-box textarea:focus{background:#FBEFD8;}
+.form-note{
+  font-size:.8rem;
+  color:#807c72;
+  margin-top:10px;
+  line-height:1.6;
+}
+.form-box .btn{width:100%;margin-top:18px;text-align:center;}
+#form-done{
+  display:none;
+  text-align:center;
+  padding:26px 10px 10px;
+}
+#form-done .big{font-size:2.6rem;margin-bottom:10px;}
+#form-done p{font-size:.98rem;line-height:1.8;}
+
+footer{
+  text-align:center;
+  padding:36px 20px 46px;
+  font-family:'Noto Serif KR',serif;
+  font-size:.74rem;
+  letter-spacing:.14em;
+  color:var(--grey-deep);
+  line-height:2;
+}
+
+@media (max-width:480px){
+  .note-l{bottom:104px;font-size:1rem;}
+  .note-r{bottom:76px;font-size:.95rem;}
+}
+@media (max-width:560px){
+  .bg-deco{opacity:.1;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ 크레용 일러스트 심볼 ============ -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-mountain" viewBox="0 0 64 64">
+    <path d="M6 52 L26 14 L38 36 L46 24 L58 52 Z" fill="#8FA97E" stroke="#211F1C" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M26 14 L31 24 L26 29 L21 24 Z" fill="#FDFCF8" stroke="#211F1C" stroke-width="3" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="i-leaf" viewBox="0 0 64 64">
+    <path d="M32 58 C32 46 32 32 33 16" fill="none" stroke="#211F1C" stroke-width="4" stroke-linecap="round"/>
+    <path d="M32 34 C22 32 12 24 10 12 C24 12 32 20 33 30 Z" fill="#7FA36A" stroke="#211F1C" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M33 30 C36 18 46 10 56 10 C54 24 44 32 34 33 Z" fill="#8FB37A" stroke="#211F1C" stroke-width="4" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="i-ginseng" viewBox="0 0 64 64">
+    <path d="M32 16 C22 16 16 23 16 31 C16 37 19 42 23 45 L20 56 C22 58 26 58 28 54 L30 48 C31 49 33 49 34 48 L36 54 C38 58 42 58 44 56 L41 45 C45 42 48 37 48 31 C48 23 42 16 32 16 Z" fill="#EFA93F" stroke="#211F1C" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M32 16 C31 12 31 10 32 6" fill="none" stroke="#211F1C" stroke-width="4" stroke-linecap="round"/>
+    <path d="M32 10 C28 5 22 4 17 5 C19 10 26 13 31 11" fill="#7FA36A" stroke="#211F1C" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M33 10 C37 5 43 4 48 5 C46 10 39 13 34 11" fill="#8FB37A" stroke="#211F1C" stroke-width="3.5" stroke-linejoin="round"/>
+    <circle cx="27" cy="30" r="2" fill="#211F1C"/>
+    <circle cx="37" cy="30" r="2" fill="#211F1C"/>
+    <path d="M28 37 C30 39 34 39 36 37" fill="none" stroke="#211F1C" stroke-width="3" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="i-bowl" viewBox="0 0 64 64">
+    <path d="M10 34 C10 45 19 53 32 53 C45 53 54 45 54 34 Z" fill="#FFFDF4" stroke="#211F1C" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M12 34 C17 30 22 38 27 34 C32 30 37 38 42 34 C46 31 50 35 52 34" fill="none" stroke="#211F1C" stroke-width="3" stroke-linecap="round"/>
+    <path d="M25 53 L27 58 L37 58 L39 53" fill="#FFFDF4" stroke="#211F1C" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M24 24 C22 20 26 16 24 12" fill="none" stroke="#211F1C" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M34 26 C32 22 36 18 34 14" fill="none" stroke="#211F1C" stroke-width="3.5" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="i-meat" viewBox="0 0 64 64">
+    <path d="M12 24 C8 36 18 47 31 49 C43 51 52 43 50 33 C48 22 36 14 25 15 C18 16 14 19 12 24 Z" fill="#C96F4E" stroke="#211F1C" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M20 26 C22 22 27 20 31 21" fill="none" stroke="#FBDFA6" stroke-width="4" stroke-linecap="round"/>
+    <path d="M44 42 L52 50" stroke="#211F1C" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="55" cy="47" r="5" fill="#FDFCF8" stroke="#211F1C" stroke-width="3"/>
+    <circle cx="49" cy="54" r="5" fill="#FDFCF8" stroke="#211F1C" stroke-width="3"/>
+  </symbol>
+  <symbol id="i-grape" viewBox="0 0 64 64">
+    <path d="M32 16 C32 11 34 7 38 5" fill="none" stroke="#211F1C" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M32 13 C36 7 44 5 50 8 C46 14 38 16 33 14 Z" fill="#7FA36A" stroke="#211F1C" stroke-width="3.5" stroke-linejoin="round"/>
+    <circle cx="25" cy="24" r="7" fill="#9A5A6B" stroke="#211F1C" stroke-width="3.5"/>
+    <circle cx="39" cy="24" r="7" fill="#9A5A6B" stroke="#211F1C" stroke-width="3.5"/>
+    <circle cx="18" cy="36" r="7" fill="#9A5A6B" stroke="#211F1C" stroke-width="3.5"/>
+    <circle cx="32" cy="36" r="7" fill="#9A5A6B" stroke="#211F1C" stroke-width="3.5"/>
+    <circle cx="46" cy="36" r="7" fill="#9A5A6B" stroke="#211F1C" stroke-width="3.5"/>
+    <circle cx="25" cy="48" r="7" fill="#9A5A6B" stroke="#211F1C" stroke-width="3.5"/>
+    <circle cx="39" cy="48" r="7" fill="#9A5A6B" stroke="#211F1C" stroke-width="3.5"/>
+  </symbol>
+  <symbol id="i-letter" viewBox="0 0 64 64">
+    <rect x="8" y="16" width="48" height="34" rx="4" fill="#FFFDF4" stroke="#211F1C" stroke-width="4"/>
+    <path d="M11 20 L32 37 L53 20" fill="none" stroke="#211F1C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M32 58 C28 54 25 51 27 48.5 C29 47 31.5 48 32 50 C32.5 48 35 47 37 48.5 C39 51 36 54 32 58 Z" fill="#E2704F" stroke="#211F1C" stroke-width="3"/>
+  </symbol>
+  <symbol id="i-pencil" viewBox="0 0 64 64">
+    <g transform="rotate(40 32 32)">
+      <rect x="24" y="4" width="16" height="8" rx="3" fill="#E2704F" stroke="#211F1C" stroke-width="3.5"/>
+      <rect x="24" y="12" width="16" height="32" rx="2" fill="#F5CF3C" stroke="#211F1C" stroke-width="3.5"/>
+      <path d="M24 44 L32 58 L40 44 Z" fill="#FFFDF4" stroke="#211F1C" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M30 53 L32 58 L34 53 Z" fill="#211F1C"/>
+    </g>
+  </symbol>
+  <symbol id="i-drop" viewBox="0 0 64 64">
+    <path d="M32 8 C25 21 17 29 17 40 A15 15 0 0 0 47 40 C47 29 39 21 32 8 Z" fill="#9FBEDB" stroke="#211F1C" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M25 40 C25 44 27 47 30 48" fill="none" stroke="#FDFCF8" stroke-width="3.5" stroke-linecap="round"/>
+  </symbol>
+</svg>
+
+<!-- ============ HERO : 매거진 커버 ============ -->
+<header class="cover">
+  <div class="cover-inner">
+    <p class="kicker">경남 함양 · 지리산 첫 줄기</p>
+    <h1>함양,</h1>
+    <p class="sub">이런 맛이었어?</p>
+
+    <div class="hero-stage">
+      <!-- 젤리 산삼 캐릭터 : 크레용 낙서 톤 -->
+      <svg viewBox="0 0 320 330" xmlns="http://www.w3.org/2000/svg" aria-label="산삼 캐릭터 그림">
+        <!-- 그림자 -->
+        <ellipse cx="160" cy="308" rx="92" ry="14" fill="rgba(33,31,28,.18)"/>
+        <!-- 잎사귀 머리 -->
+        <g stroke="#211F1C" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M160 92 C150 60 120 44 96 46 C104 74 130 92 156 94" fill="#7FA36A"/>
+          <path d="M160 92 C170 58 202 42 226 46 C218 76 190 92 164 94" fill="#8FB37A"/>
+          <path d="M160 96 C158 66 158 48 160 30" fill="none"/>
+          <circle cx="160" cy="22" r="9" fill="#C94F3D"/>
+        </g>
+        <!-- 몸통 : 젤리 앰버 -->
+        <g stroke="#211F1C" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M160 96
+                   C120 96 92 128 90 168
+                   C88 200 102 224 118 240
+                   C112 262 108 282 112 296
+                   C120 302 132 300 138 288
+                   C142 276 144 266 146 258
+                   C154 262 166 262 174 258
+                   C176 268 180 280 186 292
+                   C194 302 208 300 214 292
+                   C216 276 210 258 204 240
+                   C220 222 232 198 230 166
+                   C228 128 200 96 160 96 Z"
+                fill="#EFA93F"/>
+          <!-- 팔 -->
+          <path d="M92 170 C74 176 62 188 58 202 C68 208 84 204 94 192" fill="#EFA93F"/>
+          <path d="M228 168 C246 174 258 186 262 200 C252 206 236 202 226 190" fill="#EFA93F"/>
+        </g>
+        <!-- 젤리 하이라이트 -->
+        <path d="M120 130 C126 116 140 108 152 106" stroke="#FBDFA6" stroke-width="9" stroke-linecap="round" fill="none"/>
+        <path d="M108 160 C108 150 112 142 116 138" stroke="#FBDFA6" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <!-- 얼굴 -->
+        <circle cx="138" cy="168" r="6.5" fill="#211F1C"/>
+        <circle cx="182" cy="168" r="6.5" fill="#211F1C"/>
+        <path d="M152 190 C158 196 166 196 172 190" stroke="#211F1C" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+        <ellipse cx="120" cy="188" rx="9" ry="6" fill="#E2704F" opacity=".75"/>
+        <ellipse cx="200" cy="188" rx="9" ry="6" fill="#E2704F" opacity=".75"/>
+        <!-- 낙서 : 반짝이, 하트 -->
+        <g stroke="#FDFCF8" stroke-width="4" stroke-linecap="round" fill="none">
+          <path d="M46 96 l0 26 M33 109 l26 0"/>
+          <path d="M278 130 l0 20 M268 140 l20 0"/>
+          <path d="M262 60 C270 48 286 50 288 62 C290 72 276 82 268 88 C258 80 250 70 254 62 C258 54 262 58 262 60 Z" fill="rgba(253,252,248,.2)"/>
+        </g>
+      </svg>
+      <div class="doodle-note note-l">100%<br>지리산</div>
+      <div class="doodle-note note-r">향긋<br>향긋</div>
+      <div class="doodle-note note-yum"><span class="circled">냠!</span></div>
+    </div>
+
+    <a class="cover-cta" href="#quiz-sec">내 함양 취향 찾으러 가기 →</a>
+    <p class="credit">남가좌439 프로젝트</p>
+  </div>
+</header>
+
+<!-- ============ 함양 키워드 ============ -->
+<section id="keywords">
+  <div class="bg-deco" style="width:280px;height:280px;right:-60px;bottom:-50px;transform:rotate(8deg);">
+    <svg><use href="#i-mountain"/></svg>
+  </div>
+  <div class="bg-deco" style="width:200px;height:200px;left:-50px;top:-20px;transform:rotate(-14deg);">
+    <svg><use href="#i-leaf"/></svg>
+  </div>
+  <div class="wrap">
+    <h2 class="sec-title">함양이 뭔데?</h2>
+    <p class="sec-desc">
+      지리산이 처음 시작되는 동네, 경남 함양.<br>
+      <span class="hl">산에서 온 것들</span>이 유난히 귀하고 맛있는 곳이에요.
+    </p>
+    <div class="chips">
+      <span class="sticker">지리산 첫 줄기</span>
+      <span class="sticker">천년의 숲, 상림</span>
+      <span class="sticker">산삼의 고장</span>
+      <span class="sticker">어탕국수 원조</span>
+      <span class="sticker">안의갈비찜</span>
+      <span class="sticker">지리산 산나물</span>
+      <span class="sticker">산머루와인</span>
+      <span class="sticker">오도재 노을</span>
+      <span class="sticker">개평한옥마을</span>
+      <span class="sticker">화림동 정자길</span>
+    </div>
+    <p class="chip-note">← 이 중에 뭐가 내 취향인지, 5개의 질문으로 찾아드려요 ↓</p>
+  </div>
+</section>
+
+<!-- ============ 취향 퀴즈 ============ -->
+<section id="quiz-sec">
+  <div class="bg-deco" style="width:300px;height:300px;right:-70px;top:-50px;transform:rotate(-10deg);opacity:.16;">
+    <svg><use href="#i-bowl"/></svg>
+  </div>
+  <div class="bg-deco" style="width:260px;height:260px;left:-70px;bottom:-40px;transform:rotate(16deg);opacity:.16;">
+    <svg><use href="#i-pencil"/></svg>
+  </div>
+  <div class="wrap">
+    <h2 class="sec-title">나의 함양 미각 유형은?</h2>
+    <p class="sec-desc">고민 말고 손 가는 대로! 1분이면 끝나요.</p>
+
+    <div class="quiz-box wobble" id="quiz">
+      <div class="q-progress" id="q-progress"></div>
+      <p class="q-num" id="q-num"></p>
+      <p class="q-text" id="q-text"></p>
+      <div class="q-opts" id="q-opts"></div>
+    </div>
+
+    <!-- 결과 -->
+    <div id="result">
+      <div class="result-cover">
+        <p class="result-kicker">나의 함양 유형</p>
+        <div class="result-emoji" id="r-emoji"></div>
+        <div class="result-name" id="r-name"></div>
+        <div class="result-title" id="r-title"></div>
+        <div class="result-desc" id="r-desc"></div>
+      </div>
+      <div class="result-body">
+        <div class="course-box wobble2">
+          <h3>함양에서 이렇게 누려보세요</h3>
+          <div id="r-course"></div>
+        </div>
+        <div class="meta-row">
+          <div class="meta-card wobble">
+            <b>가장 좋은 타이밍</b>
+            <span id="r-season"></span>
+          </div>
+          <div class="meta-card wobble2">
+            <b>잘 맞는 유형</b>
+            <span id="r-friend"></span>
+          </div>
+        </div>
+        <div class="result-actions">
+          <button class="btn" id="btn-share">결과 공유하기</button>
+          <button class="btn" id="btn-retry">다시 해보기 ↺</button>
+          <a class="btn amber" href="#nam439">이 취향, 서울에서 만나기 ↓</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 누리는 경로 ============ -->
+<section id="ways">
+  <div class="bg-deco" style="width:300px;height:300px;right:-80px;bottom:-60px;transform:rotate(10deg);">
+    <svg><use href="#i-grape"/></svg>
+  </div>
+  <div class="bg-deco" style="width:240px;height:240px;left:-60px;top:-30px;transform:rotate(-10deg);">
+    <svg><use href="#i-mountain"/></svg>
+  </div>
+  <div class="wrap">
+    <h2 class="sec-title">함양을 누리는 세 가지 경로</h2>
+    <p class="sec-desc">멀다고요? 생각보다 여러 갈래 길이 있어요.</p>
+    <div class="routes">
+      <div class="route-card wobble">
+        <span class="route-tag">가볍게 당일치기</span>
+        <h3>숲 한 바퀴, 국수 한 그릇</h3>
+        <p>천년 전 최치원이 만든 인공 숲 '상림'을 아침에 걷고, 함양읍내에서 원조 어탕국수 한 그릇. 해질녘엔 구불구불 오도재에 올라 노을 보고 돌아오기.</p>
+        <p class="path">상림숲 산책 → 어탕국수 점심 → 오도재 노을</p>
+      </div>
+      <div class="route-card wobble2">
+        <span class="route-tag">진하게 1박 2일</span>
+        <h3>정자에서 한옥까지, 함양의 깊은 맛</h3>
+        <p>화림동계곡 정자길(거연정~동호정)을 걷고 안의면에서 갈비찜으로 저녁. 이튿날은 개평한옥마을을 거닐고 하미앙 와인밸리에서 산머루와인 한 잔으로 마무리.</p>
+        <p class="path">화림동 정자길 → 안의갈비찜 → 개평한옥마을 → 산머루와인</p>
+      </div>
+      <div class="route-card wobble">
+        <span class="route-tag">서울에서 미리 만나기</span>
+        <h3>남가좌439에서, 함양을 한 입</h3>
+        <p>함양까지 못 가도 괜찮아요. 서울 남가좌동에서 함양의 나물과 먹거리, 그리고 이야기를 먼저 맛볼 수 있는 자리를 준비하고 있어요. 아래에서 소식을 받아보세요.</p>
+        <p class="path">내 취향 결과 들고 → 남가좌439 → 함양 직행</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 남가좌439 CTA ============ -->
+<section id="nam439">
+  <div class="bg-deco" style="width:300px;height:300px;right:-70px;bottom:-70px;transform:rotate(-9deg);opacity:.16;">
+    <svg><use href="#i-letter"/></svg>
+  </div>
+  <div class="wrap">
+    <h2 class="sec-title">함양의 맛, 서울에서 먼저 만나요</h2>
+    <p class="sec-desc">
+      남가좌439는 지리산 함양의 나물과 먹거리를<br>
+      서울 남가좌동에서 만나게 하는 프로젝트예요.<br>
+      소식 받을 곳을 남겨주시면, 첫 자리에 가장 먼저 초대할게요.
+    </p>
+    <div class="form-box wobble">
+      <form id="fan-form">
+        <label for="f-name">이름 또는 별명 *</label>
+        <input type="text" id="f-name" required placeholder="예) 나물좋아하는 하진">
+        <label for="f-contact">이메일 또는 연락처 *</label>
+        <input type="text" id="f-contact" required placeholder="예) hello@example.com / 010-0000-0000">
+        <label for="f-msg">함양에게 궁금한 것 (선택)</label>
+        <textarea id="f-msg" placeholder="예) 산나물 언제가 제일 맛있어요?"></textarea>
+        <p class="form-note">※ 남겨주신 정보는 남가좌439 소식 안내에만 사용해요.<br>※ 퀴즈 결과가 있다면 함께 저장돼요 — 취향에 맞는 소식을 보내드리려고요!</p>
+        <button type="submit" class="btn amber">남가좌439 소식 받기</button>
+      </form>
+      <div id="form-done">
+        <div class="big"><svg style="width:60px;height:60px"><use href="#i-leaf"/></svg></div>
+        <p><b class="hand" style="font-size:1.2rem;">환영해요, 예비 함양 팬!</b><br><br>
+        첫 소식이 준비되면 가장 먼저 알려드릴게요.<br>
+        그동안 위의 함양 코스, 눈으로 먼저 다녀오세요!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  함양 × 남가좌439 · 2026
+</footer>
+
+<script>
+/* ============================================================
+   퀴즈 데이터
+============================================================ */
+const QUESTIONS = [
+  {
+    q:'낯선 동네에 도착했다! 제일 먼저 하는 일은?',
+    opts:[
+      {t:'시장부터 한 바퀴 — 사람 사는 냄새가 최고', type:'eotang'},
+      {t:'초록이 우거진 숲길로 직진', type:'namul'},
+      {t:'뷰 좋은 곳에 앉아서 일단 한숨 돌리기', type:'wine'},
+      {t:'제일 유명한 맛집 줄부터 서기', type:'galbi'},
+      {t:'"이 동네에서만 나는 귀한 것" 검색', type:'sansam'},
+    ]
+  },
+  {
+    q:'내 입맛을 한 줄로 말하면?',
+    opts:[
+      {t:'슴슴하고 향긋한 게 좋아, 재료 맛 그대로', type:'namul'},
+      {t:'양념 진하게! 화끈해야 먹은 것 같지', type:'galbi'},
+      {t:'뜨끈하고 구수한 국물이면 다 용서됨', type:'eotang'},
+      {t:'쌉싸름한 어른의 맛을 아는 편', type:'sansam'},
+      {t:'달콤새콤, 분위기까지가 맛이야', type:'wine'},
+    ]
+  },
+  {
+    q:'주말 아침의 나는?',
+    opts:[
+      {t:'해 뜨자마자 동네 한 바퀴 산책', type:'namul'},
+      {t:'느긋하게 일어나 예쁜 브런치', type:'wine'},
+      {t:'뜨끈한 국밥 한 그릇으로 시작', type:'eotang'},
+      {t:'다 같이 모여 왁자지껄 아침상', type:'galbi'},
+      {t:'몸에 좋은 것부터 챙기는 아침 루틴', type:'sansam'},
+    ]
+  },
+  {
+    q:'여행에서 최고의 순간은?',
+    opts:[
+      {t:'계획 없이 걷다가 만난 풍경', type:'namul'},
+      {t:'현지 어르신이 알려준 진짜 맛집', type:'eotang'},
+      {t:'노을 지는 순간, 인생샷 한 장', type:'wine'},
+      {t:'다 같이 상 가득 차려놓고 잔치', type:'galbi'},
+      {t:'아무나 모르는 귀한 걸 발견했을 때', type:'sansam'},
+    ]
+  },
+  {
+    q:'친구가 "함양 가자!" 하면 나는?',
+    opts:[
+      {t:'좋아, 지리산 계곡 물소리 들으러 가자', type:'namul'},
+      {t:'거기 어탕국수가 원조라며? 먹으러 가자', type:'eotang'},
+      {t:'와이너리 있대! 산머루와인 마시러 가자', type:'wine'},
+      {t:'갈비찜 골목 있다던데, 배 비우고 가자', type:'galbi'},
+      {t:'산삼 축제 때 맞춰서 제대로 가자', type:'sansam'},
+    ]
+  },
+];
+
+/* ============================================================
+   결과 유형
+============================================================ */
+const TYPES = {
+  namul: {
+    icon:'i-leaf',
+    name:'향긋한 산나물 유형',
+    title:'"새벽 숲의 미식가"',
+    desc:'당신은 재료 그대로의 맛을 아는 사람. 화려한 것보다 향긋한 것, 시끄러운 곳보다 바람 소리를 고르는 편이에요. 지리산 첫 줄기에서 자란 함양의 봄나물 — 곰취, 고사리, 취나물 — 이 당신을 기다리고 있어요.',
+    course:[
+      '이른 아침, 천년의 숲 상림을 천천히 걷기 (사람 없는 아침이 진짜예요)',
+      '함양읍 산나물 밥상집에서 제철 나물 한 상 받기',
+      '지리산 백무동계곡까지 들어가 물소리 들으며 소화시키기',
+      '장날(2·7일)이면 함양 오일장에서 말린 나물 한 봉지 사 오기',
+    ],
+    season:'4~5월. 지리산 봄나물이 쏟아지는 계절, 함양이 가장 향긋할 때예요.',
+    friend:'산양삼 유형 — 산이 주는 귀한 것을 함께 알아보는 사이.',
+  },
+  sansam: {
+    icon:'i-ginseng',
+    name:'귀하디귀한 산양삼 유형',
+    title:'"좋은 것을 알아보는 눈"',
+    desc:'당신은 아무거나 좋아하지 않아요. 대신 진짜를 만나면 확실하게 아끼죠. 함양은 산삼의 고장 — 지리산과 덕유산 사이 깊은 산에서 기른 산양삼이 자라는 곳이에요. 당신의 안목이 반가워할 동네입니다.',
+    course:[
+      '산양삼 재배지가 있는 함양의 깊은 산자락 둘러보기',
+      '산양삼 백숙 한 그릇으로 제대로 보양하기',
+      '대봉산 휴양밸리 모노레일 타고 산 꼭대기에서 심호흡',
+      '가을 함양산삼축제에 맞춰 오면 산삼 캐기 체험까지!',
+    ],
+    season:'9월 산삼축제 시즌. 함양이 산삼의 고장임을 온몸으로 보여주는 때예요.',
+    friend:'산나물 유형 — 산이 기른 것들의 가치를 아는 동지.',
+  },
+  eotang: {
+    icon:'i-bowl',
+    name:'구수한 어탕국수 유형',
+    title:'"시장 골목의 정(情) 담당"',
+    desc:'당신에게 맛은 곧 사람이에요. 국물 한 술에 담긴 이야기, 시장 골목의 왁자지껄함이 당신의 에너지원. 함양은 어탕국수의 원조 동네 — 냇물고기 푹 고아 만든 구수한 한 그릇이 당신을 기다려요.',
+    course:[
+      '함양 오일장(2·7일) 구경하며 어르신들과 눈인사 나누기',
+      '읍내 어탕국수집에서 뜨끈한 원조 한 그릇 (수제비 사리 필수!)',
+      '지안재 굽잇길 드라이브하며 "우와" 소리 지르기',
+      '장터에서 산 주전부리 까먹으며 상림숲 마무리 산책',
+    ],
+    season:'쌀쌀한 가을~겨울. 뜨끈한 어탕국수가 두 배로 맛있어지는 계절.',
+    friend:'안의갈비찜 유형 — 같이 먹으면 두 배로 행복해지는 밥친구.',
+  },
+  galbi: {
+    icon:'i-meat',
+    name:'화끈한 안의갈비찜 유형',
+    title:'"잔칫상의 주인공"',
+    desc:'당신은 먹는 일에 진심이고, 나눠 먹을 때 더 행복한 사람. 진한 양념이 밴 고기 한 점처럼 존재감도 확실하죠. 함양 안의면은 갈비찜과 갈비탕으로 전국구인 동네 — 당신 같은 미식 잔치파를 위한 곳이에요.',
+    course:[
+      '안의면 갈비찜 골목에서 원조집 도장깨기',
+      '든든한 배로 화림동계곡 정자길(거연정~동호정) 걷기',
+      '개평한옥마을에서 500년 고택 마당 구경하기',
+      '전통주 솔송주 한 병 사서 서울 갈 가방에 챙기기',
+    ],
+    season:'사계절 언제나! 갈비찜에는 비수기가 없어요. 단, 일행은 많을수록 좋아요.',
+    friend:'어탕국수 유형 — 국물과 고기, 완벽한 한 상의 짝꿍.',
+  },
+  wine: {
+    icon:'i-grape',
+    name:'낭만적인 산머루와인 유형',
+    title:'"노을 수집가"',
+    desc:'당신에게 맛은 분위기까지 포함이에요. 같은 음식도 어디서 누구와 먹는지가 중요하죠. 함양 산기슭에는 산머루로 와인을 빚는 하미앙 와인밸리가 있어요. 유럽 안 부러운 보랏빛 낭만이 여기 있습니다.',
+    course:[
+      '하미앙 와인밸리에서 산머루와인 시음 & 와인 저장 터널 구경',
+      '개평한옥마을 골목에서 필름카메라 감성 산책',
+      '해질녘 오도재 전망대 — 지리산 능선 위 노을 감상',
+      '숙소에서 산머루와인 한 잔과 오늘 찍은 사진 정리하기',
+    ],
+    season:'늦여름~가을. 머루가 익고 노을이 깊어지는 계절이 함양의 절정이에요.',
+    friend:'산나물 유형 — 조용한 아름다움을 함께 즐길 줄 아는 사이.',
+  },
+};
+
+const TYPE_KEYS = ['namul','sansam','eotang','galbi','wine'];
+
+/* ============================================================
+   퀴즈 엔진
+============================================================ */
+let current = 0;
+let scores = {namul:0, sansam:0, eotang:0, galbi:0, wine:0};
+let answered = [];   // 선택 순서 기록 (동점 처리용)
+let myResult = null;
+
+const $ = id => document.getElementById(id);
+
+function renderProgress(){
+  $('q-progress').innerHTML = QUESTIONS
+    .map((_,i)=>`<div class="q-dot ${i<=current?'on':''}"></div>`).join('');
+}
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[current];
+  renderProgress();
+  $('q-num').textContent = `Q${current+1} / ${QUESTIONS.length}`;
+  $('q-text').textContent = q.q;
+  $('q-opts').innerHTML = '';
+  shuffle(q.opts).forEach(opt=>{
+    const btn = document.createElement('button');
+    btn.className = 'q-opt';
+    btn.textContent = opt.t;
+    btn.onclick = ()=>{
+      scores[opt.type]++;
+      answered.push(opt.type);
+      current++;
+      if(current < QUESTIONS.length) renderQuestion();
+      else showResult();
+    };
+    $('q-opts').appendChild(btn);
+  });
+}
+
+function pickResult(){
+  const max = Math.max(...TYPE_KEYS.map(k=>scores[k]));
+  const top = TYPE_KEYS.filter(k=>scores[k]===max);
+  if(top.length===1) return top[0];
+  // 동점이면 나중에 고른 답(마음이 기운 쪽) 우선
+  for(let i=answered.length-1;i>=0;i--){
+    if(top.includes(answered[i])) return answered[i];
+  }
+  return top[0];
+}
+
+function showResult(){
+  myResult = pickResult();
+  const t = TYPES[myResult];
+  $('quiz').style.display = 'none';
+  $('r-emoji').innerHTML = `<svg><use href="#${t.icon}"/></svg>`;
+  $('r-name').textContent = t.name;
+  $('r-title').textContent = t.title;
+  $('r-desc').textContent = t.desc;
+  $('r-course').innerHTML = t.course
+    .map((s,i)=>`<div class="course-step"><div class="step-no">${i+1}</div><div>${s}</div></div>`).join('');
+  $('r-season').textContent = t.season;
+  $('r-friend').textContent = t.friend;
+  $('result').style.display = 'block';
+  document.getElementById('quiz-sec').scrollIntoView({behavior:'smooth'});
+}
+
+$('btn-retry').onclick = ()=>{
+  current = 0;
+  scores = {namul:0, sansam:0, eotang:0, galbi:0, wine:0};
+  answered = [];
+  myResult = null;
+  $('result').style.display = 'none';
+  $('quiz').style.display = 'block';
+  renderQuestion();
+};
+
+$('btn-share').onclick = async ()=>{
+  const t = TYPES[myResult];
+  const text = `나의 함양 미각 유형: ${t.name} ${t.title}\n너는 무슨 유형이야? → ${location.href}`;
+  try{
+    if(navigator.share){
+      await navigator.share({title:'함양, 이런 맛이었어?', text, url:location.href});
+    }else{
+      await navigator.clipboard.writeText(text);
+      $('btn-share').textContent = '복사 완료! 친구에게 붙여넣기';
+      setTimeout(()=>$('btn-share').textContent='결과 공유하기', 2200);
+    }
+  }catch(e){/* 사용자가 취소한 경우 무시 */}
+};
+
+/* ============================================================
+   남가좌439 사전 팬 모집 폼
+============================================================ */
+$('fan-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const payload = {
+    name: $('f-name').value.trim(),
+    contact: $('f-contact').value.trim(),
+    message: $('f-msg').value.trim(),
+    taste_type: myResult,                       // 퀴즈 결과 (안 했으면 null)
+    scores: myResult ? {...scores} : null,
+    submitted_at: new Date().toISOString(),
+    source: 'hamyang-taste',
+  };
+  // TODO: Supabase 연동 시 이 지점에서 insert
+  console.log('[남가좌439 사전 팬 등록]', payload);
+  $('fan-form').style.display = 'none';
+  $('form-done').style.display = 'block';
+});
+
+renderQuestion();
+</script>
+</body>
+</html>
