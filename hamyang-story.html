@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>맛을 따라 함양까지 — 화덕 샌드위치 재료 이야기 · 남가좌439</title>
+<meta name="description" content="지리산우리밀·함양 흑돼지·함양파·지리산 고사리. 제일 맛있는 걸 찾다 보니 함양이었습니다. 남가좌439 화덕 샌드위치의 재료 이야기.">
+<meta property="og:title" content="맛을 따라 함양까지 — 화덕 샌드위치 재료 이야기">
+<meta property="og:description" content="사라질 뻔한 우리밀, 흑돼지의 본향, 유럽에서 건너온 구워먹는 양파, 임금님 진상 고사리. 이걸 다 가진 동네가 함양이라서.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gaegu:wght@400;700&family=Gowun+Dodum&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --grey:#A9A59C;
+  --grey-deep:#98948B;
+  --paper:#F6F3EC;
+  --card:#FFFEFA;
+  --crayon:#211F1C;
+  --white:#FDFCF8;
+  --amber:#E8A13D;
+  --amber-deep:#D4882A;
+  --green:#5F7F4E;
+  --green-soft:#8FA97E;
+  --pig:#6B5A50;
+  --pig-pink:#E6A79E;
+  --text:#33312C;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Gowun Dodum',sans-serif;
+  color:var(--text);
+  background:var(--paper);
+  background-image:radial-gradient(circle, rgba(33,31,28,.05) 1px, transparent 1.4px);
+  background-size:16px 16px;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+.jua{font-family:'Jua',sans-serif;font-weight:400;}
+.hand{font-family:'Gaegu',cursive;}
+.serif{font-family:'Noto Serif KR',serif;}
+
+.wrap{max-width:680px;margin:0 auto;padding:0 18px;position:relative;z-index:1;}
+
+/* ===== 크레용 낙서 헬퍼 ===== */
+.wobble{
+  border:3px solid var(--crayon);
+  border-radius:255px 18px 225px 18px / 18px 225px 18px 255px;
+}
+.wobble2{
+  border:3px solid var(--crayon);
+  border-radius:18px 225px 18px 255px / 255px 18px 225px 18px;
+}
+.circled{
+  display:inline-block;
+  border:2.5px solid currentColor;
+  border-radius:50% 46% 52% 48% / 48% 52% 46% 54%;
+  padding:2px 12px;
+  transform:rotate(-4deg);
+}
+
+/* ============================================================
+   HERO
+============================================================ */
+.cover{
+  background:var(--grey);
+  color:var(--white);
+  position:relative;
+  padding:34px 0 44px;
+  overflow:hidden;
+}
+.cover-inner{position:relative;max-width:680px;margin:0 auto;padding:0 20px;}
+.cover .kicker{
+  font-family:'Noto Serif KR',serif;
+  font-size:.78rem;
+  letter-spacing:.2em;
+  opacity:.92;
+  text-align:center;
+  margin-bottom:6px;
+}
+.cover h1{
+  font-family:'Jua',sans-serif;
+  font-size:clamp(3.4rem, 15vw, 6rem);
+  line-height:1.02;
+  text-align:center;
+  transform:rotate(-2deg);
+  text-shadow:4px 4px 0 rgba(33,31,28,.28);
+  margin:4px 0 2px;
+}
+.cover .sub{
+  font-family:'Jua',sans-serif;
+  font-size:clamp(1.3rem, 5.5vw, 1.9rem);
+  text-align:center;
+  transform:rotate(-1.5deg);
+  margin-bottom:10px;
+}
+.bg-deco{
+  position:absolute;
+  opacity:.13;
+  pointer-events:none;
+}
+.bg-deco svg{width:100%;height:100%;display:block;}
+.doodle-note{
+  font-family:'Gaegu',cursive;
+  font-weight:700;
+  position:absolute;
+  line-height:1.25;
+}
+.hero-stage{
+  position:relative;
+  width:min(320px, 76vw);
+  margin:14px auto 8px;
+}
+.hero-stage svg{width:100%;height:auto;display:block;}
+.note-l{left:0;bottom:118px;font-size:1.12rem;transform:rotate(-7deg);}
+.note-r{right:0;bottom:96px;font-size:1.05rem;transform:rotate(5deg);text-align:right;}
+.note-yum{right:22px;bottom:6px;font-size:1.1rem;}
+.cover-cta{
+  display:block;
+  width:fit-content;
+  margin:22px auto 0;
+  background:var(--white);
+  color:var(--crayon);
+  font-family:'Jua',sans-serif;
+  font-size:1.25rem;
+  padding:14px 30px 12px;
+  text-decoration:none;
+  border:3px solid var(--crayon);
+  border-radius:255px 18px 225px 18px / 18px 225px 18px 255px;
+  box-shadow:4px 4px 0 rgba(33,31,28,.85);
+  transform:rotate(-1deg);
+  transition:transform .15s;
+}
+.cover-cta:hover{transform:rotate(1deg) scale(1.04);}
+.cover .credit{
+  text-align:center;
+  font-family:'Noto Serif KR',serif;
+  font-size:.72rem;
+  letter-spacing:.14em;
+  margin-top:24px;
+  opacity:.85;
+}
+
+/* ============================================================
+   섹션 공통
+============================================================ */
+section{padding:56px 0;position:relative;overflow:hidden;}
+.sec-title{
+  font-family:'Jua',sans-serif;
+  font-size:clamp(1.7rem, 7vw, 2.3rem);
+  text-align:center;
+  color:var(--crayon);
+  margin-bottom:8px;
+  transform:rotate(-.6deg);
+}
+.sec-desc{
+  text-align:center;
+  font-size:1rem;
+  line-height:1.75;
+  color:#5a574f;
+  max-width:480px;
+  margin:0 auto 30px;
+}
+.hl{
+  background:linear-gradient(transparent 62%, rgba(232,161,61,.55) 62%);
+  padding:0 2px;
+}
+
+/* ============================================================
+   여정 단락
+============================================================ */
+.journey-box{
+  background:var(--card);
+  max-width:560px;
+  margin:0 auto;
+  padding:30px 28px;
+  box-shadow:5px 5px 0 rgba(33,31,28,.8);
+  transform:rotate(-.5deg);
+}
+.journey-box p{
+  font-size:1.12rem;
+  line-height:2;
+  color:#3a3832;
+  text-align:center;
+}
+.journey-tag{
+  display:block;
+  width:fit-content;
+  margin:22px auto 0;
+  background:var(--amber);
+  color:var(--crayon);
+  font-family:'Jua',sans-serif;
+  font-size:1.15rem;
+  padding:8px 18px 6px;
+  border:2.5px solid var(--crayon);
+  border-radius:200px 14px 200px 14px/14px 200px 14px 200px;
+  transform:rotate(-1.5deg);
+  box-shadow:3px 3px 0 rgba(33,31,28,.5);
+}
+
+/* ============================================================
+   재료 카드
+============================================================ */
+#ingredients{background:var(--paper);}
+.ing-list{
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+  max-width:580px;
+  margin:0 auto;
+}
+.ing-card{
+  background:var(--card);
+  padding:22px 22px 20px;
+  box-shadow:5px 5px 0 rgba(33,31,28,.8);
+  border:3px solid var(--crayon);
+  border-radius:255px 16px 225px 16px / 16px 225px 16px 255px;
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+}
+.ing-card:nth-child(even){
+  border-radius:16px 225px 16px 255px / 255px 16px 225px 16px;
+  transform:rotate(.5deg);
+}
+.ing-card:nth-child(odd){transform:rotate(-.5deg);}
+.ing-badge{
+  flex:none;
+  width:66px;height:66px;
+  background:var(--white);
+  border:3px solid var(--crayon);
+  border-radius:50% 46% 52% 48% / 48% 52% 46% 54%;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:3px 3px 0 rgba(33,31,28,.4);
+}
+.ing-badge svg{width:42px;height:42px;}
+.ing-body{flex:1;min-width:0;}
+.ing-role{
+  display:inline-block;
+  font-family:'Gaegu',cursive;font-weight:700;
+  font-size:.9rem;
+  background:var(--amber);color:var(--crayon);
+  padding:3px 11px 1px;
+  border:2px solid var(--crayon);
+  border-radius:200px 10px 200px 10px/10px 200px 10px 200px;
+  margin-bottom:7px;
+}
+.ing-card h3{
+  font-family:'Jua',sans-serif;
+  font-size:1.22rem;
+  margin-bottom:8px;
+  color:var(--crayon);
+}
+.ing-card p{font-size:.95rem;line-height:1.8;color:#4c4a43;}
+.ing-card p .q{color:var(--green);font-family:'Gaegu',cursive;font-weight:700;font-size:1.02rem;}
+
+/* 재료를 잇는 한 문장 */
+.unify-box{
+  background:var(--grey);
+  color:var(--white);
+  max-width:580px;
+  margin:38px auto 0;
+  padding:30px 28px;
+  border:3px solid var(--crayon);
+  box-shadow:5px 5px 0 rgba(33,31,28,.8);
+  transform:rotate(-.5deg);
+  text-align:center;
+}
+.unify-box .quote{
+  font-family:'Jua',sans-serif;
+  font-size:clamp(1.15rem, 4.6vw, 1.5rem);
+  line-height:1.7;
+  text-shadow:2px 2px 0 rgba(33,31,28,.25);
+}
+.unify-box .quote .k{color:#FBDFA6;}
+.unify-box .punch{
+  display:block;
+  margin-top:14px;
+  font-size:clamp(1.3rem, 5vw, 1.75rem);
+}
+
+/* ============================================================
+   버튼
+============================================================ */
+.btn{
+  font-family:'Jua',sans-serif;
+  font-size:1.05rem;
+  padding:12px 22px 10px;
+  background:var(--white);
+  color:var(--crayon);
+  border:3px solid var(--crayon);
+  border-radius:255px 18px 225px 18px / 18px 225px 18px 255px;
+  box-shadow:4px 4px 0 rgba(33,31,28,.85);
+  cursor:pointer;
+  transition:transform .15s;
+  text-decoration:none;
+  display:inline-block;
+}
+.btn:hover{transform:rotate(-1deg) scale(1.04);}
+.btn.amber{background:var(--amber);}
+
+/* ============================================================
+   남가좌439 CTA
+============================================================ */
+#nam439{background:var(--grey);color:var(--white);position:relative;}
+#nam439 .sec-title{color:var(--white);text-shadow:3px 3px 0 rgba(33,31,28,.25);}
+#nam439 .sec-desc{color:rgba(253,252,248,.94);}
+.form-box{
+  background:var(--card);
+  color:var(--text);
+  max-width:480px;
+  margin:0 auto;
+  padding:28px 24px;
+  box-shadow:5px 5px 0 rgba(33,31,28,.8);
+}
+.form-box label{
+  display:block;
+  font-family:'Gaegu',cursive;
+  font-weight:700;
+  font-size:1.08rem;
+  margin:14px 0 6px;
+  color:var(--crayon);
+}
+.form-box label:first-child{margin-top:0;}
+.form-box input, .form-box textarea{
+  width:100%;
+  font-family:'Gowun Dodum',sans-serif;
+  font-size:.95rem;
+  padding:11px 14px;
+  background:var(--white);
+  border:2.5px solid var(--crayon);
+  border-radius:255px 12px 225px 12px/12px 225px 12px 255px;
+  outline:none;
+}
+.form-box textarea{min-height:80px;resize:vertical;border-radius:14px 200px 14px 220px/220px 14px 200px 14px;}
+.form-box input:focus, .form-box textarea:focus{background:#FBEFD8;}
+.form-note{
+  font-size:.8rem;
+  color:#807c72;
+  margin-top:10px;
+  line-height:1.6;
+}
+.form-box .btn{width:100%;margin-top:18px;text-align:center;}
+.sub-link{
+  display:block;
+  text-align:center;
+  margin:20px auto 0;
+  font-family:'Gaegu',cursive;
+  font-weight:700;
+  font-size:1.05rem;
+  color:var(--white);
+  text-decoration:underline;
+  text-underline-offset:4px;
+  opacity:.95;
+}
+#form-done{
+  display:none;
+  text-align:center;
+  padding:26px 10px 10px;
+}
+#form-done .big{margin-bottom:10px;}
+#form-done p{font-size:.98rem;line-height:1.8;}
+
+footer{
+  text-align:center;
+  padding:36px 20px 46px;
+  font-family:'Noto Serif KR',serif;
+  font-size:.74rem;
+  letter-spacing:.14em;
+  color:var(--grey-deep);
+  line-height:2;
+}
+
+@media (max-width:480px){
+  .note-l{bottom:104px;font-size:1rem;}
+  .note-r{bottom:84px;font-size:.95rem;}
+}
+@media (max-width:560px){
+  .bg-deco{opacity:.1;}
+  .journey-box p{font-size:1.05rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ 크레용 일러스트 심볼 ============ -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-mountain" viewBox="0 0 64 64">
+    <path d="M6 52 L26 14 L38 36 L46 24 L58 52 Z" fill="#8FA97E" stroke="#211F1C" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M26 14 L31 24 L26 29 L21 24 Z" fill="#FDFCF8" stroke="#211F1C" stroke-width="3" stroke-linejoin="round"/>
+  </symbol>
+  <!-- 밀 -->
+  <symbol id="i-wheat" viewBox="0 0 64 64">
+    <path d="M32 60 L32 26" fill="none" stroke="#211F1C" stroke-width="4" stroke-linecap="round"/>
+    <g fill="#E0B84C" stroke="#211F1C" stroke-width="2.5" stroke-linejoin="round">
+      <path d="M32 26 C28 22 26 15 32 9 C38 15 36 22 32 26 Z"/>
+      <path d="M32 33 C27 31 21 27 23 19 C31 21 34 27 32 33 Z"/>
+      <path d="M32 33 C37 31 43 27 41 19 C33 21 30 27 32 33 Z"/>
+      <path d="M32 42 C27 40 21 36 23 28 C31 30 34 36 32 42 Z"/>
+      <path d="M32 42 C37 40 43 36 41 28 C33 30 30 36 32 42 Z"/>
+      <path d="M32 51 C27 49 21 45 23 37 C31 39 34 45 32 51 Z"/>
+      <path d="M32 51 C37 49 43 45 41 37 C33 39 30 45 32 51 Z"/>
+    </g>
+    <path d="M32 54 C26 52 20 54 17 60" fill="none" stroke="#8FA97E" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M32 54 C38 52 44 54 47 60" fill="none" stroke="#8FA97E" stroke-width="3.5" stroke-linecap="round"/>
+  </symbol>
+  <!-- 흑돼지 (얼굴) -->
+  <symbol id="i-pig" viewBox="0 0 64 64">
+    <path d="M17 21 C12 11 15 8 22 13 C25 15 26 19 26 24 Z" fill="#6B5A50" stroke="#211F1C" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M47 21 C52 11 49 8 42 13 C39 15 38 19 38 24 Z" fill="#6B5A50" stroke="#211F1C" stroke-width="3.5" stroke-linejoin="round"/>
+    <circle cx="32" cy="34" r="18" fill="#6B5A50" stroke="#211F1C" stroke-width="4"/>
+    <ellipse cx="32" cy="39" rx="11" ry="8" fill="#E6A79E" stroke="#211F1C" stroke-width="3.5"/>
+    <ellipse cx="28" cy="39" rx="1.7" ry="2.6" fill="#211F1C"/>
+    <ellipse cx="36" cy="39" rx="1.7" ry="2.6" fill="#211F1C"/>
+    <circle cx="25" cy="28" r="2.3" fill="#211F1C"/>
+    <circle cx="39" cy="28" r="2.3" fill="#211F1C"/>
+  </symbol>
+  <!-- 함양파 (구워먹는 파/칼솟) -->
+  <symbol id="i-onion" viewBox="0 0 64 64">
+    <path d="M26 45 C26 55 38 55 38 45 C38 41 36 38 32 38 C28 38 26 41 26 45 Z" fill="#FFFDF4" stroke="#211F1C" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M29 54 L28 59 M32 55 L32 60 M35 54 L36 59" stroke="#211F1C" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M28 40 C25 28 23 16 21 7" fill="none" stroke="#8FA97E" stroke-width="4" stroke-linecap="round"/>
+    <path d="M32 38 C32 26 32 15 33 5" fill="none" stroke="#7FA36A" stroke-width="4.5" stroke-linecap="round"/>
+    <path d="M36 40 C39 28 41 17 44 9" fill="none" stroke="#8FA97E" stroke-width="4" stroke-linecap="round"/>
+  </symbol>
+  <!-- 고사리 (고사리 순) -->
+  <symbol id="i-fern" viewBox="0 0 64 64">
+    <path d="M32 59 C32 47 30 35 30 27" fill="none" stroke="#7FA36A" stroke-width="4" stroke-linecap="round"/>
+    <path d="M30 27 C29 18 38 15 41 21 C43 27 36 30 34 25 C33 21 38 20 39 24" fill="none" stroke="#7FA36A" stroke-width="4" stroke-linecap="round"/>
+    <path d="M31 48 C24 46 20 48 17 52" fill="none" stroke="#8FA97E" stroke-width="3.4" stroke-linecap="round"/>
+    <path d="M31 48 C38 46 42 48 45 52" fill="none" stroke="#8FA97E" stroke-width="3.4" stroke-linecap="round"/>
+    <path d="M31 39 C25 37 21 39 19 43" fill="none" stroke="#8FA97E" stroke-width="3.4" stroke-linecap="round"/>
+    <path d="M31 39 C37 37 41 39 43 43" fill="none" stroke="#8FA97E" stroke-width="3.4" stroke-linecap="round"/>
+  </symbol>
+  <!-- 화덕 샌드위치 -->
+  <symbol id="i-sandwich" viewBox="0 0 64 64">
+    <path d="M10 26 C10 15 22 10 32 10 C42 10 54 15 54 26 Z" fill="#E0B84C" stroke="#211F1C" stroke-width="4" stroke-linejoin="round"/>
+    <circle cx="24" cy="20" r="1.6" fill="#FBE3B0"/>
+    <circle cx="34" cy="18" r="1.6" fill="#FBE3B0"/>
+    <circle cx="42" cy="22" r="1.6" fill="#FBE3B0"/>
+    <path d="M10 26 L54 26 L54 30 L10 30 Z" fill="#7FA36A" stroke="#211F1C" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M11 33 C18 30 24 36 32 33 C40 30 46 36 53 33" fill="none" stroke="#C96F4E" stroke-width="4" stroke-linecap="round"/>
+    <path d="M11 40 L53 40 C53 47 45 51 32 51 C19 51 11 47 11 40 Z" fill="#E8C77E" stroke="#211F1C" stroke-width="4" stroke-linejoin="round"/>
+  </symbol>
+  <!-- 편지 -->
+  <symbol id="i-letter" viewBox="0 0 64 64">
+    <rect x="8" y="16" width="48" height="34" rx="4" fill="#FFFDF4" stroke="#211F1C" stroke-width="4"/>
+    <path d="M11 20 L32 37 L53 20" fill="none" stroke="#211F1C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M32 58 C28 54 25 51 27 48.5 C29 47 31.5 48 32 50 C32.5 48 35 47 37 48.5 C39 51 36 54 32 58 Z" fill="#E2704F" stroke="#211F1C" stroke-width="3"/>
+  </symbol>
+</svg>
+
+<!-- ============ HERO ============ -->
+<header class="cover">
+  <div class="cover-inner">
+    <p class="kicker">경남 함양에서 온 · 화덕 샌드위치</p>
+    <h1>맛을 따라</h1>
+    <p class="sub">함양까지 왔습니다</p>
+
+    <div class="hero-stage">
+      <!-- 흑돼지 캐릭터 : 크레용 낙서 톤 -->
+      <svg viewBox="0 0 320 330" xmlns="http://www.w3.org/2000/svg" aria-label="흑돼지 캐릭터 그림">
+        <!-- 그림자 -->
+        <ellipse cx="160" cy="308" rx="96" ry="14" fill="rgba(33,31,28,.18)"/>
+        <!-- 귀 -->
+        <g stroke="#211F1C" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M108 92 C86 54 96 40 122 60 C130 66 132 82 130 102 Z" fill="#5E4F46"/>
+          <path d="M212 92 C234 54 224 40 198 60 C190 66 188 82 190 102 Z" fill="#5E4F46"/>
+        </g>
+        <!-- 몸통 -->
+        <g stroke="#211F1C" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M160 78
+                   C110 78 80 118 80 172
+                   C80 214 98 246 122 262
+                   C118 278 116 290 122 300
+                   C130 306 144 304 150 294
+                   C154 286 154 278 154 272
+                   C158 273 168 273 172 272
+                   C172 278 172 286 176 294
+                   C182 304 196 306 204 300
+                   C210 290 208 278 204 262
+                   C228 246 240 214 240 172
+                   C240 118 210 78 160 78 Z"
+                fill="#5E4F46"/>
+          <!-- 앞다리 -->
+          <path d="M82 182 C64 188 52 202 50 218 C60 224 78 218 88 204" fill="#5E4F46"/>
+          <path d="M238 182 C256 188 268 202 270 218 C260 224 242 218 232 204" fill="#5E4F46"/>
+        </g>
+        <!-- 배 하이라이트 -->
+        <path d="M118 132 C124 118 138 110 150 108" stroke="#8A7669" stroke-width="9" stroke-linecap="round" fill="none"/>
+        <!-- 꼬리 (돌돌) -->
+        <path d="M238 236 C258 232 262 248 250 254 C242 258 238 250 244 246" fill="none" stroke="#211F1C" stroke-width="6" stroke-linecap="round"/>
+        <!-- 주둥이 -->
+        <ellipse cx="160" cy="192" rx="48" ry="35" fill="#E6A79E" stroke="#211F1C" stroke-width="6"/>
+        <ellipse cx="143" cy="192" rx="7.5" ry="12" fill="#211F1C"/>
+        <ellipse cx="177" cy="192" rx="7.5" ry="12" fill="#211F1C"/>
+        <!-- 눈 -->
+        <circle cx="130" cy="150" r="7.5" fill="#211F1C"/>
+        <circle cx="190" cy="150" r="7.5" fill="#211F1C"/>
+        <!-- 볼터치 -->
+        <ellipse cx="104" cy="172" rx="13" ry="8.5" fill="#E6A79E" opacity=".55"/>
+        <ellipse cx="216" cy="172" rx="13" ry="8.5" fill="#E6A79E" opacity=".55"/>
+        <!-- 눈웃음 눈썹 -->
+        <path d="M120 138 C124 134 132 134 136 137" stroke="#211F1C" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <path d="M184 137 C188 134 196 134 200 138" stroke="#211F1C" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <!-- 낙서 : 반짝이 -->
+        <g stroke="#FDFCF8" stroke-width="4" stroke-linecap="round" fill="none">
+          <path d="M46 104 l0 26 M33 117 l26 0"/>
+          <path d="M276 138 l0 20 M266 148 l20 0"/>
+          <path d="M256 66 C264 54 280 56 282 68 C284 78 270 88 262 94 C252 86 244 76 248 68 C252 60 256 64 256 66 Z" fill="rgba(253,252,248,.2)"/>
+        </g>
+      </svg>
+      <div class="doodle-note note-l">100%<br>함양산</div>
+      <div class="doodle-note note-r">화덕에<br>구운</div>
+      <div class="doodle-note note-yum"><span class="circled">냠!</span></div>
+    </div>
+
+    <a class="cover-cta" href="#journey">무슨 맛인지 보러가기 →</a>
+    <p class="credit">남가좌439 프로젝트 · 화덕 샌드위치</p>
+  </div>
+</header>
+
+<!-- ============ 여정 : 왜 함양 ============ -->
+<section id="journey">
+  <div class="bg-deco" style="width:280px;height:280px;right:-70px;bottom:-50px;transform:rotate(8deg);">
+    <svg><use href="#i-mountain"/></svg>
+  </div>
+  <div class="bg-deco" style="width:210px;height:210px;left:-55px;top:-25px;transform:rotate(-12deg);">
+    <svg><use href="#i-wheat"/></svg>
+  </div>
+  <div class="wrap">
+    <h2 class="sec-title">왜 하필, 함양이었을까</h2>
+    <p class="sec-desc">거창한 이유는 없었어요. 딱 하나뿐이었죠.</p>
+    <div class="journey-box">
+      <p>
+        제대로 맛있는 걸 만들고 싶었어요.<br>
+        좋은 밀을 찾고, 좋은 돼지를 찾다 보니 —<br>
+        자꾸 <span class="hl">지리산 쪽으로</span> 향하더라고요.<br>
+        그렇게 다다른 곳이, 함양이었습니다.
+      </p>
+      <span class="journey-tag">맛을 따라간 끝에, 함양</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 재료 카드 ============ -->
+<section id="ingredients">
+  <div class="bg-deco" style="width:300px;height:300px;left:-80px;top:40px;transform:rotate(-10deg);">
+    <svg><use href="#i-pig"/></svg>
+  </div>
+  <div class="bg-deco" style="width:260px;height:260px;right:-70px;bottom:120px;transform:rotate(12deg);">
+    <svg><use href="#i-onion"/></svg>
+  </div>
+  <div class="wrap">
+    <h2 class="sec-title">그래서, 이 재료들</h2>
+    <p class="sec-desc">
+      함양이라서 <span class="hl">이 맛이 나는</span>,<br>
+      네 가지 이유를 소개할게요.
+    </p>
+
+    <div class="ing-list">
+      <div class="ing-card">
+        <div class="ing-badge"><svg><use href="#i-wheat"/></svg></div>
+        <div class="ing-body">
+          <span class="ing-role">화덕 도우</span>
+          <h3>지리산우리밀</h3>
+          <p>수입밀에 밀려 사라질 뻔했던 우리밀. 지리산 자락 농부들이 되살려낸 그 밀로 도우를 반죽합니다. <span class="q">"몸에 좋아서가 아니라, 맛있어서 쓴다"</span> — 그 말에 반했거든요.</p>
+        </div>
+      </div>
+
+      <div class="ing-card">
+        <div class="ing-badge"><svg><use href="#i-pig"/></svg></div>
+        <div class="ing-body">
+          <span class="ing-role">속재료</span>
+          <h3>지리산 흑돼지 <span style="font-size:.85rem;color:#8a857a;">(감도니)</span></h3>
+          <p>지리산 흑돼지의 <span class="q">본향이 바로 함양</span>이에요. 고산지대 맑은 공기에서 자라 쫄깃하고, 지방의 풍미가 다릅니다. 화덕에 구운 담백한 도우와 만나면, 느끼함 없이 딱 좋아요.</p>
+        </div>
+      </div>
+
+      <div class="ing-card">
+        <div class="ing-badge"><svg><use href="#i-onion"/></svg></div>
+        <div class="ing-body">
+          <span class="ing-role">구워서 얹는 단맛</span>
+          <h3>함양파</h3>
+          <p>스페인의 '칼솟', 구워 먹는 고급 양파. 그걸 <span class="q">전국에서 처음으로</span> 우리 땅에 맞게 키워낸 게 함양파예요. 화덕에 구우면 올라오는 단맛 — 도우와 이보다 잘 맞을 수 없죠.</p>
+        </div>
+      </div>
+
+      <div class="ing-card">
+        <div class="ing-badge"><svg><use href="#i-fern"/></svg></div>
+        <div class="ing-body">
+          <span class="ing-role">뜻밖의 한 겹</span>
+          <h3>지리산 고사리</h3>
+          <p><span class="q">샌드위치에 고사리?</span> 네, 그 고사리 맞아요. 지리산이 키운 야생 고사리는 임금님 진상품이었어요. 한 입 먹으면, 왜 넣었는지 바로 알게 됩니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="unify-box">
+      <p class="quote">
+        <span class="k">사라질 뻔한 우리밀</span>, <span class="k">흑돼지의 본향</span>,<br>
+        <span class="k">유럽에서 건너온 구워먹는 양파</span>,<br>
+        <span class="k">임금님 진상 고사리</span>.
+        <span class="punch">이걸 다 가진 동네가 함양이라서,<br>우리가 거기까지 갔습니다.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 남가좌439 CTA ============ -->
+<section id="nam439">
+  <div class="bg-deco" style="width:300px;height:300px;right:-70px;bottom:-70px;transform:rotate(-9deg);opacity:.16;">
+    <svg><use href="#i-sandwich"/></svg>
+  </div>
+  <div class="bg-deco" style="width:230px;height:230px;left:-60px;top:-30px;transform:rotate(10deg);opacity:.16;">
+    <svg><use href="#i-letter"/></svg>
+  </div>
+  <div class="wrap">
+    <h2 class="sec-title">이 샌드위치, 서울에서 먼저</h2>
+    <p class="sec-desc">
+      남가좌439는 함양의 재료로 만든 화덕 샌드위치를<br>
+      서울 남가좌동에서 먼저 선보이는 프로젝트예요.<br>
+      첫 자리 소식을 남겨주시면, 가장 먼저 초대할게요.
+    </p>
+    <div class="form-box wobble">
+      <form id="fan-form">
+        <label for="f-name">이름 또는 별명 *</label>
+        <input type="text" id="f-name" required placeholder="예) 흑돼지 좋아하는 하진">
+        <label for="f-contact">이메일 또는 연락처 *</label>
+        <input type="text" id="f-contact" required placeholder="예) hello@example.com / 010-0000-0000">
+        <label for="f-msg">궁금한 것 (선택)</label>
+        <textarea id="f-msg" placeholder="예) 어떤 샌드위치가 먼저 나와요?"></textarea>
+        <p class="form-note">※ 남겨주신 정보는 남가좌439 소식 안내에만 사용해요.</p>
+        <button type="submit" class="btn amber">남가좌439 소식 받기</button>
+      </form>
+      <div id="form-done">
+        <div class="big"><svg style="width:64px;height:64px"><use href="#i-sandwich"/></svg></div>
+        <p><b class="hand" style="font-size:1.2rem;">환영해요, 첫 손님!</b><br><br>
+        첫 화덕이 데워지면 가장 먼저 알려드릴게요.<br>
+        그동안 위의 재료 이야기, 다시 한 번 곱씹어 보세요.</p>
+      </div>
+    </div>
+    <a class="sub-link" href="hamyang-taste.html">잠깐, 나의 함양 취향부터 알아볼까요? →</a>
+  </div>
+</section>
+
+<footer>
+  함양 × 남가좌439 · 화덕 샌드위치 · 2026
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* 남가좌439 사전 팬 모집 폼 */
+$('fan-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const payload = {
+    name: $('f-name').value.trim(),
+    contact: $('f-contact').value.trim(),
+    message: $('f-msg').value.trim(),
+    submitted_at: new Date().toISOString(),
+    source: 'hamyang-story',
+  };
+  // TODO: Supabase 연동 시 이 지점에서 insert
+  console.log('[남가좌439 사전 팬 등록]', payload);
+  $('fan-form').style.display = 'none';
+  $('form-done').style.display = 'block';
+});
+</script>
+</body>
+</html>
