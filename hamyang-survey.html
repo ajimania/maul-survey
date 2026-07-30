@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>함양, 얼마나 알고 있나요? — 함양 인지도 테스트</title>
+<meta name="description" content="함양, 얼마나 알고 있나요? 짧은 질문으로 나의 함양 인지도를 확인해 보세요. by 남가좌439">
+<meta property="og:title" content="함양, 얼마나 알고 있나요? — 함양 인지도 테스트">
+<meta property="og:description" content="지도 퀴즈부터 특별한 식재료까지, 나의 함양 레벨을 확인해 보세요.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3F0E6;
+  --card:#FFFDF8;
+  --ink:#2B3A28;
+  --green:#4E7A45;
+  --green-deep:#3A5D33;
+  --green-soft:#A9C89C;
+  --green-pale:#E7F0E1;
+  --amber:#E6A63A;
+  --amber-deep:#CE8B22;
+  --sky:#CBE6EF;
+  --muted:#8B9683;
+  --wrong:#C7583F;
+  --shadow:rgba(43,58,40,.14);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Noto Sans KR',sans-serif;
+  color:var(--ink);
+  background:var(--paper);
+  background-image:radial-gradient(circle, rgba(43,58,40,.045) 1px, transparent 1.5px);
+  background-size:18px 18px;
+  -webkit-font-smoothing:antialiased;
+  min-height:100dvh;
+  overflow-x:hidden;
+}
+
+.app{max-width:480px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;position:relative;}
+
+/* ── 상단 진행바 ── */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(243,240,230,.92);
+  backdrop-filter:blur(8px);
+  padding:14px 20px 10px;
+}
+.topbar .row{display:flex;align-items:center;gap:10px;}
+.mini-mtn{width:30px;height:26px;flex:none;}
+.progress-track{flex:1;height:9px;background:var(--green-pale);border-radius:99px;overflow:hidden;box-shadow:inset 0 1px 2px rgba(43,58,40,.1);}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--green-soft),var(--green));border-radius:99px;transition:width .35s cubic-bezier(.4,1.3,.5,1);}
+.progress-num{font-size:12px;font-weight:700;color:var(--muted);flex:none;min-width:38px;text-align:right;}
+
+/* ── 스크린 공통 ── */
+.screen{flex:1;display:none;flex-direction:column;padding:8px 22px 28px;animation:pop .4s ease;}
+.screen.active{display:flex;}
+@keyframes pop{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+
+.qnum{font-size:13px;font-weight:700;color:var(--amber-deep);letter-spacing:.02em;margin-bottom:8px;}
+.qtitle{font-size:23px;font-weight:900;line-height:1.35;margin-bottom:6px;letter-spacing:-.01em;text-wrap:balance;word-break:keep-all;}
+.qsub{font-size:13.5px;color:var(--muted);line-height:1.6;margin-bottom:20px;}
+
+/* ── 선택지 ── */
+.opts{display:flex;flex-direction:column;gap:11px;}
+.opt{
+  display:flex;align-items:center;gap:12px;
+  background:var(--card);
+  border:2px solid #E6E0D2;
+  border-radius:16px;
+  padding:16px 17px;
+  font-size:16px;font-weight:500;
+  cursor:pointer;text-align:left;width:100%;
+  color:var(--ink);font-family:inherit;
+  transition:transform .12s, border-color .15s, background .15s, box-shadow .15s;
+  box-shadow:0 2px 0 rgba(43,58,40,.05);
+}
+.opt:active{transform:scale(.985);}
+.opt .emo{font-size:22px;flex:none;line-height:1;}
+.opt.selected{border-color:var(--green);background:var(--green-pale);box-shadow:0 3px 0 rgba(78,122,69,.25);}
+.opt.selected .check{margin-left:auto;color:var(--green);font-weight:900;}
+.opt .check{display:none;}
+.opt.selected .check{display:inline;}
+.opt.correct{border-color:var(--green);background:#E4F2DD;}
+.opt.wrong{border-color:var(--wrong);background:#FBEAE5;}
+.opt.dim{opacity:.5;}
+.opt[disabled]{cursor:default;}
+
+.multi-hint{font-size:12px;color:var(--muted);margin-top:14px;text-align:center;}
+
+/* 이메일 선택 입력 */
+.email-wrap{display:none;margin-top:14px;animation:pop .3s ease;}
+.email-wrap.show{display:block;}
+.email-label{font-size:13px;font-weight:700;color:var(--green-deep);margin-bottom:8px;}
+.email-label span{color:var(--muted);font-weight:500;}
+.email-wrap input{width:100%;padding:14px 16px;border:2px solid var(--green-soft);border-radius:14px;font-size:16px;font-family:inherit;background:#fff;color:var(--ink);-webkit-appearance:none;}
+.email-wrap input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(78,122,69,.12);}
+
+/* 샌드위치 소개 카드 */
+.menu-card{background:linear-gradient(160deg,#FFF6E9,#FBE6C8);border:2px solid var(--amber);border-radius:18px;padding:20px 20px 22px;margin-bottom:18px;text-align:center;box-shadow:0 4px 14px rgba(206,139,34,.15);}
+.menu-emoji{font-size:38px;margin-bottom:6px;}
+.menu-name{font-size:18px;font-weight:900;color:var(--amber-deep);margin-bottom:9px;}
+.menu-desc{font-size:14px;line-height:1.8;color:var(--ink);}
+.menu-desc b{color:var(--amber-deep);}
+
+/* 척도(이모지) */
+.scale{display:flex;justify-content:space-between;gap:8px;margin-top:6px;}
+.scale button{
+  flex:1;background:var(--card);border:2px solid #E6E0D2;border-radius:14px;
+  padding:14px 4px 11px;cursor:pointer;font-family:inherit;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  transition:transform .12s,border-color .15s,background .15s;
+}
+.scale button .semo{font-size:26px;}
+.scale button .slabel{font-size:11px;color:var(--muted);font-weight:500;line-height:1.2;}
+.scale button:active{transform:scale(.95);}
+.scale button.selected{border-color:var(--amber);background:#FCF3E1;}
+.scale button.selected .slabel{color:var(--amber-deep);font-weight:700;}
+
+/* ── 지도 문제 ── */
+.mapwrap{position:relative;max-width:320px;margin:2px auto 0;}
+.mapwrap svg.korea{width:100%;height:auto;display:block;}
+.pin{
+  position:absolute;transform:translate(-50%,-50%);
+  width:38px;height:38px;border-radius:50%;
+  background:#fff;border:2.5px solid var(--green);
+  color:var(--green-deep);font-family:inherit;font-weight:900;font-size:17px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 3px 8px rgba(43,58,40,.22);transition:transform .12s,background .15s,border-color .15s;
+}
+.pin:active{transform:translate(-50%,-50%) scale(.9);}
+.pin.correct{background:var(--green);border-color:var(--green);color:#fff;transform:translate(-50%,-50%) scale(1.12);}
+.pin.wrong{background:var(--wrong);border-color:var(--wrong);color:#fff;}
+.pin.dim{opacity:.45;}
+.pin[disabled]{cursor:default;}
+
+/* ── 소개 화면 ── */
+.info-emoji{font-size:52px;text-align:center;margin:4px 0 8px;}
+.info-body{
+  background:var(--card);border:2px solid var(--green-soft);border-radius:18px;
+  padding:20px 20px 22px;font-size:15px;line-height:1.9;color:var(--ink);
+}
+.info-body b{color:var(--green-deep);}
+.info-body p{margin-bottom:13px;}
+.info-body .intro-hook{font-size:16px;font-weight:700;color:var(--green-deep);line-height:1.6;}
+.info-body .spot{background:var(--green-pale);border-radius:14px;padding:13px 15px;margin-bottom:11px;}
+.info-body .spot .spot-h{font-weight:800;color:var(--green-deep);font-size:14.5px;margin-bottom:5px;}
+.info-body .spot p{margin-bottom:0;font-size:13.5px;line-height:1.75;}
+.tag{display:inline-block;background:var(--green-pale);color:var(--green-deep);font-size:12.5px;font-weight:700;padding:4px 11px;border-radius:99px;margin:3px 5px 3px 0;}
+.info-tags{margin-top:14px;}
+
+/* ── 피드백 배너 ── */
+.feedback{
+  margin-top:18px;background:var(--green-deep);color:#fff;
+  border-radius:16px;padding:15px 17px;font-size:14px;line-height:1.65;
+  display:none;animation:pop .3s ease;
+}
+.feedback.show{display:block;}
+.feedback b{color:#FFE3A8;}
+.feedback.miss{background:#8a4a3a;}
+.feedback.miss b{color:#FFE0D5;}
+
+/* ── 하단 버튼 ── */
+.nav{padding:20px 22px 28px;margin-top:auto;}
+.btn{
+  width:100%;padding:16px;border:none;border-radius:16px;
+  background:var(--green);color:#fff;font-size:17px;font-weight:900;
+  font-family:inherit;cursor:pointer;letter-spacing:.01em;
+  box-shadow:0 4px 0 var(--green-deep);transition:transform .1s,opacity .15s;
+}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 var(--green-deep);}
+.btn:disabled{background:#C9CEC2;box-shadow:0 4px 0 #B2B7AB;cursor:default;}
+
+/* ── 인트로 ── */
+#intro{align-items:center;justify-content:center;text-align:center;padding-top:26px;}
+.hero-mtn{width:200px;max-width:62vw;margin:0 auto 6px;animation:float 4s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
+.intro-kicker{display:inline-block;background:var(--amber);color:#fff;font-size:12.5px;font-weight:700;padding:5px 14px;border-radius:99px;margin-bottom:14px;letter-spacing:.03em;}
+#intro h1{font-size:30px;font-weight:900;line-height:1.3;margin-bottom:12px;letter-spacing:-.02em;}
+#intro h1 .hl{color:var(--green);}
+#intro .lead{font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:30px;}
+.speech{position:relative;background:#fff;border:2px solid var(--green-soft);border-radius:16px;padding:13px 16px;font-size:14px;color:var(--green-deep);font-weight:500;line-height:1.6;margin-bottom:22px;max-width:340px;}
+.speech::after{content:"";position:absolute;top:-9px;left:50%;transform:translateX(-50%);border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:9px solid var(--green-soft);}
+
+/* ── 결과 ── */
+#result{text-align:center;padding-top:20px;display:none;}
+#result.active{display:flex;flex-direction:column;}
+.res-card{
+  background:var(--card);border:2px solid #E6E0D2;border-radius:24px;
+  padding:30px 22px 26px;box-shadow:0 8px 24px var(--shadow);margin-bottom:18px;
+  position:relative;overflow:hidden;
+}
+.res-card::before{content:"";position:absolute;inset:0 0 auto 0;height:120px;background:linear-gradient(180deg,var(--green-pale),transparent);z-index:0;}
+.res-inner{position:relative;z-index:1;}
+.res-badge{display:inline-block;background:var(--green);color:#fff;font-size:12px;font-weight:700;padding:5px 14px;border-radius:99px;margin-bottom:14px;}
+.res-mtn{width:130px;margin:0 auto 8px;}
+.res-level{font-size:30px;font-weight:900;color:var(--green-deep);line-height:1.25;margin-bottom:10px;letter-spacing:-.02em;}
+.res-desc{font-size:14.5px;color:var(--ink);line-height:1.8;margin-bottom:20px;}
+.res-stats{display:flex;gap:10px;margin-bottom:6px;}
+.res-stat{flex:1;background:var(--green-pale);border-radius:14px;padding:13px 8px;}
+.res-stat .num{font-size:22px;font-weight:900;color:var(--green);}
+.res-stat .lab{font-size:11px;color:var(--muted);font-weight:700;margin-top:3px;}
+
+.insta-cta{
+  display:flex;align-items:center;gap:14px;text-decoration:none;
+  background:linear-gradient(135deg,#F4A03B,#E1596E 55%,#B0489C);
+  color:#fff;border-radius:20px;padding:17px 18px;margin-bottom:12px;
+  box-shadow:0 6px 18px rgba(200,90,120,.32);
+}
+.insta-cta .ico{font-size:30px;flex:none;}
+.insta-cta .txt{text-align:left;line-height:1.4;}
+.insta-cta .txt .t1{font-size:15px;font-weight:900;}
+.insta-cta .txt .t2{font-size:12.5px;opacity:.92;font-weight:500;margin-top:2px;}
+.insta-cta .go{margin-left:auto;font-size:22px;font-weight:900;flex:none;}
+
+.share-btn{width:100%;padding:14px;border:2px solid var(--green-soft);background:#fff;color:var(--green-deep);border-radius:16px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;margin-bottom:10px;}
+.intro-card{background:var(--card);border:2px solid var(--green-soft);border-radius:18px;padding:20px;margin-bottom:14px;text-align:left;}
+.intro-card-head{font-size:16px;font-weight:900;color:var(--green-deep);margin-bottom:12px;}
+.intro-card-body{font-size:14.5px;line-height:1.85;color:var(--ink);}
+.intro-card-body b{color:var(--green-deep);}
+.credit{font-size:12px;color:var(--muted);line-height:1.7;margin-top:8px;}
+.credit b{color:var(--green-deep);}
+.saving{font-size:12.5px;color:var(--muted);text-align:center;padding:8px;min-height:20px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- 진행바 -->
+  <div class="topbar" id="topbar" style="display:none;">
+    <div class="row">
+      <svg class="mini-mtn" viewBox="0 0 60 52"><use href="#mtnface"/></svg>
+      <div class="progress-track"><div class="progress-fill" id="pfill"></div></div>
+      <div class="progress-num" id="pnum">1/10</div>
+    </div>
+  </div>
+
+  <!-- ============ 인트로 ============ -->
+  <section class="screen active" id="intro">
+    <svg class="hero-mtn" viewBox="0 0 60 52"><use href="#mtnface"/></svg>
+    <div class="speech">안녕하세요!<br>함양과 서울을 잇는 남가좌439팀입니다</div>
+    <span class="intro-kicker">함양 인지도 테스트</span>
+    <h1>함양, <span class="hl">얼마나</span><br>알고 있나요?</h1>
+    <p class="lead">10개의 짧은 질문으로<br>나의 <b>함양 레벨</b>을 확인해 보세요. (2분)</p>
+    <button class="btn" onclick="start()" style="max-width:300px;">시작하기 →</button>
+  </section>
+
+  <!-- ============ 문항/소개 ============ -->
+  <section class="screen" id="qscreen">
+    <div class="qnum" id="q-num"></div>
+    <div class="qtitle" id="q-title"></div>
+    <div class="qsub" id="q-sub"></div>
+    <div id="q-body"></div>
+    <div class="feedback" id="q-feedback"></div>
+    <div class="nav">
+      <button class="btn" id="q-next" onclick="next()" disabled>다음 →</button>
+    </div>
+  </section>
+
+  <!-- ============ 결과 ============ -->
+  <section class="screen" id="result">
+    <div class="res-card">
+      <div class="res-inner">
+        <div class="res-badge">나의 함양 레벨</div>
+        <svg class="res-mtn" viewBox="0 0 60 52"><use href="#mtnface"/></svg>
+        <div class="res-level" id="res-level"></div>
+        <div class="res-desc" id="res-desc"></div>
+        <div class="res-stats">
+          <div class="res-stat"><div class="num" id="res-score">0</div><div class="lab">함양 점수</div></div>
+          <div class="res-stat"><div class="num" id="res-acc">0%</div><div class="lab">식재료 정답률</div></div>
+        </div>
+      </div>
+    </div>
+
+    <a class="insta-cta" id="insta-cta" href="https://instagram.com/namgajwa439" target="_blank" rel="noopener">
+      <span class="ico">📸</span>
+      <span class="txt">
+        <span class="t1">함양의 맛과 이야기, 인스타에서 만나요</span>
+        <span class="t2">@namgajwa439 · 함양 식재료로 만드는 화덕 샌드위치 이야기</span>
+      </span>
+      <span class="go">→</span>
+    </a>
+    <div class="saving" id="saving"></div>
+    <p class="credit"><b>함양 인지도 조사</b> · 남가좌439 프로젝트<br>응답은 함양 알리기 통계로만 활용돼요 🌱</p>
+  </section>
+
+</div>
+
+<!-- 마스코트 SVG (재사용) -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<g id="mtnface">
+  <path d="M6 46 L20 18 L33 46 Z" fill="#7CA36E"/>
+  <path d="M32 46 L46 20 L58 46 Z" fill="#6B9560"/>
+  <path d="M14 48 L30 12 L48 48 Z" fill="#4E7A45"/>
+  <path d="M30 12 L24 26 Q30 22 30 27 Q31 22 37 26 Z" fill="#F3F5EF"/>
+  <ellipse cx="24.5" cy="39" rx="3" ry="2" fill="#E88B7A" opacity=".65"/>
+  <ellipse cx="35.5" cy="39" rx="3" ry="2" fill="#E88B7A" opacity=".65"/>
+  <circle cx="26" cy="35" r="1.9" fill="#2B3A28"/>
+  <circle cx="34" cy="35" r="1.9" fill="#2B3A28"/>
+  <circle cx="26.6" cy="34.4" r=".6" fill="#fff"/>
+  <circle cx="34.6" cy="34.4" r=".6" fill="#fff"/>
+  <path d="M27.5 39.5 Q30 42 32.5 39.5" fill="none" stroke="#2B3A28" stroke-width="1.4" stroke-linecap="round"/>
+</g>
+</defs></svg>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+const sb = createClient(
+  'https://hncuvjrghniwihhfpata.supabase.co',
+  'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
+);
+
+/* 남한 지도 (서해안 태안·변산 반도, 남해안 굴곡 반영) */
+const KOREA = "M70 78 Q95 62 130 60 Q165 56 200 56 Q222 58 232 74 Q239 105 240 150 Q241 185 236 205 Q245 210 246 216 Q240 224 232 232 Q222 250 208 260 Q194 270 184 264 Q176 274 166 280 Q156 286 150 278 Q142 288 132 286 Q118 294 104 296 Q90 298 84 286 Q80 272 88 260 Q76 250 80 240 Q66 234 60 226 Q70 220 78 214 Q80 200 74 190 Q62 182 58 174 Q70 166 80 160 Q84 142 76 128 Q82 108 74 96 Q70 86 70 78 Z";
+
+/* ── 단계 정의 (info = 소개 화면, 문항 번호에서 제외) ──────── */
+const STEPS = [
+  // 1. 지도 위치 퀴즈
+  { key:'location', type:'map',
+    title:'함양은 전국 어디에 있을까요?',
+    sub:'지도에서 함양이라고 생각되는 번호를 눌러 보세요.',
+    correctN:4,
+    markers:[
+      {n:1, x:71, y:39, region:'경북(안동)'},
+      {n:2, x:77, y:17, region:'강원(강릉)'},
+      {n:3, x:45, y:42, region:'충청(대전)'},
+      {n:4, x:52, y:60, region:'함양(경남)'},
+      {n:5, x:25, y:55, region:'전북(군산)'},
+    ],
+    hitMsg:'정확해요! 함양은 <b>경상남도 서북부</b>, 지도의 4번 자리예요.',
+    missMsg:'아쉬워요! 함양은 <b>경상남도 서북부</b>인 <b>4번</b>이에요.' },
+
+  // 위치 정답 후 함양 소개 (잘 쉬는 여행 · 상림·용추계곡·둘레길·맛)
+  { type:'info', emoji:'🏞️', title:'함양, 이렇게 쉬어가 보세요',
+    text:'<p class="intro-hook">🍃 요즘은 ‘많이 보는 여행’보다 <b>‘잘 쉬는 여행’</b>이 더 끌리지 않나요?</p>'+
+      '<p>함양은 그런 여행을 하러 찾아가는 곳이에요. 우리나라에서 가장 깊고 너른 산, <b>지리산이 품은 도시</b>. 잘 알려지지 않아 더 보석 같은 곳일지 몰라요. 산이 만든 맑은 공기와 깨끗한 물 덕분에, 걷는 것만으로도 몸이 가벼워지는 기분이 들어요.</p>'+
+      '<div class="spot"><div class="spot-h">🌳 천 년 숲, 상림공원</div><p>나무 그늘 아래를 천천히 산책해 보세요. 계절마다 다른 색으로 물드는 숲길은, 사진보다 직접 걸을 때 훨씬 아름다워요.</p></div>'+
+      '<div class="spot"><div class="spot-h">💧 여름이라면, 용추계곡</div><p>투명하게 흐르는 계곡물에 발을 담그고 시원한 바람을 맞다 보면, 복잡했던 생각도 어느새 잦아들어요.</p></div>'+
+      '<div class="spot"><div class="spot-h">🥾 지리산 둘레길</div><p>자연을 조금 더 가까이 만나고 싶다면. 꼭 완주하지 않아도 괜찮아요. 한두 시간만 걸어도 숲 향기와 새소리, 계곡물 소리가 도시에선 느끼기 어려운 여유를 선물해요.</p></div>'+
+      '<div class="spot"><div class="spot-h">🍽️ 걷고 난 뒤엔, 함양의 맛</div><p>산양삼 삼계탕, 지리산 흑돼지 숯불구이, 계절 산나물 산채정식, 뜨끈한 어탕국수까지. 화려하지 않지만 좋은 재료로 정성껏 만든 음식이 여행의 피로를 든든히 채워줘요.</p></div>',
+    tags:['상림공원','용추계곡','지리산 둘레길'] },
+
+  // 2. 함양 방문 경험
+  { key:'visited', type:'single', title:'함양, 가본 적 있나요?',
+    opts:[['🏡','살아봤거나 자주 가요'],['🚗','여행으로 가봤어요'],['🛣️','지나가면서 봤어요'],['🙅','아직 없어요']] },
+
+  // 3. 지리산 권역 이웃 도시
+  { key:'neighbor', type:'multi',
+    title:'혹시, 지리산 인근 다른 곳은 가본 적 있나요?',
+    sub:'가본 곳을 모두 골라 주세요. (복수 선택)',
+    opts:[['🏯','남원'],['🌊','하동'],['⛰️','산청'],['🌸','구례'],['🙅','가본 곳 없어요']],
+    exclusive:'가본 곳 없어요' },
+
+  // 4. 접점
+  { key:'contact', type:'multi', title:'함양을 어디서 접해 봤나요?',
+    sub:'해당되는 걸 모두 골라 주세요. (복수 선택)',
+    opts:[['📺','TV·유튜브'],['📱','SNS·인스타'],['🛒','특산품·마트에서'],['👪','지인·가족'],['❓','접한 적 없어요']],
+    exclusive:'접한 적 없어요' },
+
+  // 5. 특산물 채점
+  { key:'specialty', type:'multiquiz',
+    title:'이 중 함양에서 구할 수 있는 특별한 식재료는?',
+    sub:'맞다고 생각되는 걸 모두 골라 보세요. (복수 선택)',
+    opts:[['🐷','흑돼지'],['🦪','굴'],['🧅','양파'],['🫑','파프리카'],['🌾','우리밀'],['🍊','감귤'],['🍓','딸기']],
+    correct:['흑돼지','양파','우리밀'] },
+
+  // 6. 샌드위치 팝업 (맥락 + 식재료 소개 카드 + 먹어보고 싶은지 + 이메일)
+  { key:'popup', type:'single',
+    title:'혹시, 이 함양 샌드위치 팝업에 와보고 싶나요?',
+    sub:'저희 팀은 함양의 식재료로 화덕 샌드위치를 준비하고 있어요. 오는 8월, 서울에서 6일간 짧게 여는 팝업이에요.',
+    card:`<div class="menu-emoji">🥪🔥</div>`+
+      `<div class="menu-name">함양 화덕 샌드위치</div>`+
+      `<div class="menu-desc">함양에서 제분한 <b>우리밀 도우</b>를 화덕에 구워 부풀린 빵에, <b>함양산 양파로 만든 양파잼</b>과 <b>수비드한 함양 청정 흑돼지</b>를 듬뿍. 지리산이 키운 로컬 식재료로 채운 건강한 한 끼예요.</div>`,
+    opts:[['🔥','꼭 가서 먹어보고 싶어요'],['🥲','가지는 못하겠지만 먹어보고 싶어요'],['🤔','생각해 볼게요'],['🙅','별로 관심 없어요']],
+    emailFor:['꼭 가서 먹어보고 싶어요','가지는 못하겠지만 먹어보고 싶어요'] },
+
+  // 7. 함양 지역 관심 (post-exposure)
+  { key:'interest', type:'scale', title:'혹시 함양이라는 지역, 관심이 생기셨나요?',
+    sub:'테스트 전과 비교해서 솔직하게 골라 주세요.',
+    opts:[['😐','전혀'],['🙂','조금'],['😊','보통'],['😍','꽤'],['🤩','많이!']] },
+
+  // 기본 정보 (마지막)
+  { key:'age', type:'single', title:'나이대가 어떻게 되나요?',
+    sub:'마지막으로 간단한 기본 정보만 여쭤볼게요.',
+    opts:[['🐣','10대'],['🌱','20대'],['🌿','30대'],['🍀','40대'],['🌳','50대 이상']] },
+
+  { key:'gender', type:'single', title:'성별이 어떻게 되나요?',
+    sub:'선택하지 않아도 괜찮아요.',
+    opts:[['🙋‍♀️','여성'],['🙋‍♂️','남성'],['🤝','응답 안 함']] },
+
+  { key:'region', type:'single', title:'지금 어디에 사시나요?',
+    opts:[['🏙️','서울'],['🏘️','경기'],['⛰️','강원'],['🌾','충청'],['🌊','전라'],['🍎','경상'],['🍊','제주']] },
+];
+
+const TOTALQ = STEPS.filter(s=>s.type!=='info').length; // 9
+const state = {};
+let idx = 0;
+
+const $ = s => document.querySelector(s);
+const body = $('#q-body'), fb = $('#q-feedback');
+
+window.start = () => {
+  $('#intro').classList.remove('active');
+  $('#topbar').style.display = 'block';
+  $('#qscreen').classList.add('active');
+  render();
+};
+
+function render(){
+  const q = STEPS[idx];
+  const done = STEPS.slice(0,idx).filter(x=>x.type!=='info').length;
+  $('#pfill').style.width = (done/TOTALQ*100)+'%';
+  fb.className='feedback'; fb.innerHTML=''; body.innerHTML='';
+  $('#q-title').textContent = q.title;
+  $('#q-sub').textContent = q.sub || '';
+  $('#q-sub').style.display = q.sub ? 'block' : 'none';
+
+  if(q.type==='info'){
+    $('#q-num').textContent='';
+    $('#pnum').textContent='';
+    buildInfo(q);
+    $('#q-next').disabled=false;
+    $('#q-next').textContent='계속 →';
+    return;
+  }
+
+  $('#q-num').textContent = 'Q'+(done+1);
+  $('#pnum').textContent = (done+1)+'/'+TOTALQ;
+  $('#q-next').disabled = !q.optional;
+  if(q.type==='multiquiz'){ q._revealed=false; $('#q-next').disabled=false; }
+  const isLast = idx === STEPS.length-1;
+  $('#q-next').textContent = isLast ? '결과 보기 🎉' : '다음 →';
+
+  if(q.card){ const c=document.createElement('div'); c.className='menu-card'; c.innerHTML=q.card; body.appendChild(c); }
+  if(q.type==='scale') buildScale(q);
+  else if(q.type==='map') buildMap(q);
+  else buildOpts(q);
+}
+
+/* ── 소개 ── */
+function buildInfo(q){
+  const wrap=document.createElement('div');
+  wrap.innerHTML =
+    `<div class="info-emoji">${q.emoji||'🌿'}</div>`+
+    `<div class="info-body">${q.text}`+
+    (q.tags?`<div class="info-tags">${q.tags.map(t=>`<span class="tag"># ${t}</span>`).join('')}</div>`:'')+
+    `</div>`;
+  body.appendChild(wrap);
+}
+
+/* ── 일반 선택지 ── */
+function buildOpts(q){
+  const wrap = document.createElement('div'); wrap.className='opts';
+  q.opts.forEach((o)=>{
+    const [emo,label]=o;
+    const btn=document.createElement('button');
+    btn.className='opt'; btn.type='button';
+    btn.innerHTML=(emo?`<span class="emo">${emo}</span>`:'')+`<span>${label}</span><span class="check">✓</span>`;
+    btn.onclick=()=>onPick(q,btn,label);
+    wrap.appendChild(btn);
+  });
+  body.appendChild(wrap);
+  if(q.type==='multi'||q.type==='multiquiz'){
+    const h=document.createElement('div'); h.className='multi-hint'; h.textContent='여러 개 선택할 수 있어요';
+    body.appendChild(h);
+  }
+  if(q.emailFor){
+    const ew=document.createElement('div'); ew.id='email-wrap'; ew.className='email-wrap';
+    ew.innerHTML=`<div class="email-label">📮 팝업이 열리면 알려드릴까요? <span>(선택)</span></div>`+
+      `<input id="email-input" type="email" inputmode="email" autocomplete="email" placeholder="이메일 주소를 남겨 주세요">`;
+    body.appendChild(ew);
+    ew.querySelector('#email-input').addEventListener('input', e=>{ state.email = e.target.value.trim() || null; });
+  }
+}
+
+function labelOf(btn){ return btn.querySelector('.emo')? btn.querySelector('.emo').nextElementSibling.textContent : btn.querySelector('span').textContent; }
+
+function onPick(q,btn,label){
+  const wrap=btn.parentElement;
+  if(q.type==='single'){
+    wrap.querySelectorAll('.opt').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    state[q.key]=label; $('#q-next').disabled=false;
+    if(q.emailFor){
+      const ew=document.getElementById('email-wrap');
+      if(ew){
+        if(q.emailFor.includes(label)){ ew.classList.add('show'); }
+        else { ew.classList.remove('show'); const inp=document.getElementById('email-input'); if(inp) inp.value=''; state.email=null; }
+      }
+    }
+    return;
+  }
+  if(q.type==='multi'){
+    if(q.exclusive){
+      if(label===q.exclusive){
+        const on=!btn.classList.contains('selected');
+        wrap.querySelectorAll('.opt').forEach(b=>b.classList.remove('selected'));
+        if(on) btn.classList.add('selected');
+      } else {
+        btn.classList.toggle('selected');
+        wrap.querySelectorAll('.opt').forEach(b=>{ if(labelOf(b)===q.exclusive) b.classList.remove('selected'); });
+      }
+    } else btn.classList.toggle('selected');
+    const sel=[...wrap.querySelectorAll('.opt.selected')].map(labelOf);
+    state[q.key]=sel; $('#q-next').disabled=sel.length===0; return;
+  }
+  if(q.type==='multiquiz'){
+    btn.classList.toggle('selected');
+    state[q.key]=[...wrap.querySelectorAll('.opt.selected')].map(labelOf);
+    $('#q-next').disabled=false;
+  }
+}
+
+/* ── 척도 ── */
+function buildScale(q){
+  const wrap=document.createElement('div'); wrap.className='scale';
+  q.opts.forEach((o,i)=>{
+    const [emo,label]=o;
+    const b=document.createElement('button'); b.type='button';
+    b.innerHTML=`<span class="semo">${emo}</span><span class="slabel">${label}</span>`;
+    b.onclick=()=>{
+      wrap.querySelectorAll('button').forEach(x=>x.classList.remove('selected'));
+      b.classList.add('selected'); state[q.key]=i+1; $('#q-next').disabled=false;
+    };
+    wrap.appendChild(b);
+  });
+  body.appendChild(wrap);
+}
+
+/* ── 지도 문제 ── */
+function buildMap(q){
+  const wrap=document.createElement('div'); wrap.className='mapwrap';
+  wrap.innerHTML=`<svg class="korea" viewBox="0 0 300 400" aria-hidden="true">
+    <path d="${KOREA}" fill="#DCEBD3" stroke="#A9C89C" stroke-width="2.5" stroke-linejoin="round"/>
+    <ellipse cx="102" cy="366" rx="22" ry="9" fill="#DCEBD3" stroke="#A9C89C" stroke-width="2.5"/>
+  </svg>`;
+  q.markers.forEach(m=>{
+    const b=document.createElement('button');
+    b.className='pin'; b.type='button'; b.textContent=m.n;
+    b.style.left=m.x+'%'; b.style.top=m.y+'%';
+    b.onclick=()=>onMap(q,wrap,b,m);
+    wrap.appendChild(b);
+  });
+  body.appendChild(wrap);
+}
+
+function onMap(q,wrap,btn,m){
+  state.location=m.region;
+  state.location_correct=(m.n===q.correctN);
+  wrap.querySelectorAll('.pin').forEach(p=>{
+    p.disabled=true;
+    const pn=+p.textContent;
+    if(pn===q.correctN) p.classList.add('correct');
+    else if(p===btn) p.classList.add('wrong');
+    else p.classList.add('dim');
+  });
+  if(state.location_correct){ fb.className='feedback show'; fb.innerHTML='✅ '+q.hitMsg; }
+  else { fb.className='feedback show miss'; fb.innerHTML='💡 '+q.missMsg; }
+  $('#q-next').disabled=false;
+}
+
+/* ── 특산물 정답 공개 ── */
+function revealQuiz(q){
+  const correct=q.correct;
+  [...body.querySelectorAll('.opt')].forEach(b=>{
+    b.disabled=true;
+    const lbl=labelOf(b), isSel=b.classList.contains('selected');
+    b.classList.remove('selected');
+    if(correct.includes(lbl)) b.classList.add('correct');
+    else if(isSel) b.classList.add('wrong');
+    else b.classList.add('dim');
+  });
+  const picked=state[q.key]||[];
+  const hit=picked.filter(p=>correct.includes(p)).length;
+  const wrongPick=picked.filter(p=>!correct.includes(p)).length;
+  fb.className='feedback show';
+  fb.innerHTML = `✅ 함양의 특별한 식재료는 <b>${correct.join('·')}</b>예요!<br>`+
+    (picked.length
+      ? `${correct.length}개 중 <b>${hit}개</b>를 맞혔어요`+(wrongPick?`. (${wrongPick}개는 함양 식재료가 아니에요)`:'.')
+      : `이번 기회에 함양 식재료를 알아가요 🌿`);
+  $('#q-next').textContent = (idx===STEPS.length-1)?'결과 보기 🎉':'다음 →';
+}
+
+/* ── 이동 ── */
+window.next = ()=>{
+  const q=STEPS[idx];
+  if(q && q.type==='multiquiz' && !q._revealed){ revealQuiz(q); q._revealed=true; return; }
+  if(idx < STEPS.length-1){ idx++; render(); }
+  else finish();
+};
+
+/* ── 결과 ── */
+function computeResult(){
+  let score=0;
+  if(state.location_correct) score+=30;
+  const v=state.visited;
+  if(v==='살아봤거나 자주 가요'||v==='여행으로 가봤어요') score+=20;
+  else if(v==='지나가면서 봤어요') score+=10;
+  const nb=(state.neighbor||[]).filter(x=>x!=='가본 곳 없어요').length;
+  score+=Math.min(20, nb*5);
+  const correct=STEPS.find(s=>s.key==='specialty').correct;
+  const picked=state.specialty||[];
+  const hit=picked.filter(p=>correct.includes(p)).length;
+  const wrongPick=picked.filter(p=>!correct.includes(p)).length;
+  const acc=Math.round(hit/correct.length*100);
+  score+=hit*7-wrongPick*4;
+  score+=(state.interest||0)*3;
+  score=Math.max(0,Math.min(100,Math.round(score)));
+
+  let level,desc;
+  if(score>=60){
+    level='🏔️ 함양 마스터';
+    desc='함양을 이미 꿰뚫고 계시네요! 지리산 자락 이야기부터 흑돼지·양파·우리밀까지, 함양 홍보대사로 모실게요. 🌟';
+  } else if(score>=32){
+    level='🍃 함양 관심러';
+    desc='함양을 어느 정도 알고 계시네요! 조금만 더 알면 완전 매력에 빠질 거예요. 다음엔 진짜 함양을 만나러 와요.';
+  } else {
+    level='🌱 함양 새싹';
+    desc='함양과는 이제 막 인사한 사이네요! 지리산 자락 함양엔 청정 흑돼지·양파·우리밀… 알수록 재밌는 게 가득해요. 🌿';
+  }
+  return {score,acc,level,desc};
+}
+
+function finish(){
+  const r=computeResult();
+  state.score=r.score; state.accuracy=r.acc; state.level=r.level;
+  $('#pfill').style.width='100%';
+  $('#qscreen').classList.remove('active');
+  $('#topbar').style.display='none';
+  $('#result').classList.add('active');
+  $('#res-level').textContent=r.level;
+  $('#res-desc').textContent=r.desc;
+  animateNum('#res-score', r.score, '');
+  animateNum('#res-acc', r.acc, '%');
+  saveToDB();
+}
+
+function animateNum(sel,target,suffix){
+  const el=$(sel); let cur=0; const step=Math.max(1,Math.round(target/30));
+  const t=setInterval(()=>{cur+=step; if(cur>=target){cur=target;clearInterval(t);} el.textContent=cur+suffix;},22);
+}
+
+async function saveToDB(){
+  const s=$('#saving'); s.textContent='응답 저장 중…';
+  const payload={
+    q_location: state.location||null,
+    q_location_correct: state.location_correct??null,
+    visited: state.visited||null,
+    neighbor_cities: (state.neighbor||[]).join(', ')||null,
+    contact_points: (state.contact||[]).join(', ')||null,
+    ingredients: (state.specialty||[]).join(', ')||null,
+    ingredient_accuracy: state.accuracy??null,
+    popup_intent: state.popup||null,
+    email: state.email||null,
+    region_interest: state.interest||null,
+    age: state.age||null,
+    gender: state.gender||null,
+    region: state.region||null,
+    level: state.level||null,
+    score: state.score??null,
+  };
+  try{
+    const { error } = await sb.from('hamyang_survey').insert(payload);
+    if(error){ s.textContent=''; console.warn(error); }
+    else s.textContent='✅ 응답 고마워요!';
+  }catch(e){ s.textContent=''; console.warn(e); }
+}
+
+window.shareResult=async()=>{
+  const text=`나의 함양 레벨은 "${state.level}" (${state.score}점)! 당신도 해보세요 🏔️`;
+  try{
+    if(navigator.share) await navigator.share({title:'함양 인지도 테스트', text, url:location.href});
+    else { await navigator.clipboard.writeText(text+' '+location.href); alert('결과 링크를 복사했어요!'); }
+  }catch(e){}
+};
+</script>
+</body>
+</html>

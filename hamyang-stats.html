@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>함양 인지도 조사 · 결과 대시보드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3F0E6; --card:#FFFDF8; --ink:#2B3A28;
+  --green:#4E7A45; --green-deep:#3A5D33; --green-soft:#A9C89C; --green-pale:#E7F0E1;
+  --amber:#E6A63A; --amber-deep:#CE8B22; --wrong:#C7583F; --muted:#8B9683;
+  --shadow:rgba(43,58,40,.12);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans KR',sans-serif;color:var(--ink);background:var(--paper);
+  background-image:radial-gradient(circle, rgba(43,58,40,.04) 1px, transparent 1.5px);background-size:18px 18px;
+  -webkit-font-smoothing:antialiased;min-height:100dvh;}
+.wrap{max-width:960px;margin:0 auto;padding:0 18px 60px;}
+
+/* 헤더 */
+.head{position:sticky;top:0;z-index:20;background:rgba(243,240,230,.94);backdrop-filter:blur(8px);
+  padding:18px 18px 14px;margin:0 -18px 8px;border-bottom:1px solid #e5e0d2;}
+.head-in{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.head h1{font-size:19px;font-weight:900;letter-spacing:-.01em;}
+.head .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.head .spacer{flex:1;}
+.btn{background:var(--green);color:#fff;border:none;border-radius:11px;padding:9px 15px;font-size:13px;font-weight:700;
+  font-family:inherit;cursor:pointer;box-shadow:0 2px 0 var(--green-deep);}
+.btn:active{transform:translateY(1px);box-shadow:0 1px 0 var(--green-deep);}
+.updated{font-size:11.5px;color:var(--muted);}
+
+/* 상태 */
+.state{text-align:center;padding:70px 20px;color:var(--muted);}
+.state .big{font-size:44px;margin-bottom:12px;}
+.state h2{font-size:18px;color:var(--ink);font-weight:900;margin-bottom:8px;}
+.state p{font-size:14px;line-height:1.7;}
+.state code{background:#eee6d4;padding:2px 7px;border-radius:6px;font-size:12.5px;}
+
+/* 헤드라인 카드 */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0 8px;}
+@media(max-width:640px){.cards{grid-template-columns:repeat(2,1fr);}}
+.kpi{background:var(--card);border:1.5px solid #e9e3d4;border-radius:16px;padding:16px;box-shadow:0 3px 10px var(--shadow);}
+.kpi .lab{font-size:12px;color:var(--muted);font-weight:700;}
+.kpi .val{font-size:30px;font-weight:900;color:var(--green-deep);line-height:1.1;margin-top:6px;letter-spacing:-.02em;}
+.kpi .val small{font-size:15px;color:var(--muted);font-weight:700;}
+.kpi .note{font-size:11.5px;color:var(--muted);margin-top:4px;}
+.kpi.accent .val{color:var(--amber-deep);}
+
+/* 섹션 */
+.sec{background:var(--card);border:1.5px solid #e9e3d4;border-radius:18px;padding:20px 20px 22px;margin-top:16px;box-shadow:0 3px 10px var(--shadow);}
+.sec h3{font-size:16px;font-weight:900;margin-bottom:4px;}
+.sec .desc{font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:16px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+@media(max-width:640px){.grid2{grid-template-columns:1fr;gap:20px;}}
+.subh{font-size:13px;font-weight:800;color:var(--green-deep);margin-bottom:12px;}
+
+/* 바 차트 */
+.bars{display:flex;flex-direction:column;gap:9px;}
+.bar-row{display:grid;grid-template-columns:96px 1fr 52px;align-items:center;gap:10px;}
+.bar-row .bl{font-size:12.5px;font-weight:600;color:var(--ink);text-align:right;line-height:1.25;}
+.bar-track{background:var(--green-pale);border-radius:99px;height:20px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:99px;background:var(--green);min-width:2px;transition:width .5s cubic-bezier(.3,1,.4,1);}
+.bar-fill.amber{background:var(--amber);}
+.bar-fill.grey{background:#c8ccc0;}
+.bar-fill.red{background:var(--wrong);}
+.bar-val{font-size:12.5px;font-weight:800;color:var(--green-deep);text-align:left;}
+.bar-val small{color:var(--muted);font-weight:600;}
+
+/* 큰 정답률 */
+.donut-wrap{display:flex;align-items:center;gap:18px;}
+.donut{--p:0;width:120px;height:120px;border-radius:50%;flex:none;
+  background:conic-gradient(var(--green) calc(var(--p)*1%), var(--wrong) 0);
+  display:flex;align-items:center;justify-content:center;position:relative;}
+.donut::after{content:"";position:absolute;inset:14px;background:var(--card);border-radius:50%;}
+.donut .dn{position:relative;z-index:1;text-align:center;}
+.donut .dn b{font-size:26px;font-weight:900;color:var(--green-deep);}
+.donut .dn span{display:block;font-size:11px;color:var(--muted);font-weight:700;}
+.legend{font-size:12.5px;line-height:1.9;}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle;}
+.insight{margin-top:16px;background:var(--green-pale);border-radius:12px;padding:12px 14px;font-size:12.5px;line-height:1.6;color:var(--green-deep);font-weight:600;}
+.insight b{color:var(--amber-deep);}
+.foot{font-size:11.5px;color:var(--muted);text-align:center;margin-top:24px;line-height:1.7;}
+</style>
+</head>
+<body>
+
+<div class="head">
+  <div class="head-in">
+    <div>
+      <h1>🏔️ 함양 인지도 조사 · 대시보드</h1>
+      <div class="sub">남가좌439 · 함양 알리기 팝업 근거 데이터</div>
+    </div>
+    <div class="spacer"></div>
+    <div style="text-align:right;">
+      <button class="btn" onclick="load()">↻ 새로고침</button>
+      <div class="updated" id="updated"></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div id="state" class="state"><div class="big">⏳</div><p>불러오는 중…</p></div>
+  <div id="dash" style="display:none;">
+    <div class="cards" id="kpis"></div>
+    <div id="sections"></div>
+    <div class="foot">이메일 주소는 이 대시보드에 노출되지 않습니다(수집 인원 수만 표시). 실제 주소는 Supabase Table Editor에서 확인하세요.</div>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+const sb = createClient(
+  'https://hncuvjrghniwihhfpata.supabase.co',
+  'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
+);
+
+const $ = s => document.querySelector(s);
+const pct = (n,d) => d ? Math.round(n/d*100) : 0;
+const splitCsv = v => (v||'').split(',').map(s=>s.trim()).filter(Boolean);
+
+// 순서 정의
+const ORDER = {
+  visited:['살아봤거나 자주 가요','여행으로 가봤어요','지나가면서 봤어요','아직 없어요'],
+  contact:['TV·유튜브','SNS·인스타','특산품·마트에서','지인·가족','접한 적 없어요'],
+  neighbor:['남원','하동','산청','구례','가본 곳 없어요'],
+  ingredient:['흑돼지','굴','양파','파프리카','우리밀','감귤','딸기'],
+  popup:['꼭 가서 먹어보고 싶어요','가지는 못하겠지만 먹어보고 싶어요','생각해 볼게요','별로 관심 없어요'],
+  age:['10대','20대','30대','40대','50대 이상'],
+  gender:['여성','남성','응답 안 함'],
+  region:['서울','경기','강원','충청','전라','경상','제주'],
+  level:['🏔️ 함양 마스터','🍃 함양 관심러','🌱 함양 새싹'],
+};
+const CORRECT_ING = ['흑돼지','양파','우리밀'];
+const WANT_POPUP = ['꼭 가서 먹어보고 싶어요','가지는 못하겠지만 먹어보고 싶어요'];
+const INTEREST_LABEL = {1:'전혀',2:'조금',3:'보통',4:'꽤',5:'많이'};
+
+window.load = async function(){
+  const st=$('#state');
+  st.style.display='block'; $('#dash').style.display='none';
+  st.innerHTML='<div class="big">⏳</div><p>불러오는 중…</p>';
+  let rows, error;
+  try{ ({data:rows, error} = await sb.from('hamyang_survey_public').select('*')); }
+  catch(e){ error=e; }
+
+  if(error){
+    st.innerHTML=`<div class="big">🛠️</div><h2>데이터를 불러올 수 없어요</h2>
+      <p>아직 테이블/뷰가 없거나 권한이 설정되지 않았어요.<br>
+      Supabase SQL Editor에서 <code>supabase/hamyang_survey.sql</code>을 실행해 주세요.<br>
+      <span style="font-size:12px">(${(error.message||'').slice(0,120)})</span></p>`;
+    return;
+  }
+  if(!rows || rows.length===0){
+    st.innerHTML=`<div class="big">🌱</div><h2>아직 응답이 없어요</h2>
+      <p>설문에 응답이 들어오면 여기에 통계가 채워집니다.</p>`;
+    return;
+  }
+  render(rows);
+  st.style.display='none'; $('#dash').style.display='block';
+  $('#updated').textContent='업데이트 '+new Date().toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
+};
+
+/* ── 집계 유틸 ── */
+function tally(rows, fn){ const m=new Map(); rows.forEach(r=>{ const v=fn(r); if(v==null||v==='')return; m.set(v,(m.get(v)||0)+1); }); return m; }
+function tallyMulti(rows, fn){ const m=new Map(); rows.forEach(r=>{ splitCsv(fn(r)).forEach(v=>m.set(v,(m.get(v)||0)+1)); }); return m; }
+function ordered(map, order){
+  const items = order ? order.map(k=>[k, map.get(k)||0]) : [...map.entries()].sort((a,b)=>b[1]-a[1]);
+  return items;
+}
+
+/* ── 렌더 ── */
+function barChart(items, total, opt={}){
+  const max = Math.max(1, ...items.map(i=>i[1]));
+  const denom = opt.ofTotal ? total : max;
+  return `<div class="bars">`+items.map(([label,count])=>{
+    const w = count/denom*100;
+    const p = pct(count,total);
+    const cls = opt.colorFn ? opt.colorFn(label) : '';
+    return `<div class="bar-row"><div class="bl">${label}</div>
+      <div class="bar-track"><div class="bar-fill ${cls}" style="width:${w}%"></div></div>
+      <div class="bar-val">${p}%<small> ·${count}</small></div></div>`;
+  }).join('')+`</div>`;
+}
+function sec(html){ const d=document.createElement('div'); d.className='sec'; d.innerHTML=html; $('#sections').appendChild(d); }
+
+function render(rows){
+  const n=rows.length;
+  $('#sections').innerHTML='';
+
+  /* KPI */
+  const locOk = rows.filter(r=>r.q_location_correct===true).length;
+  const wantN = rows.filter(r=>WANT_POPUP.includes(r.popup_intent)).length;
+  const emailN = rows.filter(r=>r.has_email===true).length;
+  $('#kpis').innerHTML = [
+    ['총 응답', `${n}<small>명</small>`, ''],
+    ['함양 위치 정답률', `${pct(locOk,n)}<small>%</small>`, `${locOk} / ${n}명`, 'accent'],
+    ['샌드위치 먹어보고 싶다', `${pct(wantN,n)}<small>%</small>`, `${wantN}명`],
+    ['이메일 남긴 수', `${emailN}<small>명</small>`, '팝업 소식 신청'],
+  ].map(([lab,val,note,cls])=>`<div class="kpi ${cls||''}"><div class="lab">${lab}</div><div class="val">${val}</div><div class="note">${note||''}</div></div>`).join('');
+
+  /* 1. 함양 위치 인지 */
+  const locWrong = n-locOk;
+  const wrongMap = tally(rows.filter(r=>r.q_location_correct===false), r=>r.q_location);
+  sec(`<h3>📍 함양 위치, 얼마나 알까?</h3>
+    <div class="desc">지도에서 함양(정답)을 맞힌 비율과, 틀린 응답자가 대신 고른 지역</div>
+    <div class="grid2">
+      <div><div class="subh">정답률</div>
+        <div class="donut-wrap"><div class="donut" style="--p:${pct(locOk,n)}"><div class="dn"><b>${pct(locOk,n)}%</b><span>정답</span></div></div>
+        <div class="legend"><div><i style="background:var(--green)"></i>맞힘 ${locOk}명</div><div><i style="background:var(--wrong)"></i>틀림 ${locWrong}명</div></div></div>
+      </div>
+      <div><div class="subh">틀린 사람이 고른 곳</div>
+        ${barChart(ordered(wrongMap), Math.max(1,locWrong), {colorFn:()=>'red'})}</div>
+    </div>
+    <div class="insight">💡 응답자의 <b>${pct(locWrong,n)}%</b>가 함양 위치를 정확히 몰랐어요 — "함양, 어디에 위치해?"의 근거.</div>`);
+
+  /* 2. 지리산 권역 방문 비교 */
+  const hamyangVisit = rows.filter(r=>['살아봤거나 자주 가요','여행으로 가봤어요'].includes(r.visited)).length;
+  const nb = tallyMulti(rows, r=>r.neighbor_cities);
+  const cmp = [['함양', hamyangVisit], ...ORDER.neighbor.filter(c=>c!=='가본 곳 없어요').map(c=>[c, nb.get(c)||0])];
+  sec(`<h3>🥾 지리산 권역, 어디를 가봤나</h3>
+    <div class="desc">실제 방문(살았거나 여행) 비율 — 함양 vs 이웃 도시</div>
+    ${barChart(cmp, n, {colorFn:l=>l==='함양'?'':'grey'})}
+    <div class="insight">💡 지리산 권역 안에서도 <b>함양</b>이 이웃 도시보다 덜 방문됐는지 확인하는 지표.</div>`);
+
+  /* 3. 접점 */
+  sec(`<h3>📡 함양을 어디서 접했나</h3>
+    <div class="desc">복수 응답</div>
+    ${barChart(ordered(tallyMulti(rows,r=>r.contact_points), ORDER.contact), n)}`);
+
+  /* 4. 식재료 퀴즈 */
+  const accAvg = Math.round(rows.reduce((s,r)=>s+(r.ingredient_accuracy||0),0)/n);
+  const ingMap = tallyMulti(rows, r=>r.ingredients);
+  sec(`<h3>🌿 함양 특별 식재료 퀴즈</h3>
+    <div class="desc">식재료별 선택률 — <b style="color:var(--green-deep)">초록 = 정답(흑돼지·양파·우리밀)</b>, 회색 = 오답 보기</div>
+    <div class="subh">평균 정답률 ${accAvg}%</div>
+    ${barChart(ordered(ingMap, ORDER.ingredient), n, {colorFn:l=>CORRECT_ING.includes(l)?'':'grey'})}`);
+
+  /* 5. 팝업 반응 + 관심도 */
+  const interestMap = new Map(); rows.forEach(r=>{ if(r.region_interest) interestMap.set(r.region_interest,(interestMap.get(r.region_interest)||0)+1); });
+  const interestItems = [1,2,3,4,5].map(k=>[`${INTEREST_LABEL[k]}(${k})`, interestMap.get(k)||0]);
+  sec(`<h3>🥪 팝업 반응 & 함양 관심도</h3>
+    <div class="grid2">
+      <div><div class="subh">샌드위치 팝업, 먹어보고 싶은가</div>
+        ${barChart(ordered(tally(rows,r=>r.popup_intent), ORDER.popup), n, {colorFn:l=>WANT_POPUP.includes(l)?'':'grey'})}</div>
+      <div><div class="subh">테스트 후 함양 관심도</div>
+        ${barChart(interestItems, n, {colorFn:()=>'amber'})}</div>
+    </div>`);
+
+  /* 6. 인지도 레벨 */
+  sec(`<h3>🏅 함양 인지도 레벨 분포</h3>
+    ${barChart(ordered(tally(rows,r=>r.level), ORDER.level), n)}`);
+
+  /* 7. 응답자 */
+  sec(`<h3>👥 응답자 구성</h3>
+    <div class="grid2" style="gap:20px 32px">
+      <div><div class="subh">나이대</div>${barChart(ordered(tally(rows,r=>r.age),ORDER.age), n)}</div>
+      <div><div class="subh">성별</div>${barChart(ordered(tally(rows,r=>r.gender),ORDER.gender), n)}</div>
+    </div>
+    <div style="margin-top:20px"><div class="subh">거주 지역</div>${barChart(ordered(tally(rows,r=>r.region),ORDER.region), n)}</div>`);
+}
+
+/* 데모 미리보기 (?demo) — 실제 응답 없이 렌더 확인용 */
+function genDemo(N=64){
+  const pick=a=>a[Math.floor(Math.random()*a.length)];
+  const rows=[];
+  for(let i=0;i<N;i++){
+    const correct=Math.random()<0.42;
+    const ing=ORDER.ingredient.filter(()=>Math.random()<0.35);
+    const acc=Math.round(ing.filter(x=>CORRECT_ING.includes(x)).length/CORRECT_ING.length*100);
+    const nb=['남원','하동','산청','구례'].filter(()=>Math.random()<0.28);
+    rows.push({
+      q_location: correct?'함양(경남)':pick(['경북(안동)','강원(강릉)','충청(대전)','전북(군산)']),
+      q_location_correct: correct,
+      visited: pick(ORDER.visited),
+      neighbor_cities: nb.length?nb.join(', '):'가본 곳 없어요',
+      contact_points: ORDER.contact.filter(()=>Math.random()<0.3).join(', ')||'접한 적 없어요',
+      ingredients: ing.join(', '), ingredient_accuracy: acc,
+      popup_intent: pick(ORDER.popup), region_interest: 1+Math.floor(Math.random()*5),
+      age: pick(ORDER.age), gender: pick(ORDER.gender), region: pick(ORDER.region),
+      level: pick(ORDER.level), has_email: Math.random()<0.3,
+    });
+  }
+  return rows;
+}
+
+if(new URLSearchParams(location.search).has('demo')){
+  render(genDemo(64));
+  $('#state').style.display='none'; $('#dash').style.display='block';
+  $('#updated').textContent='📊 데모 데이터 미리보기';
+} else { load(); }
+</script>
+</body>
+</html>
