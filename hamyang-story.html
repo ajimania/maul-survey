@@ -416,6 +416,31 @@ footer{
     <circle cx="25" cy="28" r="2.3" fill="#211F1C"/>
     <circle cx="39" cy="28" r="2.3" fill="#211F1C"/>
   </symbol>
+  <!-- 지리산 (얼굴 캐릭터 · hamyang-survey와 통일) -->
+  <symbol id="i-jirisan" viewBox="0 0 60 52">
+    <path d="M6 46 L20 18 L33 46 Z" fill="#7CA36E"/>
+    <path d="M32 46 L46 20 L58 46 Z" fill="#6B9560"/>
+    <path d="M14 48 L30 12 L48 48 Z" fill="#4E7A45"/>
+    <path d="M30 12 L24 26 Q30 22 30 27 Q31 22 37 26 Z" fill="#F3F5EF"/>
+    <ellipse cx="24.5" cy="39" rx="3" ry="2" fill="#E88B7A" opacity=".65"/>
+    <ellipse cx="35.5" cy="39" rx="3" ry="2" fill="#E88B7A" opacity=".65"/>
+    <circle cx="26" cy="35" r="1.9" fill="#2B3A28"/>
+    <circle cx="34" cy="35" r="1.9" fill="#2B3A28"/>
+    <circle cx="26.6" cy="34.4" r=".6" fill="#fff"/>
+    <circle cx="34.6" cy="34.4" r=".6" fill="#fff"/>
+    <path d="M27.5 39.5 Q30 42 32.5 39.5" fill="none" stroke="#2B3A28" stroke-width="1.4" stroke-linecap="round"/>
+  </symbol>
+  <!-- 둥근 양파 -->
+  <symbol id="i-onion-bulb" viewBox="0 0 64 64">
+    <path d="M32 15 C32 10 33 6 36 4" fill="none" stroke="#7FA36A" stroke-width="3.2" stroke-linecap="round"/>
+    <path d="M32 13 C30 8 26 6 21 7 C23 12 28 14 31 12 Z" fill="#8FA97E" stroke="#211F1C" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M33 12 C36 7 41 6 46 8 C43 13 38 14 34 11 Z" fill="#7FA36A" stroke="#211F1C" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M32 16 C17 16 13 31 15 43 C17 55 25 59 32 59 C39 59 47 55 49 43 C51 31 47 16 32 16 Z" fill="#EBCF8A" stroke="#211F1C" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M24 23 C21 33 21 47 26 56" fill="none" stroke="#C99E4E" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M40 23 C43 33 43 47 38 56" fill="none" stroke="#C99E4E" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M32 17 L32 58" stroke="#C99E4E" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M29 59 L28 62 M32 59 L32 62 M35 59 L36 62" stroke="#211F1C" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
   <!-- 함양파 (구워먹는 파/칼솟) -->
   <symbol id="i-onion" viewBox="0 0 64 64">
     <path d="M26 45 C26 55 38 55 38 45 C38 41 36 38 32 38 C28 38 26 41 26 45 Z" fill="#FFFDF4" stroke="#211F1C" stroke-width="3.5" stroke-linejoin="round"/>
@@ -523,8 +548,8 @@ footer{
 
 <!-- ============ 여정 : 왜 함양 ============ -->
 <section id="journey">
-  <div class="bg-deco" style="width:280px;height:280px;right:-70px;bottom:-50px;transform:rotate(8deg);">
-    <svg><use href="#i-mountain"/></svg>
+  <div class="bg-deco" style="width:290px;height:290px;right:-70px;bottom:-40px;transform:rotate(6deg);">
+    <svg><use href="#i-jirisan"/></svg>
   </div>
   <div class="bg-deco" style="width:210px;height:210px;left:-55px;top:-25px;transform:rotate(-12deg);">
     <svg><use href="#i-wheat"/></svg>
@@ -549,8 +574,8 @@ footer{
   <div class="bg-deco" style="width:300px;height:300px;left:-80px;top:40px;transform:rotate(-10deg);">
     <svg><use href="#i-pig"/></svg>
   </div>
-  <div class="bg-deco" style="width:260px;height:260px;right:-70px;bottom:120px;transform:rotate(12deg);">
-    <svg><use href="#i-onion"/></svg>
+  <div class="bg-deco" style="width:250px;height:250px;right:-65px;bottom:120px;transform:rotate(12deg);">
+    <svg><use href="#i-onion-bulb"/></svg>
   </div>
   <div class="wrap">
     <h2 class="sec-title">그래서, 이 재료들</h2>
@@ -579,7 +604,7 @@ footer{
       </div>
 
       <div class="ing-card">
-        <div class="ing-badge"><svg><use href="#i-onion"/></svg></div>
+        <div class="ing-badge"><svg><use href="#i-onion-bulb"/></svg></div>
         <div class="ing-body">
           <span class="ing-role">구워서 얹는 단맛</span>
           <h3>함양파</h3>
