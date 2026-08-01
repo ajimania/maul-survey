@@ -31,6 +31,8 @@ body{font-family:'Noto Sans KR',sans-serif;color:var(--ink);background:var(--pap
 .btn{background:var(--green);color:#fff;border:none;border-radius:11px;padding:9px 15px;font-size:13px;font-weight:700;
   font-family:inherit;cursor:pointer;box-shadow:0 2px 0 var(--green-deep);}
 .btn:active{transform:translateY(1px);box-shadow:0 1px 0 var(--green-deep);}
+.btn.ghost{background:#fff;color:var(--green-deep);border:1.5px solid var(--green-soft);box-shadow:none;margin-right:6px;}
+.btn.ghost:active{transform:translateY(1px);}
 .updated{font-size:11.5px;color:var(--muted);}
 
 /* 상태 */
@@ -96,6 +98,7 @@ body{font-family:'Noto Sans KR',sans-serif;color:var(--ink);background:var(--pap
     </div>
     <div class="spacer"></div>
     <div style="text-align:right;">
+      <button class="btn ghost" onclick="exportEmails()">📧 이메일 내보내기</button>
       <button class="btn" onclick="load()">↻ 새로고침</button>
       <div class="updated" id="updated"></div>
     </div>
@@ -161,6 +164,33 @@ window.load = async function(){
   render(rows);
   st.style.display='none'; $('#dash').style.display='block';
   $('#updated').textContent='업데이트 '+new Date().toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
+};
+
+/* ── 이메일 내보내기 (비밀번호 잠금 RPC 호출) ── */
+window.exportEmails = async function(){
+  const pass = prompt('이메일 내보내기 비밀번호를 입력하세요');
+  if(pass===null || pass==='') return;
+  let data, error;
+  try{ ({data, error} = await sb.rpc('export_hamyang_contacts', { pass })); }
+  catch(e){ error=e; }
+  if(error){
+    alert('내보내기 실패\n· 비밀번호가 틀렸거나\n· 내보내기 함수(export_hamyang_contacts)가 아직 없어요.\nsupabase/hamyang_email_export.sql을 먼저 실행했는지 확인하세요.');
+    return;
+  }
+  if(!data || data.length===0){ alert('제출된 이메일이 아직 없어요.'); return; }
+  const esc = v => `"${String(v??'').replace(/"/g,'""')}"`;
+  const header = ['id','응답시각(KST)','이메일','팝업 의향','함양 관심도'];
+  const lines = data.map(r=>{
+    const t = r.created_at ? new Date(r.created_at).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'}) : '';
+    return [r.id, t, r.email, r.popup_intent, r.region_interest].map(esc).join(',');
+  });
+  const csv = '﻿' + header.map(esc).join(',') + '\n' + lines.join('\n'); // BOM: 엑셀 한글
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `함양_이메일_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click(); URL.revokeObjectURL(a.href);
+  alert(`이메일 ${data.length}건을 CSV로 내려받았어요.`);
 };
 
 /* ── 집계 유틸 ── */
