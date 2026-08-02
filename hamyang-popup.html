@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>함양이가 왔어요 — 남가좌, 함양에 스며들다</title>
+<meta name="description" content="경남 함양에서 280km를 건너온 밀과 양파. 함양이와 함께 함양을 알아보고, 생산자에게 한 마디 남겨보세요.">
+<meta property="og:title" content="함양이가 왔어요">
+<meta property="og:description" content="함양의 밀로 굽고, 함양의 양파로 채운 한 입. 남가좌동 늦여름 베이커리.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gaegu:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F3EC;
+  --card:#FFFEFA;
+  --crayon:#211F1C;
+  --white:#FDFCF8;
+  --amber:#E8A13D;
+  --amber-deep:#D4882A;
+  --green:#5F7F4E;
+  --green-soft:#8FA97E;
+  --onion:#EBCF8A;
+  --onion-line:#C99E4E;
+  --pig:#6B5A50;
+  --text:#33312C;
+  --muted:#8A857B;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  font-family:'Gowun Dodum',sans-serif;
+  color:var(--text);
+  background:var(--paper);
+  background-image:radial-gradient(circle, rgba(33,31,28,.05) 1px, transparent 1.4px);
+  background-size:16px 16px;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+.jua{font-family:'Jua',sans-serif;}
+.hand{font-family:'Gaegu',cursive;}
+
+/* ───────── 레이아웃 ───────── */
+#app{
+  max-width:460px;margin:0 auto;min-height:100dvh;
+  display:flex;flex-direction:column;
+  padding:0 20px calc(28px + env(safe-area-inset-bottom));
+  position:relative;
+}
+.bar{height:5px;background:rgba(33,31,28,.09);border-radius:99px;margin:14px 0 6px;overflow:hidden;flex:none;}
+.bar i{display:block;height:100%;width:0;background:var(--amber);border-radius:99px;transition:width .45s cubic-bezier(.4,1.3,.5,1);}
+.screen{display:none;flex:1;flex-direction:column;justify-content:center;padding:12px 0 8px;}
+.screen.on{display:flex;animation:rise .42s cubic-bezier(.2,.9,.3,1);}
+@keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+
+/* ───────── 공통 요소 ───────── */
+.char{display:block;margin:0 auto;}
+.say{
+  font-family:'Jua',sans-serif;font-size:24px;line-height:1.5;
+  text-align:center;letter-spacing:-.4px;margin:18px 0 0;
+}
+.say.sm{font-size:20px;}
+.sub{text-align:center;color:var(--muted);font-size:14.5px;line-height:1.65;margin-top:10px;}
+.opts{display:flex;flex-direction:column;gap:10px;margin-top:26px;}
+.opt{
+  font-family:'Gowun Dodum',sans-serif;font-size:16.5px;color:var(--text);
+  background:var(--card);border:2.5px solid var(--crayon);
+  border-radius:255px 16px 225px 16px / 16px 225px 16px 255px;
+  padding:16px 18px;text-align:left;cursor:pointer;
+  box-shadow:3px 3px 0 rgba(33,31,28,.16);
+  transition:transform .12s, box-shadow .12s, background .12s;
+}
+.opt:nth-child(even){border-radius:16px 225px 16px 255px / 255px 16px 225px 16px;}
+.opt:active{transform:translate(2px,2px);box-shadow:1px 1px 0 rgba(33,31,28,.16);}
+.opt.sel{background:var(--onion);}
+.big{text-align:center;font-family:'Jua',sans-serif;font-size:19px;padding:20px 18px;}
+.cta{
+  margin-top:22px;width:100%;font-family:'Jua',sans-serif;font-size:18px;
+  background:var(--crayon);color:var(--white);border:none;
+  border-radius:255px 16px 225px 16px / 16px 225px 16px 255px;
+  padding:17px;cursor:pointer;box-shadow:3px 3px 0 rgba(33,31,28,.22);
+}
+.cta:active{transform:translate(2px,2px);box-shadow:1px 1px 0 rgba(33,31,28,.22);}
+.cta[disabled]{opacity:.32;box-shadow:none;}
+.skip{
+  display:block;margin:14px auto 0;background:none;border:none;
+  font-family:'Gowun Dodum',sans-serif;font-size:15px;color:var(--muted);
+  text-decoration:underline;text-underline-offset:4px;cursor:pointer;padding:8px 14px;
+}
+.fb{
+  margin-top:20px;background:var(--card);border:2.5px dashed rgba(33,31,28,.3);
+  border-radius:14px;padding:16px 16px;text-align:center;font-size:15.5px;line-height:1.7;
+  animation:rise .35s;
+}
+.fb b{color:var(--amber-deep);}
+
+/* ───────── 도착 ───────── */
+#s-arrive{justify-content:center;}
+.route{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:26px;font-size:12.5px;color:var(--muted);}
+.route .ln{flex:1;max-width:88px;height:0;border-top:2.5px dashed rgba(33,31,28,.3);}
+.walkin{animation:walkin 1s cubic-bezier(.2,.9,.3,1);}
+@keyframes walkin{from{opacity:0;transform:translateX(-60px) rotate(-8deg);}to{opacity:1;transform:none;}}
+.bob{animation:bob 2.6s ease-in-out infinite;}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-1.5deg);}50%{transform:translateY(-7px) rotate(1.5deg);}}
+
+/* ───────── 별점 ───────── */
+.stars{display:flex;justify-content:center;gap:6px;margin-top:22px;}
+.star{background:none;border:none;cursor:pointer;padding:2px;line-height:0;}
+.star svg{width:44px;height:44px;}
+.star .f{fill:#E6E2D8;stroke:var(--crayon);stroke-width:3;}
+.star.lit .f{fill:var(--amber);}
+
+/* ───────── 지도 ───────── */
+.mapwrap{position:relative;margin:18px auto 0;width:min(320px,86vw);}
+.mapwrap svg{width:100%;display:block;}
+.mk{
+  position:absolute;transform:translate(-50%,-50%);
+  width:38px;height:38px;border-radius:50%;
+  background:var(--card);border:2.5px solid var(--crayon);
+  font-family:'Jua',sans-serif;font-size:16px;color:var(--text);
+  cursor:pointer;box-shadow:2px 2px 0 rgba(33,31,28,.2);
+}
+.mk:active{transform:translate(-50%,-50%) scale(.92);}
+.mk.hit{background:var(--amber);color:var(--white);}
+.mk.miss{background:#E0DCD2;}
+.mk.ans{background:var(--amber);color:var(--white);animation:pop .5s;}
+@keyframes pop{0%{transform:translate(-50%,-50%) scale(.5);}60%{transform:translate(-50%,-50%) scale(1.22);}100%{transform:translate(-50%,-50%) scale(1);}}
+
+/* ───────── 재료 ───────── */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:22px;}
+.ing{
+  background:var(--card);border:2.5px solid var(--crayon);border-radius:16px;
+  padding:11px 4px 9px;cursor:pointer;text-align:center;
+  box-shadow:2px 2px 0 rgba(33,31,28,.15);transition:transform .12s,background .12s;
+}
+.ing svg{width:42px;height:42px;display:block;margin:0 auto 4px;}
+.ing span{font-size:12.5px;letter-spacing:-.3px;}
+.ing.sel{background:var(--onion);transform:translate(1px,1px);}
+.ing.ok{background:#CFE3BE;}
+.ing.no{opacity:.42;}
+
+/* ───────── 생산자 ───────── */
+.pcard{
+  background:var(--card);border:2.5px solid var(--crayon);
+  border-radius:255px 16px 225px 16px / 16px 225px 16px 255px;
+  padding:20px 18px;margin-top:14px;box-shadow:3px 3px 0 rgba(33,31,28,.14);
+}
+.pcard:last-of-type{border-radius:16px 225px 16px 255px / 255px 16px 225px 16px;}
+.pcard .ph{display:flex;align-items:center;gap:10px;}
+.pcard .ph svg{width:46px;height:46px;flex:none;}
+.pcard h3{font-family:'Jua',sans-serif;font-size:19px;letter-spacing:-.4px;}
+.pcard p{font-size:15px;line-height:1.85;margin-top:12px;}
+.pcard .sig{margin-top:12px;font-size:12.5px;color:var(--muted);}
+.note{
+  margin-top:12px;padding:12px;border:2px dashed rgba(33,31,28,.25);border-radius:12px;
+  font-family:'Gaegu',cursive;font-size:17px;line-height:1.6;color:#4a463f;text-align:center;
+}
+.scroller{overflow-y:auto;max-height:none;}
+
+/* ───────── 편지 ───────── */
+.to{display:flex;gap:9px;margin-top:18px;}
+.to button{
+  flex:1;background:var(--card);border:2.5px solid var(--crayon);border-radius:14px;
+  padding:12px 6px;cursor:pointer;font-family:'Gowun Dodum',sans-serif;font-size:14px;
+  box-shadow:2px 2px 0 rgba(33,31,28,.15);
+}
+.to button svg{width:36px;height:36px;display:block;margin:0 auto 4px;}
+.to button.sel{background:var(--onion);}
+textarea{
+  width:100%;margin-top:14px;background:var(--card);
+  border:2.5px solid var(--crayon);border-radius:14px;padding:14px;
+  font-family:'Gaegu',cursive;font-size:19px;line-height:1.6;color:var(--text);
+  resize:none;min-height:118px;
+}
+textarea::placeholder{color:#B8B2A6;}
+textarea:focus{outline:none;box-shadow:3px 3px 0 rgba(33,31,28,.15);}
+.cnt{text-align:right;font-size:12px;color:var(--muted);margin-top:5px;}
+
+/* 배달 애니메이션 */
+.deliver{position:relative;height:96px;margin-top:16px;}
+.deliver .rail{position:absolute;top:64px;left:0;right:0;border-top:2.5px dashed rgba(33,31,28,.28);}
+.deliver .go{position:absolute;top:12px;left:0;width:56px;animation:go 2.5s cubic-bezier(.4,0,.5,1) forwards;}
+@keyframes go{0%{left:0;}100%{left:calc(100% - 56px);}}
+.deliver .tag{position:absolute;top:74px;font-size:11.5px;color:var(--muted);}
+.deliver .tag.l{left:0;}.deliver .tag.r{right:0;}
+
+/* ───────── 편지 벽 ───────── */
+.wallhead{text-align:center;margin-top:6px;}
+.wallhead .n{font-family:'Jua',sans-serif;font-size:34px;color:var(--amber-deep);}
+.letters{margin-top:16px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;}
+.lt{
+  background:var(--card);border:2.5px solid var(--crayon);border-radius:14px;
+  padding:13px 15px;box-shadow:2px 2px 0 rgba(33,31,28,.13);
+  transform:rotate(-.5deg);
+}
+.lt:nth-child(even){transform:rotate(.6deg);}
+.lt .who{font-size:11.5px;color:var(--muted);margin-bottom:5px;}
+.lt .bd{font-family:'Gaegu',cursive;font-size:18.5px;line-height:1.55;}
+
+/* ───────── 관계 맺기 ───────── */
+.blk{margin-top:24px;}
+.blk h4{font-family:'Jua',sans-serif;font-size:18px;text-align:center;letter-spacing:-.4px;}
+.row{display:flex;gap:8px;margin-top:12px;}
+.row .opt{flex:1;text-align:center;font-size:14.5px;padding:13px 6px;border-radius:14px!important;}
+.insta{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin-top:12px;background:var(--crayon);color:var(--white);
+  border-radius:14px;padding:14px;font-family:'Jua',sans-serif;font-size:16px;
+  text-decoration:none;box-shadow:3px 3px 0 rgba(33,31,28,.2);
+}
+input[type=text],input[type=tel]{
+  width:100%;margin-top:9px;background:var(--card);
+  border:2.5px solid var(--crayon);border-radius:12px;padding:13px 14px;
+  font-family:'Gowun Dodum',sans-serif;font-size:16px;color:var(--text);
+}
+input:focus{outline:none;box-shadow:3px 3px 0 rgba(33,31,28,.15);}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px;}
+.chip{
+  background:var(--card);border:2.5px solid var(--crayon);border-radius:99px;
+  padding:9px 14px;font-size:14px;cursor:pointer;font-family:'Gowun Dodum',sans-serif;
+}
+.chip.sel{background:var(--onion);}
+.agree{margin-top:13px;font-size:12px;line-height:1.7;color:var(--muted);}
+
+/* ───────── 완료 ───────── */
+.ticket{
+  background:var(--card);border:3px solid var(--crayon);
+  border-radius:20px;padding:24px 18px;text-align:center;margin-top:18px;
+  box-shadow:4px 4px 0 rgba(33,31,28,.2);position:relative;
+}
+.ticket .big2{font-family:'Jua',sans-serif;font-size:26px;color:var(--amber-deep);margin-top:8px;letter-spacing:-.6px;}
+.ticket .sm{font-size:13.5px;color:var(--muted);margin-top:8px;line-height:1.6;}
+.next{margin-top:26px;text-align:center;}
+.next .row3{display:flex;justify-content:center;gap:18px;margin-top:12px;}
+.next .row3 figure{width:82px;}
+.next .row3 svg{width:52px;height:52px;display:block;margin:0 auto;}
+.next .row3 figcaption{font-size:11.5px;color:var(--muted);margin-top:3px;letter-spacing:-.4px;white-space:nowrap;}
+.foot{text-align:center;font-size:11px;color:var(--muted);margin-top:26px;line-height:1.7;}
+
+/* ───────── 매장 벽 모드 ───────── */
+#wall{display:none;min-height:100dvh;padding:26px 30px;}
+#wall.on{display:flex;flex-direction:column;}
+#wall .wh{display:flex;align-items:center;justify-content:center;gap:16px;flex:none;}
+#wall .wh svg{width:64px;height:64px;}
+#wall .wt{font-family:'Jua',sans-serif;font-size:clamp(24px,3.4vw,40px);letter-spacing:-1px;}
+#wall .wt em{font-style:normal;color:var(--amber-deep);font-size:1.35em;}
+#wall .wgrid{
+  flex:1;margin-top:22px;display:grid;gap:14px;overflow:hidden;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  align-content:start;
+}
+#wall .lt .bd{font-size:clamp(19px,1.8vw,26px);}
+#wall .wf{flex:none;text-align:center;margin-top:18px;font-size:15px;color:var(--muted);}
+.fly{position:fixed;top:12%;left:-90px;width:82px;z-index:9;animation:fly 5.5s cubic-bezier(.4,0,.5,1) forwards;}
+@keyframes fly{0%{left:-90px;}100%{left:calc(100% + 90px);}}
+
+@media (min-width:900px){
+  #wall .wgrid{grid-template-columns:repeat(auto-fill,minmax(360px,1fr));}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ 크레용 심볼 ══════════ -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <!-- 밀 -->
+  <symbol id="i-wheat" viewBox="0 0 64 64">
+    <path d="M32 60 L32 26" fill="none" stroke="#211F1C" stroke-width="4" stroke-linecap="round"/>
+    <g fill="#E0B84C" stroke="#211F1C" stroke-width="2.5" stroke-linejoin="round">
+      <path d="M32 26 C28 22 26 15 32 9 C38 15 36 22 32 26 Z"/>
+      <path d="M32 33 C27 31 21 27 23 19 C31 21 34 27 32 33 Z"/>
+      <path d="M32 33 C37 31 43 27 41 19 C33 21 30 27 32 33 Z"/>
+      <path d="M32 42 C27 40 21 36 23 28 C31 30 34 36 32 42 Z"/>
+      <path d="M32 42 C37 40 43 36 41 28 C33 30 30 36 32 42 Z"/>
+      <path d="M32 51 C27 49 21 45 23 37 C31 39 34 45 32 51 Z"/>
+      <path d="M32 51 C37 49 43 45 41 37 C33 39 30 45 32 51 Z"/>
+    </g>
+    <path d="M32 54 C26 52 20 54 17 60" fill="none" stroke="#8FA97E" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M32 54 C38 52 44 54 47 60" fill="none" stroke="#8FA97E" stroke-width="3.5" stroke-linecap="round"/>
+  </symbol>
+  <!-- 밀 (얼굴) -->
+  <symbol id="i-wheat-face" viewBox="0 0 64 64">
+    <use href="#i-wheat"/>
+    <circle cx="26" cy="40" r="3.4" fill="#FFFDF4" stroke="#211F1C" stroke-width="1.8"/>
+    <circle cx="38" cy="40" r="3.4" fill="#FFFDF4" stroke="#211F1C" stroke-width="1.8"/>
+    <circle cx="26.6" cy="40.4" r="1.5" fill="#211F1C"/>
+    <circle cx="37.4" cy="40.4" r="1.5" fill="#211F1C"/>
+    <path d="M29.5 46.5 Q32 49.2 34.5 46.5" fill="none" stroke="#211F1C" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+  <!-- 지리산 (얼굴 · hamyang-survey와 통일) -->
+  <symbol id="i-jirisan" viewBox="0 0 60 52">
+    <path d="M6 46 L20 18 L33 46 Z" fill="#7CA36E"/>
+    <path d="M32 46 L46 20 L58 46 Z" fill="#6B9560"/>
+    <path d="M14 48 L30 12 L48 48 Z" fill="#4E7A45"/>
+    <path d="M30 12 L24 26 Q30 22 30 27 Q31 22 37 26 Z" fill="#F3F5EF"/>
+    <ellipse cx="24.5" cy="39" rx="3" ry="2" fill="#E88B7A" opacity=".65"/>
+    <ellipse cx="35.5" cy="39" rx="3" ry="2" fill="#E88B7A" opacity=".65"/>
+    <circle cx="26" cy="35" r="1.9" fill="#2B3A28"/>
+    <circle cx="34" cy="35" r="1.9" fill="#2B3A28"/>
+    <circle cx="26.6" cy="34.4" r=".6" fill="#fff"/>
+    <circle cx="34.6" cy="34.4" r=".6" fill="#fff"/>
+    <path d="M27.5 39.5 Q30 42 32.5 39.5" fill="none" stroke="#2B3A28" stroke-width="1.4" stroke-linecap="round"/>
+  </symbol>
+  <!-- 흑돼지 -->
+  <symbol id="i-pig" viewBox="0 0 64 64">
+    <path d="M17 21 C12 11 15 8 22 13 C25 15 26 19 26 24 Z" fill="#6B5A50" stroke="#211F1C" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M47 21 C52 11 49 8 42 13 C39 15 38 19 38 24 Z" fill="#6B5A50" stroke="#211F1C" stroke-width="3.5" stroke-linejoin="round"/>
+    <circle cx="32" cy="34" r="18" fill="#6B5A50" stroke="#211F1C" stroke-width="4"/>
+    <ellipse cx="32" cy="39" rx="11" ry="8" fill="#E6A79E" stroke="#211F1C" stroke-width="3.5"/>
+    <ellipse cx="28" cy="39" rx="1.7" ry="2.6" fill="#211F1C"/>
+    <ellipse cx="36" cy="39" rx="1.7" ry="2.6" fill="#211F1C"/>
+    <circle cx="25" cy="28" r="2.3" fill="#211F1C"/>
+    <circle cx="39" cy="28" r="2.3" fill="#211F1C"/>
+  </symbol>
+  <!-- 고사리 -->
+  <symbol id="i-fern" viewBox="0 0 64 64">
+    <path d="M32 59 C32 47 30 35 30 27" fill="none" stroke="#7FA36A" stroke-width="4" stroke-linecap="round"/>
+    <path d="M30 27 C29 18 38 15 41 21 C43 27 36 30 34 25 C33 21 38 20 39 24" fill="none" stroke="#7FA36A" stroke-width="4" stroke-linecap="round"/>
+    <path d="M31 48 C24 46 20 48 17 52" fill="none" stroke="#8FA97E" stroke-width="3.4" stroke-linecap="round"/>
+    <path d="M31 48 C38 46 42 48 45 52" fill="none" stroke="#8FA97E" stroke-width="3.4" stroke-linecap="round"/>
+    <path d="M31 39 C25 37 21 39 19 43" fill="none" stroke="#8FA97E" stroke-width="3.4" stroke-linecap="round"/>
+    <path d="M31 39 C37 37 41 39 43 43" fill="none" stroke="#8FA97E" stroke-width="3.4" stroke-linecap="round"/>
+  </symbol>
+  <!-- 함양파 (칼솟) -->
+  <symbol id="i-calsot" viewBox="0 0 64 64">
+    <path d="M26 45 C26 55 38 55 38 45 C38 41 36 38 32 38 C28 38 26 41 26 45 Z" fill="#FFFDF4" stroke="#211F1C" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M29 54 L28 59 M32 55 L32 60 M35 54 L36 59" stroke="#211F1C" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M28 40 C25 28 23 16 21 7" fill="none" stroke="#8FA97E" stroke-width="4" stroke-linecap="round"/>
+    <path d="M32 38 C32 26 32 15 33 5" fill="none" stroke="#7FA36A" stroke-width="4.5" stroke-linecap="round"/>
+    <path d="M36 40 C39 28 41 17 44 9" fill="none" stroke="#8FA97E" stroke-width="4" stroke-linecap="round"/>
+  </symbol>
+
+  <!-- ── 재료 7종 ── -->
+  <symbol id="g-bread" viewBox="0 0 64 64">
+    <path d="M11 44 C9 26 21 18 32 18 C43 18 55 26 53 44 Q51 52 32 52 Q13 52 11 44 Z" fill="#E8A13D" stroke="#211F1C" stroke-width="3.4" stroke-linejoin="round"/>
+    <path d="M23 30 L29 37 M33 27 L39 34 M42 31 L47 37" fill="none" stroke="#211F1C" stroke-width="2.4" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="g-jam" viewBox="0 0 64 64">
+    <rect x="17" y="16" width="30" height="9" rx="3" fill="#C99E4E" stroke="#211F1C" stroke-width="3"/>
+    <path d="M19 25 h26 v24 a5 5 0 0 1 -5 5 h-16 a5 5 0 0 1 -5 -5 Z" fill="#EBCF8A" stroke="#211F1C" stroke-width="3.2" stroke-linejoin="round"/>
+    <path d="M23 36 q5 -4 9 0 q5 4 9 0" fill="none" stroke="#C99E4E" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M23 44 q5 -4 9 0 q5 4 9 0" fill="none" stroke="#C99E4E" stroke-width="2.6" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="g-cheese" viewBox="0 0 64 64">
+    <path d="M14 20 h36 v9 q-4 8 -8 3 q-4 10 -9 2 q-4 9 -9 1 q-5 5 -10 -3 Z" fill="#F2D68A" stroke="#211F1C" stroke-width="3.2" stroke-linejoin="round"/>
+    <ellipse cx="24" cy="41" rx="3.4" ry="4.4" fill="#F2D68A" stroke="#211F1C" stroke-width="2.6"/>
+    <ellipse cx="38" cy="46" rx="3" ry="4" fill="#F2D68A" stroke="#211F1C" stroke-width="2.6"/>
+  </symbol>
+  <symbol id="g-tomato" viewBox="0 0 64 64">
+    <path d="M32 15 C47 15 53 28 49 41 C45 53 35 55 32 55 C29 55 19 53 15 41 C11 28 17 15 32 15 Z" fill="#C0453A" stroke="#211F1C" stroke-width="3.4" stroke-linejoin="round"/>
+    <path d="M24 24 C21 32 22 43 26 50 M32 21 C30 32 31 43 34 51 M40 25 C43 33 42 43 39 49" fill="none" stroke="#8E2C25" stroke-width="2.4" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="g-bacon" viewBox="0 0 64 64">
+    <path d="M8 26 Q19 16 30 26 Q41 36 56 24 L58 38 Q44 50 30 40 Q19 32 10 40 Z" fill="#D9736A" stroke="#211F1C" stroke-width="3.2" stroke-linejoin="round"/>
+    <path d="M9 33 Q20 24 31 33 Q42 43 57 31" fill="none" stroke="#F4C7BF" stroke-width="3.4" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="g-arugula" viewBox="0 0 64 64">
+    <path d="M33 58 C33 44 31 32 30 22" fill="none" stroke="#5F7F4E" stroke-width="3.4" stroke-linecap="round"/>
+    <path d="M30 24 C22 24 16 18 15 10 C24 9 30 14 31 21 Z" fill="#8FA97E" stroke="#211F1C" stroke-width="2.8" stroke-linejoin="round"/>
+    <path d="M31 30 C24 32 16 28 13 21 C22 18 29 22 31 28 Z" fill="#7FA36A" stroke="#211F1C" stroke-width="2.8" stroke-linejoin="round"/>
+    <path d="M32 26 C39 24 46 18 47 10 C38 10 32 16 31 23 Z" fill="#8FA97E" stroke="#211F1C" stroke-width="2.8" stroke-linejoin="round"/>
+    <path d="M33 34 C40 34 47 30 49 22 C40 21 34 26 32 32 Z" fill="#7FA36A" stroke="#211F1C" stroke-width="2.8" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="g-oil" viewBox="0 0 64 64">
+    <path d="M28 10 h8 v9 l7 10 v21 a5 5 0 0 1 -5 5 h-12 a5 5 0 0 1 -5 -5 V29 l7 -10 Z" fill="#A8B86A" stroke="#211F1C" stroke-width="3.2" stroke-linejoin="round"/>
+    <path d="M23 36 h18 v14 a3 3 0 0 1 -3 3 h-12 a3 3 0 0 1 -3 -3 Z" fill="#D8C86A" stroke="#211F1C" stroke-width="2.4"/>
+    <path d="M27 8 h10" stroke="#211F1C" stroke-width="3.4" stroke-linecap="round"/>
+  </symbol>
+
+  <!-- 편지 -->
+  <symbol id="g-letter" viewBox="0 0 64 48">
+    <rect x="4" y="6" width="56" height="36" rx="4" fill="#FDFCF8" stroke="#211F1C" stroke-width="3.4"/>
+    <path d="M4 9 L32 27 L60 9" fill="none" stroke="#211F1C" stroke-width="3"/>
+  </symbol>
+</svg>
+
+<!-- ══════════ 참여 페이지 ══════════ -->
+<main id="app">
+  <div class="bar"><i id="prog"></i></div>
+
+  <!-- ① 도착 -->
+  <section class="screen on" id="s-arrive">
+    <div id="arriveChar"></div>
+    <h1 class="say" id="arriveSay">안녕하세요.<br>저는 함양이예요.</h1>
+    <p class="say sm" id="arriveSay2" style="margin-top:12px"></p>
+    <div class="route"><span>경남 함양</span><span class="ln"></span><span>약 280km</span><span class="ln"></span><span>남가좌동</span></div>
+  </section>
+
+  <!-- ② 갈림길 -->
+  <section class="screen" id="s-fork">
+    <div id="forkChar"></div>
+    <h2 class="say">함양 화덕 샌드위치,<br>드셔보셨어요?</h2>
+    <div class="opts">
+      <button class="opt big" data-ate="1">방금 먹었어요</button>
+      <button class="opt big" data-ate="0">아직이요</button>
+    </div>
+  </section>
+
+  <!-- ③A 맛 평가 -->
+  <section class="screen" id="s-taste">
+    <div id="tasteChar"></div>
+    <h2 class="say">솔직하게 말해주세요.<br>어땠어요?</h2>
+    <div class="stars" id="stars"></div>
+    <div id="revisitBox" style="display:none">
+      <h2 class="say sm" style="margin-top:28px">또 드시러 오실 것 같아요?</h2>
+      <div class="opts">
+        <button class="opt big" data-rv="또 올게요">또 올게요</button>
+        <button class="opt big" data-rv="한 번은 더">한 번은 더</button>
+        <button class="opt big" data-rv="글쎄요">글쎄요</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ③B 멈춰선 이유 -->
+  <section class="screen" id="s-reason">
+    <div id="reasonChar"></div>
+    <h2 class="say">괜찮아요.<br>아직 기회 있어요.</h2>
+    <p class="say sm" style="margin-top:16px">그런데 뭘 보고<br>여기 들어오셨어요?</p>
+    <div class="opts">
+      <button class="opt" data-rs="창가에 놓인 양파">창가에 놓인 양파</button>
+      <button class="opt" data-rs="입구 포스터">입구 포스터</button>
+      <button class="opt" data-rs="그냥 지나가다가">그냥 지나가다가</button>
+      <button class="opt" data-rs="소문 듣고">소문 듣고</button>
+      <button class="opt" data-rs="인스타·당근 보고">인스타·당근 보고</button>
+    </div>
+  </section>
+
+  <!-- ④ 지도 -->
+  <section class="screen" id="s-map">
+    <svg class="char" viewBox="0 0 60 52" style="width:74px"><use href="#i-jirisan"/></svg>
+    <h2 class="say sm" style="margin-top:12px">함양이 어디 있는지 아세요?<br>지도에서 찍어보세요.</h2>
+    <div class="mapwrap" id="mapwrap"></div>
+    <div id="mapFb"></div>
+    <button class="cta" id="mapNext" style="display:none">계속</button>
+  </section>
+
+  <!-- ⑤ 재료 -->
+  <section class="screen" id="s-ing">
+    <div id="ingChar"></div>
+    <h2 class="say sm" style="margin-top:12px">샌드위치에 재료가 일곱 가지 들어가요.<br>그중 둘이 함양에서 왔어요.</h2>
+    <p class="sub">어떤 걸까요? 두 개 골라주세요.</p>
+    <div class="grid" id="ingGrid"></div>
+    <div id="ingFb"></div>
+    <button class="cta" id="ingBtn" disabled>확인</button>
+  </section>
+
+  <!-- ⑥ 생산자 -->
+  <section class="screen scroller" id="s-producer">
+    <h2 class="say sm" style="margin-top:4px">저를 만든 사람들이에요.</h2>
+    <article class="pcard">
+      <div class="ph">
+        <span id="pcOnion"></span>
+        <h3>사라질 뻔한 저를<br>지킨 사람</h3>
+      </div>
+      <p>제 품종은 한때 버려졌어요. 단가가 비싸다고, 상품성이 없다고요. 다들 심기를 그만뒀을 때 이분만 남아서 계속 심었어요. 지금 저를 기르는 사람은 전국에 한 명이에요.</p>
+      <div class="note">[자필 메시지 자리]</div>
+      <div class="sig">강호현 농장 · 경남 함양군 함양읍</div>
+    </article>
+    <article class="pcard">
+      <div class="ph">
+        <svg viewBox="0 0 64 64"><use href="#i-wheat-face"/></svg>
+        <h3>30년을 이어온 밀</h3>
+      </div>
+      <p>저는 지곡면 제분소에서 왔어요. 30년 전 아버지가 시작했고, 지금은 자녀들이 잇고 있어요. 품종을 섞으면 편한데 굳이 하나씩 따로 빻아요. 그 번거로운 걸 30년째 고집하고 있어요.</p>
+      <div class="note">[자필 메시지 자리]</div>
+      <div class="sig">지리산우리밀영농조합법인 · 경남 함양군 지곡면</div>
+    </article>
+    <button class="cta" id="prodNext">한 마디 남기러 가기</button>
+  </section>
+
+  <!-- ⑦ 편지 -->
+  <section class="screen" id="s-letter">
+    <div id="letterChar"></div>
+    <h2 class="say sm" style="margin-top:10px">이 사람들한테<br>한 마디 남겨주실래요?</h2>
+    <p class="sub">짧아도 괜찮아요.<br>팝업 끝나면 모아서 함양으로 가져갈게요.</p>
+    <div class="to">
+      <button data-to="onion"><svg viewBox="0 0 64 70" id="toOnion"></svg>양파 농부에게</button>
+      <button data-to="wheat"><svg viewBox="0 0 64 64"><use href="#i-wheat-face"/></svg>밀 제분소에게</button>
+    </div>
+    <textarea id="letterBody" maxlength="120" placeholder="예: 양파가 이렇게 단 줄 몰랐어요."></textarea>
+    <div class="cnt"><span id="cnt">0</span>/120</div>
+    <button class="cta" id="sendLetter" disabled>함양으로 보내기</button>
+    <button class="skip" id="letterSkip">건너뛸게요</button>
+  </section>
+
+  <!-- ⑦-b 배달 -->
+  <section class="screen" id="s-fly">
+    <h2 class="say sm">함양으로 가는 중이에요.</h2>
+    <div class="deliver">
+      <div class="rail"></div>
+      <div class="go" id="flyChar"></div>
+      <span class="tag l">남가좌동</span><span class="tag r">경남 함양</span>
+    </div>
+  </section>
+
+  <!-- ⑧ 편지 벽 -->
+  <section class="screen scroller" id="s-wall">
+    <div class="wallhead">
+      <div class="n" id="wallN">—</div>
+      <p class="say sm" style="margin-top:2px">번째 편지가 함양으로 갔어요.</p>
+      <p class="sub">먼저 다녀간 분들이 남긴 말이에요.</p>
+    </div>
+    <div class="letters" id="wallList"></div>
+    <button class="cta" id="wallNext">계속</button>
+  </section>
+
+  <!-- ⑨ 관계 맺기 -->
+  <section class="screen scroller" id="s-relate">
+    <div class="blk" style="margin-top:6px">
+      <h4>함양, 가보고 싶어지셨어요?</h4>
+      <div class="row" id="rowVisit">
+        <button class="opt" data-vi="가보고 싶어요">가보고<br>싶어요</button>
+        <button class="opt" data-vi="잘 모르겠어요">잘<br>모르겠어요</button>
+        <button class="opt" data-vi="아직은요">아직은요</button>
+      </div>
+    </div>
+    <div class="blk">
+      <h4>이 동네 사세요?</h4>
+      <div class="row" id="rowNb">
+        <button class="opt" data-nb="근처">네, 근처예요</button>
+        <button class="opt" data-nb="멀리">아니요,<br>멀리서 왔어요</button>
+      </div>
+    </div>
+    <div class="blk">
+      <h4>함양 소식은 여기로 전할게요.</h4>
+      <a class="insta" href="https://instagram.com/namgajwa439" target="_blank" rel="noopener">@namgajwa439 팔로우</a>
+    </div>
+    <div class="blk">
+      <h4>다음에 함양에서 뭔가 열리면</h4>
+      <p class="sub" style="margin-top:6px">이름이랑 연락처를 남겨주시면<br>제일 먼저 알려드릴게요.</p>
+      <input type="text" id="cName" placeholder="이름" autocomplete="name">
+      <input type="tel" id="cPhone" placeholder="연락처" autocomplete="tel">
+      <div class="chips" id="chips">
+        <button class="chip" data-it="함양 체험농장">함양 체험농장</button>
+        <button class="chip" data-it="생산자와 함께하는 소셜다이닝">생산자와 함께하는 소셜다이닝</button>
+        <button class="chip" data-it="다음 시즌 함양 원물">다음 시즌 함양 원물</button>
+      </div>
+      <p class="agree">남겨주신 연락처는 함양 관련 소식 안내에만 쓰고, 팝업 종료 후 1년 뒤에 지웁니다. 언제든 수신을 거부하실 수 있어요.</p>
+    </div>
+    <button class="cta" id="relateNext">남길게요</button>
+    <button class="skip" id="relateSkip">건너뛰기</button>
+  </section>
+
+  <!-- ⑩ 완료 -->
+  <section class="screen scroller" id="s-done">
+    <div id="doneChar"></div>
+    <div class="ticket">
+      <p id="doneTop">고맙습니다.</p>
+      <div class="big2" id="doneBig">1,000원 할인</div>
+      <p class="sm" id="doneSm">이 화면을 보여주세요.</p>
+    </div>
+    <div class="next">
+      <p class="say sm">저희는 다음에 갈게요.</p>
+      <div class="row3">
+        <figure><svg viewBox="0 0 64 64"><use href="#i-pig"/></svg><figcaption>함양 흑돼지</figcaption></figure>
+        <figure><svg viewBox="0 0 64 64"><use href="#i-fern"/></svg><figcaption>지리산 고사리</figcaption></figure>
+        <figure><svg viewBox="0 0 64 64"><use href="#i-calsot"/></svg><figcaption>함양파</figcaption></figure>
+      </div>
+    </div>
+    <p class="foot">남가좌439 · 늦여름 베이커리<br>서울시 넥스트로컬 8기</p>
+  </section>
+</main>
+
+<!-- ══════════ 매장 벽 모드 ══════════ -->
+<div id="wall">
+  <div class="wh">
+    <svg viewBox="0 0 64 70" id="wallChar"></svg>
+    <div class="wt">오늘 함양으로 간 편지 <em id="wallCount">0</em>통</div>
+  </div>
+  <div class="wgrid" id="wallGrid"></div>
+  <div class="wf">샌드위치 포장지의 QR로 한 마디 남기실 수 있어요.</div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+const sb = createClient(
+  'https://hncuvjrghniwihhfpata.supabase.co',
+  'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
+);
+
+/* ─────────────────────────────────────────
+   운영 설정
+───────────────────────────────────────── */
+const REMAIN_TODAY = null;   // 오늘 남은 샌드위치 수량. 숫자를 넣으면 완료화면에 표시, null이면 숨김
+
+/* ─────────────────────────────────────────
+   함양이 캐릭터 (표정 4종)
+───────────────────────────────────────── */
+function onionSVG(mood='hi'){
+  const face = {
+    hi:`<circle cx="26" cy="38" r="2.6" fill="#211F1C"/><circle cx="38" cy="38" r="2.6" fill="#211F1C"/>
+        <circle cx="26.8" cy="37.2" r=".8" fill="#fff"/><circle cx="38.8" cy="37.2" r=".8" fill="#fff"/>
+        <path d="M27.5 45 Q32 50 36.5 45" fill="none" stroke="#211F1C" stroke-width="2.2" stroke-linecap="round"/>`,
+    huh:`<circle cx="26" cy="38" r="2.6" fill="#211F1C"/><circle cx="38" cy="38.8" r="2.2" fill="#211F1C"/>
+        <circle cx="26.8" cy="37.2" r=".8" fill="#fff"/>
+        <ellipse cx="32" cy="46.5" rx="2.4" ry="3" fill="none" stroke="#211F1C" stroke-width="2.2"/>`,
+    nervous:`<circle cx="26" cy="38" r="2.2" fill="#211F1C"/><circle cx="38" cy="38" r="2.2" fill="#211F1C"/>
+        <path d="M27 46.5 Q29.5 43.5 32 46.5 Q34.5 49.5 37 46.5" fill="none" stroke="#211F1C" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M50 30 q3 5 0 7 q-3 -2 0 -7 Z" fill="#9CC7DE" stroke="#211F1C" stroke-width="1.6"/>`,
+    bye:`<path d="M22.5 39 Q26 35 29.5 39" fill="none" stroke="#211F1C" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M34.5 39 Q38 35 41.5 39" fill="none" stroke="#211F1C" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M27 45 Q32 51 37 45" fill="none" stroke="#211F1C" stroke-width="2.2" stroke-linecap="round"/>`
+  }[mood] || '';
+  return `
+  <path d="M32 16 C32 11 33 7 36 5" fill="none" stroke="#7FA36A" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M32 14 C30 9 26 7 21 8 C23 13 28 15 31 13 Z" fill="#8FA97E" stroke="#211F1C" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M33 13 C36 8 41 7 46 9 C43 14 38 15 34 12 Z" fill="#7FA36A" stroke="#211F1C" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M32 17 C17 17 13 32 15 44 C17 56 25 60 32 60 C39 60 47 56 49 44 C51 32 47 17 32 17 Z" fill="#EBCF8A" stroke="#211F1C" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M22 25 C19 34 19 47 24 57" fill="none" stroke="#C99E4E" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M42 25 C45 34 45 47 40 57" fill="none" stroke="#C99E4E" stroke-width="2.4" stroke-linecap="round"/>
+  <ellipse cx="22.5" cy="43.5" rx="3.4" ry="2.3" fill="#E88B7A" opacity=".5"/>
+  <ellipse cx="41.5" cy="43.5" rx="3.4" ry="2.3" fill="#E88B7A" opacity=".5"/>
+  ${face}
+  <path d="M29 60 L28 64 M32 60 L32 65 M35 60 L36 64" stroke="#211F1C" stroke-width="2" stroke-linecap="round"/>`;
+}
+function onionEl(mood, size, cls=''){
+  return `<svg class="char ${cls}" viewBox="0 0 64 68" style="width:${size}px">${onionSVG(mood)}</svg>`;
+}
+/* 편지를 든 함양이 */
+function onionLetter(size){
+  return `<svg class="char" viewBox="0 0 74 68" style="width:${size}px">
+    ${onionSVG('bye')}
+    <g transform="translate(44 34) rotate(-8)">
+      <rect x="0" y="0" width="26" height="17" rx="2" fill="#FDFCF8" stroke="#211F1C" stroke-width="2.6"/>
+      <path d="M0 1.5 L13 10 L26 1.5" fill="none" stroke="#211F1C" stroke-width="2.2"/>
+    </g></svg>`;
+}
+
+/* ─────────────────────────────────────────
+   상태 · 저장
+───────────────────────────────────────── */
+const qs = new URLSearchParams(location.search);
+const SRC = (qs.get('src') || '').toLowerCase();
+/* randomUUID는 보안 컨텍스트에서만 동작 — http 테스트 환경 대비 폴백 */
+const uuid = () => (crypto.randomUUID
+  ? crypto.randomUUID()
+  : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+      const r = Math.random() * 16 | 0;
+      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    }));
+const S = { sid: uuid(), src: SRC || null, steps:{} };
+let rowId = null, saving = null;
+
+function stamp(k){ S.steps[k] = new Date().toISOString(); }
+
+async function save(patch = {}){
+  Object.assign(S, patch);
+  try{ localStorage.setItem('hamyang_popup', JSON.stringify(S)); }catch(e){}
+  saving = (saving || Promise.resolve()).then(async () => {
+    try{
+      const body = {...S};
+      if(rowId === null){
+        const { data, error } = await sb.from('hamyang_popup').insert(body).select('id').single();
+        if(!error && data) rowId = data.id;
+      }else{
+        await sb.from('hamyang_popup').update(body).eq('id', rowId);
+      }
+    }catch(e){ /* 저장 실패해도 참여는 계속 */ }
+  });
+  return saving;
+}
+
+/* ─────────────────────────────────────────
+   화면 전환
+───────────────────────────────────────── */
+const FLOW = ['s-fork','s-taste','s-reason','s-map','s-ing','s-producer','s-letter','s-wall','s-relate','s-done'];
+const WEIGHT = { 's-fork':1, 's-taste':2, 's-reason':2, 's-map':3, 's-ing':4, 's-producer':5, 's-letter':6, 's-fly':6, 's-wall':6, 's-relate':7, 's-done':8 };
+const $ = id => document.getElementById(id);
+
+function go(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+  $(id).classList.add('on');
+  window.scrollTo(0,0);
+  $('prog').style.width = ((WEIGHT[id] || 0) / 8 * 100) + '%';
+  stamp(id.replace('s-',''));
+}
+
+/* ─────────────────────────────────────────
+   ① 도착
+───────────────────────────────────────── */
+const ARRIVE = {
+  wrap : '방금 드신 그 샌드위치 안에,<br>제가 있었어요.',
+  onion: '지금 손에 쥔 그 양파가<br>저예요.',
+  map  : '경남 함양에서<br>280km 건너왔어요.'
+};
+$('arriveChar').innerHTML = onionEl('hi', 130, 'walkin');
+$('arriveSay2').innerHTML = ARRIVE[SRC] || ARRIVE.map;
+stamp('arrive');
+let moved = false;
+const leaveArrive = () => { if(moved) return; moved = true; go('s-fork'); };
+setTimeout(leaveArrive, 2600);
+$('s-arrive').addEventListener('click', leaveArrive);
+
+/* ─────────────────────────────────────────
+   ② 갈림길
+───────────────────────────────────────── */
+$('forkChar').innerHTML = onionEl('huh', 108, 'bob');
+document.querySelectorAll('[data-ate]').forEach(b => b.onclick = () => {
+  const ate = b.dataset.ate === '1';
+  save({ ate });
+  go(ate ? 's-taste' : 's-reason');
+});
+
+/* ─────────────────────────────────────────
+   ③A 맛 평가
+───────────────────────────────────────── */
+$('tasteChar').innerHTML = onionEl('nervous', 100, 'bob');
+$('stars').innerHTML = [1,2,3,4,5].map(n =>
+  `<button class="star" data-n="${n}" aria-label="${n}점"><svg viewBox="0 0 48 48"><path class="f" d="M24 5 L30 18 L44 20 L34 30 L36.5 44 L24 37 L11.5 44 L14 30 L4 20 L18 18 Z" stroke-linejoin="round"/></svg></button>`
+).join('');
+document.querySelectorAll('.star').forEach(st => st.onclick = () => {
+  const n = +st.dataset.n;
+  document.querySelectorAll('.star').forEach(s => s.classList.toggle('lit', +s.dataset.n <= n));
+  save({ taste_score: n });
+  $('revisitBox').style.display = 'block';
+  setTimeout(() => $('revisitBox').scrollIntoView({behavior:'smooth', block:'center'}), 120);
+});
+document.querySelectorAll('[data-rv]').forEach(b => b.onclick = () => {
+  save({ revisit: b.dataset.rv });
+  go('s-map');
+});
+
+/* ─────────────────────────────────────────
+   ③B 멈춰선 이유
+───────────────────────────────────────── */
+$('reasonChar').innerHTML = onionEl('hi', 100, 'bob');
+document.querySelectorAll('[data-rs]').forEach(b => b.onclick = () => {
+  save({ stop_reason: b.dataset.rs });
+  go('s-map');
+});
+
+/* ─────────────────────────────────────────
+   ④ 지도
+───────────────────────────────────────── */
+const KOREA = "M70 78 Q95 62 130 60 Q165 56 200 56 Q222 58 232 74 Q239 105 240 150 Q241 185 236 205 Q245 210 246 216 Q240 224 232 232 Q222 250 208 260 Q194 270 184 264 Q176 274 166 280 Q156 286 150 278 Q142 288 132 286 Q118 294 104 296 Q90 298 84 286 Q80 272 88 260 Q76 250 80 240 Q66 234 60 226 Q70 220 78 214 Q80 200 74 190 Q62 182 58 174 Q70 166 80 160 Q84 142 76 128 Q82 108 74 96 Q70 86 70 78 Z";
+const MARKERS = [
+  {n:1, x:71, y:39, region:'경북(안동)'},
+  {n:2, x:77, y:17, region:'강원(강릉)'},
+  {n:3, x:45, y:42, region:'충청(대전)'},
+  {n:4, x:52, y:60, region:'함양(경남)'},
+  {n:5, x:25, y:55, region:'전북(군산)'}
+];
+$('mapwrap').innerHTML =
+  `<svg viewBox="0 0 300 400" aria-hidden="true"><path d="${KOREA}" fill="#DCEBD3" stroke="#A9C89C" stroke-width="2.5" stroke-linejoin="round"/></svg>` +
+  MARKERS.map(m => `<button class="mk" data-n="${m.n}" style="left:${m.x}%;top:${m.y}%">${m.n}</button>`).join('');
+
+let mapDone = false;
+document.querySelectorAll('.mk').forEach(mk => mk.onclick = () => {
+  if(mapDone) return;
+  mapDone = true;
+  const n = +mk.dataset.n;
+  const hit = n === 4;
+  const picked = MARKERS.find(m => m.n === n);
+  mk.classList.add(hit ? 'hit' : 'miss');
+  if(!hit) document.querySelector('.mk[data-n="4"]').classList.add('ans');
+  $('mapFb').innerHTML = `<div class="fb">${
+    hit ? '아시는구나.<br><b>지리산 자락, 가장 깊숙한 곳</b>이에요.'
+        : '괜찮아요. 다들 잘 모르세요.<br>여기예요. <b>지리산 자락, 가장 깊숙한 곳.</b>'
+  }<br><br>우리나라에서 가장 많은 것을 품은 산,<br>그 가장 깊은 자리에 함양이 있어요.</div>`;
+  $('mapNext').style.display = 'block';
+  save({ map_pick: picked.region, map_correct: hit });
+});
+$('mapNext').onclick = () => go('s-ing');
+
+/* ─────────────────────────────────────────
+   ⑤ 재료 맞히기
+───────────────────────────────────────── */
+const INGS = [
+  {k:'화덕빵',        ic:'g-bread',   ok:true},
+  {k:'양파잼',        ic:'g-jam',     ok:true},
+  {k:'로메로 치즈 소스', ic:'g-cheese',  ok:false},
+  {k:'선드라이토마토',  ic:'g-tomato',  ok:false},
+  {k:'베이컨',        ic:'g-bacon',   ok:false},
+  {k:'루꼴라',        ic:'g-arugula', ok:false},
+  {k:'올리브유',      ic:'g-oil',     ok:false}
+];
+$('ingChar').innerHTML = onionEl('huh', 88, 'bob');
+$('ingGrid').innerHTML = INGS.map((g,i) =>
+  `<button class="ing" data-i="${i}"><svg viewBox="0 0 64 64"><use href="#${g.ic}"/></svg><span>${g.k}</span></button>`
+).join('');
+
+let picked = [], ingDone = false;
+document.querySelectorAll('.ing').forEach(el => el.onclick = () => {
+  if(ingDone) return;
+  const i = +el.dataset.i;
+  if(picked.includes(i)) picked = picked.filter(v => v !== i);
+  else if(picked.length < 2) picked.push(i);
+  document.querySelectorAll('.ing').forEach(e => e.classList.toggle('sel', picked.includes(+e.dataset.i)));
+  $('ingBtn').disabled = picked.length !== 2;
+});
+$('ingBtn').onclick = () => {
+  if(!ingDone){
+    ingDone = true;
+    const ok = picked.every(i => INGS[i].ok);
+    document.querySelectorAll('.ing').forEach(e => {
+      const g = INGS[+e.dataset.i];
+      e.classList.remove('sel');
+      e.classList.add(g.ok ? 'ok' : 'no');
+    });
+    $('ingFb').innerHTML = `<div class="fb">${
+      ok ? '맞아요.' : '<b>화덕빵</b>과 <b>양파잼</b>이었어요.'
+    }<br>빵을 만든 밀도, 속을 채운 저도<br>함양에서 왔어요.</div>`;
+    $('ingBtn').textContent = '계속';
+    save({ ing_pick: picked.map(i => INGS[i].k).join(','), ing_correct: ok });
+  }else{
+    go('s-producer');
+  }
+};
+
+/* ─────────────────────────────────────────
+   ⑥ 생산자
+───────────────────────────────────────── */
+$('pcOnion').innerHTML = onionEl('hi', 46).replace('class="char "','');
+$('prodNext').onclick = () => go('s-letter');
+
+/* ─────────────────────────────────────────
+   ⑦ 편지
+───────────────────────────────────────── */
+$('letterChar').innerHTML = onionEl('hi', 92, 'bob');
+$('toOnion').innerHTML = onionSVG('hi');
+$('toOnion').setAttribute('viewBox','0 0 64 68');
+
+let letterTo = null;
+document.querySelectorAll('[data-to]').forEach(b => b.onclick = () => {
+  letterTo = b.dataset.to;
+  document.querySelectorAll('[data-to]').forEach(x => x.classList.toggle('sel', x === b));
+  refreshSend();
+});
+const ta = $('letterBody');
+ta.oninput = () => { $('cnt').textContent = ta.value.length; refreshSend(); };
+function refreshSend(){ $('sendLetter').disabled = !(letterTo && ta.value.trim().length > 0); }
+
+let sent = false;
+$('sendLetter').onclick = async () => {
+  if(sent) return;
+  sent = true;
+  save({ letter_to: letterTo, letter_body: ta.value.trim() });
+  $('flyChar').innerHTML = onionLetter(56);
+  go('s-fly');
+  await new Promise(r => setTimeout(r, 2600));
+  await loadWall();
+  go('s-wall');
+};
+$('letterSkip').onclick = async () => { await loadWall(); go('s-wall'); };
+
+/* ─────────────────────────────────────────
+   ⑧ 편지 벽
+───────────────────────────────────────── */
+const TO_LABEL = { onion:'양파 농부에게', wheat:'밀 제분소에게' };
+async function fetchLetters(limit = 24){
+  try{
+    const { data, count } = await sb
+      .from('hamyang_popup_letters')
+      .select('*', { count:'exact' })
+      .limit(limit);
+    return { rows: data || [], count: count || 0 };
+  }catch(e){ return { rows: [], count: 0 }; }
+}
+function letterCard(r){
+  const body = (r.letter_body || '').replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+  return `<div class="lt"><div class="who">${TO_LABEL[r.letter_to] || '함양으로'}</div><div class="bd">${body}</div></div>`;
+}
+async function loadWall(){
+  const { rows, count } = await fetchLetters();
+  $('wallN').textContent = count > 0 ? count.toLocaleString() : '첫';
+  $('wallList').innerHTML = rows.length
+    ? rows.map(letterCard).join('')
+    : '<div class="lt"><div class="bd">아직 편지가 없어요. 첫 번째로 남겨주셨네요.</div></div>';
+}
+$('wallNext').onclick = () => go('s-relate');
+
+/* ─────────────────────────────────────────
+   ⑨ 관계 맺기
+───────────────────────────────────────── */
+document.querySelectorAll('#rowVisit .opt').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#rowVisit .opt').forEach(x => x.classList.toggle('sel', x === b));
+  save({ visit_intent: b.dataset.vi });
+});
+document.querySelectorAll('#rowNb .opt').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#rowNb .opt').forEach(x => x.classList.toggle('sel', x === b));
+  save({ neighbor: b.dataset.nb });
+});
+let interests = [];
+document.querySelectorAll('.chip').forEach(c => c.onclick = () => {
+  const v = c.dataset.it;
+  interests = interests.includes(v) ? interests.filter(x => x !== v) : [...interests, v];
+  c.classList.toggle('sel', interests.includes(v));
+});
+async function finish(withContact){
+  const patch = { finished: true };
+  if(withContact){
+    const nm = $('cName').value.trim(), ph = $('cPhone').value.trim();
+    if(nm) patch.contact_name = nm;
+    if(ph) patch.contact_phone = ph;
+    if(interests.length) patch.interests = interests.join(',');
+  }
+  save(patch);
+  renderDone();
+  go('s-done');
+}
+$('relateNext').onclick = () => finish(true);
+$('relateSkip').onclick = () => finish(false);
+
+/* ─────────────────────────────────────────
+   ⑩ 완료
+───────────────────────────────────────── */
+function renderDone(){
+  $('doneChar').innerHTML = onionEl('bye', 104, 'bob');
+  if(S.ate){
+    $('doneTop').textContent = '고맙습니다.';
+    $('doneBig').textContent = '1,000원 할인';
+    $('doneSm').innerHTML = '이 화면을 보여주시면<br>다음에 1,000원 빼드려요.';
+  }else{
+    $('doneTop').textContent = '고맙습니다.';
+    $('doneBig').textContent = '함양 양파 한 알';
+    $('doneSm').innerHTML = '이 화면을 보여주시면<br>저를 한 알 드려요.'
+      + (REMAIN_TODAY !== null ? `<br><br>오늘 샌드위치 <b>${REMAIN_TODAY}개</b> 남았어요.` : '');
+  }
+}
+
+/* ─────────────────────────────────────────
+   ⑫ 매장 벽 모드  ?wall=1
+───────────────────────────────────────── */
+if(qs.get('wall') === '1'){
+  document.getElementById('app').style.display = 'none';
+  const w = $('wall'); w.classList.add('on');
+  $('wallChar').innerHTML = onionSVG('bye');
+  $('wallChar').setAttribute('viewBox','0 0 64 68');
+  let lastCount = -1;
+  async function todayCount(){
+    const d = new Date(); d.setHours(0,0,0,0);
+    try{
+      const { count } = await sb.from('hamyang_popup_letters')
+        .select('*', { count:'exact', head:true })
+        .gte('created_at', d.toISOString());
+      return count || 0;
+    }catch(e){ return 0; }
+  }
+  async function tick(){
+    const { rows } = await fetchLetters(12);
+    const count = await todayCount();
+    $('wallCount').textContent = count.toLocaleString();
+    $('wallGrid').innerHTML = rows.length
+      ? rows.map(letterCard).join('')
+      : `<div class="lt"><div class="bd">오늘의 첫 편지를 기다리고 있어요.</div></div>`;
+    if(lastCount >= 0 && count > lastCount){
+      const f = document.createElement('div');
+      f.className = 'fly';
+      f.innerHTML = onionLetter(82);
+      document.body.appendChild(f);
+      setTimeout(() => f.remove(), 5600);
+    }
+    lastCount = count;
+  }
+  tick();
+  setInterval(tick, 30000);
+}
+</script>
+</body>
+</html>
