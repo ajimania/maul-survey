@@ -81,7 +81,7 @@ h1{font-family:'Black Han Sans',sans-serif;font-size:23px;letter-spacing:-.8px;l
 
   <div class="note">
     예약이 아니라 수요조사입니다. 여기 숫자는 <b>확정 주문이 아니라 희망 수량</b>이에요.<br>
-    연락처는 뒤 4자리만 보입니다. 전체 번호는 Supabase 대시보드에서 확인하세요.<br>
+    현장에서 “이메일 신청하고 왔어요”라고 하시면 개당 1,000원 할인입니다.<br>
     마공 가족 사전주문은 <a href="hamyang-preorder-admin.html">여기</a>에서 봅니다.
   </div>
 </div>
@@ -157,7 +157,6 @@ function render(rows){
         if (r.qty_emotion) q.push(`정서 <em>${r.qty_emotion}</em>`);
         const bits = [];
         if (r.party_size) bits.push(r.party_size >= 4 ? '4명 이상' : `${r.party_size}명`);
-        if (r.phone_tail) bits.push(r.phone_tail);
         const t = new Date(r.created_at);
         bits.push(`${t.getMonth()+1}/${t.getDate()} 접수`);
         return `<div class="r">

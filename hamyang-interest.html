@@ -145,6 +145,7 @@ p{font-size:15px;line-height:1.85;text-wrap:pretty;}
 }
 .sum .won{display:block;font-family:'Black Han Sans',sans-serif;font-size:22px;color:var(--rust);margin-top:4px;}
 .sum .won em{font-style:normal;font-family:'Gothic A1',sans-serif;font-size:12.5px;font-weight:700;color:var(--ink);opacity:.7;margin-left:6px;}
+.sum .was{display:block;margin-top:3px;font-size:12.5px;font-weight:400;opacity:.65;}
 .sum.empty{opacity:.6;font-weight:400;}
 
 .field{margin-top:13px;}
@@ -162,12 +163,15 @@ input:focus{outline:none;box-shadow:0 3px 0 rgba(28,26,23,.2);}
   font-family:'Gothic A1',sans-serif;font-size:14.5px;font-weight:700;color:var(--ink);cursor:pointer;
 }
 .party button.sel{background:var(--rust);color:var(--white);}
-.agree{
-  display:flex;gap:11px;align-items:flex-start;margin-top:18px;cursor:pointer;
-  background:rgba(255,253,248,.6);border-radius:6px;padding:13px 14px;
+.privacy{margin-top:8px;font-size:12.5px;line-height:1.65;opacity:.7;}
+.deal{
+  margin-top:12px;background:var(--white);border:3px solid var(--rust);border-radius:6px;
+  padding:15px 17px;text-align:center;
 }
-.agree input{flex:none;width:20px;height:20px;margin-top:2px;accent-color:var(--rust);}
-.agree span{font-size:13px;line-height:1.7;}
+.deal .dt{font-family:'Black Han Sans',sans-serif;font-size:19px;letter-spacing:-.5px;}
+.deal .dt b{color:var(--rust);font-weight:400;}
+.deal .dd{margin-top:8px;font-size:13.5px;line-height:1.75;}
+.deal .dd b{font-weight:900;color:var(--rust);}
 .cta{
   display:block;width:100%;margin-top:20px;font-family:'Black Han Sans',sans-serif;font-size:19px;
   background:var(--rust);color:var(--white);border:none;border-radius:6px;padding:17px;cursor:pointer;
@@ -316,6 +320,12 @@ footer{padding:26px 0 6px;text-align:center;font-size:12.5px;line-height:1.9;opa
       남겨주시면 준비할 때 먼저 헤아리겠습니다.
     </div>
 
+    <div class="deal">
+      <div class="dt">신청하고 오시면 <b>1,000원 할인</b></div>
+      <div class="dd">현장에서 <b>“이메일 신청하고 왔어요”</b>라고 말씀해주세요.<br>
+        샌드위치 <b>한 개당 1,000원</b>씩 빼드립니다.</div>
+    </div>
+
     <div class="step">
       <div class="lb">1. 언제 오실 것 같으세요?</div>
       <div class="hint">아직 못 정하셨어도 괜찮아요.</div>
@@ -358,21 +368,13 @@ footer{padding:26px 0 6px;text-align:center;font-size:12.5px;line-height:1.9;opa
     </div>
 
     <div class="step">
-      <div class="lb">4. 연락받으실 곳</div>
-      <div class="hint">준비가 어렵거나 일정이 바뀌면 미리 알려드리려고 받습니다.</div>
+      <div class="lb">4. 성함을 남겨주세요</div>
+      <div class="hint">현장에서 확인할 이름만 받습니다. 연락처는 받지 않습니다.</div>
       <div class="field">
         <label for="fName">이름<i>*</i></label>
         <input type="text" id="fName" maxlength="40" autocomplete="name" placeholder="홍길동">
+        <div class="privacy">이름은 준비와 현장 확인에만 쓰고, 팝업이 끝나면 지웁니다.</div>
       </div>
-      <div class="field">
-        <label for="fPhone">연락처<i>*</i></label>
-        <input type="tel" id="fPhone" maxlength="40" autocomplete="tel" inputmode="tel" placeholder="010-0000-0000">
-      </div>
-      <label class="agree">
-        <input type="checkbox" id="fAgree">
-        <span>이름과 연락처를 이번 팝업 준비와 안내에만 쓰는 데 동의합니다.
-          팝업이 끝나고 한 달 안에 지웁니다.</span>
-      </label>
 
       <div class="err" id="err"></div>
       <button class="cta" id="submit" disabled>사전 신청 보내기</button>
@@ -384,6 +386,11 @@ footer{padding:26px 0 6px;text-align:center;font-size:12.5px;line-height:1.9;opa
     <h2>고맙습니다<br>잘 받았어요</h2>
     <div class="receipt">
       <div class="lines" id="rLines"></div>
+    </div>
+    <div class="deal" style="margin-top:18px">
+      <div class="dt">오시면 <b>“이메일 신청하고 왔어요”</b></div>
+      <div class="dd">이 한 마디면 샌드위치 <b>한 개당 1,000원</b> 빼드립니다.<br>
+        성함도 함께 말씀해주세요.</div>
     </div>
     <div class="after">
       말씀드린 대로 <b>예약은 아니어서 수량을 잡아두지는 않습니다.</b><br>
@@ -411,7 +418,7 @@ const sb = createClient(
   'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
 );
 
-const PRICE = 9500, MAXQ = 10;
+const PRICE = 9500, DEAL = 8500, MAXQ = 10;
 const SRC = (new URLSearchParams(location.search).get('src') || '').toLowerCase() || null;
 const DATES = ['2026-08-07','2026-08-08','2026-08-11','2026-08-12','2026-08-13'];
 const DOW = ['일','월','화','수','목','금','토'];
@@ -464,7 +471,8 @@ function renderQty(){
     if (state.emotion) parts.push(`정서함양 ${state.emotion}`);
     box.className = 'sum';
     box.innerHTML = `${parts.join(' · ')} — 모두 ${total}개
-      <span class="won">${won(total * PRICE)}원<em>현장 결제</em></span>`;
+      <span class="won">${won(total * DEAL)}원<em>할인 적용 · 현장 결제</em></span>
+      <span class="was">정가 ${won(total * PRICE)}원에서 ${won(total * 1000)}원 할인</span>`;
   }
   syncSubmit();
 }
@@ -488,15 +496,10 @@ $('party').querySelectorAll('button').forEach(b => {
 function syncSubmit(){
   const ok = (state.date || state.undecided)
     && (state.emotion + state.energy) > 0
-    && $('fName').value.trim()
-    && $('fPhone').value.trim()
-    && $('fAgree').checked;
+    && $('fName').value.trim();
   $('submit').disabled = !ok;
 }
-['fName','fPhone','fAgree'].forEach(id => {
-  $(id).addEventListener('input', syncSubmit);
-  $(id).addEventListener('change', syncSubmit);
-});
+$('fName').addEventListener('input', syncSubmit);
 
 function showErr(t){ $('err').textContent = t; $('err').classList.add('on'); }
 
@@ -511,10 +514,9 @@ $('submit').onclick = async () => {
     pickup_date: state.date,
     qty_emotion: state.emotion,
     qty_energy:  state.energy,
-    est_price:   total * PRICE,
+    est_price:   total * DEAL,
     party_size:  state.party,
     name:        $('fName').value.trim(),
-    phone:       $('fPhone').value.trim(),
     src:         SRC
   });
   btn.textContent = '사전 신청 보내기';
@@ -538,7 +540,7 @@ $('submit').onclick = async () => {
   $('rLines').innerHTML =
     `${when}${who ? ' · ' + who : ''}<br>
      ${parts.join(' · ')} — 모두 ${total}개<br>
-     ${won(total * PRICE)}원`;
+     ${won(total * DEAL)}원 <span style="font-size:13px;opacity:.6">(할인 적용)</span>`;
   $('ask').style.display = 'none';
   $('done').classList.add('on');
   $('done').scrollIntoView({ behavior:'smooth', block:'start' });

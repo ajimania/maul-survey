@@ -15,7 +15,7 @@ create table if not exists public.hamyang_interest (
 alter table public.hamyang_interest add column if not exists pickup_date date;              -- null = 아직 못 정함
 alter table public.hamyang_interest add column if not exists qty_emotion int default 0;     -- 정서함양
 alter table public.hamyang_interest add column if not exists qty_energy  int default 0;     -- 체력함양
-alter table public.hamyang_interest add column if not exists est_price   int;               -- 9,500 × 총 수량
+alter table public.hamyang_interest add column if not exists est_price   int;               -- 8,500(할인가) × 총 수량
 alter table public.hamyang_interest add column if not exists party_size  int;               -- 함께 오는 인원
 alter table public.hamyang_interest add column if not exists name        text;
 alter table public.hamyang_interest add column if not exists phone       text;
@@ -25,11 +25,11 @@ alter table public.hamyang_interest add column if not exists src         text;
 create index if not exists hamyang_interest_created_idx on public.hamyang_interest (created_at desc);
 
 -- 값 검증 (함수 대신)
+-- 연락처는 받지 않습니다. phone 컬럼은 남겨두되 검사하지 않습니다.
 alter table public.hamyang_interest drop constraint if exists hamyang_interest_sane;
 alter table public.hamyang_interest add constraint hamyang_interest_sane check (
-  name is not null and phone is not null
+  name is not null
   and length(btrim(name)) between 1 and 40
-  and length(btrim(phone)) between 1 and 40
   and qty_emotion between 0 and 20
   and qty_energy between 0 and 20
   and qty_emotion + qty_energy > 0
@@ -43,13 +43,11 @@ drop policy if exists "anon can insert" on public.hamyang_interest;
 create policy "anon can insert" on public.hamyang_interest
   for insert to anon with check (true);
 
--- 운영자 명단용 뷰 — 연락처는 뒤 4자리만. 전체 번호는 Table Editor에서만
+-- 결과 화면용 뷰
 drop view if exists public.hamyang_interest_list;
 create view public.hamyang_interest_list
 with (security_invoker = off) as
-  select id, created_at, pickup_date, qty_emotion, qty_energy, est_price, party_size, name, status,
-         case when phone is null or btrim(phone) = '' then null
-              else '···' || right(regexp_replace(phone, '[^0-9]', '', 'g'), 4) end as phone_tail
+  select id, created_at, pickup_date, qty_emotion, qty_energy, est_price, party_size, name, status
     from public.hamyang_interest;
 
 grant select on public.hamyang_interest_list to anon, authenticated;
