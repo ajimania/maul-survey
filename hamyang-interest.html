@@ -384,7 +384,6 @@ footer{padding:26px 0 6px;text-align:center;font-size:12.5px;line-height:1.9;opa
     <h2>고맙습니다<br>잘 받았어요</h2>
     <div class="receipt">
       <div class="lines" id="rLines"></div>
-      <div class="no">접수번호<em id="rNo">—</em></div>
     </div>
     <div class="after">
       말씀드린 대로 <b>예약은 아니어서 수량을 잡아두지는 않습니다.</b><br>
@@ -507,27 +506,26 @@ $('submit').onclick = async () => {
   btn.disabled = true;
   btn.textContent = '보내는 중…';
 
-  const { data, error } = await sb.rpc('hamyang_interest_create', {
-    p_date:    state.date,
-    p_emotion: state.emotion,
-    p_energy:  state.energy,
-    p_name:    $('fName').value.trim(),
-    p_phone:   $('fPhone').value.trim(),
-    p_party:   state.party,
-    p_src:     SRC
+  const total = state.emotion + state.energy;
+  const { error } = await sb.from('hamyang_interest').insert({
+    pickup_date: state.date,
+    qty_emotion: state.emotion,
+    qty_energy:  state.energy,
+    est_price:   total * PRICE,
+    party_size:  state.party,
+    name:        $('fName').value.trim(),
+    phone:       $('fPhone').value.trim(),
+    src:         SRC
   });
   btn.textContent = '사전 신청 보내기';
 
-  if (error || !data || !data.ok) {
-    showErr(data && data.error === 'no_contact'
-      ? '이름과 연락처를 적어주세요.'
-      : '보내지 못했어요. 잠시 뒤 다시 눌러주세요.');
+  if (error) {
+    showErr('보내지 못했어요. 잠시 뒤 다시 눌러주세요.');
     btn.disabled = false;
     syncSubmit();
     return;
   }
 
-  const total = state.emotion + state.energy;
   const parts = [];
   if (state.energy)  parts.push(`체력함양 ${state.energy}`);
   if (state.emotion) parts.push(`정서함양 ${state.emotion}`);
@@ -541,8 +539,6 @@ $('submit').onclick = async () => {
     `${when}${who ? ' · ' + who : ''}<br>
      ${parts.join(' · ')} — 모두 ${total}개<br>
      ${won(total * PRICE)}원`;
-  $('rNo').textContent = data.id;
-
   $('ask').style.display = 'none';
   $('done').classList.add('on');
   $('done').scrollIntoView({ behavior:'smooth', block:'start' });
