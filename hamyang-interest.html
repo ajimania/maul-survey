@@ -87,7 +87,6 @@ p{font-size:15px;line-height:1.85;text-wrap:pretty;}
   border-radius:999px;padding:5px 18px;font-family:'Black Han Sans',sans-serif;font-size:17px;
 }
 .menu .kind{margin-top:9px;font-size:14px;font-weight:700;color:var(--rust);line-height:1.55;}
-.menu .price{float:right;font-family:'Black Han Sans',sans-serif;font-size:17px;}
 .menu p{margin-top:11px;font-size:14px;line-height:1.8;}
 .spec{margin-top:13px;border-top:2px dashed var(--line);padding-top:11px;}
 .spec div{display:flex;gap:9px;font-size:13.5px;line-height:1.7;}
@@ -144,8 +143,7 @@ p{font-size:15px;line-height:1.85;text-wrap:pretty;}
   text-align:center;font-size:14.5px;font-weight:700;
 }
 .sum .won{display:block;font-family:'Black Han Sans',sans-serif;font-size:22px;color:var(--rust);margin-top:4px;}
-.sum .won em{font-style:normal;font-family:'Gothic A1',sans-serif;font-size:12.5px;font-weight:700;color:var(--ink);opacity:.7;margin-left:6px;}
-.sum .was{display:block;margin-top:3px;font-size:12.5px;font-weight:400;opacity:.65;}
+.sum .was{display:block;margin-top:4px;font-size:13px;font-weight:400;opacity:.7;}
 .sum.empty{opacity:.6;font-weight:400;}
 
 .field{margin-top:13px;}
@@ -259,7 +257,6 @@ footer{padding:26px 0 6px;text-align:center;font-size:12.5px;line-height:1.9;opa
     <div class="menu">
       <img src="hamyang-preorder-energy.jpg" alt="체력함양 — 베이컨과 마스카포네 크림 소스 샌드위치" loading="lazy">
       <div class="b">
-        <span class="price">9,500원</span>
         <span class="nm">체력함양</span>
         <div class="kind">베이컨 &amp; 마스카포네<br>크림 소스 샌드위치</div>
         <p>겹겹이 쌓이는 바싹 구운 베이컨의 짭쪼롬함과 마스카포네 크림의 고소함,
@@ -275,7 +272,6 @@ footer{padding:26px 0 6px;text-align:center;font-size:12.5px;line-height:1.9;opa
     <div class="menu">
       <img src="hamyang-preorder-emotion.jpg" alt="정서함양 — 브리치즈와 양파잼 샌드위치" loading="lazy">
       <div class="b">
-        <span class="price">9,500원</span>
         <span class="nm">정서함양</span>
         <div class="kind">브리치즈 &amp; 양파잼<br>샌드위치</div>
         <p>퐁신한 빵을 베어물면 감도는 브리의 부드러움, 함양 양파잼의 단맛.
@@ -337,7 +333,7 @@ footer{padding:26px 0 6px;text-align:center;font-size:12.5px;line-height:1.9;opa
       <div class="hint">정확하지 않아도 됩니다. 대략으로 적어주세요.</div>
       <div class="qty">
         <div class="qrow">
-          <div class="nm"><b>체력함양</b><span>베이컨 &amp; 마스카포네 크림 · 9,500원</span></div>
+          <div class="nm"><b>체력함양</b><span>베이컨 &amp; 마스카포네 크림</span></div>
           <div class="stp2" data-k="energy">
             <button type="button" data-d="-1" aria-label="체력함양 하나 빼기">−</button>
             <div class="n" id="nEnergy">0</div>
@@ -345,7 +341,7 @@ footer{padding:26px 0 6px;text-align:center;font-size:12.5px;line-height:1.9;opa
           </div>
         </div>
         <div class="qrow">
-          <div class="nm"><b>정서함양</b><span>브리치즈 &amp; 양파잼 · 9,500원</span></div>
+          <div class="nm"><b>정서함양</b><span>브리치즈 &amp; 양파잼</span></div>
           <div class="stp2" data-k="emotion">
             <button type="button" data-d="-1" aria-label="정서함양 하나 빼기">−</button>
             <div class="n" id="nEmotion">0</div>
@@ -417,13 +413,12 @@ const sb = createClient(
   'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
 );
 
-const PRICE = 9500, DEAL = 9000, OFF = 500, MAXQ = 10;
+const MAXQ = 10;
 const SRC = (new URLSearchParams(location.search).get('src') || '').toLowerCase() || null;
 const DATES = ['2026-08-07','2026-08-08','2026-08-11','2026-08-12','2026-08-13'];
 const DOW = ['일','월','화','수','목','금','토'];
 
 const $ = id => document.getElementById(id);
-const won = n => n.toLocaleString('ko-KR');
 const fmt = s => {
   const [y,m,d] = s.split('-').map(Number);
   return { short:`${m}.${d}`, dow:DOW[new Date(y, m-1, d).getDay()], long:`${m}월 ${d}일` };
@@ -469,9 +464,8 @@ function renderQty(){
     if (state.energy)  parts.push(`체력함양 ${state.energy}`);
     if (state.emotion) parts.push(`정서함양 ${state.emotion}`);
     box.className = 'sum';
-    box.innerHTML = `${parts.join(' · ')} — 모두 ${total}개
-      <span class="won">${won(total * DEAL)}원<em>할인 적용 · 현장 결제</em></span>
-      <span class="was">정가 ${won(total * PRICE)}원에서 ${won(total * OFF)}원 할인</span>`;
+    box.innerHTML = `<span class="won">모두 ${total}개</span>
+      <span class="was">${parts.join(' · ')}</span>`;
   }
   syncSubmit();
 }
@@ -513,7 +507,6 @@ $('submit').onclick = async () => {
     pickup_date: state.date,
     qty_emotion: state.emotion,
     qty_energy:  state.energy,
-    est_price:   total * DEAL,
     party_size:  state.party,
     name:        $('fName').value.trim(),
     src:         SRC
@@ -538,8 +531,7 @@ $('submit').onclick = async () => {
     : null;
   $('rLines').innerHTML =
     `${when}${who ? ' · ' + who : ''}<br>
-     ${parts.join(' · ')} — 모두 ${total}개<br>
-     ${won(total * DEAL)}원 <span style="font-size:13px;opacity:.6">(할인 적용)</span>`;
+     ${parts.join(' · ')} — 모두 ${total}개`;
   $('ask').style.display = 'none';
   $('done').classList.add('on');
   $('done').scrollIntoView({ behavior:'smooth', block:'start' });
