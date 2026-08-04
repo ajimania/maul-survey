@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>함양 샌드위치 사전주문 — 남가좌439 × 늦여름 베이커리</title>
+<meta name="description" content="8월, 남가좌동 골목에서 함양의 양파와 우리밀로 만든 화덕 샌드위치를 냅니다. 마공 가족에게 먼저 여는 사전주문.">
+<meta property="og:title" content="함양 샌드위치 사전주문">
+<meta property="og:description" content="함양의 우리밀과 양파로 채운 한 입. 하루에 샌드위치 종류별로 5개까지 사전 주문 받습니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gaegu:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F3EC;
+  --card:#FFFEFA;
+  --crayon:#211F1C;
+  --white:#FDFCF8;
+  --amber:#E8A13D;
+  --amber-deep:#D4882A;
+  --green:#5F7F4E;
+  --green-soft:#8FA97E;
+  --onion:#EBCF8A;
+  --onion-line:#C99E4E;
+  --text:#33312C;
+  --muted:#8A857B;
+  --line:rgba(33,31,28,.14);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{
+  font-family:'Gowun Dodum',sans-serif;
+  color:var(--text);
+  background:var(--paper);
+  background-image:radial-gradient(circle, rgba(33,31,28,.05) 1px, transparent 1.4px);
+  background-size:16px 16px;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  line-height:1.75;
+}
+.jua{font-family:'Jua',sans-serif;letter-spacing:-.4px;}
+.hand{font-family:'Gaegu',cursive;}
+
+#app{max-width:480px;margin:0 auto;padding:0 20px calc(40px + env(safe-area-inset-bottom));}
+section{padding:38px 0;border-bottom:2px dashed var(--line);}
+section:last-of-type{border-bottom:none;}
+.kicker{font-family:'Jua',sans-serif;font-size:13px;color:var(--amber-deep);letter-spacing:.4px;}
+h2{font-family:'Jua',sans-serif;font-size:24px;line-height:1.45;letter-spacing:-.5px;margin-top:8px;text-wrap:balance;}
+h3{font-family:'Jua',sans-serif;font-size:19px;letter-spacing:-.4px;}
+p{font-size:15.5px;line-height:1.85;text-wrap:pretty;}
+p + p{margin-top:14px;}
+.muted{color:var(--muted);font-size:14px;line-height:1.7;}
+
+/* ───────── 히어로 ───────── */
+#hero{text-align:center;padding:34px 0 40px;border-bottom:2px dashed var(--line);}
+#hero .route{
+  font-family:'Gaegu',cursive;font-weight:700;font-size:21px;color:var(--muted);
+  line-height:1.5;letter-spacing:.2px;
+}
+#hero h1{
+  font-family:'Jua',sans-serif;font-size:30px;line-height:1.42;letter-spacing:-.8px;
+  margin:14px 0 0;text-wrap:balance;
+}
+#hero .sub{margin-top:16px;font-size:14.5px;color:var(--muted);line-height:1.8;}
+.bob{animation:bob 3s ease-in-out infinite;}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-1.5deg);}50%{transform:translateY(-7px) rotate(1.5deg);}}
+.char{display:block;margin:0 auto;}
+
+/* ───────── 버튼 ───────── */
+.cta{
+  display:block;width:100%;margin-top:24px;
+  font-family:'Jua',sans-serif;font-size:18px;
+  background:var(--crayon);color:var(--white);border:none;
+  border-radius:255px 16px 225px 16px / 16px 225px 16px 255px;
+  padding:17px;cursor:pointer;box-shadow:3px 3px 0 rgba(33,31,28,.22);
+  text-align:center;text-decoration:none;
+}
+.cta:active{transform:translate(2px,2px);box-shadow:1px 1px 0 rgba(33,31,28,.22);}
+.cta[disabled]{opacity:.34;box-shadow:none;cursor:default;}
+.cta.ghost{background:var(--card);color:var(--text);border:2.5px solid var(--crayon);box-shadow:3px 3px 0 rgba(33,31,28,.16);}
+
+/* ───────── 취지 ───────── */
+#why .said{
+  font-family:'Jua',sans-serif;font-size:19px;line-height:1.6;text-align:center;
+  letter-spacing:-.4px;margin-top:16px;
+}
+#why .close{
+  margin-top:22px;padding:16px;border:2.5px dashed rgba(33,31,28,.28);border-radius:14px;
+  font-family:'Gaegu',cursive;font-size:19px;line-height:1.55;text-align:center;color:#4a463f;
+}
+
+/* ───────── 메뉴 ───────── */
+.menu{
+  background:var(--card);border:2.5px solid var(--crayon);
+  border-radius:255px 18px 225px 18px / 18px 225px 18px 255px;
+  box-shadow:3px 3px 0 rgba(33,31,28,.16);
+  overflow:hidden;margin-top:18px;
+}
+.menu:nth-of-type(even){border-radius:18px 225px 18px 255px / 255px 18px 225px 18px;}
+.menu img{display:block;width:100%;height:212px;object-fit:cover;border-bottom:2.5px solid var(--crayon);}
+.menu .body{padding:18px 18px 20px;}
+.menu .top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+.menu .price{font-family:'Jua',sans-serif;font-size:17px;color:var(--amber-deep);white-space:nowrap;}
+.menu .kind{font-size:13.5px;color:var(--muted);margin-top:2px;}
+.menu .one{
+  font-family:'Gaegu',cursive;font-size:19px;line-height:1.5;color:#4a463f;
+  margin-top:12px;padding:10px 12px;background:rgba(235,207,138,.28);border-radius:10px;
+}
+.menu p{margin-top:13px;font-size:14.5px;line-height:1.8;}
+.spec{margin-top:14px;border-top:2px dashed var(--line);padding-top:12px;}
+.spec div{display:flex;gap:10px;font-size:14px;line-height:1.7;}
+.spec div + div{margin-top:7px;}
+.spec b{
+  flex:none;width:62px;font-family:'Jua',sans-serif;font-weight:400;
+  font-size:12.5px;color:var(--amber-deep);letter-spacing:.5px;padding-top:2px;
+}
+
+/* ───────── 원물 ───────── */
+.orig{margin-top:20px;display:flex;gap:13px;align-items:flex-start;}
+.orig svg{width:52px;height:52px;flex:none;margin-top:2px;}
+.orig p{font-size:14.5px;line-height:1.8;margin-top:9px;}
+
+/* ───────── 주문 ───────── */
+#order{scroll-margin-top:12px;}
+.info{
+  margin-top:18px;background:var(--card);border:2.5px solid var(--crayon);border-radius:16px;
+  padding:6px 16px;box-shadow:3px 3px 0 rgba(33,31,28,.14);
+}
+.info div{display:flex;gap:12px;padding:11px 0;font-size:14.5px;line-height:1.7;}
+.info div + div{border-top:2px dashed var(--line);}
+.info b{flex:none;width:44px;font-family:'Jua',sans-serif;font-weight:400;color:var(--amber-deep);font-size:14px;}
+.step{margin-top:30px;}
+.step .lb{font-family:'Jua',sans-serif;font-size:18px;letter-spacing:-.4px;}
+.step .hint{color:var(--muted);font-size:13.5px;margin-top:5px;line-height:1.65;}
+
+/* 날짜 */
+.dates{display:flex;flex-direction:column;gap:9px;margin-top:14px;}
+.date{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:var(--card);border:2.5px solid var(--crayon);
+  border-radius:255px 16px 225px 16px / 16px 225px 16px 255px;
+  padding:14px 18px;cursor:pointer;text-align:left;width:100%;
+  box-shadow:3px 3px 0 rgba(33,31,28,.15);
+  font-family:'Gowun Dodum',sans-serif;color:var(--text);
+  transition:transform .12s, box-shadow .12s, background .12s;
+}
+.date:nth-child(even){border-radius:16px 225px 16px 255px / 255px 16px 225px 16px;}
+.date:active{transform:translate(2px,2px);box-shadow:1px 1px 0 rgba(33,31,28,.15);}
+.date .d{font-family:'Jua',sans-serif;font-size:18px;letter-spacing:-.4px;}
+.date .d em{font-style:normal;font-size:14px;color:var(--muted);margin-left:5px;}
+.date .r{font-size:13px;color:var(--muted);text-align:right;line-height:1.5;}
+.date.sel{background:var(--onion);}
+.date.sel .r{color:#6b5a2e;}
+.date[disabled]{opacity:.42;cursor:default;box-shadow:none;}
+.date[disabled] .r{font-family:'Jua',sans-serif;color:var(--muted);}
+
+/* 수량 */
+.qty{margin-top:14px;display:flex;flex-direction:column;gap:10px;}
+.qrow{
+  display:flex;align-items:center;gap:12px;
+  background:var(--card);border:2.5px solid var(--crayon);border-radius:16px;
+  padding:13px 14px;box-shadow:3px 3px 0 rgba(33,31,28,.14);
+}
+.qrow .nm{flex:1;min-width:0;}
+.qrow .nm b{display:block;font-family:'Jua',sans-serif;font-weight:400;font-size:16.5px;letter-spacing:-.4px;}
+.qrow .nm span{display:block;font-size:12.5px;color:var(--muted);margin-top:2px;line-height:1.5;}
+.stp{display:flex;align-items:center;gap:4px;flex:none;}
+.stp button{
+  width:34px;height:34px;border:2.5px solid var(--crayon);background:var(--card);
+  border-radius:50%;font-family:'Jua',sans-serif;font-size:19px;line-height:1;color:var(--text);
+  cursor:pointer;box-shadow:2px 2px 0 rgba(33,31,28,.16);
+}
+.stp button:active{transform:translate(1px,1px);box-shadow:1px 1px 0 rgba(33,31,28,.16);}
+.stp button[disabled]{opacity:.3;box-shadow:none;cursor:default;}
+.stp .n{width:30px;text-align:center;font-family:'Jua',sans-serif;font-size:19px;}
+.sum{
+  margin-top:14px;padding:15px 16px;border:2.5px dashed rgba(33,31,28,.3);border-radius:14px;
+  text-align:center;font-size:15px;line-height:1.75;
+}
+.sum .won{display:block;font-family:'Jua',sans-serif;font-size:23px;color:var(--amber-deep);margin-top:5px;}
+.sum .won em{font-style:normal;font-size:13px;color:var(--muted);margin-left:6px;}
+.sum.empty{color:var(--muted);}
+
+/* 입력 */
+.field{margin-top:13px;}
+.field label{display:block;font-size:14px;margin-bottom:6px;}
+.field label i{font-style:normal;color:var(--amber-deep);margin-left:3px;}
+.field label u{
+  text-decoration:none;color:var(--muted);font-size:12.5px;margin-left:5px;
+}
+input[type=text],input[type=tel],textarea{
+  width:100%;background:var(--card);border:2.5px solid var(--crayon);border-radius:13px;
+  padding:13px 14px;font-family:'Gowun Dodum',sans-serif;font-size:15.5px;color:var(--text);
+}
+textarea{resize:none;min-height:86px;line-height:1.7;}
+input::placeholder,textarea::placeholder{color:#B8B2A6;}
+input:focus,textarea:focus{outline:none;box-shadow:3px 3px 0 rgba(33,31,28,.15);}
+.privacy{margin-top:8px;font-size:12.5px;line-height:1.65;color:var(--muted);}
+.err{
+  margin-top:14px;padding:13px 14px;border:2.5px solid #C8563C;border-radius:13px;
+  background:#FBEDE9;color:#9B3D28;font-size:14.5px;line-height:1.7;display:none;
+}
+.err.on{display:block;}
+
+/* 완료 */
+#done{display:none;}
+#done.on{display:block;animation:rise .45s cubic-bezier(.2,.9,.3,1);}
+@keyframes rise{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+.receipt{
+  margin-top:18px;background:var(--card);border:2.5px solid var(--crayon);
+  border-radius:255px 18px 225px 18px / 18px 225px 18px 255px;
+  padding:24px 20px;box-shadow:3px 3px 0 rgba(33,31,28,.16);text-align:center;
+}
+.receipt .big{font-family:'Jua',sans-serif;font-size:21px;line-height:1.5;letter-spacing:-.4px;}
+.receipt .lines{margin-top:16px;padding:15px 0;border-top:2px dashed var(--line);border-bottom:2px dashed var(--line);font-size:15.5px;line-height:1.9;}
+.receipt .lines b{font-family:'Jua',sans-serif;font-weight:400;font-size:18px;}
+.receipt .no{margin-top:14px;font-size:13.5px;color:var(--muted);}
+.receipt .no em{font-style:normal;font-family:'Jua',sans-serif;font-size:19px;color:var(--amber-deep);margin-left:6px;}
+.after{margin-top:20px;font-size:14.5px;line-height:1.85;text-align:center;}
+.after .tip{margin-top:14px;color:var(--muted);font-size:13.5px;line-height:1.75;}
+
+footer{padding:26px 0 8px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.8;}
+.tbd{color:#B8B2A6;}
+</style>
+</head>
+<body>
+
+<!-- 아이콘 -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-onion" viewBox="0 0 64 64">
+    <path d="M32 15 C30 10 26 8 21 9 C23 14 28 16 31 14 Z" fill="#8FA97E" stroke="#211F1C" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M33 14 C36 9 41 8 46 10 C43 15 38 16 34 13 Z" fill="#7FA36A" stroke="#211F1C" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M32 18 C17 18 13 32 15 43 C17 54 25 58 32 58 C39 58 47 54 49 43 C51 32 47 18 32 18 Z" fill="#EBCF8A" stroke="#211F1C" stroke-width="3.4" stroke-linejoin="round"/>
+    <path d="M22 26 C19 34 19 46 24 55" fill="none" stroke="#C99E4E" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M42 26 C45 34 45 46 40 55" fill="none" stroke="#C99E4E" stroke-width="2.4" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="i-wheat" viewBox="0 0 64 64">
+    <path d="M32 56 L32 22" fill="none" stroke="#211F1C" stroke-width="3" stroke-linecap="round"/>
+    <path d="M32 24 q-9 -3 -10 -11 q9 1 10 11 Z" fill="#E0B84C" stroke="#211F1C" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M32 24 q9 -3 10 -11 q-9 1 -10 11 Z" fill="#E0B84C" stroke="#211F1C" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M32 36 q-9 -3 -10 -11 q9 1 10 11 Z" fill="#EBCF8A" stroke="#211F1C" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M32 36 q9 -3 10 -11 q-9 1 -10 11 Z" fill="#EBCF8A" stroke="#211F1C" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M32 48 q-9 -3 -10 -11 q9 1 10 11 Z" fill="#E0B84C" stroke="#211F1C" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M32 48 q9 -3 10 -11 q-9 1 -10 11 Z" fill="#E0B84C" stroke="#211F1C" stroke-width="2.4" stroke-linejoin="round"/>
+  </symbol>
+</svg>
+
+<div id="app">
+
+  <!-- ① 히어로 -->
+  <div id="hero">
+    <svg class="char bob" viewBox="0 0 64 68" style="width:92px" id="heroChar"></svg>
+    <div class="route">함양 to 남가좌<br>남가좌 to 함양</div>
+    <h1>8월, 골목에서<br>함양을 한 입 드셔보세요</h1>
+    <div class="sub">
+      남가좌439 × 늦여름 베이커리 팝업<br>
+      마공 가족에게 먼저 여는 사전주문
+    </div>
+    <a class="cta" href="#order">사전주문 하러 가기</a>
+  </div>
+
+  <!-- ② 취지 -->
+  <section id="why">
+    <div class="kicker">왜 하는가</div>
+    <h2>280km를 건너온<br>양파와 밀입니다</h2>
+    <div class="said">안녕하세요. 저는 함양이예요.<br>경남 함양에서 280km 건너왔어요.</div>
+    <p style="margin-top:20px">
+      서울에서 함양은 멀게 느껴집니다.
+      지리산 자락에 안긴 작은 군이라 이름은 낯설고, 가본 사람도 적습니다.
+    </p>
+    <p>
+      그런데 잘 알려지지 않은 만큼 때묻지 않은 자연이 남았고,
+      그 땅을 지켜온 농부와 자기다운 삶을 사는 청년들이 있습니다.
+    </p>
+    <p>
+      남가좌동 골목에서 함양의 양파와 우리밀로 만든 샌드위치를 냅니다.
+      한 입 베어무는 순간, 280km 너머의 밭과 사람이 조금 가까워지기를 바랍니다.
+    </p>
+    <div class="close">먹는 것에서 시작해, 아는 것으로.<br>아는 것을 넘어 가보고 경험하는 것까지.</div>
+  </section>
+
+  <!-- ③ 샌드위치 -->
+  <section id="menu">
+    <div class="kicker">남가좌 to 함양 샌드위치</div>
+    <h2>두 가지를 준비했습니다</h2>
+    <p style="margin-top:12px">함양 우리밀로 만든 퐁신한 도우빵에 두 가지 속을 채웠습니다.</p>
+
+    <div class="menu">
+      <img src="hamyang-preorder-emotion.jpg" alt="정서함양 — 브리치즈와 양파잼을 채운 화덕 샌드위치" loading="lazy">
+      <div class="body">
+        <div class="top">
+          <div>
+            <h3>정서함양</h3>
+            <div class="kind">브리치즈 &amp; 양파잼 샌드위치</div>
+          </div>
+          <div class="price">9,500원</div>
+        </div>
+        <div class="one">내 마음과 정서를 채워주는<br>속 편하고 다정한 한 입</div>
+        <p>
+          퐁신한 빵을 베어물면 감도는 브리의 부드러움, 함양 양파잼의 단맛.
+          선드라이토마토의 농축된 감칠맛과 루꼴라의 알싸함,
+          아몬드와 꿀의 조합으로 고소하고 달큰하게 마무리
+        </p>
+        <div class="spec">
+          <div><b>BREAD</b><span>함양 우리밀 퐁신 도우빵</span></div>
+          <div><b>SAUCE</b><span>사과 브랜디 수제 양파잼, 홀그레인 머스터드 마요, 꿀</span></div>
+          <div><b>INSIDE</b><span>쫀득한 브리치즈, 아작거리는 아몬드 슬라이스, 루꼴라, 선드라이 토마토</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu">
+      <img src="hamyang-preorder-energy.jpg" alt="체력함양 — 베이컨과 화이트 크림을 채운 화덕 샌드위치" loading="lazy">
+      <div class="body">
+        <div class="top">
+          <div>
+            <h3>체력함양</h3>
+            <div class="kind">베이컨 &amp; 화이트 크림 샌드위치</div>
+          </div>
+          <div class="price">9,500원</div>
+        </div>
+        <div class="one">기운과 체력을 충전하는<br>든든하고 꽉 찬 한 입</div>
+        <p>
+          겹겹이 쌓이는 바싹 구운 베이컨의 짭쪼롬함과 마스카포네 크림의 고소함,
+          루꼴라와 선드라이토마토의 산뜻한 마무리
+        </p>
+        <div class="spec">
+          <div><b>BREAD</b><span>함양 우리밀 퐁신 도우빵</span></div>
+          <div><b>SAUCE</b><span>페코리노 로마노 &amp; 마스카포네 크림 소스</span></div>
+          <div><b>INSIDE</b><span>크리스피 베이컨, 루꼴라, 선드라이 토마토</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ④ 원물 -->
+  <section id="origin">
+    <div class="kicker">숨은 주인공</div>
+    <h2>함양 양파와 우리밀</h2>
+
+    <div class="orig">
+      <svg viewBox="0 0 64 64"><use href="#i-onion"/></svg>
+      <div>
+        <h3>함양 블루밍어니언</h3>
+        <p>
+          함양의 게르마늄 토양에서 자란 양파는
+          바닥에 내리쳐도 뭉개지지 않을 만큼 단단하고 달아요.
+        </p>
+        <p>
+          양파잼은 한 번 만들 때 적어도 2시간 이상은 저어주며 졸여야 해요.
+          천천히 맛을 응축시켜, 절대로 빠르게 만들 수 없기에 더 정직한 맛입니다.
+          보통의 잼보다 설탕은 절반 이하로 적게 들어가고,
+          발사믹 등으로 향과 맛을 더해 고급스러운 소스로 활용이 가능합니다.
+        </p>
+      </div>
+    </div>
+
+    <div class="orig">
+      <svg viewBox="0 0 64 64"><use href="#i-wheat"/></svg>
+      <div>
+        <h3>함양에서 제분한 우리밀</h3>
+        <p>
+          전국에 4군데밖에 없는 우리밀 제분소가 함양군 지곡면에 있습니다.
+          큰 회사들이 품종을 섞어 밀을 빻을 때 품종별로 따로 빻는 고집으로,
+          우리밀의 고유한 맛을 살렸어요. 보존제도, GMO도 없습니다.
+        </p>
+        <p>
+          글루텐 함량이 낮아 빵 만들기는 까다롭지만,
+          속이 편하고 씹을수록 구수하답니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑤ 사전주문 -->
+  <section id="order">
+    <div class="kicker">사전주문</div>
+    <h2>마공의 가족에게<br>먼저 열어요</h2>
+    <p style="margin-top:12px">
+      하루에 샌드위치 종류별로 5개까지 사전 주문 받습니다.
+    </p>
+
+    <div class="info">
+      <div><b>수령</b><span>현장 수령만 가능합니다</span></div>
+      <div><b>결제</b><span>현장 결제. 수령하실 때 결제하시면 됩니다</span></div>
+      <div><b>장소</b><span>늦여름 베이커리</span></div>
+      <div><b>시간</b><span>오전 10시 ~ 오후 2시<br>
+        <span style="color:var(--muted);font-size:13.5px">어려우실 경우 2시 이후 수령 가능합니다</span></span></div>
+    </div>
+
+    <!-- 1단계 -->
+    <div class="step">
+      <div class="lb">1. 언제 오실까요?</div>
+      <div class="hint">수령하실 날짜 하나를 골라주세요.</div>
+      <div class="dates" id="dates">
+        <div class="muted" style="text-align:center;padding:18px 0">남은 수량을 불러오는 중이에요…</div>
+      </div>
+    </div>
+
+    <!-- 2단계 -->
+    <div class="step" id="stepQty" hidden>
+      <div class="lb">2. 몇 개 담을까요?</div>
+      <div class="hint" id="qtyHint"></div>
+      <div class="qty">
+        <div class="qrow">
+          <div class="nm"><b>정서함양</b><span>브리치즈 &amp; 양파잼 · 9,500원</span></div>
+          <div class="stp" data-k="emotion">
+            <button type="button" data-d="-1" aria-label="정서함양 하나 빼기">−</button>
+            <div class="n" id="nEmotion">0</div>
+            <button type="button" data-d="1" aria-label="정서함양 하나 더하기">+</button>
+          </div>
+        </div>
+        <div class="qrow">
+          <div class="nm"><b>체력함양</b><span>베이컨 &amp; 화이트 크림 · 9,500원</span></div>
+          <div class="stp" data-k="energy">
+            <button type="button" data-d="-1" aria-label="체력함양 하나 빼기">−</button>
+            <div class="n" id="nEnergy">0</div>
+            <button type="button" data-d="1" aria-label="체력함양 하나 더하기">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sum empty" id="sum">아직 담은 게 없어요.</div>
+    </div>
+
+    <!-- 3단계 -->
+    <div class="step" id="stepWho" hidden>
+      <div class="lb">3. 신청자</div>
+      <div class="hint">수령하실 때 성함으로 확인합니다.</div>
+      <div class="field">
+        <label for="fName">이름<i>*</i></label>
+        <input type="text" id="fName" maxlength="40" autocomplete="name" placeholder="홍길동">
+        <div class="privacy">이름은 수령 확인에만 쓰고, 팝업이 끝나면 지웁니다.</div>
+      </div>
+
+      <div class="err" id="err"></div>
+      <button class="cta" id="submit" disabled>사전주문 넣기</button>
+    </div>
+  </section>
+
+  <!-- ⑥ 완료 -->
+  <section id="done">
+    <svg class="char" viewBox="0 0 64 68" style="width:80px" id="doneChar"></svg>
+    <h2 style="text-align:center;margin-top:14px">주문이 들어갔어요</h2>
+    <div class="receipt">
+      <div class="lines" id="rLines"></div>
+      <div class="no">주문번호<em id="rNo">—</em></div>
+    </div>
+    <div class="after">
+      수령하실 때 성함을 말씀해주세요.<br>
+      결제는 그때 현장에서 하시면 됩니다.
+      <div class="tip">
+        못 오시게 되면 미리 알려주세요. 그날 만들 개수를 맞춰야 해서요.<br>
+        <span class="tbd" id="cancelTo">[취소 연락처]</span>
+      </div>
+    </div>
+    <a class="cta ghost" href="https://instagram.com/namgajwa439" target="_blank" rel="noopener">@namgajwa439 인스타 보기</a>
+  </section>
+
+  <footer>
+    남가좌439 · 늦여름 베이커리<br>서울시 넥스트로컬 8기
+  </footer>
+</div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+const sb = createClient(
+  'https://hncuvjrghniwihhfpata.supabase.co',
+  'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
+);
+
+const PRICE = 9500;
+const SRC = (new URLSearchParams(location.search).get('src') || '').toLowerCase() || null;
+
+/* ───────── 함양이 캐릭터 ───────── */
+function onionSVG(mood='hi'){
+  const face = {
+    hi:`<circle cx="26" cy="38" r="2.6" fill="#211F1C"/><circle cx="38" cy="38" r="2.6" fill="#211F1C"/>
+        <circle cx="26.8" cy="37.2" r=".8" fill="#fff"/><circle cx="38.8" cy="37.2" r=".8" fill="#fff"/>
+        <path d="M27.5 45 Q32 50 36.5 45" fill="none" stroke="#211F1C" stroke-width="2.2" stroke-linecap="round"/>`,
+    bye:`<path d="M22.5 39 Q26 35 29.5 39" fill="none" stroke="#211F1C" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M34.5 39 Q38 35 41.5 39" fill="none" stroke="#211F1C" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M27 45 Q32 51 37 45" fill="none" stroke="#211F1C" stroke-width="2.2" stroke-linecap="round"/>`
+  }[mood] || '';
+  return `
+  <path d="M32 16 C32 11 33 7 36 5" fill="none" stroke="#7FA36A" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M32 14 C30 9 26 7 21 8 C23 13 28 15 31 13 Z" fill="#8FA97E" stroke="#211F1C" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M33 13 C36 8 41 7 46 9 C43 14 38 15 34 12 Z" fill="#7FA36A" stroke="#211F1C" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M32 17 C17 17 13 32 15 44 C17 56 25 60 32 60 C39 60 47 56 49 44 C51 32 47 17 32 17 Z" fill="#EBCF8A" stroke="#211F1C" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M22 25 C19 34 19 47 24 57" fill="none" stroke="#C99E4E" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M42 25 C45 34 45 47 40 57" fill="none" stroke="#C99E4E" stroke-width="2.4" stroke-linecap="round"/>
+  <ellipse cx="22.5" cy="43.5" rx="3.4" ry="2.3" fill="#E88B7A" opacity=".5"/>
+  <ellipse cx="41.5" cy="43.5" rx="3.4" ry="2.3" fill="#E88B7A" opacity=".5"/>
+  ${face}
+  <path d="M29 60 L28 64 M32 60 L32 65 M35 60 L36 64" stroke="#211F1C" stroke-width="2" stroke-linecap="round"/>`;
+}
+document.getElementById('heroChar').innerHTML = onionSVG('hi');
+document.getElementById('doneChar').innerHTML = onionSVG('bye');
+
+/* ───────── 상태 ───────── */
+const $ = id => document.getElementById(id);
+const state = { slots: [], date: null, emotion: 0, energy: 0 };
+const DOW = ['일','월','화','수','목','금','토'];
+const fmtDate = s => {
+  const [y,m,d] = s.split('-').map(Number);
+  return { short:`${m}/${d}`, dow:DOW[new Date(y, m-1, d).getDay()], long:`${m}월 ${d}일` };
+};
+const won = n => n.toLocaleString('ko-KR');
+const cur = () => state.slots.find(s => s.pickup_date === state.date) || null;
+
+/* ───────── 잔여 불러오기 ───────── */
+async function loadSlots(){
+  const { data, error } = await sb
+    .from('hamyang_preorder_slots')
+    .select('pickup_date,is_open,left_emotion,left_energy,sort')
+    .order('sort');
+  if (error || !data) {
+    $('dates').innerHTML =
+      `<div class="muted" style="text-align:center;padding:18px 0">
+         남은 수량을 불러오지 못했어요.<br>잠시 뒤 새로고침 해주세요.
+       </div>`;
+    return;
+  }
+  state.slots = data;
+  renderDates();
+}
+
+function renderDates(){
+  $('dates').innerHTML = state.slots.map(s => {
+    const f = fmtDate(s.pickup_date);
+    const e = s.left_emotion, n = s.left_energy;
+    const closed = !s.is_open || (e + n === 0);
+    let right;
+    if (closed)          right = '마감';
+    else if (e === 0)    right = `정서 마감 · 체력 ${n} 남음`;
+    else if (n === 0)    right = `정서 ${e} 남음 · 체력 마감`;
+    else                 right = `정서 ${e} · 체력 ${n} 남음`;
+    return `<button type="button" class="date${state.date === s.pickup_date ? ' sel' : ''}"
+              data-d="${s.pickup_date}" ${closed ? 'disabled' : ''}>
+              <span class="d">${f.short}<em>${f.dow}</em></span>
+              <span class="r">${right}</span>
+            </button>`;
+  }).join('');
+  $('dates').querySelectorAll('.date:not([disabled])').forEach(b => {
+    b.onclick = () => pickDate(b.dataset.d);
+  });
+}
+
+function pickDate(d){
+  if (state.date !== d) { state.emotion = 0; state.energy = 0; }
+  state.date = d;
+  renderDates();
+  $('stepQty').hidden = false;
+  $('stepWho').hidden = false;
+  const s = cur();
+  $('qtyHint').textContent =
+    `${fmtDate(d).long}에 남은 건 정서함양 ${s.left_emotion}개, 체력함양 ${s.left_energy}개예요.`;
+  renderQty();
+  $('stepQty').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+/* ───────── 수량 ───────── */
+function renderQty(){
+  const s = cur();
+  $('nEmotion').textContent = state.emotion;
+  $('nEnergy').textContent  = state.energy;
+  document.querySelectorAll('.stp').forEach(g => {
+    const k = g.dataset.k;
+    const max = s ? (k === 'emotion' ? s.left_emotion : s.left_energy) : 0;
+    g.querySelector('[data-d="-1"]').disabled = state[k] <= 0;
+    g.querySelector('[data-d="1"]').disabled  = state[k] >= max;
+  });
+  const total = state.emotion + state.energy;
+  const box = $('sum');
+  if (!total) {
+    box.className = 'sum empty';
+    box.textContent = '아직 담은 게 없어요.';
+  } else {
+    const parts = [];
+    if (state.emotion) parts.push(`정서함양 ${state.emotion}`);
+    if (state.energy)  parts.push(`체력함양 ${state.energy}`);
+    box.className = 'sum';
+    box.innerHTML = `${parts.join(' · ')} — 모두 ${total}개
+      <span class="won">${won(total * PRICE)}원<em>현장 결제</em></span>`;
+  }
+  syncSubmit();
+}
+
+document.querySelectorAll('.stp button').forEach(b => {
+  b.onclick = () => {
+    const k = b.closest('.stp').dataset.k;
+    const s = cur(); if (!s) return;
+    const max = k === 'emotion' ? s.left_emotion : s.left_energy;
+    state[k] = Math.min(max, Math.max(0, state[k] + Number(b.dataset.d)));
+    renderQty();
+  };
+});
+
+/* ───────── 제출 ───────── */
+function syncSubmit(){
+  const ok = state.date
+    && (state.emotion + state.energy) > 0
+    && $('fName').value.trim();
+  $('submit').disabled = !ok;
+}
+$('fName').addEventListener('input', syncSubmit);
+
+function showErr(msg){
+  const e = $('err');
+  e.innerHTML = msg;
+  e.classList.add('on');
+  e.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+$('submit').onclick = async () => {
+  const btn = $('submit');
+  $('err').classList.remove('on');
+  btn.disabled = true;
+  btn.textContent = '넣는 중이에요…';
+
+  const payload = {
+    p_date:    state.date,
+    p_emotion: state.emotion,
+    p_energy:  state.energy,
+    p_name:    $('fName').value.trim(),
+    p_src:     SRC
+  };
+
+  const { data, error } = await sb.rpc('hamyang_preorder_create', payload);
+  btn.textContent = '사전주문 넣기';
+
+  if (error) {
+    showErr('주문을 넣지 못했어요. 잠시 뒤 다시 눌러주세요.');
+    btn.disabled = false;
+    return;
+  }
+  if (!data || !data.ok) {
+    const code = data && data.error;
+    if (code === 'sold_out') {
+      // 그 사이 팔린 경우 — 잔여를 다시 불러와 화면을 맞춘다
+      await loadSlots();
+      const s = cur();
+      if (s) {
+        state.emotion = Math.min(state.emotion, s.left_emotion);
+        state.energy  = Math.min(state.energy,  s.left_energy);
+        $('qtyHint').textContent =
+          `${fmtDate(state.date).long}에 남은 건 정서함양 ${s.left_emotion}개, 체력함양 ${s.left_energy}개예요.`;
+        renderQty();
+      }
+      showErr('죄송해요, 그 사이에 남은 수량이 바뀌었어요.<br>수량을 다시 확인하고 눌러주세요.');
+    } else if (code === 'closed') {
+      await loadSlots();
+      showErr('그날은 주문이 닫혔어요. 다른 날짜를 골라주세요.');
+    } else if (code === 'no_contact') {
+      showErr('이름을 적어주세요.');
+    } else {
+      showErr('주문을 넣지 못했어요. 잠시 뒤 다시 눌러주세요.');
+    }
+    btn.disabled = false;
+    syncSubmit();
+    return;
+  }
+
+  // 완료
+  const f = fmtDate(state.date);
+  const total = state.emotion + state.energy;
+  const parts = [];
+  if (state.emotion) parts.push(`정서함양 ${state.emotion}`);
+  if (state.energy)  parts.push(`체력함양 ${state.energy}`);
+  $('rLines').innerHTML =
+    `<b>${f.long} ${f.dow}요일</b><br>
+     ${parts.join(' · ')} — 모두 ${total}개<br>
+     ${won(total * PRICE)}원`;
+  $('rNo').textContent = data.id;
+
+  $('order').style.display = 'none';
+  $('done').classList.add('on');
+  $('done').scrollIntoView({ behavior:'smooth', block:'start' });
+};
+
+loadSlots();
+</script>
+</body>
+</html>
