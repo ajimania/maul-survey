@@ -81,6 +81,18 @@ h1{font-family:'Jua',sans-serif;font-size:22px;letter-spacing:-.5px;}
 .tag{font-size:11.5px;color:var(--muted);}
 
 .note{margin-top:22px;font-size:12.5px;color:var(--muted);line-height:1.8;text-align:center;}
+.sect{
+  margin-top:30px;font-family:'Jua',sans-serif;font-size:17px;letter-spacing:-.4px;
+  padding-bottom:7px;border-bottom:2.5px solid var(--crayon);
+}
+.sect span{font-family:'Gowun Dodum',sans-serif;font-size:12px;color:var(--muted);margin-left:7px;}
+.ic{display:flex;align-items:center;gap:10px;padding:12px 16px;}
+.ic + .ic{border-top:2px dashed var(--line);}
+.ic .who{flex:1;min-width:0;}
+.ic .who b{font-size:15.5px;font-weight:400;}
+.ic .who span{display:block;font-size:12.5px;color:var(--muted);margin-top:1px;}
+.ic .qq{flex:none;font-size:13.5px;text-align:right;line-height:1.45;}
+.ic .qq em{font-style:normal;font-family:'Jua',sans-serif;color:var(--amber-deep);}
 .msg{
   margin-top:16px;padding:14px;border:2.5px solid var(--red);border-radius:13px;
   background:#FBEDE9;color:#9B3D28;font-size:14.5px;display:none;
@@ -100,11 +112,18 @@ h1{font-family:'Jua',sans-serif;font-size:22px;letter-spacing:-.5px;}
   </header>
 
   <div class="msg" id="msg"></div>
+
+  <div class="sect">마공 사전주문 <span>정원 있음 · 예약</span></div>
   <div id="list"><div class="loading">불러오는 중…</div></div>
 
   <div class="note">
     이름을 확인하고 <b>수령</b>을 누르면 체크됩니다.<br>
     취소한 주문의 수량은 사전주문 페이지에서 다시 풀립니다.
+  </div>
+
+  <div id="interestWrap" hidden>
+    <div class="sect">사전 수요조사 <span>정원 없음 · 예약 아님</span></div>
+    <div id="ilist"></div>
   </div>
 </div>
 
@@ -144,6 +163,7 @@ async function load(){
     return;
   }
   render(slots.data || [], orders.data || []);
+  loadInterest();
   const n = new Date();
   $('stamp').textContent =
     `${n.getMonth()+1}월 ${n.getDate()}일 ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')} 기준`;
@@ -224,6 +244,64 @@ async function setStatus(btn){
     return;
   }
   load();
+}
+
+/* ───────── 사전 수요조사 (정원 없음, 예약 아님) ───────── */
+async function loadInterest(){
+  const { data, error } = await sb.from('hamyang_interest_list').select('*').order('created_at');
+  if (error) { $('interestWrap').hidden = true; return; }   // SQL 아직 미실행이면 조용히 숨김
+  $('interestWrap').hidden = false;
+
+  const rows = data || [];
+  if (!rows.length) {
+    $('ilist').innerHTML = `<div class="day"><div class="empty">아직 신청이 없어요</div></div>`;
+    return;
+  }
+
+  const groups = new Map();
+  rows.forEach(r => {
+    const k = r.pickup_date || 'unknown';
+    if (!groups.has(k)) groups.set(k, []);
+    groups.get(k).push(r);
+  });
+  const keys = [...groups.keys()].sort((a,b) =>
+    a === 'unknown' ? 1 : b === 'unknown' ? -1 : a.localeCompare(b));
+
+  const tot = {
+    e: rows.reduce((a,r) => a + (r.qty_emotion||0), 0),
+    n: rows.reduce((a,r) => a + (r.qty_energy||0), 0),
+    p: rows.reduce((a,r) => a + (r.party_size||0), 0)
+  };
+
+  $('ilist').innerHTML =
+    `<div class="total"><span class="l">전체 수요</span>
+       <span class="r">${rows.length}건 · ${tot.e + tot.n}개</span></div>` +
+    keys.map(k => {
+      const g = groups.get(k);
+      const e = g.reduce((a,r) => a + (r.qty_emotion||0), 0);
+      const n = g.reduce((a,r) => a + (r.qty_energy||0), 0);
+      const p = g.reduce((a,r) => a + (r.party_size||0), 0);
+      const head = k === 'unknown' ? '날짜 미정' : `${fmt(k).label} ${fmt(k).dow}`;
+      const body = g.map(r => {
+        const q = [];
+        if (r.qty_emotion) q.push(`정서 <em>${r.qty_emotion}</em>`);
+        if (r.qty_energy)  q.push(`체력 <em>${r.qty_energy}</em>`);
+        const bits = [];
+        if (r.party_size) bits.push(r.party_size >= 4 ? '4명 이상' : `${r.party_size}명`);
+        if (r.phone_tail) bits.push(r.phone_tail);
+        return `<div class="ic">
+            <div class="who"><b>${esc(r.name || '이름없음')}</b>
+              <span>${esc(bits.join(' · '))}</span></div>
+            <div class="qq">${q.join('<br>') || '—'}</div>
+          </div>`;
+      }).join('');
+      return `<div class="day">
+          <div class="dh"><span class="d">${head}</span>
+            <span class="s">${g.length}건${p ? ' · ' + p + '명' : ''}</span></div>
+          <div class="make">희망 수량 — 정서함양 <b>${e}</b> · 체력함양 <b>${n}</b></div>
+          ${body}
+        </div>`;
+    }).join('');
 }
 
 $('reload').onclick = load;

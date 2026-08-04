@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>함양 to 남가좌 pop-up — 사전 신청</title>
+<meta name="description" content="함양의 양파, 우리밀로 만든 화덕풍 샌드위치. 8월 7일부터 13일까지 남가좌동 늦여름 베이커리. 언제 오실지 미리 알려주세요.">
+<meta property="og:title" content="함양 to 남가좌 pop-up">
+<meta property="og:description" content="서울에서 함양을 가장 가까이 경험하는 방법. 8.7–8.13 남가좌동 늦여름 베이커리.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --yellow:#F8C33E;
+  --yellow-deep:#EBB12A;
+  --rust:#A8432A;
+  --rust-soft:#C0563A;
+  --ink:#1C1A17;
+  --white:#FFFDF8;
+  --line:rgba(28,26,23,.16);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{
+  font-family:'Gothic A1',sans-serif;color:var(--ink);background:var(--yellow);
+  -webkit-font-smoothing:antialiased;line-height:1.75;overflow-x:hidden;
+}
+.han{font-family:'Black Han Sans',sans-serif;font-weight:400;letter-spacing:-.5px;}
+#app{max-width:480px;margin:0 auto;padding:0 20px calc(40px + env(safe-area-inset-bottom));}
+section{padding:40px 0;}
+section + section{border-top:2px solid rgba(28,26,23,.15);}
+
+h2{font-family:'Black Han Sans',sans-serif;font-size:30px;line-height:1.25;letter-spacing:-1px;text-align:center;text-wrap:balance;}
+h3{font-family:'Black Han Sans',sans-serif;font-size:20px;letter-spacing:-.5px;}
+p{font-size:15px;line-height:1.85;text-wrap:pretty;}
+.mid{text-align:center;}
+.rust{color:var(--rust);}
+.sub{font-size:15.5px;font-weight:700;font-style:italic;text-align:center;margin-top:14px;}
+
+/* 연결 모티프 */
+.motif{display:block;margin:0 auto;width:46px;height:auto;}
+.motif.lg{width:80px;}
+
+/* ───────── 히어로 ───────── */
+#hero{padding:34px 0 40px;text-align:center;}
+#hero .t{font-family:'Black Han Sans',sans-serif;font-size:clamp(38px,11.5vw,50px);line-height:1.02;letter-spacing:-2px;color:var(--rust);}
+#hero .t i{font-family:'Gothic A1',sans-serif;font-style:italic;font-weight:900;font-size:.72em;letter-spacing:-1px;}
+#hero .pop{
+  display:inline-block;margin-top:10px;background:var(--white);color:var(--rust);
+  border-radius:999px;padding:5px 26px;font-style:italic;font-weight:700;font-size:19px;letter-spacing:.5px;
+}
+#hero .lede{font-weight:900;font-size:17px;line-height:1.55;margin-top:20px;letter-spacing:-.5px;text-wrap:balance;}
+#hero .when{
+  margin-top:22px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);
+  padding:14px 0;font-size:15px;line-height:1.9;font-weight:700;
+}
+#hero .when b{font-family:'Black Han Sans',sans-serif;font-weight:400;font-size:17px;}
+#hero .when .r{
+  display:inline-block;border:2px solid var(--ink);border-radius:999px;
+  padding:0 9px;font-size:12.5px;font-weight:700;margin-right:5px;vertical-align:2px;
+}
+#hero .where{margin-top:12px;font-size:14px;line-height:1.7;}
+#hero .where span{font-size:12.5px;opacity:.72;}
+
+/* ───────── 3단계 ───────── */
+.steps{margin-top:26px;}
+.stp{padding:22px 0;text-align:center;}
+.stp + .stp{border-top:2px solid rgba(28,26,23,.2);}
+.stp .n{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  font-family:'Black Han Sans',sans-serif;font-size:21px;letter-spacing:-.5px;
+}
+.stp .n em{
+  font-style:normal;width:23px;height:23px;border-radius:50%;background:var(--ink);color:var(--yellow);
+  font-size:14px;display:inline-flex;align-items:center;justify-content:center;
+}
+.stp p{margin-top:11px;font-size:14.5px;line-height:1.8;font-weight:500;}
+.stp p b{color:var(--rust);font-weight:900;}
+
+/* ───────── 메뉴 ───────── */
+.menu{margin-top:22px;background:var(--white);border-radius:6px;overflow:hidden;
+  box-shadow:0 3px 0 rgba(28,26,23,.18);}
+.menu img{display:block;width:100%;height:216px;object-fit:cover;}
+.menu .b{padding:18px;}
+.menu .nm{
+  display:inline-block;background:var(--rust);color:var(--white);
+  border-radius:999px;padding:5px 18px;font-family:'Black Han Sans',sans-serif;font-size:17px;
+}
+.menu .kind{margin-top:9px;font-size:14px;font-weight:700;color:var(--rust);line-height:1.55;}
+.menu .price{float:right;font-family:'Black Han Sans',sans-serif;font-size:17px;}
+.menu p{margin-top:11px;font-size:14px;line-height:1.8;}
+.spec{margin-top:13px;border-top:2px dashed var(--line);padding-top:11px;}
+.spec div{display:flex;gap:9px;font-size:13.5px;line-height:1.7;}
+.spec div + div{margin-top:6px;}
+.spec b{flex:none;width:56px;font-size:11.5px;font-weight:900;color:var(--rust);letter-spacing:.4px;padding-top:3px;}
+
+/* ───────── 원물 ───────── */
+.orig{margin-top:20px;background:rgba(255,253,248,.55);border-radius:6px;padding:16px 17px;}
+.orig h3{font-size:17px;color:var(--rust);}
+.orig p{margin-top:8px;font-size:14px;line-height:1.8;}
+
+/* ───────── 폼 ───────── */
+#ask{scroll-margin-top:10px;}
+.notice{
+  margin-top:18px;background:var(--ink);color:var(--white);border-radius:6px;padding:17px 18px;
+  font-size:14.5px;line-height:1.8;
+}
+.notice b{font-family:'Black Han Sans',sans-serif;font-weight:400;color:var(--yellow);font-size:16px;}
+.step{margin-top:28px;}
+.lb{font-family:'Black Han Sans',sans-serif;font-size:19px;letter-spacing:-.5px;}
+.hint{font-size:13.5px;margin-top:5px;line-height:1.7;opacity:.75;}
+
+.dates{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:14px;}
+.date{
+  background:var(--white);border:2.5px solid var(--ink);border-radius:6px;
+  padding:13px 10px;cursor:pointer;font-family:'Gothic A1',sans-serif;color:var(--ink);
+  box-shadow:0 3px 0 rgba(28,26,23,.2);text-align:center;
+}
+.date .d{display:block;font-family:'Black Han Sans',sans-serif;font-size:18px;}
+.date .w{display:block;font-size:12.5px;opacity:.7;margin-top:1px;}
+.date:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(28,26,23,.2);}
+.date.sel{background:var(--rust);color:var(--white);}
+.date.sel .w{opacity:.85;}
+.date.wide{grid-column:1 / -1;}
+.date.wide .d{font-size:16px;}
+
+.qty{margin-top:14px;display:flex;flex-direction:column;gap:9px;}
+.qrow{
+  display:flex;align-items:center;gap:12px;background:var(--white);border-radius:6px;
+  padding:13px 14px;box-shadow:0 3px 0 rgba(28,26,23,.18);
+}
+.qrow .nm{flex:1;min-width:0;}
+.qrow .nm b{display:block;font-family:'Black Han Sans',sans-serif;font-weight:400;font-size:16px;}
+.qrow .nm span{display:block;font-size:12px;opacity:.7;margin-top:1px;line-height:1.5;}
+.stp2{display:flex;align-items:center;gap:4px;flex:none;}
+.stp2 button{
+  width:33px;height:33px;border:2.5px solid var(--ink);background:var(--white);border-radius:50%;
+  font-family:'Black Han Sans',sans-serif;font-size:18px;line-height:1;color:var(--ink);cursor:pointer;
+}
+.stp2 button[disabled]{opacity:.28;cursor:default;}
+.stp2 .n{width:28px;text-align:center;font-family:'Black Han Sans',sans-serif;font-size:18px;}
+.sum{
+  margin-top:13px;padding:14px;border:2.5px dashed rgba(28,26,23,.35);border-radius:6px;
+  text-align:center;font-size:14.5px;font-weight:700;
+}
+.sum .won{display:block;font-family:'Black Han Sans',sans-serif;font-size:22px;color:var(--rust);margin-top:4px;}
+.sum .won em{font-style:normal;font-family:'Gothic A1',sans-serif;font-size:12.5px;font-weight:700;color:var(--ink);opacity:.7;margin-left:6px;}
+.sum.empty{opacity:.6;font-weight:400;}
+
+.field{margin-top:13px;}
+.field label{display:block;font-size:14px;font-weight:700;margin-bottom:6px;}
+.field label i{font-style:normal;color:var(--rust);margin-left:3px;}
+input[type=text],input[type=tel]{
+  width:100%;background:var(--white);border:2.5px solid var(--ink);border-radius:6px;
+  padding:13px 14px;font-family:'Gothic A1',sans-serif;font-size:15.5px;color:var(--ink);
+}
+input::placeholder{color:#B5AFA4;}
+input:focus{outline:none;box-shadow:0 3px 0 rgba(28,26,23,.2);}
+.party{display:flex;gap:8px;margin-top:2px;}
+.party button{
+  flex:1;background:var(--white);border:2.5px solid var(--ink);border-radius:6px;padding:11px 4px;
+  font-family:'Gothic A1',sans-serif;font-size:14.5px;font-weight:700;color:var(--ink);cursor:pointer;
+}
+.party button.sel{background:var(--rust);color:var(--white);}
+.agree{
+  display:flex;gap:11px;align-items:flex-start;margin-top:18px;cursor:pointer;
+  background:rgba(255,253,248,.6);border-radius:6px;padding:13px 14px;
+}
+.agree input{flex:none;width:20px;height:20px;margin-top:2px;accent-color:var(--rust);}
+.agree span{font-size:13px;line-height:1.7;}
+.cta{
+  display:block;width:100%;margin-top:20px;font-family:'Black Han Sans',sans-serif;font-size:19px;
+  background:var(--rust);color:var(--white);border:none;border-radius:6px;padding:17px;cursor:pointer;
+  box-shadow:0 4px 0 #7E3020;letter-spacing:-.5px;
+}
+.cta:active{transform:translateY(3px);box-shadow:0 1px 0 #7E3020;}
+.cta[disabled]{opacity:.4;box-shadow:none;cursor:default;}
+.err{
+  margin-top:14px;padding:13px;border:2.5px solid var(--rust);border-radius:6px;
+  background:var(--white);color:var(--rust);font-size:14.5px;font-weight:700;display:none;
+}
+.err.on{display:block;}
+
+/* ───────── 완료 ───────── */
+#done{display:none;}
+#done.on{display:block;animation:rise .45s cubic-bezier(.2,.9,.3,1);}
+@keyframes rise{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+.receipt{
+  margin-top:18px;background:var(--white);border-radius:6px;padding:24px 20px;text-align:center;
+  box-shadow:0 3px 0 rgba(28,26,23,.2);
+}
+.receipt .lines{font-size:15.5px;line-height:1.95;font-weight:700;}
+.receipt .lines b{font-family:'Black Han Sans',sans-serif;font-weight:400;font-size:19px;}
+.receipt .no{margin-top:13px;padding-top:13px;border-top:2px dashed var(--line);font-size:13px;opacity:.7;}
+.receipt .no em{font-style:normal;font-family:'Black Han Sans',sans-serif;font-size:18px;color:var(--rust);margin-left:6px;opacity:1;}
+.after{margin-top:18px;font-size:14.5px;line-height:1.85;text-align:center;}
+
+footer{padding:26px 0 6px;text-align:center;font-size:12.5px;line-height:1.9;opacity:.72;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- 히어로 -->
+  <div id="hero">
+    <div class="t">함양<i>to</i>남가좌</div>
+    <div class="pop">pop-up</div>
+    <div class="lede">함양의 양파, 우리밀로 만든<br>화덕풍 샌드위치</div>
+    <div class="when">
+      <span class="r">1차</span><b>8.7(금) – 8.8(토)</b><br>
+      <span class="r">2차</span><b>8.11(화) – 8.13(목)</b>
+    </div>
+    <div class="where">
+      매일 오전 10시 – 오후 2시 · 늦여름 베이커리<br>
+      <span>서대문구 가재울로 4길 40</span>
+    </div>
+  </div>
+
+  <!-- 3단계 -->
+  <section>
+    <h2>먹는 경험으로<br>지역과 연결되기</h2>
+    <div class="sub">서울에서 함양을 가장 가까이 경험하는 방법</div>
+    <svg class="motif" viewBox="0 0 60 24" style="margin-top:20px" aria-hidden="true">
+      <rect x="0" y="6" width="12" height="12" rx="3.5" fill="#A8432A"/>
+      <rect x="16" y="0" width="12" height="12" rx="3.5" fill="#A8432A"/>
+      <rect x="16" y="14" width="10" height="10" rx="3" fill="#A8432A"/>
+      <rect x="32" y="6" width="12" height="12" rx="3.5" fill="#A8432A"/>
+      <rect x="48" y="9" width="7" height="7" rx="2.2" fill="#A8432A"/>
+    </svg>
+
+    <div class="steps">
+      <div class="stp">
+        <div class="n"><em>1</em>만나다</div>
+        <p>서울에서 함양은 조금 멉니다.<br>
+          그래서 우리는 <b>함양의 양파와 우리밀</b>,<br>
+          그리고 <b>그곳에서 만난 사람들의 이야기</b>를 남가좌로 가져왔습니다.</p>
+      </div>
+      <div class="stp">
+        <div class="n"><em>2</em>맛보다</div>
+        <p>함양의 양파와 우리밀로 만든 <b>두 가지 화덕풍 샌드위치</b>.<br>
+          한 입으로 함양을 가장 가까이 만나봅니다.</p>
+      </div>
+      <div class="stp">
+        <div class="n"><em>3</em>연결되다</div>
+        <p>함양에서 온 양파와 우리밀을 직접 보고,<br>
+          <b>작은 전시와 참여 프로그램</b>을 통해 함양을 조금 더 가까이 경험합니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 메뉴 -->
+  <section>
+    <h2>두 가지<br>샌드위치</h2>
+
+    <div class="menu">
+      <img src="hamyang-preorder-energy.jpg" alt="체력함양 — 베이컨과 마스카포네 크림 소스 샌드위치" loading="lazy">
+      <div class="b">
+        <span class="price">9,500원</span>
+        <span class="nm">체력함양</span>
+        <div class="kind">베이컨 &amp; 마스카포네<br>크림 소스 샌드위치</div>
+        <p>겹겹이 쌓이는 바싹 구운 베이컨의 짭쪼롬함과 마스카포네 크림의 고소함,
+          루꼴라와 선드라이토마토의 산뜻한 마무리</p>
+        <div class="spec">
+          <div><b>BREAD</b><span>함양 우리밀 퐁신 도우빵</span></div>
+          <div><b>SAUCE</b><span>페코리노 로마노 &amp; 마스카포네 크림 소스</span></div>
+          <div><b>INSIDE</b><span>크리스피 베이컨, 루꼴라, 선드라이 토마토</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu">
+      <img src="hamyang-preorder-emotion.jpg" alt="정서함양 — 브리치즈와 양파잼 샌드위치" loading="lazy">
+      <div class="b">
+        <span class="price">9,500원</span>
+        <span class="nm">정서함양</span>
+        <div class="kind">브리치즈 &amp; 양파잼<br>샌드위치</div>
+        <p>퐁신한 빵을 베어물면 감도는 브리의 부드러움, 함양 양파잼의 단맛.
+          선드라이토마토의 농축된 감칠맛과 루꼴라의 알싸함,
+          아몬드와 꿀의 조합으로 고소하고 달큰하게 마무리</p>
+        <div class="spec">
+          <div><b>BREAD</b><span>함양 우리밀 퐁신 도우빵</span></div>
+          <div><b>SAUCE</b><span>사과 브랜디 수제 양파잼, 홀그레인 머스터드 마요, 꿀</span></div>
+          <div><b>INSIDE</b><span>쫀득한 브리치즈, 아작거리는 아몬드 슬라이스, 루꼴라, 선드라이 토마토</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 원물 -->
+  <section>
+    <h2>숨은 주인공</h2>
+    <div class="sub">함양 양파와 우리밀</div>
+
+    <div class="orig">
+      <h3>함양 블루밍어니언</h3>
+      <p>함양의 게르마늄 토양에서 자란 양파는 바닥에 내리쳐도 뭉개지지 않을 만큼 단단하고 달아요.
+        양파잼은 한 번 만들 때 적어도 2시간 이상은 저어주며 졸여야 합니다.
+        천천히 맛을 응축시켜, 절대로 빠르게 만들 수 없기에 더 정직한 맛입니다.</p>
+    </div>
+    <div class="orig">
+      <h3>함양에서 제분한 우리밀</h3>
+      <p>전국에 4군데밖에 없는 우리밀 제분소가 함양군 지곡면에 있습니다.
+        큰 회사들이 품종을 섞어 밀을 빻을 때 품종별로 따로 빻는 고집으로 우리밀의 고유한 맛을 살렸어요.
+        보존제도, GMO도 없습니다. 글루텐 함량이 낮아 빵 만들기는 까다롭지만, 속이 편하고 씹을수록 구수합니다.</p>
+    </div>
+  </section>
+
+  <!-- 사전 신청 -->
+  <section id="ask">
+    <h2>얼마나 준비할지<br>알려주세요</h2>
+
+    <div class="notice">
+      <b>예약이 아니에요.</b><br>
+      하루에 만들 수 있는 개수가 정해져 있어서,
+      몇 분이 언제쯤 오실지 미리 알면 그날 넉넉히 준비할 수 있습니다.
+      남겨주시면 준비할 때 먼저 헤아리겠습니다.
+    </div>
+
+    <div class="step">
+      <div class="lb">1. 언제 오실 것 같으세요?</div>
+      <div class="hint">아직 못 정하셨어도 괜찮아요.</div>
+      <div class="dates" id="dates"></div>
+    </div>
+
+    <div class="step">
+      <div class="lb">2. 몇 개쯤 사고 싶으세요?</div>
+      <div class="hint">정확하지 않아도 됩니다. 대략으로 적어주세요.</div>
+      <div class="qty">
+        <div class="qrow">
+          <div class="nm"><b>체력함양</b><span>베이컨 &amp; 마스카포네 크림 · 9,500원</span></div>
+          <div class="stp2" data-k="energy">
+            <button type="button" data-d="-1" aria-label="체력함양 하나 빼기">−</button>
+            <div class="n" id="nEnergy">0</div>
+            <button type="button" data-d="1" aria-label="체력함양 하나 더하기">+</button>
+          </div>
+        </div>
+        <div class="qrow">
+          <div class="nm"><b>정서함양</b><span>브리치즈 &amp; 양파잼 · 9,500원</span></div>
+          <div class="stp2" data-k="emotion">
+            <button type="button" data-d="-1" aria-label="정서함양 하나 빼기">−</button>
+            <div class="n" id="nEmotion">0</div>
+            <button type="button" data-d="1" aria-label="정서함양 하나 더하기">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="sum empty" id="sum">아직 고르지 않으셨어요.</div>
+    </div>
+
+    <div class="step">
+      <div class="lb">3. 몇 분이 오시나요?</div>
+      <div class="hint">좌석과 시식 준비에 참고합니다.</div>
+      <div class="party" id="party">
+        <button type="button" data-p="1">혼자</button>
+        <button type="button" data-p="2">2명</button>
+        <button type="button" data-p="3">3명</button>
+        <button type="button" data-p="4">4명 이상</button>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="lb">4. 연락받으실 곳</div>
+      <div class="hint">준비가 어렵거나 일정이 바뀌면 미리 알려드리려고 받습니다.</div>
+      <div class="field">
+        <label for="fName">이름<i>*</i></label>
+        <input type="text" id="fName" maxlength="40" autocomplete="name" placeholder="홍길동">
+      </div>
+      <div class="field">
+        <label for="fPhone">연락처<i>*</i></label>
+        <input type="tel" id="fPhone" maxlength="40" autocomplete="tel" inputmode="tel" placeholder="010-0000-0000">
+      </div>
+      <label class="agree">
+        <input type="checkbox" id="fAgree">
+        <span>이름과 연락처를 이번 팝업 준비와 안내에만 쓰는 데 동의합니다.
+          팝업이 끝나고 한 달 안에 지웁니다.</span>
+      </label>
+
+      <div class="err" id="err"></div>
+      <button class="cta" id="submit" disabled>사전 신청 보내기</button>
+    </div>
+  </section>
+
+  <!-- 완료 -->
+  <section id="done">
+    <h2>고맙습니다<br>잘 받았어요</h2>
+    <div class="receipt">
+      <div class="lines" id="rLines"></div>
+      <div class="no">접수번호<em id="rNo">—</em></div>
+    </div>
+    <div class="after">
+      말씀드린 대로 <b>예약은 아니어서 수량을 잡아두지는 않습니다.</b><br>
+      다만 그날 넉넉히 준비해두고 기다리겠습니다.
+    </div>
+    <div class="notice" style="margin-top:20px">
+      <b>오시는 길</b><br>
+      늦여름 베이커리 · 서대문구 가재울로 4길 40<br>
+      매일 오전 10시 – 오후 2시<br>
+      8.7(금) – 8.8(토) · 8.11(화) – 8.13(목)
+    </div>
+    <a class="cta" href="https://instagram.com/namgajwa439" target="_blank" rel="noopener"
+       style="text-align:center;text-decoration:none">@namgajwa439 인스타 보기</a>
+  </section>
+
+  <footer>
+    남가좌439 × 늦여름 베이커리<br>서울시 넥스트로컬 8기
+  </footer>
+</div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+const sb = createClient(
+  'https://hncuvjrghniwihhfpata.supabase.co',
+  'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
+);
+
+const PRICE = 9500, MAXQ = 10;
+const SRC = (new URLSearchParams(location.search).get('src') || '').toLowerCase() || null;
+const DATES = ['2026-08-07','2026-08-08','2026-08-11','2026-08-12','2026-08-13'];
+const DOW = ['일','월','화','수','목','금','토'];
+
+const $ = id => document.getElementById(id);
+const won = n => n.toLocaleString('ko-KR');
+const fmt = s => {
+  const [y,m,d] = s.split('-').map(Number);
+  return { short:`${m}.${d}`, dow:DOW[new Date(y, m-1, d).getDay()], long:`${m}월 ${d}일` };
+};
+const state = { date:null, undecided:false, emotion:0, energy:0, party:null };
+
+/* 날짜 */
+$('dates').innerHTML =
+  DATES.map(d => {
+    const f = fmt(d);
+    return `<button type="button" class="date" data-d="${d}">
+        <span class="d">${f.short}</span><span class="w">${f.dow}요일</span>
+      </button>`;
+  }).join('') +
+  `<button type="button" class="date wide" data-d="">
+     <span class="d">아직 못 정했어요</span></button>`;
+
+$('dates').querySelectorAll('.date').forEach(b => {
+  b.onclick = () => {
+    state.date = b.dataset.d || null;
+    state.undecided = !b.dataset.d;
+    $('dates').querySelectorAll('.date').forEach(x => x.classList.toggle('sel', x === b));
+    syncSubmit();
+  };
+});
+
+/* 수량 */
+function renderQty(){
+  $('nEmotion').textContent = state.emotion;
+  $('nEnergy').textContent  = state.energy;
+  document.querySelectorAll('.stp2').forEach(g => {
+    const k = g.dataset.k;
+    g.querySelector('[data-d="-1"]').disabled = state[k] <= 0;
+    g.querySelector('[data-d="1"]').disabled  = state[k] >= MAXQ;
+  });
+  const total = state.emotion + state.energy;
+  const box = $('sum');
+  if (!total) {
+    box.className = 'sum empty';
+    box.textContent = '아직 고르지 않으셨어요.';
+  } else {
+    const parts = [];
+    if (state.energy)  parts.push(`체력함양 ${state.energy}`);
+    if (state.emotion) parts.push(`정서함양 ${state.emotion}`);
+    box.className = 'sum';
+    box.innerHTML = `${parts.join(' · ')} — 모두 ${total}개
+      <span class="won">${won(total * PRICE)}원<em>현장 결제</em></span>`;
+  }
+  syncSubmit();
+}
+document.querySelectorAll('.stp2 button').forEach(b => {
+  b.onclick = () => {
+    const k = b.closest('.stp2').dataset.k;
+    state[k] = Math.min(MAXQ, Math.max(0, state[k] + Number(b.dataset.d)));
+    renderQty();
+  };
+});
+
+/* 인원 */
+$('party').querySelectorAll('button').forEach(b => {
+  b.onclick = () => {
+    state.party = Number(b.dataset.p);
+    $('party').querySelectorAll('button').forEach(x => x.classList.toggle('sel', x === b));
+  };
+});
+
+/* 제출 */
+function syncSubmit(){
+  const ok = (state.date || state.undecided)
+    && (state.emotion + state.energy) > 0
+    && $('fName').value.trim()
+    && $('fPhone').value.trim()
+    && $('fAgree').checked;
+  $('submit').disabled = !ok;
+}
+['fName','fPhone','fAgree'].forEach(id => {
+  $(id).addEventListener('input', syncSubmit);
+  $(id).addEventListener('change', syncSubmit);
+});
+
+function showErr(t){ $('err').textContent = t; $('err').classList.add('on'); }
+
+$('submit').onclick = async () => {
+  const btn = $('submit');
+  $('err').classList.remove('on');
+  btn.disabled = true;
+  btn.textContent = '보내는 중…';
+
+  const { data, error } = await sb.rpc('hamyang_interest_create', {
+    p_date:    state.date,
+    p_emotion: state.emotion,
+    p_energy:  state.energy,
+    p_name:    $('fName').value.trim(),
+    p_phone:   $('fPhone').value.trim(),
+    p_party:   state.party,
+    p_src:     SRC
+  });
+  btn.textContent = '사전 신청 보내기';
+
+  if (error || !data || !data.ok) {
+    showErr(data && data.error === 'no_contact'
+      ? '이름과 연락처를 적어주세요.'
+      : '보내지 못했어요. 잠시 뒤 다시 눌러주세요.');
+    btn.disabled = false;
+    syncSubmit();
+    return;
+  }
+
+  const total = state.emotion + state.energy;
+  const parts = [];
+  if (state.energy)  parts.push(`체력함양 ${state.energy}`);
+  if (state.emotion) parts.push(`정서함양 ${state.emotion}`);
+  const when = state.date
+    ? `<b>${fmt(state.date).long} ${fmt(state.date).dow}요일</b>`
+    : `<b>날짜는 아직 미정</b>`;
+  const who = state.party
+    ? `${state.party === 4 ? '4명 이상' : state.party === 1 ? '혼자' : state.party + '명'}`
+    : null;
+  $('rLines').innerHTML =
+    `${when}${who ? ' · ' + who : ''}<br>
+     ${parts.join(' · ')} — 모두 ${total}개<br>
+     ${won(total * PRICE)}원`;
+  $('rNo').textContent = data.id;
+
+  $('ask').style.display = 'none';
+  $('done').classList.add('on');
+  $('done').scrollIntoView({ behavior:'smooth', block:'start' });
+};
+
+renderQty();
+</script>
+</body>
+</html>
