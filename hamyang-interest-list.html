@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>사전 수요조사 결과 — 함양 to 남가좌 pop-up</title>
+<title>예약 명단 — 함양 to 남가좌 pop-up</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,6 +56,17 @@ h1{font-family:'Black Han Sans',sans-serif;font-size:23px;letter-spacing:-.8px;l
 .r .qq{flex:none;font-size:13.5px;text-align:right;line-height:1.45;font-weight:700;}
 .r .qq em{font-style:normal;font-family:'Black Han Sans',sans-serif;color:var(--rust);}
 .empty{padding:20px;text-align:center;opacity:.6;font-size:14px;}
+.acts{display:flex;gap:5px;flex:none;}
+.acts button{
+  border:2px solid var(--ink);background:var(--white);border-radius:5px;
+  padding:6px 9px;font-family:'Gothic A1',sans-serif;font-weight:700;font-size:12.5px;color:var(--ink);cursor:pointer;
+}
+.acts button:active{transform:translateY(1px);}
+.r.came{background:rgba(120,160,90,.18);}
+.r.came .who b::after{content:' ✓';color:#4E7A34;}
+.r.canceled{background:rgba(28,26,23,.07);}
+.r.canceled .who b{text-decoration:line-through;opacity:.55;}
+.r.canceled .qq{opacity:.45;}
 
 .msg{
   margin-top:16px;padding:14px;border:2.5px solid var(--rust);border-radius:6px;
@@ -70,7 +81,7 @@ h1{font-family:'Black Han Sans',sans-serif;font-size:23px;letter-spacing:-.8px;l
 <div id="app">
   <header>
     <div>
-      <h1>사전 수요조사 결과</h1>
+      <h1>예약 명단</h1>
       <div class="stamp" id="stamp">불러오는 중…</div>
     </div>
     <button class="reload" id="reload">새로고침</button>
@@ -80,8 +91,8 @@ h1{font-family:'Black Han Sans',sans-serif;font-size:23px;letter-spacing:-.8px;l
   <div id="list"></div>
 
   <div class="note">
-    예약이 아니라 수요조사입니다. 여기 숫자는 <b>확정 주문이 아니라 희망 수량</b>이에요.<br>
-    현장에서 “이메일 신청하고 왔어요”라고 하시면 개당 500원 할인입니다.<br>
+    메일 안내를 받고 예약하신 분들입니다. 한 분당 최대 2개, 정원은 마공과 별개입니다.<br>
+    이름을 확인하고 <b>수령</b>을 누르면 체크됩니다. 취소하면 그 수량이 다시 풀립니다.<br>
     마공 가족 사전주문은 <a href="hamyang-preorder-admin.html">여기</a>에서 봅니다.
   </div>
 </div>
@@ -104,15 +115,18 @@ const esc = s => String(s).replace(/[&<>"']/g, c =>
 
 async function load(){
   $('msg').classList.remove('on');
-  const { data, error } = await sb
-    .from('hamyang_interest_list')
-    .select('*')
-    .order('created_at');
+  const [slots, rows] = await Promise.all([
+    sb.from('hamyang_interest_slots').select('pickup_date,is_open,cap_emotion,cap_energy,sort').order('sort'),
+    sb.from('hamyang_interest_list').select('*').order('created_at')
+  ]);
+  const data = rows.data, error = rows.error || slots.error;
+  window.__CAPS = {};
+  (slots.data || []).forEach(s => { window.__CAPS[s.pickup_date] = s; });
 
   if (error) {
     $('list').innerHTML = '';
     $('stamp').textContent = '';
-    $('msg').textContent = '결과를 불러오지 못했어요. SQL 실행이 끝났는지 확인해주세요.';
+    $('msg').textContent = '명단을 불러오지 못했어요. SQL 실행이 끝났는지 확인해주세요.';
     $('msg').classList.add('on');
     return;
   }
@@ -125,12 +139,13 @@ async function load(){
 
 function render(rows){
   if (!rows.length) {
-    $('list').innerHTML = `<div class="day"><div class="empty">아직 신청이 없어요</div></div>`;
+    $('list').innerHTML = `<div class="day"><div class="empty">아직 예약이 없어요</div></div>`;
     return;
   }
 
   const sum = (a, f) => a.reduce((x, r) => x + (r[f] || 0), 0);
-  const tot = { e: sum(rows,'qty_emotion'), n: sum(rows,'qty_energy'), p: sum(rows,'party_size') };
+  const live = rows.filter(r => r.status !== 'canceled');
+  const tot = { e: sum(live,'qty_emotion'), n: sum(live,'qty_energy'), p: sum(live,'party_size') };
 
   const groups = new Map();
   rows.forEach(r => {
@@ -143,34 +158,61 @@ function render(rows){
 
   $('list').innerHTML =
     `<div class="tot">
-       <div><div class="k">신청</div><div class="v">${rows.length}<span>건</span></div></div>
-       <div><div class="k">희망 수량</div><div class="v">${tot.e + tot.n}<span>개</span></div></div>
+       <div><div class="k">예약</div><div class="v">${live.length}<span>건</span></div></div>
+       <div><div class="k">예약 수량</div><div class="v">${tot.e + tot.n}<span>개</span></div></div>
        <div><div class="k">예상 인원</div><div class="v">${tot.p || '—'}<span>${tot.p ? '명' : ''}</span></div></div>
      </div>` +
     keys.map(k => {
       const g = groups.get(k);
-      const e = sum(g,'qty_emotion'), n = sum(g,'qty_energy'), p = sum(g,'party_size');
+      const gl = g.filter(r => r.status !== 'canceled');
+      const e = sum(gl,'qty_emotion'), n = sum(gl,'qty_energy'), p = sum(gl,'party_size');
+      const cap = window.__CAPS[k];
       const head = k === 'unknown' ? '날짜 미정' : fmt(k);
       const body = g.map(r => {
         const q = [];
         if (r.qty_energy)  q.push(`체력 <em>${r.qty_energy}</em>`);
         if (r.qty_emotion) q.push(`정서 <em>${r.qty_emotion}</em>`);
         const bits = [];
+        if (r.phone_tail) bits.push(r.phone_tail);
         if (r.party_size) bits.push(r.party_size >= 4 ? '4명 이상' : `${r.party_size}명`);
         const t = new Date(r.created_at);
         bits.push(`${t.getMonth()+1}/${t.getDate()} 접수`);
-        return `<div class="r">
+        if (r.status === 'canceled') bits.push('취소됨');
+        const acts = r.status === 'canceled'
+          ? `<button data-id="${r.id}" data-s="open">되돌리기</button>`
+          : r.status === 'came'
+            ? `<button data-id="${r.id}" data-s="open">수령취소</button>`
+            : `<button data-id="${r.id}" data-s="came">수령</button>
+               <button data-id="${r.id}" data-s="canceled">취소</button>`;
+        return `<div class="r ${r.status || 'open'}">
             <div class="who"><b>${esc(r.name || '이름없음')}</b><span>${esc(bits.join(' · '))}</span></div>
             <div class="qq">${q.join('<br>') || '—'}</div>
+            <div class="acts">${acts}</div>
           </div>`;
       }).join('');
       return `<div class="day">
           <div class="dh"><span class="d">${head}</span>
-            <span class="s">${g.length}건${p ? ' · ' + p + '명' : ''}</span></div>
-          <div class="make">희망 수량 — 체력함양 <b>${n}</b> · 정서함양 <b>${e}</b></div>
+            <span class="s">${gl.length}건${p ? ' · ' + p + '명' : ''}${cap && !cap.is_open ? ' · 닫힘' : ''}</span></div>
+          <div class="make">예약 — 체력함양 <b>${n}</b> · 정서함양 <b>${e}</b>${cap ? ` <span style="opacity:.6;font-weight:400;font-size:12.5px">(정원 ${cap.cap_energy}·${cap.cap_emotion})</span>` : ''}</div>
           ${body}
         </div>`;
     }).join('');
+
+  $('list').querySelectorAll('.acts button').forEach(b => { b.onclick = () => setStatus(b); });
+}
+
+async function setStatus(btn){
+  const id = Number(btn.dataset.id), st = btn.dataset.s;
+  if (st === 'canceled' && !confirm('이 예약을 취소할까요? 수량이 다시 풀립니다.')) return;
+  btn.disabled = true;
+  const { data, error } = await sb.rpc('hamyang_interest_set_status', { p_id: id, p_status: st });
+  if (error || !data || !data.ok) {
+    $('msg').textContent = '바꾸지 못했어요. 다시 눌러주세요.';
+    $('msg').classList.add('on');
+    btn.disabled = false;
+    return;
+  }
+  load();
 }
 
 $('reload').onclick = load;

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>함양 to 남가좌 pop-up — 사전 신청</title>
-<meta name="description" content="함양의 양파, 우리밀로 만든 화덕풍 샌드위치. 8월 7일부터 13일까지 남가좌동 늦여름 베이커리. 언제 오실지 미리 알려주세요.">
+<title>함양 to 남가좌 pop-up — 예약</title>
+<meta name="description" content="함양의 양파, 우리밀로 만든 화덕풍 샌드위치. 8월 7일부터 13일까지 남가좌동 늦여름 베이커리. 미리 예약하세요.">
 <meta property="og:title" content="함양 to 남가좌 pop-up">
 <meta property="og:description" content="서울에서 함양을 가장 가까이 경험하는 방법. 8.7–8.13 남가좌동 늦여름 베이커리.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -120,8 +120,11 @@ p{font-size:15px;line-height:1.85;text-wrap:pretty;}
 .date:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(28,26,23,.2);}
 .date.sel{background:var(--rust);color:var(--white);}
 .date.sel .w{opacity:.85;}
-.date.wide{grid-column:1 / -1;}
-.date.wide .d{font-size:16px;}
+.date .r{display:block;font-size:12px;margin-top:5px;opacity:.75;line-height:1.4;}
+.date.sel .r{opacity:.9;}
+.date[disabled]{opacity:.4;cursor:default;box-shadow:none;}
+.date[disabled] .r{font-family:'Black Han Sans',sans-serif;opacity:.9;}
+.loading{grid-column:1 / -1;text-align:center;padding:16px 0;opacity:.7;font-size:14px;}
 
 .qty{margin-top:14px;display:flex;flex-direction:column;gap:9px;}
 .qrow{
@@ -162,14 +165,6 @@ input:focus{outline:none;box-shadow:0 3px 0 rgba(28,26,23,.2);}
 }
 .party button.sel{background:var(--rust);color:var(--white);}
 .privacy{margin-top:8px;font-size:12.5px;line-height:1.65;opacity:.7;}
-.deal{
-  margin-top:12px;background:var(--white);border:3px solid var(--rust);border-radius:6px;
-  padding:15px 17px;text-align:center;
-}
-.deal .dt{font-family:'Black Han Sans',sans-serif;font-size:19px;letter-spacing:-.5px;}
-.deal .dt b{color:var(--rust);font-weight:400;}
-.deal .dd{margin-top:8px;font-size:13.5px;line-height:1.75;}
-.deal .dd b{font-weight:900;color:var(--rust);}
 .cta{
   display:block;width:100%;margin-top:20px;font-family:'Black Han Sans',sans-serif;font-size:19px;
   background:var(--rust);color:var(--white);border:none;border-radius:6px;padding:17px;cursor:pointer;
@@ -193,6 +188,8 @@ input:focus{outline:none;box-shadow:0 3px 0 rgba(28,26,23,.2);}
 }
 .receipt .lines{font-size:15.5px;line-height:1.95;font-weight:700;}
 .receipt .lines b{font-family:'Black Han Sans',sans-serif;font-weight:400;font-size:19px;}
+.receipt .no{margin-top:14px;padding-top:13px;border-top:2px dashed var(--line);font-size:13px;opacity:.7;}
+.receipt .no em{font-style:normal;font-family:'Black Han Sans',sans-serif;font-size:19px;color:var(--rust);margin-left:6px;opacity:1;}
 .receipt .no{margin-top:13px;padding-top:13px;border-top:2px dashed var(--line);font-size:13px;opacity:.7;}
 .receipt .no em{font-style:normal;font-family:'Black Han Sans',sans-serif;font-size:18px;color:var(--rust);margin-left:6px;opacity:1;}
 .after{margin-top:18px;font-size:14.5px;line-height:1.85;text-align:center;}
@@ -305,32 +302,27 @@ footer{padding:26px 0 6px;text-align:center;font-size:12.5px;line-height:1.9;opa
     </div>
   </section>
 
-  <!-- 사전 신청 -->
+  <!-- 예약 -->
   <section id="ask">
-    <h2>얼마나 준비할지<br>알려주세요</h2>
+    <h2>미리 예약하세요</h2>
 
     <div class="notice">
-      <b>예약이 아니에요.</b><br>
-      하루에 만들 수 있는 개수가 정해져 있어서,
-      몇 분이 언제쯤 오실지 미리 알면 그날 넉넉히 준비할 수 있습니다.
-      남겨주시면 준비할 때 먼저 헤아리겠습니다.
-    </div>
-
-    <div class="deal">
-      <div class="dt">신청하고 오시면 <b>500원 할인</b></div>
-      <div class="dd">현장에서 <b>“이메일 신청하고 왔어요”</b>라고 말씀해주세요.<br>
-        샌드위치 <b>한 개당 500원</b>씩 할인해드립니다.</div>
+      <b>하루에 만드는 개수가 정해져 있습니다.</b><br>
+      현장 수령만 가능하고, 결제는 오셔서 하시면 됩니다.<br>
+      한 분이 <b>최대 2개</b>까지 예약하실 수 있습니다.
     </div>
 
     <div class="step">
-      <div class="lb">1. 언제 오실 것 같으세요?</div>
-      <div class="hint">아직 못 정하셨어도 괜찮아요.</div>
-      <div class="dates" id="dates"></div>
+      <div class="lb">1. 언제 오실까요?</div>
+      <div class="hint">수령하실 날짜 하나를 골라주세요.</div>
+      <div class="dates" id="dates">
+        <div class="loading">남은 수량을 불러오는 중이에요…</div>
+      </div>
     </div>
 
-    <div class="step">
-      <div class="lb">2. 몇 개쯤 사고 싶으세요?</div>
-      <div class="hint">정확하지 않아도 됩니다. 대략으로 적어주세요.</div>
+    <div class="step" id="stepQty" hidden>
+      <div class="lb">2. 몇 개 예약할까요?</div>
+      <div class="hint" id="qtyHint"></div>
       <div class="qty">
         <div class="qrow">
           <div class="nm"><b>체력함양</b><span>베이컨 &amp; 마스카포네 크림</span></div>
@@ -364,32 +356,33 @@ footer{padding:26px 0 6px;text-align:center;font-size:12.5px;line-height:1.9;opa
     </div>
 
     <div class="step">
-      <div class="lb">4. 성함을 남겨주세요</div>
+      <div class="lb">4. 예약하실 분</div>
+      <div class="hint">수령하실 때 성함으로 확인합니다.</div>
       <div class="field">
         <label for="fName">이름<i>*</i></label>
         <input type="text" id="fName" maxlength="40" autocomplete="name" placeholder="홍길동">
-        <div class="privacy">이름은 준비와 현장 확인에만 쓰고, 팝업이 끝나면 지웁니다.</div>
+      </div>
+      <div class="field">
+        <label for="fPhone">전화번호<i>*</i></label>
+        <input type="tel" id="fPhone" maxlength="40" autocomplete="tel" inputmode="tel" placeholder="010-0000-0000">
+        <div class="privacy">이름과 전화번호는 예약 확인과 안내에만 쓰고, 팝업이 끝나면 지웁니다.</div>
       </div>
 
       <div class="err" id="err"></div>
-      <button class="cta" id="submit" disabled>사전 신청 보내기</button>
+      <button class="cta" id="submit" disabled>예약하기</button>
     </div>
   </section>
 
   <!-- 완료 -->
   <section id="done">
-    <h2>고맙습니다<br>잘 받았어요</h2>
+    <h2>예약되었습니다</h2>
     <div class="receipt">
       <div class="lines" id="rLines"></div>
-    </div>
-    <div class="deal" style="margin-top:18px">
-      <div class="dt">오시면 <b>“이메일 신청하고 왔어요”</b></div>
-      <div class="dd">이 한 마디면 샌드위치 <b>한 개당 500원</b> 할인해드립니다.<br>
-        성함도 함께 말씀해주세요.</div>
+      <div class="no">예약번호<em id="rNo">—</em></div>
     </div>
     <div class="after">
-      말씀드린 대로 <b>예약은 아니어서 수량을 잡아두지는 않습니다.</b><br>
-      다만 그날 넉넉히 준비해두고 기다리겠습니다.
+      오시면 <b>성함을 말씀해주세요.</b> 결제는 그때 현장에서 하시면 됩니다.<br>
+      못 오시게 되면 미리 알려주세요. 그날 만들 개수를 맞춰야 해서요.
     </div>
     <div class="notice" style="margin-top:20px">
       <b>오시는 길</b><br>
@@ -413,9 +406,8 @@ const sb = createClient(
   'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
 );
 
-const MAXQ = 10;
+const PER_PERSON = 2;   // 1인당 총 예약 가능 개수 (종류 무관)
 const SRC = (new URLSearchParams(location.search).get('src') || '').toLowerCase() || null;
-const DATES = ['2026-08-07','2026-08-08','2026-08-11','2026-08-12','2026-08-13'];
 const DOW = ['일','월','화','수','목','금','토'];
 
 const $ = id => document.getElementById(id);
@@ -423,36 +415,71 @@ const fmt = s => {
   const [y,m,d] = s.split('-').map(Number);
   return { short:`${m}.${d}`, dow:DOW[new Date(y, m-1, d).getDay()], long:`${m}월 ${d}일` };
 };
-const state = { date:null, undecided:false, emotion:0, energy:0, party:null };
+const state = { slots:[], date:null, emotion:0, energy:0, party:null };
+const cur = () => state.slots.find(s => s.pickup_date === state.date) || null;
 
-/* 날짜 */
-$('dates').innerHTML =
-  DATES.map(d => {
-    const f = fmt(d);
-    return `<button type="button" class="date" data-d="${d}">
-        <span class="d">${f.short}</span><span class="w">${f.dow}요일</span>
-      </button>`;
-  }).join('') +
-  `<button type="button" class="date wide" data-d="">
-     <span class="d">아직 못 정했어요</span></button>`;
+/* ───────── 잔여 불러오기 ───────── */
+async function loadSlots(){
+  const { data, error } = await sb
+    .from('hamyang_interest_slots')
+    .select('pickup_date,is_open,left_emotion,left_energy,sort')
+    .order('sort');
+  if (error || !data) {
+    $('dates').innerHTML =
+      '<div class="loading">남은 수량을 불러오지 못했어요.<br>잠시 뒤 새로고침 해주세요.</div>';
+    return;
+  }
+  state.slots = data;
+  renderDates();
+}
 
-$('dates').querySelectorAll('.date').forEach(b => {
-  b.onclick = () => {
-    state.date = b.dataset.d || null;
-    state.undecided = !b.dataset.d;
-    $('dates').querySelectorAll('.date').forEach(x => x.classList.toggle('sel', x === b));
-    syncSubmit();
-  };
-});
+function renderDates(){
+  $('dates').innerHTML = state.slots.map(s => {
+    const f = fmt(s.pickup_date);
+    const e = s.left_emotion, n = s.left_energy;
+    const closed = !s.is_open || (e + n === 0);
+    let right;
+    if (closed)       right = '마감';
+    else if (e === 0) right = '체력 ' + n + '개 남음';
+    else if (n === 0) right = '정서 ' + e + '개 남음';
+    else              right = '체력 ' + n + ' · 정서 ' + e + ' 남음';
+    return `<button type="button" class="date${state.date === s.pickup_date ? ' sel' : ''}"
+              data-d="${s.pickup_date}" ${closed ? 'disabled' : ''}>
+              <span class="d">${f.short}</span><span class="w">${f.dow}요일</span>
+              <span class="r">${right}</span>
+            </button>`;
+  }).join('');
+  $('dates').querySelectorAll('.date:not([disabled])').forEach(b => {
+    b.onclick = () => pickDate(b.dataset.d);
+  });
+}
 
-/* 수량 */
+function pickDate(d){
+  if (state.date !== d) { state.emotion = 0; state.energy = 0; }
+  state.date = d;
+  renderDates();
+  $('stepQty').hidden = false;
+  const s = cur();
+  $('qtyHint').textContent =
+    `${fmt(d).long}에 남은 건 체력함양 ${s.left_energy}개, 정서함양 ${s.left_emotion}개예요. 한 분당 최대 ${PER_PERSON}개까지 예약하실 수 있습니다.`;
+  renderQty();
+  $('stepQty').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+/* ───────── 수량 ───────── */
+function capFor(k){
+  const s = cur(); if (!s) return 0;
+  const left = k === 'emotion' ? s.left_emotion : s.left_energy;
+  const other = k === 'emotion' ? state.energy : state.emotion;
+  return Math.min(left, PER_PERSON - other);
+}
 function renderQty(){
   $('nEmotion').textContent = state.emotion;
   $('nEnergy').textContent  = state.energy;
   document.querySelectorAll('.stp2').forEach(g => {
     const k = g.dataset.k;
     g.querySelector('[data-d="-1"]').disabled = state[k] <= 0;
-    g.querySelector('[data-d="1"]').disabled  = state[k] >= MAXQ;
+    g.querySelector('[data-d="1"]').disabled  = state[k] >= capFor(k);
   });
   const total = state.emotion + state.energy;
   const box = $('sum');
@@ -465,19 +492,19 @@ function renderQty(){
     if (state.emotion) parts.push(`정서함양 ${state.emotion}`);
     box.className = 'sum';
     box.innerHTML = `<span class="won">모두 ${total}개</span>
-      <span class="was">${parts.join(' · ')}</span>`;
+      <span class="was">${parts.join(' · ')}${total >= PER_PERSON ? ' · 한 분당 최대 수량입니다' : ''}</span>`;
   }
   syncSubmit();
 }
 document.querySelectorAll('.stp2 button').forEach(b => {
   b.onclick = () => {
     const k = b.closest('.stp2').dataset.k;
-    state[k] = Math.min(MAXQ, Math.max(0, state[k] + Number(b.dataset.d)));
+    state[k] = Math.max(0, Math.min(capFor(k), state[k] + Number(b.dataset.d)));
     renderQty();
   };
 });
 
-/* 인원 */
+/* ───────── 인원 ───────── */
 $('party').querySelectorAll('button').forEach(b => {
   b.onclick = () => {
     state.party = Number(b.dataset.p);
@@ -485,59 +512,86 @@ $('party').querySelectorAll('button').forEach(b => {
   };
 });
 
-/* 제출 */
+/* ───────── 제출 ───────── */
 function syncSubmit(){
-  const ok = (state.date || state.undecided)
+  const ok = state.date
     && (state.emotion + state.energy) > 0
-    && $('fName').value.trim();
+    && $('fName').value.trim()
+    && $('fPhone').value.trim();
   $('submit').disabled = !ok;
 }
-$('fName').addEventListener('input', syncSubmit);
+['fName','fPhone'].forEach(id => $(id).addEventListener('input', syncSubmit));
 
-function showErr(t){ $('err').textContent = t; $('err').classList.add('on'); }
+function showErr(t){
+  $('err').innerHTML = t;
+  $('err').classList.add('on');
+  $('err').scrollIntoView({ behavior:'smooth', block:'center' });
+}
 
 $('submit').onclick = async () => {
   const btn = $('submit');
   $('err').classList.remove('on');
   btn.disabled = true;
-  btn.textContent = '보내는 중…';
+  btn.textContent = '예약하는 중…';
 
-  const total = state.emotion + state.energy;
-  const { error } = await sb.from('hamyang_interest').insert({
-    pickup_date: state.date,
-    qty_emotion: state.emotion,
-    qty_energy:  state.energy,
-    party_size:  state.party,
-    name:        $('fName').value.trim(),
-    src:         SRC
+  const { data, error } = await sb.rpc('hamyang_interest_reserve', {
+    p_date:    state.date,
+    p_emotion: state.emotion,
+    p_energy:  state.energy,
+    p_name:    $('fName').value.trim(),
+    p_phone:   $('fPhone').value.trim(),
+    p_party:   state.party,
+    p_src:     SRC
   });
-  btn.textContent = '사전 신청 보내기';
+  btn.textContent = '예약하기';
 
-  if (error) {
-    showErr('보내지 못했어요. 잠시 뒤 다시 눌러주세요.');
+  if (error || !data || !data.ok) {
+    const code = data && data.error;
+    if (code === 'sold_out') {
+      await loadSlots();
+      const s = cur();
+      if (s) {
+        state.emotion = Math.min(state.emotion, s.left_emotion);
+        state.energy  = Math.min(state.energy,  s.left_energy);
+        $('qtyHint').textContent =
+          `${fmt(state.date).long}에 남은 건 체력함양 ${s.left_energy}개, 정서함양 ${s.left_emotion}개예요. 한 분당 최대 ${PER_PERSON}개까지 예약하실 수 있습니다.`;
+        renderQty();
+      }
+      showErr('죄송해요, 그 사이에 남은 수량이 바뀌었어요.<br>수량을 다시 확인하고 눌러주세요.');
+    } else if (code === 'closed') {
+      await loadSlots();
+      showErr('그날은 예약이 닫혔어요. 다른 날짜를 골라주세요.');
+    } else if (code === 'no_contact') {
+      showErr('이름과 전화번호를 적어주세요.');
+    } else if (code === 'bad_qty') {
+      showErr(`한 분당 최대 ${PER_PERSON}개까지 예약하실 수 있어요.`);
+    } else {
+      showErr('예약하지 못했어요. 잠시 뒤 다시 눌러주세요.');
+    }
     btn.disabled = false;
     syncSubmit();
     return;
   }
 
+  const total = state.emotion + state.energy;
   const parts = [];
   if (state.energy)  parts.push(`체력함양 ${state.energy}`);
   if (state.emotion) parts.push(`정서함양 ${state.emotion}`);
-  const when = state.date
-    ? `<b>${fmt(state.date).long} ${fmt(state.date).dow}요일</b>`
-    : `<b>날짜는 아직 미정</b>`;
+  const f = fmt(state.date);
   const who = state.party
-    ? `${state.party === 4 ? '4명 이상' : state.party === 1 ? '혼자' : state.party + '명'}`
+    ? (state.party >= 4 ? '4명 이상' : state.party === 1 ? '혼자' : state.party + '명')
     : null;
   $('rLines').innerHTML =
-    `${when}${who ? ' · ' + who : ''}<br>
+    `<b>${f.long} ${f.dow}요일</b>${who ? ' · ' + who : ''}<br>
      ${parts.join(' · ')} — 모두 ${total}개`;
+  $('rNo').textContent = data.id;
+
   $('ask').style.display = 'none';
   $('done').classList.add('on');
   $('done').scrollIntoView({ behavior:'smooth', block:'start' });
 };
 
-renderQty();
+loadSlots();
 </script>
 </body>
 </html>
