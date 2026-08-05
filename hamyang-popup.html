@@ -43,7 +43,16 @@ body{
   display:flex;flex-direction:column;
   padding:0 22px calc(34px + env(safe-area-inset-bottom));
 }
-.bar{height:2px;background:var(--line-soft);margin:18px 0 2px;overflow:hidden;flex:none;}
+.top{display:flex;align-items:center;gap:12px;margin:16px 0 2px;flex:none;}
+.back{
+  display:flex;align-items:center;gap:4px;flex:none;
+  background:none;border:none;padding:4px 2px;cursor:pointer;
+  font-family:inherit;font-size:13px;color:var(--muted);letter-spacing:-.2px;
+}
+.back svg{width:14px;height:14px;}
+.back:active{color:var(--ink);}
+.back[hidden]{display:none;}
+.bar{height:2px;background:var(--line-soft);overflow:hidden;flex:1;}
 .bar i{display:block;height:100%;width:0;background:var(--green);transition:width .5s cubic-bezier(.3,.9,.3,1);}
 .screen{display:none;flex:1;flex-direction:column;justify-content:flex-start;padding:18px 0 8px;}
 #s-fly{justify-content:center;}
@@ -264,7 +273,12 @@ input[type=email],input[type=tel]{
 <body>
 
 <main id="app">
-  <div class="bar"><i id="prog"></i></div>
+  <header class="top">
+    <button class="back" id="backBtn" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>이전
+    </button>
+    <div class="bar"><i id="prog"></i></div>
+  </header>
 
   <!-- ⓪ 표지 -->
   <section class="screen on scroller" id="s-cover">
@@ -576,7 +590,8 @@ const uuid = () => (crypto.randomUUID
 const S = { sid: uuid(), src: SRC || null, steps:{} };
 let rowId = null, saving = null;
 const $ = id => document.getElementById(id);
-const stamp = k => { S.steps[k] = new Date().toISOString(); };
+/* 처음 도달한 시각만 기록한다 (뒤로 갔다 와도 덮어쓰지 않음) */
+const stamp = k => { if(!S.steps[k]) S.steps[k] = new Date().toISOString(); };
 
 async function save(patch = {}){
   Object.assign(S, patch);
@@ -598,17 +613,28 @@ async function save(patch = {}){
 /* ─────────── 화면 전환 ─────────── */
 const WEIGHT = { 's-cover':0, 's-card1':1, 's-card2':2, 's-exp':3, 's-sw':4, 's-jam':4,
                  's-letter':5, 's-fly':5, 's-interest':6, 's-shop':7 };
-function go(id){
+/* 분기가 있어 뒤로가기는 하드코딩 대신 방문 이력으로 되짚는다 */
+const trail = [];
+function go(id, isBack){
+  const cur = document.querySelector('.screen.on');
+  if(!isBack && cur && cur.id !== id && cur.id !== 's-fly') trail.push(cur.id);
+
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
   $(id).classList.add('on');
   window.scrollTo(0,0);
   $('prog').style.width = ((WEIGHT[id] || 0) / 7 * 100) + '%';
+  $('backBtn').hidden = (trail.length === 0 || id === 's-fly');
+  if(id === 's-letter') sent = false;      // 되돌아왔으면 다시 보낼 수 있게
   stamp(id.replace('s-',''));
   if(id === 's-card1' || id === 's-card2'){
     const f = (id === 's-card1') ? f1 : f2;
     setTimeout(() => { sizeFlip(f); nudge(f); }, 0);   // rAF는 탭이 가려지면 멈춘다
   }
 }
+$('backBtn').onclick = () => {
+  const prev = trail.pop();
+  if(prev) go(prev, true);
+};
 
 /* ─────────── ① 카드 뒤집기 ─────────── */
 guide($('g1'), 'hi', '이 한 입을 만든 두 사람이에요.<br><b>카드를 눌러 뒤집어 보세요.</b>');
