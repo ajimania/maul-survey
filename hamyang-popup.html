@@ -23,6 +23,7 @@
   --green:#5C6B3F;
   --green-soft:#EDF0E4;
   --gold:#D9A63C;
+  --brick:#BE4A2F;      /* A2 포스터 헤드 색 — 표지에서만 사용 */
   --white:#fff;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -54,6 +55,23 @@ body{
 .guide svg{width:34px;flex:none;opacity:.95;}
 .guide .bub{font-size:14.5px;line-height:1.6;color:var(--ink-soft);}
 .guide .bub b{color:var(--green);font-weight:700;}
+
+/* ── 표지 ── */
+.cover-eyebrow{font-size:12.5px;color:var(--muted);letter-spacing:0;margin-bottom:14px;}
+.cover-title{font-size:29px;font-weight:800;line-height:1.42;letter-spacing:-1.2px;}
+.cover-title em{font-style:normal;color:var(--brick);}
+.cover-photo{
+  width:100%;height:auto;display:block;margin:24px 0 28px;
+  border-radius:3px;border:1px solid var(--line);
+}
+.cover-lead{font-size:16px;font-weight:700;line-height:1.6;letter-spacing:-.4px;}
+.cover-body{margin-top:16px;}
+.cover-body p{font-size:14.5px;line-height:1.95;color:var(--ink-soft);word-break:keep-all;margin-bottom:14px;}
+.cover-quote{
+  margin-top:26px;padding:20px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  font-size:16px;font-weight:700;line-height:1.7;letter-spacing:-.4px;text-align:center;
+}
 
 /* ── 생산자 카드 ── */
 .flip{perspective:1600px;position:relative;transition:height .5s cubic-bezier(.4,0,.2,1);cursor:pointer;}
@@ -248,8 +266,24 @@ input[type=email],input[type=tel]{
 <main id="app">
   <div class="bar"><i id="prog"></i></div>
 
+  <!-- ⓪ 표지 -->
+  <section class="screen on scroller" id="s-cover">
+    <p class="cover-eyebrow">남가좌439 × 함양 × 늦여름베이커리</p>
+    <h1 class="cover-title">함양 to 남가좌<br>남가좌 to 함양<br><em>연결을 시작합니다</em></h1>
+    <img class="cover-photo" src="hamyang-img/cover.jpg" alt="지리산 자락의 함양" width="880" height="512">
+    <p class="cover-lead">지리산 자락의 숨겨진 보석,<br>함양을 들어보셨나요?</p>
+    <div class="cover-body">
+      <p>서울에서 함양은 멀게 느껴집니다. 지리산 자락에 안긴 작은 군이라 이름은 낯설고, 가본 사람도 적습니다.</p>
+      <p>그러나 잘 알려지지 않은 만큼 때묻지 않은 자연을 가지고, 가치를 지키며 땅을 지켜온 농부가 있는 지역입니다.</p>
+      <p>남가좌동 골목에서 저희가 찾은 함양의 양파와 우리밀로 만든 샌드위치를 선보입니다. 한 입 베어무는 순간, 300km 너머의 밭과 사람이 조금 가까워지기를 바랍니다.</p>
+      <p>먹는 것에서 시작해 아는 것으로, 아는 것을 넘어 가보고 경험하는 것까지.</p>
+    </div>
+    <p class="cover-quote">지금 이 순간 남가좌동은<br>서울에서 함양에 가장 가까운 동네입니다.</p>
+    <button class="cta" id="coverNext">두 사람을 만나러 가기</button>
+  </section>
+
   <!-- ① 카드 1 — 함양 양파 -->
-  <section class="screen on scroller" id="s-card1">
+  <section class="screen scroller" id="s-card1">
     <div class="guide" id="g1"></div>
     <div class="flip" id="flip1">
       <div class="finner">
@@ -562,7 +596,7 @@ async function save(patch = {}){
 }
 
 /* ─────────── 화면 전환 ─────────── */
-const WEIGHT = { 's-card1':1, 's-card2':2, 's-exp':3, 's-sw':4, 's-jam':4,
+const WEIGHT = { 's-cover':0, 's-card1':1, 's-card2':2, 's-exp':3, 's-sw':4, 's-jam':4,
                  's-letter':5, 's-fly':5, 's-interest':6, 's-shop':7 };
 function go(id){
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
@@ -606,9 +640,9 @@ bindFlip(f2, 'flip_wheat');
 addEventListener('resize', () => { sizeFlip(f1); sizeFlip(f2); });
 addEventListener('load', () => { sizeFlip(f1); sizeFlip(f2); });
 document.querySelectorAll('.portrait').forEach(img => img.addEventListener('load', () => { sizeFlip(f1); sizeFlip(f2); }));
-setTimeout(() => { sizeFlip(f1); sizeFlip(f2); nudge(f1); }, 0);
-stamp('card1');
-
+stamp('cover');
+/* 표지가 먼저라 카드는 숨겨진 상태 — 높이 측정과 넛지는 go('s-card1')에서 한다 */
+$('coverNext').onclick = () => go('s-card1');
 $('next1').onclick = () => go('s-card2');
 $('next2').onclick = () => go('s-exp');
 
