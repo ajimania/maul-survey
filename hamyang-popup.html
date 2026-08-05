@@ -44,7 +44,8 @@ body{
 }
 .bar{height:2px;background:var(--line-soft);margin:18px 0 2px;overflow:hidden;flex:none;}
 .bar i{display:block;height:100%;width:0;background:var(--green);transition:width .5s cubic-bezier(.3,.9,.3,1);}
-.screen{display:none;flex:1;flex-direction:column;justify-content:center;padding:18px 0 8px;}
+.screen{display:none;flex:1;flex-direction:column;justify-content:flex-start;padding:18px 0 8px;}
+#s-fly{justify-content:center;}
 .screen.on{display:flex;animation:rise .45s cubic-bezier(.2,.9,.3,1);}
 @keyframes rise{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 
@@ -106,6 +107,9 @@ body{
 .row .opt{flex:1;min-width:0;text-align:center;font-size:13.5px;padding:14px 4px;line-height:1.4;}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px;}
 .grid3 .opt{text-align:center;font-size:13.5px;padding:15px 4px;line-height:1.4;}
+.note{margin-top:30px;padding:18px 18px 20px;background:var(--green-soft);border-radius:3px;}
+.note .nt{font-size:12.5px;font-weight:600;color:var(--green);margin-bottom:9px;letter-spacing:0;}
+.note p{font-size:13.5px;line-height:1.85;color:var(--ink-soft);word-break:keep-all;}
 
 .cta{
   margin-top:30px;width:100%;font-family:inherit;font-size:16px;font-weight:600;
@@ -145,6 +149,13 @@ textarea{
 textarea::placeholder{color:#C3BAA8;}
 textarea:focus,input:focus{outline:none;border-color:var(--green);}
 .cnt{text-align:right;font-size:11.5px;color:var(--muted);margin-top:6px;}
+.split{
+  display:block;margin:14px 0 0;background:none;border:none;padding:0;
+  font-family:inherit;font-size:13px;color:var(--green);cursor:pointer;
+  text-decoration:underline;text-underline-offset:3px;
+}
+.lbl{font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-top:14px;letter-spacing:0;}
+.lbl + textarea{margin-top:7px;min-height:96px;}
 .deliver{position:relative;height:100px;margin-top:24px;}
 .deliver .rail{position:absolute;top:66px;left:0;right:0;border-top:1px solid var(--line);}
 .deliver .go{position:absolute;top:14px;left:0;width:52px;animation:go 2.5s cubic-bezier(.4,0,.5,1) forwards;}
@@ -160,11 +171,12 @@ textarea:focus,input:focus{outline:none;border-color:var(--green);}
   transition:background .15s,border-color .15s,color .15s;
 }
 .chip.sel{background:var(--green);border-color:var(--green);color:#fff;font-weight:600;}
-input[type=email]{
+input[type=email],input[type=tel]{
   width:100%;margin-top:12px;background:var(--card);
   border:1px solid var(--line);border-radius:3px;padding:16px;
   font-family:inherit;font-size:15.5px;color:var(--ink);
 }
+.note b{font-weight:700;color:var(--green);}
 .err{color:#B4533F;font-size:12.5px;margin-top:8px;display:none;}
 .agree{margin-top:14px;font-size:11px;line-height:1.75;color:var(--muted);letter-spacing:0;}
 
@@ -179,6 +191,8 @@ input[type=email]{
 .shop .st{font-size:15.5px;font-weight:600;letter-spacing:-.3px;}
 .shop .sd{font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.5;}
 .shop .go2{margin-left:auto;font-size:15px;color:var(--muted);flex:none;}
+.end{margin-top:40px;padding-top:30px;border-top:1px solid var(--line-soft);}
+.end .sub{margin-top:14px;}
 .foot{text-align:center;font-size:10.5px;color:var(--muted);margin-top:30px;line-height:1.8;letter-spacing:0;}
 
 /* ── 매장 벽 모드 ── */
@@ -262,7 +276,7 @@ input[type=email]{
         </div>
       </div>
     </div>
-    <button class="cta" id="next2">두 분께 한 마디 남기러 가기</button>
+    <button class="cta" id="next2">다음</button>
   </section>
 
   <!-- ② 식경험 분기 -->
@@ -311,12 +325,14 @@ input[type=email]{
         <button class="opt" data-b="고민해볼게요">고민해<br>볼게요</button>
         <button class="opt" data-b="아니요">아니요</button>
       </div>
+      <div class="note">
+        <div class="nt">이 잼은 이렇게 만듭니다</div>
+        <p>12브릭스 고당도 양파를 얇게 썰어 뭉근히 오래 졸입니다. 설탕으로 낸 단맛이 아니라 양파가 원래 가진 단맛이에요. 사라질 뻔한 품종을 홀로 지켜온, 그 양파입니다.</p>
+      </div>
       <p class="q">150g 한 병이라면<br>얼마까지 내실 수 있으세요?</p>
-      <div class="grid3" id="jamWtp">
-        <button class="opt" data-w="6000">6,000원<br>이하</button>
-        <button class="opt" data-w="7000">7,000원</button>
+      <div class="row" id="jamWtp">
+        <button class="opt" data-w="7000">7,000원<br>이하</button>
         <button class="opt" data-w="8000">8,000원</button>
-        <button class="opt" data-w="9000">9,000원</button>
         <button class="opt" data-w="10000">10,000원</button>
         <button class="opt" data-w="12000">12,000원<br>이상</button>
       </div>
@@ -333,8 +349,18 @@ input[type=email]{
       <button data-to="wheat">지리산우리밀<br>에게</button>
       <button data-to="both">두 분<br>모두에게</button>
     </div>
-    <textarea id="letterBody" maxlength="120" placeholder="예: 양파가 이렇게 단 줄 몰랐어요."></textarea>
-    <div class="cnt"><span id="cnt">0</span>/120</div>
+    <button class="split" id="splitToggle" style="display:none">각각 따로 쓸래요</button>
+    <div id="oneBox">
+      <textarea id="letterBody" maxlength="120" placeholder="예: 양파가 이렇게 단 줄 몰랐어요."></textarea>
+      <div class="cnt"><span id="cnt">0</span>/120</div>
+    </div>
+    <div id="eachBox" style="display:none">
+      <div class="lbl">강호현 농부에게</div>
+      <textarea id="letterOnion" maxlength="120" placeholder="예: 양파가 이렇게 단 줄 몰랐어요."></textarea>
+      <div class="lbl" style="margin-top:20px">지리산우리밀에게</div>
+      <textarea id="letterWheat" maxlength="120" placeholder="예: 빵이 정말 구수했어요."></textarea>
+      <button class="split" id="splitBack">한 번에 쓸래요</button>
+    </div>
     <button class="cta" id="sendLetter" disabled>함양으로 보내기</button>
     <button class="skip" id="letterSkip">건너뛸게요</button>
   </section>
@@ -361,10 +387,18 @@ input[type=email]{
     </div>
     <p class="q">자리가 열리면 메일로 알려드릴게요.</p>
     <input type="email" id="email" placeholder="이메일 주소" autocomplete="email" inputmode="email">
-    <p class="err" id="emailErr">이메일 주소를 다시 확인해주세요.</p>
-    <p class="agree">남겨주신 메일은 함양 관련 소식 안내에만 쓰고, 팝업 종료 후 2주 뒤에 지웁니다. 언제든 수신을 거부하실 수 있어요.</p>
+    <p class="err" id="emailErr">이메일 주소를 확인해주세요.</p>
+
+    <div class="note" style="margin-top:26px">
+      <div class="nt">무지개양파를 보내드려요</div>
+      <p>오늘 참여해주신 분들 중 <b>열 분</b>을 추첨해, 강호현 농부가 보내주신 무지개양파를 보내드립니다. 그린애플어니언 · 아히네 · 함양파 · 블루밍어니언, 네 가지예요.</p>
+    </div>
+    <input type="tel" id="phone" placeholder="휴대폰 번호 (추첨 발송용)" autocomplete="tel" inputmode="tel">
+    <p class="err" id="phoneErr">휴대폰 번호를 확인해주세요.</p>
+
+    <p class="agree">남겨주신 연락처는 함양 소식 안내와 추첨 경품 발송에만 쓰고, 팝업 종료 후 2주 뒤에 지웁니다. 언제든 수신을 거부하실 수 있어요.</p>
     <button class="cta" id="intNext">남길게요</button>
-    <button class="skip" id="intSkip">건너뛰기</button>
+    <button class="skip" id="intSkip">괜찮아요, 건너뛸게요</button>
   </section>
 
   <!-- ⑥ 구매 페이지 -->
@@ -381,12 +415,17 @@ input[type=email]{
     <a class="shop" href="https://jirisanare.com/category/shop/24/" target="_blank" rel="noopener" data-shop="wheat">
       <img src="hamyang-img/wheat-miller.jpg" alt="">
       <div>
-        <div class="st">지리산우리밀</div>
+        <div class="st">지리산우리밀 스토어</div>
         <div class="sd">품종별로 따로 빻은 우리밀</div>
       </div>
       <span class="go2">→</span>
     </a>
-    <p class="say" style="margin-top:32px;font-size:19px">고맙습니다.<br>오늘 한 입이 함양까지 닿았어요.</p>
+
+    <div class="end">
+      <p class="say">참여해주셔서 고맙습니다.<br>오늘 한 입이 함양까지 닿았어요.</p>
+      <p class="sub" style="text-align:center">드린 함양 양파, 맛있게 드세요.<br>남겨주신 한 마디는 팝업이 끝나면 두 분께 전해드릴게요.</p>
+      <p class="sub" id="drawNote" style="text-align:center;display:none">추첨 결과는 팝업이 끝난 뒤<br>남겨주신 번호로 알려드립니다.</p>
+    </div>
     <p class="foot">남가좌439 · 늦여름 베이커리<br>서울시 넥스트로컬 8기</p>
   </section>
 </main>
@@ -573,21 +612,45 @@ $('jamNext').onclick = () => go('s-letter');
 
 /* ─────────── ④ 편지 ─────────── */
 guide($('g6'), 'hi', '오늘 드신 것을 만든 분들이에요.<br>한 마디 남겨주실래요?');
-let letterTo = null;
+let letterTo = null, eachMode = false;
 document.querySelectorAll('[data-to]').forEach(b => b.onclick = () => {
   letterTo = b.dataset.to;
   document.querySelectorAll('[data-to]').forEach(x => x.classList.toggle('sel', x === b));
+  if(letterTo !== 'both' && eachMode) setEach(false);
+  else $('splitToggle').style.display = (letterTo === 'both') ? 'block' : 'none';
   refreshSend();
 });
-const ta = $('letterBody');
-ta.oninput = () => { $('cnt').textContent = ta.value.length; refreshSend(); };
-function refreshSend(){ $('sendLetter').disabled = !(letterTo && ta.value.trim().length > 0); }
+/* '두 분 모두에게'를 고른 사람만 각각 따로 쓰기로 전환할 수 있다 */
+function setEach(on){
+  eachMode = on;
+  $('oneBox').style.display  = on ? 'none'  : 'block';
+  $('eachBox').style.display = on ? 'block' : 'none';
+  $('splitToggle').style.display = (!on && letterTo === 'both') ? 'block' : 'none';
+  refreshSend();
+}
+$('splitToggle').onclick = () => setEach(true);
+$('splitBack').onclick   = () => setEach(false);
+
+const ta = $('letterBody'), taO = $('letterOnion'), taW = $('letterWheat');
+ta.oninput  = () => { $('cnt').textContent = ta.value.length; refreshSend(); };
+taO.oninput = refreshSend;
+taW.oninput = refreshSend;
+function refreshSend(){
+  const ok = eachMode
+    ? (taO.value.trim().length > 0 || taW.value.trim().length > 0)
+    : (letterTo && ta.value.trim().length > 0);
+  $('sendLetter').disabled = !ok;
+}
 
 let sent = false;
 $('sendLetter').onclick = async () => {
   if(sent) return;
   sent = true;
-  save({ letter_to: letterTo, letter_body: ta.value.trim() });
+  save(eachMode
+    ? { letter_to:'each',
+        letter_body: taO.value.trim() || null,
+        letter_body_wheat: taW.value.trim() || null }
+    : { letter_to: letterTo, letter_body: ta.value.trim() });
   $('flyChar').innerHTML = onionLetter(56);
   go('s-fly');
   setTimeout(() => go('s-interest'), 2600);
@@ -607,18 +670,34 @@ document.querySelectorAll('.chip').forEach(c => c.onclick = () => {
   }
   document.querySelectorAll('.chip').forEach(x => x.classList.toggle('sel', interests.includes(x.dataset.it)));
 });
-function finish(withEmail){
+function finish(withContact){
   const patch = { finished: true };
   if(interests.length) patch.interests = interests.join(',');
-  if(withEmail){
-    const v = $('email').value.trim();
-    if(v){
-      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){ $('emailErr').style.display = 'block'; return; }
-      patch.email = v;
-    }
-  }
   $('emailErr').style.display = 'none';
+  $('phoneErr').style.display = 'none';
+
+  if(withContact){
+    const em = $('email').value.trim();
+    const ph = $('phone').value.trim();
+    /* 모임에 관심을 표시했는데 연락처가 하나도 없으면 연락할 방법이 없다 */
+    const wantsMeet = interests.length > 0 && !interests.includes('아직은 괜찮아요');
+
+    if(em && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){
+      $('emailErr').textContent = '이메일 주소를 확인해주세요.';
+      $('emailErr').style.display = 'block'; return;
+    }
+    if(ph && !/^0\d{1,2}-?\d{3,4}-?\d{4}$/.test(ph.replace(/\s/g,''))){
+      $('phoneErr').style.display = 'block'; return;
+    }
+    if(wantsMeet && !em && !ph){
+      $('emailErr').textContent = '연락드릴 방법이 필요해요. 이메일이나 휴대폰 번호 중 하나는 남겨주세요.';
+      $('emailErr').style.display = 'block'; return;
+    }
+    if(em) patch.email = em;
+    if(ph) patch.phone = ph;
+  }
   save(patch);
+  $('drawNote').style.display = patch.phone ? 'block' : 'none';
   go('s-shop');
 }
 $('intNext').onclick = () => finish(true);

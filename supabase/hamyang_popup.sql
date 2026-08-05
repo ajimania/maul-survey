@@ -34,12 +34,14 @@ alter table public.hamyang_popup add column if not exists jam_buy      text;    
 alter table public.hamyang_popup add column if not exists jam_wtp      int;     -- 150g 한 병 지불의사(원)
 
 -- ④ 편지
-alter table public.hamyang_popup add column if not exists letter_to    text;    -- onion | wheat | both
-alter table public.hamyang_popup add column if not exists letter_body  text;
+alter table public.hamyang_popup add column if not exists letter_to          text; -- onion | wheat | both | each
+alter table public.hamyang_popup add column if not exists letter_body        text; -- (each일 때는 양파 농부용)
+alter table public.hamyang_popup add column if not exists letter_body_wheat  text; -- each일 때 우리밀용
 
--- ⑤ 참여 의사 · 이메일
+-- ⑤ 참여 의사 · 연락처
 alter table public.hamyang_popup add column if not exists interests    text;    -- 복수 선택(쉼표)
-alter table public.hamyang_popup add column if not exists email        text;    -- 선택
+alter table public.hamyang_popup add column if not exists email        text;    -- 모임 안내용
+alter table public.hamyang_popup add column if not exists phone        text;    -- 무지개양파 추첨 발송용(선택)
 
 -- ⑥ 구매 페이지 클릭 (관계 → 재소비)
 alter table public.hamyang_popup add column if not exists shop_click   text;    -- onion,wheat
@@ -66,14 +68,20 @@ create policy "anon can update recent" on public.hamyang_popup
 -- ⚠️ base 테이블에 익명 select 정책을 만들지 마세요 (이메일 노출).
 -- 실제 이메일은 대시보드 Table Editor / service_role 키로만 조회하세요.
 
--- 4) 편지 벽 공개 뷰 — 편지 본문만. id·이메일 등 일절 노출 안 함
+-- 4) 편지 벽 공개 뷰 — 편지 본문만. id·연락처 등 일절 노출 안 함
+--    '각각 따로' 작성분은 수신자별로 한 줄씩 펼쳐서 내보냅니다.
 drop view if exists public.hamyang_popup_letters;
 create or replace view public.hamyang_popup_letters
 with (security_invoker = off) as
-  select created_at, letter_to, letter_body
-  from public.hamyang_popup
-  where letter_body is not null and btrim(letter_body) <> ''
-  order by created_at desc;
+  select created_at,
+         case when letter_to = 'each' then 'onion' else letter_to end as letter_to,
+         letter_body
+    from public.hamyang_popup
+   where letter_body is not null and btrim(letter_body) <> ''
+  union all
+  select created_at, 'wheat' as letter_to, letter_body_wheat as letter_body
+    from public.hamyang_popup
+   where letter_body_wheat is not null and btrim(letter_body_wheat) <> '';
 
 grant select on public.hamyang_popup_letters to anon;
 
@@ -87,7 +95,8 @@ with (security_invoker = off) as
     sw_score, sw_price, sw_revisit,
     jam_score, jam_buy, jam_wtp,
     letter_to, interests, shop_click, finished, steps,
-    (email is not null and btrim(email) <> '') as has_email
+    (email is not null and btrim(email) <> '') as has_email,
+    (phone is not null and btrim(phone) <> '') as has_phone
   from public.hamyang_popup;
 
 grant select on public.hamyang_popup_public to anon;
