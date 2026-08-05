@@ -318,9 +318,9 @@ footer{padding:26px 0 6px;text-align:center;font-size:12.5px;line-height:1.9;opa
       <div class="dates" id="dates"></div>
     </div>
 
-    <div class="step" id="stepQty" hidden>
-      <div class="lb">2. 몇 개 예약할까요?</div>
-      <div class="hint" id="qtyHint"></div>
+    <div class="step" id="stepQty">
+      <div class="lb">2. 어떤 샌드위치로 하시겠어요?</div>
+      <div class="hint" id="qtyHint">두 가지 중 골라 담아주세요. 한 분당 <b>최대 2개</b>까지 예약하실 수 있습니다.</div>
       <div class="qty">
         <div class="qrow">
           <div class="nm"><b>체력함양</b><span>베이컨 &amp; 마스카포네 크림</span></div>
@@ -427,11 +427,7 @@ $('dates').querySelectorAll('.date').forEach(b => {
   b.onclick = () => {
     state.date = b.dataset.d;
     $('dates').querySelectorAll('.date').forEach(x => x.classList.toggle('sel', x === b));
-    $('stepQty').hidden = false;
-    $('qtyHint').textContent =
-      `${fmt(state.date).long}에 받으실 수량이에요. 한 분당 최대 ${PER_PERSON}개까지 예약하실 수 있습니다.`;
     renderQty();
-    $('stepQty').scrollIntoView({ behavior:'smooth', block:'start' });
   };
 });
 
