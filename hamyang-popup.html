@@ -613,18 +613,21 @@ async function save(patch = {}){
 /* ─────────── 화면 전환 ─────────── */
 const WEIGHT = { 's-cover':0, 's-card1':1, 's-card2':2, 's-exp':3, 's-sw':4, 's-jam':4,
                  's-letter':5, 's-fly':5, 's-interest':6, 's-shop':7 };
-/* 분기가 있어 뒤로가기는 하드코딩 대신 방문 이력으로 되짚는다 */
+/* 뒤로가기는 생산자 이야기 구간(표지·카드)에서만 허용한다.
+   설문이 시작되면 이력을 비워 되돌아갈 수 없게 하고, 그래서 화면별
+   도달 시각이 한 방향으로만 쌓인다. */
+const BACKABLE = new Set(['s-card1', 's-card2']);
 const trail = [];
 function go(id, isBack){
   const cur = document.querySelector('.screen.on');
-  if(!isBack && cur && cur.id !== id && cur.id !== 's-fly') trail.push(cur.id);
+  if(!isBack && cur && cur.id !== id) trail.push(cur.id);
+  if(!BACKABLE.has(id)) trail.length = 0;
 
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
   $(id).classList.add('on');
   window.scrollTo(0,0);
   $('prog').style.width = ((WEIGHT[id] || 0) / 7 * 100) + '%';
-  $('backBtn').hidden = (trail.length === 0 || id === 's-fly');
-  if(id === 's-letter') sent = false;      // 되돌아왔으면 다시 보낼 수 있게
+  $('backBtn').hidden = trail.length === 0;
   stamp(id.replace('s-',''));
   if(id === 's-card1' || id === 's-card2'){
     const f = (id === 's-card1') ? f1 : f2;
