@@ -24,14 +24,17 @@ alter table public.hamyang_popup add column if not exists flip_wheat   boolean; 
 alter table public.hamyang_popup add column if not exists experience   text;    -- sandwich | jam | both | none
 
 -- ③-A 샌드위치 (판매가 9,500원)
+alter table public.hamyang_popup add column if not exists sw_type      text;    -- 베이컨&마스카포네 | 브리&양파잼
 alter table public.hamyang_popup add column if not exists sw_score     int;     -- 맛 1~5
 alter table public.hamyang_popup add column if not exists sw_price     text;    -- 가격 평가
 alter table public.hamyang_popup add column if not exists sw_revisit   text;    -- 재구매 의향
+alter table public.hamyang_popup add column if not exists sw_free      text;    -- 주관식 — 한 가지만 바꾼다면
 
 -- ③-B 양파잼 (미출시 · 순수 지불의사)
 alter table public.hamyang_popup add column if not exists jam_score    int;     -- 맛 1~5
 alter table public.hamyang_popup add column if not exists jam_buy      text;    -- 구매 의사
-alter table public.hamyang_popup add column if not exists jam_wtp      int;     -- 150g 한 병 지불의사(원)
+alter table public.hamyang_popup add column if not exists jam_wtp      int;     -- 200g 한 병 지불의사(원)
+alter table public.hamyang_popup add column if not exists jam_free     text;    -- 주관식
 
 -- ④ 편지
 alter table public.hamyang_popup add column if not exists letter_to          text; -- onion | wheat | both | each
@@ -92,8 +95,8 @@ with (security_invoker = off) as
   select
     id, created_at, src,
     flip_onion, flip_wheat, experience,
-    sw_score, sw_price, sw_revisit,
-    jam_score, jam_buy, jam_wtp,
+    sw_type, sw_score, sw_price, sw_revisit, sw_free,
+    jam_score, jam_buy, jam_wtp, jam_free,
     letter_to, interests, shop_click, finished, steps,
     (email is not null and btrim(email) <> '') as has_email,
     (phone is not null and btrim(phone) <> '') as has_phone

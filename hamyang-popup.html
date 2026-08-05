@@ -169,6 +169,10 @@ textarea{
   resize:none;min-height:120px;
 }
 textarea::placeholder{color:#C3BAA8;}
+textarea.short{
+  min-height:74px;font-family:inherit;font-size:15px;line-height:1.65;margin-top:12px;
+}
+.chip{text-align:left;line-height:1.5;}
 textarea:focus,input:focus{outline:none;border-color:var(--green);}
 .cnt{text-align:right;font-size:11.5px;color:var(--muted);margin-top:6px;}
 .split{
@@ -319,7 +323,12 @@ input[type=email],input[type=tel]{
   <!-- ③-A 샌드위치 -->
   <section class="screen scroller" id="s-sw">
     <div class="guide" id="g4"></div>
-    <p class="q">함양 화덕 샌드위치, 어떠셨어요?</p>
+    <p class="q">어떤 샌드위치를 드셨어요?</p>
+    <div class="row" id="swType">
+      <button class="opt" data-t="베이컨&amp;마스카포네">베이컨 &amp;<br>마스카포네</button>
+      <button class="opt" data-t="브리&amp;양파잼">브리 &amp;<br>양파잼</button>
+    </div>
+    <p class="q">맛은 어떠셨어요?</p>
     <div class="stars" id="swStars"></div>
     <div id="swRest" style="display:none">
       <p class="q">이 샌드위치는 9,500원입니다.<br>가격은 어떻게 느끼셨어요?</p>
@@ -335,6 +344,9 @@ input[type=email],input[type=tel]{
         <button class="opt" data-r="한 번은 더">한 번은 더</button>
         <button class="opt" data-r="글쎄요">글쎄요</button>
       </div>
+      <p class="q">딱 한 가지만 바꿀 수 있다면,<br>뭘 바꾸고 싶으세요?</p>
+      <p class="sub">한 줄이면 충분해요. 다음 메뉴에 반영합니다.</p>
+      <textarea id="swFree" class="short" maxlength="150" placeholder="예: 빵이 조금 더 촉촉했으면 좋겠어요."></textarea>
       <button class="cta" id="swNext" disabled>다음</button>
     </div>
   </section>
@@ -353,15 +365,19 @@ input[type=email],input[type=tel]{
       </div>
       <div class="note">
         <div class="nt">이 잼은 이렇게 만듭니다</div>
-        <p>12브릭스 고당도 양파를 얇게 썰어 뭉근히 오래 졸입니다. 설탕으로 낸 단맛이 아니라 양파가 원래 가진 단맛이에요. 사라질 뻔한 품종을 홀로 지켜온, 그 양파입니다.</p>
+        <p>함양의 단단한 양파를 2시간 이상 저어가며 오래 졸여 만듭니다. 다른 잼 종류보다 설탕은 절반 이하로 적게 들어가고, 발사믹 · 사과브랜디 · 버터 등으로 향과 풍미를 더해 만듭니다.</p>
       </div>
-      <p class="q">150g 한 병이라면<br>얼마까지 내실 수 있으세요?</p>
+      <p class="q">200g 한 병이라면<br>얼마까지 내실 수 있으세요?</p>
+      <p class="sub">한 손에 쥐어지는 작은 유리병 하나예요.<br>시판 잼 한 병보다 조금 작은 정도.</p>
       <div class="row" id="jamWtp">
         <button class="opt" data-w="7000">7,000원<br>이하</button>
         <button class="opt" data-w="8000">8,000원</button>
         <button class="opt" data-w="10000">10,000원</button>
         <button class="opt" data-w="12000">12,000원<br>이상</button>
       </div>
+      <p class="q">이 잼에 대해<br>하고 싶은 말이 있으세요?</p>
+      <p class="sub">한 줄이면 충분해요.</p>
+      <textarea id="jamFree" class="short" maxlength="150" placeholder="예: 빵 말고 고기에도 어울릴 것 같아요."></textarea>
       <button class="cta" id="jamNext" disabled>다음</button>
     </div>
   </section>
@@ -406,9 +422,9 @@ input[type=email],input[type=tel]{
     <div class="guide" id="g7"></div>
     <p class="sub" style="margin-top:0">관심 가는 걸 골라주세요.</p>
     <div class="chips" id="chips">
-      <button class="chip" data-it="강호현 농부와의 만남">강호현 농부와의 만남</button>
-      <button class="chip" data-it="지리산우리밀과의 만남">지리산우리밀과의 만남</button>
-      <button class="chip" data-it="생산자와 함께하는 소셜다이닝">생산자와 함께하는 소셜다이닝</button>
+      <button class="chip" data-it="양파 이야기와 함양파 칼솟 다이닝">강호현 농부의 양파 이야기와<br>함양파 칼솟 다이닝</button>
+      <button class="chip" data-it="우리밀 이야기와 우리밀 빵 다이닝">지리산우리밀에게 듣는 우리밀 이야기와<br>우리밀 빵 다이닝</button>
+      <button class="chip" data-it="생산자를 만나는 함양 여행">생산자를 만나는 함양 여행</button>
       <button class="chip" data-it="아직은 괜찮아요" data-none="1">아직은 괜찮아요</button>
     </div>
     <p class="q">자리가 열리면 메일로 알려드릴게요.</p>
@@ -627,14 +643,20 @@ function pickOne(wrapId, attr, onPick){
 /* ─────────── ③-A 샌드위치 ─────────── */
 guide($('g4'), 'nervous', '솔직하게 말해주세요.');
 const sw = {};
+pickOne('swType', 't', v => { sw.type = v; save({ sw_type: v }); checkSw(); });
 stars('swStars', n => {
   sw.score = n; save({ sw_score: n });
   $('swRest').style.display = 'block';
+  checkSw();
 });
 pickOne('swPrice', 'p', v => { sw.price = v; save({ sw_price: v }); checkSw(); });
 pickOne('swRev',   'r', v => { sw.rev   = v; save({ sw_revisit: v }); checkSw(); });
-function checkSw(){ $('swNext').disabled = !(sw.price && sw.rev); }
-$('swNext').onclick = () => go(S.experience === 'both' ? 's-jam' : 's-letter');
+function checkSw(){ $('swNext').disabled = !(sw.type && sw.score && sw.price && sw.rev); }
+$('swNext').onclick = () => {
+  const t = $('swFree').value.trim();
+  if(t) save({ sw_free: t });
+  go(S.experience === 'both' ? 's-jam' : 's-letter');
+};
 
 /* ─────────── ③-B 양파잼 ─────────── */
 guide($('g5'), 'nervous', '이것도 여쭤볼게요.');
@@ -646,7 +668,11 @@ stars('jamStars', n => {
 pickOne('jamBuy', 'b', v => { jam.buy = v; save({ jam_buy: v }); checkJam(); });
 pickOne('jamWtp', 'w', v => { jam.wtp = +v; save({ jam_wtp: +v }); checkJam(); });
 function checkJam(){ $('jamNext').disabled = !(jam.buy && jam.wtp); }
-$('jamNext').onclick = () => go('s-letter');
+$('jamNext').onclick = () => {
+  const t = $('jamFree').value.trim();
+  if(t) save({ jam_free: t });
+  go('s-letter');
+};
 
 /* ─────────── ④ 편지 ─────────── */
 guide($('g6'), 'hi', '오늘 드신 것을 만든 분들이에요.<br>한 마디 남겨주실래요?');
@@ -696,7 +722,7 @@ $('sendLetter').onclick = async () => {
 $('letterSkip').onclick = () => go('s-interest');
 
 /* ─────────── ⑤ 참여 의사 ─────────── */
-guide($('g7'), 'hi', '남가좌439에서<br>이런 자리를 준비하고 있어요.');
+guide($('g7'), 'hi', '지역과 서울을 연결하기 위해<br>이런 자리를 준비하고 있어요.');
 let interests = [];
 document.querySelectorAll('.chip').forEach(c => c.onclick = () => {
   const v = c.dataset.it;
