@@ -307,17 +307,15 @@ footer{padding:26px 0 6px;text-align:center;font-size:12.5px;line-height:1.9;opa
     <h2>미리 예약하세요</h2>
 
     <div class="notice">
-      <b>하루에 만드는 개수가 정해져 있습니다.</b><br>
-      현장 수령만 가능하고, 결제는 오셔서 하시면 됩니다.<br>
+      <b>현장 수령만 가능합니다.</b><br>
+      결제는 오셔서 하시면 됩니다.<br>
       한 분이 <b>최대 2개</b>까지 예약하실 수 있습니다.
     </div>
 
     <div class="step">
       <div class="lb">1. 언제 오실까요?</div>
       <div class="hint">수령하실 날짜 하나를 골라주세요.</div>
-      <div class="dates" id="dates">
-        <div class="loading">남은 수량을 불러오는 중이에요…</div>
-      </div>
+      <div class="dates" id="dates"></div>
     </div>
 
     <div class="step" id="stepQty" hidden>
@@ -378,7 +376,6 @@ footer{padding:26px 0 6px;text-align:center;font-size:12.5px;line-height:1.9;opa
     <h2>예약되었습니다</h2>
     <div class="receipt">
       <div class="lines" id="rLines"></div>
-      <div class="no">예약번호<em id="rNo">—</em></div>
     </div>
     <div class="after">
       오시면 <b>성함을 말씀해주세요.</b> 결제는 그때 현장에서 하시면 됩니다.<br>
@@ -406,8 +403,9 @@ const sb = createClient(
   'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
 );
 
-const PER_PERSON = 2;   // 1인당 총 예약 가능 개수 (종류 무관)
+const PER_PERSON = 2;   // 1인당 총 예약 가능 개수 (종류 무관). 날짜별 정원은 없음
 const SRC = (new URLSearchParams(location.search).get('src') || '').toLowerCase() || null;
+const DATES = ['2026-08-07','2026-08-08','2026-08-11','2026-08-12','2026-08-13'];
 const DOW = ['일','월','화','수','목','금','토'];
 
 const $ = id => document.getElementById(id);
@@ -415,64 +413,31 @@ const fmt = s => {
   const [y,m,d] = s.split('-').map(Number);
   return { short:`${m}.${d}`, dow:DOW[new Date(y, m-1, d).getDay()], long:`${m}월 ${d}일` };
 };
-const state = { slots:[], date:null, emotion:0, energy:0, party:null };
-const cur = () => state.slots.find(s => s.pickup_date === state.date) || null;
+const state = { date:null, emotion:0, energy:0, party:null };
 
-/* ───────── 잔여 불러오기 ───────── */
-async function loadSlots(){
-  const { data, error } = await sb
-    .from('hamyang_interest_slots')
-    .select('pickup_date,is_open,left_emotion,left_energy,sort')
-    .order('sort');
-  if (error || !data) {
-    $('dates').innerHTML =
-      '<div class="loading">남은 수량을 불러오지 못했어요.<br>잠시 뒤 새로고침 해주세요.</div>';
-    return;
-  }
-  state.slots = data;
-  renderDates();
-}
+/* ───────── 날짜 ───────── */
+$('dates').innerHTML = DATES.map(d => {
+  const f = fmt(d);
+  return `<button type="button" class="date" data-d="${d}">
+      <span class="d">${f.short}</span><span class="w">${f.dow}요일</span>
+    </button>`;
+}).join('');
 
-function renderDates(){
-  $('dates').innerHTML = state.slots.map(s => {
-    const f = fmt(s.pickup_date);
-    const e = s.left_emotion, n = s.left_energy;
-    const closed = !s.is_open || (e + n === 0);
-    let right;
-    if (closed)       right = '마감';
-    else if (e === 0) right = '체력 ' + n + '개 남음';
-    else if (n === 0) right = '정서 ' + e + '개 남음';
-    else              right = '체력 ' + n + ' · 정서 ' + e + ' 남음';
-    return `<button type="button" class="date${state.date === s.pickup_date ? ' sel' : ''}"
-              data-d="${s.pickup_date}" ${closed ? 'disabled' : ''}>
-              <span class="d">${f.short}</span><span class="w">${f.dow}요일</span>
-              <span class="r">${right}</span>
-            </button>`;
-  }).join('');
-  $('dates').querySelectorAll('.date:not([disabled])').forEach(b => {
-    b.onclick = () => pickDate(b.dataset.d);
-  });
-}
-
-function pickDate(d){
-  if (state.date !== d) { state.emotion = 0; state.energy = 0; }
-  state.date = d;
-  renderDates();
-  $('stepQty').hidden = false;
-  const s = cur();
-  $('qtyHint').textContent =
-    `${fmt(d).long}에 남은 건 체력함양 ${s.left_energy}개, 정서함양 ${s.left_emotion}개예요. 한 분당 최대 ${PER_PERSON}개까지 예약하실 수 있습니다.`;
-  renderQty();
-  $('stepQty').scrollIntoView({ behavior:'smooth', block:'start' });
-}
+$('dates').querySelectorAll('.date').forEach(b => {
+  b.onclick = () => {
+    state.date = b.dataset.d;
+    $('dates').querySelectorAll('.date').forEach(x => x.classList.toggle('sel', x === b));
+    $('stepQty').hidden = false;
+    $('qtyHint').textContent =
+      `${fmt(state.date).long}에 받으실 수량이에요. 한 분당 최대 ${PER_PERSON}개까지 예약하실 수 있습니다.`;
+    renderQty();
+    $('stepQty').scrollIntoView({ behavior:'smooth', block:'start' });
+  };
+});
 
 /* ───────── 수량 ───────── */
-function capFor(k){
-  const s = cur(); if (!s) return 0;
-  const left = k === 'emotion' ? s.left_emotion : s.left_energy;
-  const other = k === 'emotion' ? state.energy : state.emotion;
-  return Math.min(left, PER_PERSON - other);
-}
+const capFor = k => PER_PERSON - (k === 'emotion' ? state.energy : state.emotion);
+
 function renderQty(){
   $('nEmotion').textContent = state.emotion;
   $('nEnergy').textContent  = state.energy;
@@ -534,40 +499,19 @@ $('submit').onclick = async () => {
   btn.disabled = true;
   btn.textContent = '예약하는 중…';
 
-  const { data, error } = await sb.rpc('hamyang_interest_reserve', {
-    p_date:    state.date,
-    p_emotion: state.emotion,
-    p_energy:  state.energy,
-    p_name:    $('fName').value.trim(),
-    p_phone:   $('fPhone').value.trim(),
-    p_party:   state.party,
-    p_src:     SRC
+  const { error } = await sb.from('hamyang_interest').insert({
+    pickup_date: state.date,
+    qty_emotion: state.emotion,
+    qty_energy:  state.energy,
+    party_size:  state.party,
+    name:        $('fName').value.trim(),
+    phone:       $('fPhone').value.trim(),
+    src:         SRC
   });
   btn.textContent = '예약하기';
 
-  if (error || !data || !data.ok) {
-    const code = data && data.error;
-    if (code === 'sold_out') {
-      await loadSlots();
-      const s = cur();
-      if (s) {
-        state.emotion = Math.min(state.emotion, s.left_emotion);
-        state.energy  = Math.min(state.energy,  s.left_energy);
-        $('qtyHint').textContent =
-          `${fmt(state.date).long}에 남은 건 체력함양 ${s.left_energy}개, 정서함양 ${s.left_emotion}개예요. 한 분당 최대 ${PER_PERSON}개까지 예약하실 수 있습니다.`;
-        renderQty();
-      }
-      showErr('죄송해요, 그 사이에 남은 수량이 바뀌었어요.<br>수량을 다시 확인하고 눌러주세요.');
-    } else if (code === 'closed') {
-      await loadSlots();
-      showErr('그날은 예약이 닫혔어요. 다른 날짜를 골라주세요.');
-    } else if (code === 'no_contact') {
-      showErr('이름과 전화번호를 적어주세요.');
-    } else if (code === 'bad_qty') {
-      showErr(`한 분당 최대 ${PER_PERSON}개까지 예약하실 수 있어요.`);
-    } else {
-      showErr('예약하지 못했어요. 잠시 뒤 다시 눌러주세요.');
-    }
+  if (error) {
+    showErr('예약하지 못했어요. 잠시 뒤 다시 눌러주세요.');
     btn.disabled = false;
     syncSubmit();
     return;
@@ -584,14 +528,13 @@ $('submit').onclick = async () => {
   $('rLines').innerHTML =
     `<b>${f.long} ${f.dow}요일</b>${who ? ' · ' + who : ''}<br>
      ${parts.join(' · ')} — 모두 ${total}개`;
-  $('rNo').textContent = data.id;
 
   $('ask').style.display = 'none';
   $('done').classList.add('on');
   $('done').scrollIntoView({ behavior:'smooth', block:'start' });
 };
 
-loadSlots();
+renderQty();
 </script>
 </body>
 </html>

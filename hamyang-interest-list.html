@@ -91,7 +91,7 @@ h1{font-family:'Black Han Sans',sans-serif;font-size:23px;letter-spacing:-.8px;l
   <div id="list"></div>
 
   <div class="note">
-    메일 안내를 받고 예약하신 분들입니다. 한 분당 최대 2개, 정원은 마공과 별개입니다.<br>
+    메일 안내를 받고 예약하신 분들입니다. 한 분당 최대 2개, 날짜별 정원은 없습니다.<br>
     이름을 확인하고 <b>수령</b>을 누르면 체크됩니다. 취소하면 그 수량이 다시 풀립니다.<br>
     마공 가족 사전주문은 <a href="hamyang-preorder-admin.html">여기</a>에서 봅니다.
   </div>
@@ -115,13 +115,10 @@ const esc = s => String(s).replace(/[&<>"']/g, c =>
 
 async function load(){
   $('msg').classList.remove('on');
-  const [slots, rows] = await Promise.all([
-    sb.from('hamyang_interest_slots').select('pickup_date,is_open,cap_emotion,cap_energy,sort').order('sort'),
-    sb.from('hamyang_interest_list').select('*').order('created_at')
-  ]);
-  const data = rows.data, error = rows.error || slots.error;
-  window.__CAPS = {};
-  (slots.data || []).forEach(s => { window.__CAPS[s.pickup_date] = s; });
+  const { data, error } = await sb
+    .from('hamyang_interest_list')
+    .select('*')
+    .order('created_at');
 
   if (error) {
     $('list').innerHTML = '';
@@ -166,7 +163,6 @@ function render(rows){
       const g = groups.get(k);
       const gl = g.filter(r => r.status !== 'canceled');
       const e = sum(gl,'qty_emotion'), n = sum(gl,'qty_energy'), p = sum(gl,'party_size');
-      const cap = window.__CAPS[k];
       const head = k === 'unknown' ? '날짜 미정' : fmt(k);
       const body = g.map(r => {
         const q = [];
@@ -192,8 +188,8 @@ function render(rows){
       }).join('');
       return `<div class="day">
           <div class="dh"><span class="d">${head}</span>
-            <span class="s">${gl.length}건${p ? ' · ' + p + '명' : ''}${cap && !cap.is_open ? ' · 닫힘' : ''}</span></div>
-          <div class="make">예약 — 체력함양 <b>${n}</b> · 정서함양 <b>${e}</b>${cap ? ` <span style="opacity:.6;font-weight:400;font-size:12.5px">(정원 ${cap.cap_energy}·${cap.cap_emotion})</span>` : ''}</div>
+            <span class="s">${gl.length}건${p ? ' · ' + p + '명' : ''}</span></div>
+          <div class="make">예약 — 체력함양 <b>${n}</b> · 정서함양 <b>${e}</b></div>
           ${body}
         </div>`;
     }).join('');
