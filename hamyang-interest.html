@@ -415,6 +415,22 @@ const fmt = s => {
 };
 const state = { date:null, emotion:0, energy:0, party:null };
 
+/* ───────── 방문 기록 (링크를 몇 명이 열어봤는지) ───────── */
+(function logView(){
+  try{
+    let sid = localStorage.getItem('hy_sid');
+    if (!sid) {
+      sid = (crypto.randomUUID ? crypto.randomUUID()
+        : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+            const r = Math.random() * 16 | 0;
+            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+          }));
+      localStorage.setItem('hy_sid', sid);
+    }
+    sb.from('hamyang_view').insert({ page:'interest', src:SRC, sid }).then(()=>{}, ()=>{});
+  }catch(e){}
+})();
+
 /* ───────── 날짜 ───────── */
 $('dates').innerHTML = DATES.map(d => {
   const f = fmt(d);
