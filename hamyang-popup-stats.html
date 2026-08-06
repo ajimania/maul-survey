@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>함양 팝업 참여 결과 · 남가좌439</title>
+<meta name="robots" content="noindex">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAF5EA; --card:#FFFDF7; --line:#DBD2C0; --line-soft:#E8E1D2;
+  --ink:#4A3D2E; --ink-soft:#6E6152; --muted:#9A9081;
+  --green:#5C6B3F; --green-soft:#EDF0E4; --gold:#D9A63C; --brick:#BE4A2F;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Pretendard Variable',Pretendard,-apple-system,system-ui,sans-serif;
+  background:var(--paper);color:var(--ink);letter-spacing:-.2px;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:32px 22px 80px;}
+
+header{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;padding-bottom:18px;border-bottom:1px solid var(--line);}
+h1{font-size:23px;font-weight:800;letter-spacing:-.8px;}
+header .sub{font-size:13px;color:var(--muted);margin-top:5px;}
+header .sp{flex:1;}
+.btn{
+  font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;
+  background:var(--ink);color:#fff;border:none;border-radius:3px;padding:10px 15px;
+}
+.btn.ghost{background:none;color:var(--ink-soft);border:1px solid var(--line);}
+.btn:active{opacity:.82;}
+
+.state{text-align:center;padding:80px 20px;color:var(--muted);font-size:14px;line-height:1.9;}
+.state code{background:var(--green-soft);padding:2px 6px;border-radius:3px;color:var(--green);}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:22px;}
+@media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr);}}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:16px 16px 18px;}
+.kpi .lab{font-size:11.5px;color:var(--muted);letter-spacing:0;}
+.kpi .val{font-size:28px;font-weight:800;line-height:1.15;margin-top:8px;letter-spacing:-1px;}
+.kpi .val small{font-size:14px;font-weight:600;color:var(--muted);margin-left:2px;}
+.kpi .note{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.5;letter-spacing:0;}
+.kpi.hi .val{color:var(--green);}
+.kpi.warn .val{color:var(--brick);}
+
+.sec{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:22px 22px 24px;margin-top:14px;}
+.sec h2{font-size:15.5px;font-weight:700;letter-spacing:-.4px;}
+.sec .desc{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.6;letter-spacing:0;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:18px;}
+@media(max-width:760px){.grid2{grid-template-columns:1fr;gap:22px;}}
+.subh{font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-bottom:10px;letter-spacing:0;}
+
+.bars{display:flex;flex-direction:column;gap:7px;margin-top:14px;}
+.row{display:flex;align-items:center;gap:10px;}
+.row .bl{width:132px;flex:none;font-size:12.5px;color:var(--ink-soft);letter-spacing:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.row .track{flex:1;height:16px;background:var(--line-soft);border-radius:2px;overflow:hidden;}
+.row .fill{height:100%;background:var(--green);border-radius:2px;transition:width .5s;}
+.row .fill.mut{background:#C6BCA6;}
+.row .fill.gold{background:var(--gold);}
+.row .fill.brick{background:var(--brick);}
+.row .rv{width:74px;flex:none;text-align:right;font-size:12px;font-variant-numeric:tabular-nums;color:var(--ink);}
+.row .rv small{color:var(--muted);font-size:11px;}
+
+.insight{
+  margin-top:18px;padding:14px 16px;background:var(--green-soft);border-radius:3px;
+  font-size:13px;line-height:1.75;color:var(--ink-soft);letter-spacing:0;
+}
+.insight b{color:var(--green);font-weight:700;}
+
+.notes{display:flex;flex-direction:column;gap:8px;margin-top:16px;max-height:420px;overflow-y:auto;}
+.note-item{border:1px solid var(--line-soft);border-radius:3px;padding:12px 14px;font-size:13.5px;line-height:1.7;}
+.note-item .meta{font-size:11px;color:var(--muted);margin-bottom:5px;letter-spacing:0;}
+.letters{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-top:16px;}
+.lt{border:1px solid var(--line-soft);border-radius:3px;padding:13px 15px;}
+.lt .who{font-size:11px;color:var(--muted);margin-bottom:6px;letter-spacing:0;}
+.lt .bd{font-family:'Gaegu',cursive;font-size:17px;line-height:1.55;}
+.empty{font-size:13px;color:var(--muted);padding:14px 0;}
+.foot{font-size:11.5px;color:var(--muted);margin-top:26px;line-height:1.8;letter-spacing:0;}
+table.mini{width:100%;border-collapse:collapse;margin-top:14px;font-size:12.5px;}
+table.mini th,table.mini td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line-soft);letter-spacing:0;}
+table.mini th{color:var(--muted);font-weight:600;font-size:11.5px;}
+table.mini td.num{text-align:right;font-variant-numeric:tabular-nums;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>함양 팝업 참여 결과</h1>
+      <div class="sub">남가좌, 함양에 스며들다 · 포장지 QR 참여 페이지</div>
+    </div>
+    <div class="sp"></div>
+    <button class="btn ghost" onclick="exportCsv()">응답 CSV</button>
+    <button class="btn ghost" onclick="exportContacts()">연락처 내보내기</button>
+    <button class="btn" onclick="load()">새로고침</button>
+  </header>
+
+  <div id="state" class="state">불러오는 중…</div>
+  <div id="body" style="display:none">
+    <div class="kpis" id="kpis"></div>
+    <div id="secs"></div>
+    <p class="foot" id="foot"></p>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+const sb = createClient(
+  'https://hncuvjrghniwihhfpata.supabase.co',
+  'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
+);
+
+const $ = s => document.querySelector(s);
+let ROWS = [];
+
+/* ── 유틸 ── */
+const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
+const esc = s => (s ?? '').toString().replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+function tally(rows, fn){
+  const m = new Map();
+  rows.forEach(r => { const v = fn(r); if(v === null || v === undefined || v === '') return; m.set(v, (m.get(v) || 0) + 1); });
+  return m;
+}
+function tallyCsv(rows, fn){
+  const m = new Map();
+  rows.forEach(r => (fn(r) || '').split(',').map(s => s.trim()).filter(Boolean)
+    .forEach(v => m.set(v, (m.get(v) || 0) + 1)));
+  return m;
+}
+function ordered(map, order){
+  const out = order.filter(k => map.has(k)).map(k => [k, map.get(k)]);
+  [...map.keys()].filter(k => !order.includes(k)).forEach(k => out.push([k, map.get(k)]));
+  return out;
+}
+function bars(items, total, cls = ''){
+  if(!items.length) return '<div class="empty">아직 응답이 없어요.</div>';
+  return '<div class="bars">' + items.map(([label, count]) => {
+    const p = pct(count, total);
+    return `<div class="row"><div class="bl" title="${esc(label)}">${esc(label)}</div>
+      <div class="track"><div class="fill ${cls}" style="width:${p}%"></div></div>
+      <div class="rv">${p}%<small> · ${count}</small></div></div>`;
+  }).join('') + '</div>';
+}
+function avg(nums){ return nums.length ? (nums.reduce((a,b)=>a+b,0) / nums.length) : null; }
+function median(nums){
+  if(!nums.length) return null;
+  const s = [...nums].sort((a,b)=>a-b), m = Math.floor(s.length/2);
+  return s.length % 2 ? s[m] : (s[m-1] + s[m]) / 2;
+}
+function sec(html){ const d = document.createElement('div'); d.className = 'sec'; d.innerHTML = html; $('#secs').appendChild(d); }
+
+/* ── 미리보기용 가짜 데이터 (?demo=1) ─────────────────────────
+   팝업 전에 화면이 어떻게 보이는지 확인하는 용도. 실제 데이터와 무관. */
+function demoData(){
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  const rows = [], letters = [];
+  const SW_FREE = ['빵이 조금 더 촉촉했으면 좋겠어요','양이 조금 아쉬웠어요','루꼴라가 신선해서 좋았어요'];
+  const JAM_FREE = ['고기에도 어울릴 것 같아요','너무 달지 않아서 좋아요','빵에 발라 먹고 싶어요'];
+  const LT = ['양파가 이렇게 단 줄 몰랐어요','잘 먹었습니다. 함양 꼭 가볼게요','빵이 정말 구수했어요','귀한 걸 지켜주셔서 고맙습니다'];
+  for(let i = 0; i < 84; i++){
+    const exp = pick(['sandwich','jam','both','none','jam','none','both']);
+    const ate = exp !== 'none';
+    const steps = { cover:1, card1:1 };
+    if(Math.random() < .92) steps.card2 = 1;
+    if(Math.random() < .86) steps.exp = 1;
+    if(steps.exp && (exp === 'sandwich' || exp === 'both')) steps.sw = 1;
+    if(steps.exp && (exp === 'jam' || exp === 'both')) steps.jam = 1;
+    if(steps.exp && ate && Math.random() < .8) steps.letter = 1;
+    if(steps.exp && Math.random() < .74) steps.interest = 1;
+    if(steps.interest && Math.random() < .9) steps.shop = 1;
+    const wroteLetter = !!steps.letter && Math.random() < .62;
+    const to = pick(['onion','wheat','both']);
+    if(wroteLetter) letters.push({ letter_to: to, letter_body: pick(LT) });
+    rows.push({
+      id: i + 1,
+      created_at: new Date(Date.now() - i * 36e5).toISOString(),
+      src: pick(['wrap','onion','map','onion',null]),
+      experience: exp,
+      flip_onion: Math.random() < .71, flip_wheat: Math.random() < .58,
+      sw_type: steps.sw ? pick(['베이컨&마스카포네','브리&양파잼']) : null,
+      sw_score: steps.sw ? pick([3,4,4,5,5]) : null,
+      sw_price: steps.sw ? pick(['적당하다','적당하다','조금 비싸다','싸다','많이 비싸다']) : null,
+      sw_revisit: steps.sw ? pick(['또 올게요','또 올게요','한 번은 더','글쎄요']) : null,
+      sw_free: steps.sw && Math.random() < .35 ? pick(SW_FREE) : null,
+      jam_score: steps.jam ? pick([4,4,5,5,3]) : null,
+      jam_buy: steps.jam ? pick(['사고 싶어요','고민해볼게요','고민해볼게요','아니요']) : null,
+      jam_wtp: steps.jam ? pick([7000,8000,8000,10000,10000,12000]) : null,
+      jam_free: steps.jam && Math.random() < .3 ? pick(JAM_FREE) : null,
+      letter_to: wroteLetter ? to : null,
+      interests: steps.interest ? pick([
+        '양파 이야기와 함양파 칼솟 다이닝',
+        '우리밀 이야기와 우리밀 빵 다이닝',
+        '생산자를 만나는 함양 여행',
+        '양파 이야기와 함양파 칼솟 다이닝,생산자를 만나는 함양 여행',
+        '아직은 괜찮아요']) : null,
+      shop_click: steps.shop && Math.random() < .38 ? pick(['onion','wheat','onion,wheat']) : null,
+      finished: !!steps.interest,
+      steps,
+      has_email: !!steps.interest && Math.random() < .42,
+      has_phone: !!steps.interest && Math.random() < .55
+    });
+  }
+  return { rows, letters };
+}
+
+/* ── 로드 ── */
+async function load(){
+  $('#state').style.display = 'block';
+  $('#state').textContent = '불러오는 중…';
+  $('#body').style.display = 'none';
+  $('#secs').innerHTML = '';
+
+  if(new URLSearchParams(location.search).get('demo') === '1'){
+    const d = demoData();
+    ROWS = d.rows;
+    $('#state').style.display = 'none';
+    $('#body').style.display = 'block';
+    render(d.rows, d.letters);
+    $('#foot').insertAdjacentHTML('afterbegin',
+      '<b style="color:var(--brick)">미리보기 모드입니다 — 아래 숫자는 전부 가짜 데이터입니다.</b><br>');
+    return;
+  }
+
+  let rows, letters;
+  try{
+    const r1 = await sb.from('hamyang_popup_public').select('*').order('created_at', { ascending:false });
+    if(r1.error) throw r1.error;
+    rows = r1.data || [];
+    const r2 = await sb.from('hamyang_popup_letters').select('*');
+    letters = r2.data || [];
+  }catch(e){
+    $('#state').innerHTML = `데이터를 불러올 수 없어요.<br>
+      Supabase SQL Editor에서 <code>supabase/hamyang_popup.sql</code>을 실행했는지 확인해 주세요.<br>
+      <span style="font-size:12px">${esc(e.message || e)}</span>`;
+    return;
+  }
+  if(!rows.length){
+    $('#state').textContent = '아직 참여자가 없어요.';
+    return;
+  }
+  ROWS = rows;
+  $('#state').style.display = 'none';
+  $('#body').style.display = 'block';
+  render(rows, letters);
+}
+window.load = load;
+
+/* ── 렌더 ── */
+function render(rows, letters){
+  const n = rows.length;
+  const done = rows.filter(r => r.finished).length;
+  const ate = rows.filter(r => r.experience && r.experience !== 'none');
+  const notAte = rows.filter(r => r.experience === 'none');
+  const wroteLetter = rows.filter(r => r.letter_to).length;
+  const contact = rows.filter(r => r.has_email || r.has_phone).length;
+  const clicked = rows.filter(r => r.shop_click).length;
+
+  /* KPI */
+  $('#kpis').innerHTML = [
+    ['참여자', n, 'QR로 들어와 첫 응답을 남긴 사람'],
+    ['완주율', pct(done, n) + '<small>%</small>', `${done}명이 마지막 화면까지`, 'hi'],
+    ['편지', wroteLetter, `참여자의 ${pct(wroteLetter, n)}% — 관계의 실물 증거`, 'hi'],
+    ['연락처', contact, `참여자의 ${pct(contact, n)}%가 메일·번호를 남김`, 'hi'],
+    ['먹은 사람', ate.length, `안 먹은 사람 ${notAte.length}명`],
+    ['구매 페이지 클릭', clicked, `참여자의 ${pct(clicked, n)}%`],
+    ['양파 카드 뒤집음', pct(rows.filter(r=>r.flip_onion).length, n) + '<small>%</small>', '생산자 이야기를 실제로 읽은 비율'],
+    ['우리밀 카드 뒤집음', pct(rows.filter(r=>r.flip_wheat).length, n) + '<small>%</small>', '']
+  ].map(([lab, val, note, cls]) =>
+    `<div class="kpi ${cls||''}"><div class="lab">${lab}</div><div class="val">${val}</div><div class="note">${note||''}</div></div>`
+  ).join('');
+
+  /* 퍼널 — 화면별 도달 */
+  /* spine=true 인 화면만 모두가 지나간다. 나머지는 고른 사람만 거치므로 이탈 계산에서 뺀다. */
+  const STEPS = [
+    ['cover','표지', true], ['card1','강호현 카드', true], ['card2','우리밀 카드', true],
+    ['exp','식경험 선택', true],
+    ['sw','샌드위치 설문 · 먹은 사람만', false], ['jam','양파잼 설문 · 맛본 사람만', false],
+    ['letter','편지 · 먹은 사람만', false],
+    ['interest','참여 의사', true], ['shop','구매 페이지', true]
+  ];
+  const reach = STEPS.map(([k, label]) => [label, rows.filter(r => r.steps && r.steps[k]).length]);
+  const spine = STEPS.map(([k, label, s], i) => s ? [label, reach[i][1]] : null).filter(Boolean);
+  let worst = null;
+  for(let i = 1; i < spine.length; i++){
+    const d = spine[i-1][1] - spine[i][1];
+    if(!worst || d > worst.d) worst = { d, from: spine[i-1][0], to: spine[i][0] };
+  }
+  sec(`<h2>어디까지 왔는가</h2>
+    <div class="desc">화면별 도달 인원. '먹은 사람만' 표시된 화면은 해당하는 사람만 지나가므로 위아래로 비교하지 마세요.</div>
+    ${bars(reach, n)}
+    ${worst && worst.d > 0 ? `<div class="insight">모두가 지나가는 화면 중 가장 많이 빠져나간 구간은 <b>${esc(worst.from)} → ${esc(worst.to)}</b>로 ${worst.d}명입니다.</div>` : ''}`);
+
+  /* 유입 경로 */
+  const srcLabel = { wrap:'포장지 QR', onion:'양파 QR 카드', map:'매장 지도 옆' };
+  const srcMap = tally(rows, r => srcLabel[r.src] || (r.src ? r.src : '직접 접속'));
+  const srcRows = [...srcMap.entries()];
+  const bySrc = srcRows.map(([label]) => {
+    const sub = rows.filter(r => (srcLabel[r.src] || (r.src ? r.src : '직접 접속')) === label);
+    return [label, sub.length, pct(sub.filter(r => r.letter_to).length, sub.length), pct(sub.filter(r => r.shop_click).length, sub.length)];
+  });
+  sec(`<h2>어느 접점에서 들어왔나</h2>
+    <div class="desc">접점별로 편지·구매 클릭까지 간 비율을 비교하면, 어떤 접점이 관계를 만드는지 보입니다.</div>
+    <table class="mini"><thead><tr><th>접점</th><th class="num">참여</th><th class="num">편지 작성률</th><th class="num">구매 클릭률</th></tr></thead>
+    <tbody>${bySrc.map(([l,c,a,b]) => `<tr><td>${esc(l)}</td><td class="num">${c}</td><td class="num">${a}%</td><td class="num">${b}%</td></tr>`).join('')}</tbody></table>`);
+
+  /* 식경험 분기 */
+  const expLabel = { sandwich:'샌드위치만', jam:'양파잼만', both:'둘 다', none:'아무것도 안 먹음' };
+  const expRows = ordered(tally(rows, r => expLabel[r.experience] || r.experience), Object.values(expLabel));
+  sec(`<h2>무엇을 먹었나</h2>
+    <div class="desc">이 갈래가 이번 팝업의 핵심 대조군입니다.</div>
+    ${bars(expRows, n)}`);
+
+  /* 핵심 대조 — 먹은 사람 vs 안 먹은 사람 */
+  const cmp = [
+    ['편지를 남김', pct(ate.filter(r=>r.letter_to).length, ate.length), pct(notAte.filter(r=>r.letter_to).length, notAte.length)],
+    ['모임에 관심', pct(ate.filter(r=>r.interests && !r.interests.includes('아직은')).length, ate.length),
+                   pct(notAte.filter(r=>r.interests && !r.interests.includes('아직은')).length, notAte.length)],
+    ['연락처를 남김', pct(ate.filter(r=>r.has_email||r.has_phone).length, ate.length), pct(notAte.filter(r=>r.has_email||r.has_phone).length, notAte.length)],
+    ['구매 페이지 클릭', pct(ate.filter(r=>r.shop_click).length, ate.length), pct(notAte.filter(r=>r.shop_click).length, notAte.length)]
+  ];
+  sec(`<h2>맛이 관심의 문을 열었는가</h2>
+    <div class="desc">먹은 사람(${ate.length}명)과 안 먹은 사람(${notAte.length}명)의 전환율 비교. 기획서의 핵심 가설을 직접 검증하는 표입니다.</div>
+    <table class="mini"><thead><tr><th>지표</th><th class="num">먹은 사람</th><th class="num">안 먹은 사람</th><th class="num">차이</th></tr></thead>
+    <tbody>${cmp.map(([l,a,b]) => `<tr><td>${l}</td><td class="num">${a}%</td><td class="num">${b}%</td><td class="num" style="color:${a>=b?'var(--green)':'var(--brick)'}">${a-b>0?'+':''}${a-b}%p</td></tr>`).join('')}</tbody></table>
+    <div class="insight">먹은 쪽이 높게 나와도 <b>애초에 관심 있는 사람이 사 먹었을 가능성</b>이 남습니다. 보고서에 이 한계를 먼저 적어두세요.</div>`);
+
+  /* 샌드위치 */
+  const sw = rows.filter(r => r.sw_score != null);
+  if(sw.length){
+    const byType = [...tally(sw, r => r.sw_type).entries()].map(([t, c]) => {
+      const sub = sw.filter(r => r.sw_type === t);
+      return [t, c, avg(sub.map(r => r.sw_score))];
+    });
+    sec(`<h2>샌드위치 (${sw.length}명)</h2>
+      <div class="desc">판매가 9,500원. 평균 별점 <b>${avg(sw.map(r=>r.sw_score)).toFixed(2)}</b> / 5</div>
+      <table class="mini"><thead><tr><th>종류</th><th class="num">응답</th><th class="num">평균 별점</th></tr></thead>
+      <tbody>${byType.map(([t,c,a]) => `<tr><td>${esc(t)}</td><td class="num">${c}</td><td class="num">${a.toFixed(2)}</td></tr>`).join('')}</tbody></table>
+      <div class="grid2">
+        <div><div class="subh">9,500원, 어떻게 느꼈나</div>
+          ${bars(ordered(tally(sw, r=>r.sw_price), ['싸다','적당하다','조금 비싸다','많이 비싸다']), sw.length, 'gold')}</div>
+        <div><div class="subh">재구매 의향</div>
+          ${bars(ordered(tally(sw, r=>r.sw_revisit), ['또 올게요','한 번은 더','글쎄요']), sw.length)}</div>
+      </div>`);
+  }
+
+  /* 양파잼 */
+  const jam = rows.filter(r => r.jam_score != null);
+  if(jam.length){
+    const wtp = jam.filter(r => r.jam_wtp != null).map(r => r.jam_wtp);
+    const wtpRows = ordered(tally(jam, r => r.jam_wtp ? r.jam_wtp.toLocaleString() + '원' : null),
+      ['7,000원','8,000원','10,000원','12,000원']);
+    sec(`<h2>양파잼 (${jam.length}명)</h2>
+      <div class="desc">미출시 상품. 가격을 알려주지 않고 받은 순수 지불의사입니다. 평균 별점 <b>${avg(jam.map(r=>r.jam_score)).toFixed(2)}</b> / 5</div>
+      <div class="grid2">
+        <div><div class="subh">병에 담아 판다면</div>
+          ${bars(ordered(tally(jam, r=>r.jam_buy), ['사고 싶어요','고민해볼게요','아니요']), jam.length)}</div>
+        <div><div class="subh">200g 한 병 지불의사</div>
+          ${bars(wtpRows, jam.length, 'gold')}</div>
+      </div>
+      ${wtp.length ? `<div class="insight">지불의사 중앙값 <b>${median(wtp).toLocaleString()}원</b> · 평균 ${Math.round(avg(wtp)).toLocaleString()}원.
+        예정가 8,000~10,000원과 견줘 보세요. 보기 양 끝(7,000 이하 / 12,000 이상)에 몰리면 구간을 다시 잡아야 합니다.</div>` : ''}`);
+  }
+
+  /* 참여 의사 */
+  const intMap = tallyCsv(rows, r => r.interests);
+  sec(`<h2>다음 자리에 대한 관심</h2>
+    <div class="desc">복수 선택. 분모는 전체 참여자입니다.</div>
+    ${bars([...intMap.entries()].sort((a,b)=>b[1]-a[1]), n)}`);
+
+  /* 주관식 */
+  const frees = [];
+  rows.forEach(r => {
+    if(r.sw_free) frees.push(['샌드위치 · 한 가지만 바꾼다면', r.sw_free, r.created_at]);
+    if(r.jam_free) frees.push(['양파잼', r.jam_free, r.created_at]);
+  });
+  sec(`<h2>주관식 (${frees.length}건)</h2>
+    <div class="desc">표본이 작아 별점 평균보다 이쪽이 메뉴 개발에 직접 쓰입니다.</div>
+    ${frees.length ? `<div class="notes">${frees.map(([k,v,t]) =>
+      `<div class="note-item"><div class="meta">${esc(k)} · ${new Date(t).toLocaleDateString('ko-KR')}</div>${esc(v)}</div>`).join('')}</div>`
+      : '<div class="empty">아직 없어요.</div>'}`);
+
+  /* 편지 */
+  const TO = { onion:'강호현 농부에게', wheat:'지리산우리밀에게', both:'두 분 모두에게' };
+  sec(`<h2>생산자에게 온 편지 (${letters.length}통)</h2>
+    <div class="desc">팝업이 끝나면 묶어서 두 분께 전달할 내용입니다.</div>
+    ${letters.length ? `<div class="letters">${letters.map(l =>
+      `<div class="lt"><div class="who">${TO[l.letter_to] || '함양으로'}</div><div class="bd">${esc(l.letter_body)}</div></div>`).join('')}</div>`
+      : '<div class="empty">아직 없어요.</div>'}`);
+
+  const last = rows[0]?.created_at;
+  $('#foot').innerHTML = `연락처(메일·휴대폰)는 이 화면에 표시되지 않습니다 — 남겼는지 여부만 집계합니다.
+    실제 값은 상단 '연락처 내보내기'(비밀번호 필요) 또는 Supabase Table Editor에서 확인하세요.<br>
+    마지막 참여 ${last ? new Date(last).toLocaleString('ko-KR') : '—'} · 총 ${n}명`;
+}
+
+/* ── 내보내기 ── */
+function toCsv(rows){
+  const cols = ['id','created_at','src','experience','flip_onion','flip_wheat',
+    'sw_type','sw_score','sw_price','sw_revisit','sw_free',
+    'jam_score','jam_buy','jam_wtp','jam_free',
+    'letter_to','interests','shop_click','finished','has_email','has_phone'];
+  const cell = v => {
+    if(v === null || v === undefined) return '';
+    const s = String(v);
+    return /[",\n]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s;
+  };
+  return '﻿' + cols.join(',') + '\n' + rows.map(r => cols.map(c => cell(r[c])).join(',')).join('\n');
+}
+function download(name, text){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], { type:'text/csv;charset=utf-8' }));
+  a.download = name; a.click(); URL.revokeObjectURL(a.href);
+}
+window.exportCsv = () => {
+  if(!ROWS.length) return alert('내보낼 응답이 없어요.');
+  download(`함양팝업_응답_${new Date().toISOString().slice(0,10)}.csv`, toCsv(ROWS));
+};
+window.exportContacts = async () => {
+  const pass = prompt('연락처 내보내기 비밀번호를 입력하세요.');
+  if(!pass) return;
+  const { data, error } = await sb.rpc('export_hamyang_popup_contacts', { pass });
+  if(error || !data){
+    alert('내보내기 실패\n· 비밀번호가 틀렸거나\n· 내보내기 함수가 아직 없습니다.\nsupabase/hamyang_popup_export.sql을 먼저 실행했는지 확인하세요.');
+    return;
+  }
+  if(!data.length) return alert('아직 남겨진 연락처가 없어요.');
+  const cols = ['id','created_at','email','phone','interests','experience'];
+  const csv = '﻿' + cols.join(',') + '\n' +
+    data.map(r => cols.map(c => {
+      const s = r[c] == null ? '' : String(r[c]);
+      return /[",\n]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s;
+    }).join(',')).join('\n');
+  download(`함양팝업_연락처_${new Date().toISOString().slice(0,10)}.csv`, csv);
+};
+
+load();
+</script>
+</body>
+</html>
