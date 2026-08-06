@@ -44,14 +44,15 @@ body{
   padding:0 22px calc(34px + env(safe-area-inset-bottom));
 }
 .top{display:flex;align-items:center;gap:12px;margin:16px 0 2px;flex:none;}
-.back{
+ /* 카드 뒷면의 .back 과 이름이 겹치면 안 된다 */
+.navback{
   display:flex;align-items:center;gap:4px;flex:none;
   background:none;border:none;padding:4px 2px;cursor:pointer;
   font-family:inherit;font-size:13px;color:var(--muted);letter-spacing:-.2px;
 }
-.back svg{width:14px;height:14px;}
-.back:active{color:var(--ink);}
-.back[hidden]{display:none;}
+.navback svg{width:14px;height:14px;}
+.navback:active{color:var(--ink);}
+.navback[hidden]{display:none;}
 .bar{height:2px;background:var(--line-soft);overflow:hidden;flex:1;}
 .bar i{display:block;height:100%;width:0;background:var(--green);transition:width .5s cubic-bezier(.3,.9,.3,1);}
 .screen{display:none;flex:1;flex-direction:column;justify-content:flex-start;padding:18px 0 8px;}
@@ -83,7 +84,9 @@ body{
 }
 
 /* ── 생산자 카드 ── */
-.flip{perspective:1600px;position:relative;transition:height .5s cubic-bezier(.4,0,.2,1);cursor:pointer;}
+/* 두 면이 모두 absolute라 min-content 높이가 0이다. flex:none이 없으면
+   화면이 좁을 때 flex 아이템으로 눌려 카드가 통째로 사라진다. */
+.flip{perspective:1600px;position:relative;flex:none;cursor:pointer;}
 .finner{position:relative;width:100%;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.4,0,.2,1);}
 .flip.on .finner{transform:rotateY(180deg);}
 .face{
@@ -93,6 +96,11 @@ body{
   background:var(--card);box-shadow:0 1px 3px rgba(74,61,46,.05);
 }
 .face.back{transform:rotateY(180deg);}
+/* iOS Safari는 overflow:hidden + border-radius 조합에서 backface-visibility를 무시해
+   뒷면 위로 앞면이 좌우 반전된 채 비쳐 보인다. 카드가 옆으로 서는 중간 지점(0.35s)에
+   면을 직접 갈아끼워 확실히 가린다. display가 아니라 visibility여야 높이 측정이 된다. */
+.face{visibility:hidden;}
+.flip .front{visibility:visible;}
 .front .pad{padding:34px 24px 20px;}
 .band{height:82px;background-size:cover;background-position:center bottom;}
 .portrait{
@@ -219,6 +227,28 @@ textarea:focus,input:focus{outline:none;border-color:var(--green);}
 .deliver .tag.l{left:0;}.deliver .tag.r{right:0;}
 
 /* ── 참여 의사 ── */
+/* 함양이 얼마나 가까워졌나 슬라이더 */
+.slider{margin-top:18px;}
+.slider output{
+  display:block;text-align:center;font-size:26px;font-weight:800;
+  letter-spacing:-1px;color:var(--green);margin-bottom:12px;
+}
+.slider input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:3px;
+  background:linear-gradient(to right,var(--line) 0%,var(--green) 100%);
+  border-radius:99px;outline:none;
+}
+.slider input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:26px;height:26px;border-radius:50%;
+  background:var(--green);border:3px solid var(--card);cursor:pointer;
+  box-shadow:0 1px 5px rgba(74,61,46,.3);
+}
+.slider input[type=range]::-moz-range-thumb{
+  width:22px;height:22px;border-radius:50%;background:var(--green);
+  border:3px solid var(--card);cursor:pointer;
+}
+.slider .ends{display:flex;justify-content:space-between;margin-top:10px;font-size:11.5px;color:var(--muted);letter-spacing:0;}
+
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px;}
 .chip{
   background:var(--card);border:1px solid var(--line);border-radius:99px;
@@ -274,7 +304,7 @@ input[type=email],input[type=tel]{
 
 <main id="app">
   <header class="top">
-    <button class="back" id="backBtn" hidden>
+    <button class="navback" id="backBtn" hidden>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>이전
     </button>
     <div class="bar"><i id="prog"></i></div>
@@ -375,8 +405,8 @@ input[type=email],input[type=tel]{
     <div class="guide" id="g4"></div>
     <p class="q">어떤 샌드위치를 드셨어요?</p>
     <div class="row" id="swType">
-      <button class="opt" data-t="베이컨&amp;마스카포네">베이컨 &amp;<br>마스카포네</button>
-      <button class="opt" data-t="브리&amp;양파잼">브리 &amp;<br>양파잼</button>
+      <button class="opt" data-t="체력함양(베이컨&amp;마스카포네)"><b>체력함양</b><br>베이컨 &amp; 마스카포네</button>
+      <button class="opt" data-t="정서함양(브리&amp;양파잼)"><b>정서함양</b><br>브리 &amp; 양파잼</button>
     </div>
     <p class="q">맛은 어떠셨어요?</p>
     <div class="stars" id="swStars"></div>
@@ -470,7 +500,16 @@ input[type=email],input[type=tel]{
   <!-- ⑤ 참여 의사 -->
   <section class="screen scroller" id="s-interest">
     <div class="guide" id="g7"></div>
-    <p class="sub" style="margin-top:0">관심 가는 걸 골라주세요.</p>
+    <p class="q" style="margin-top:0">함양이 얼마나 가까워졌나요?</p>
+    <p class="sub">오기 전엔 300km 떨어진 낯선 이름이었죠.<br>지금은 어느 정도로 느껴지세요?</p>
+    <div class="slider">
+      <output id="closeOut">150km쯤</output>
+      <input type="range" id="close" min="0" max="300" step="10" value="150" aria-label="함양이 가까워진 정도">
+      <div class="ends"><span>아직 300km</span><span>바로 옆 0km</span></div>
+    </div>
+
+    <p class="q">지역과 서울을 잇는 자리를 준비하고 있어요.</p>
+    <p class="sub">관심 가는 걸 골라주세요.</p>
     <div class="chips" id="chips">
       <button class="chip" data-it="양파 이야기와 함양파 칼솟 다이닝">강호현 농부의 양파 이야기와<br>함양파 칼솟 다이닝</button>
       <button class="chip" data-it="우리밀 이야기와 우리밀 빵 다이닝">지리산우리밀에게 듣는 우리밀 이야기와<br>우리밀 빵 다이닝</button>
@@ -631,7 +670,7 @@ function go(id, isBack){
   stamp(id.replace('s-',''));
   if(id === 's-card1' || id === 's-card2'){
     const f = (id === 's-card1') ? f1 : f2;
-    setTimeout(() => { sizeFlip(f); nudge(f); }, 0);   // rAF는 탭이 가려지면 멈춘다
+    setTimeout(() => { faceSwap(f, true); nudge(f); }, 0);  // rAF는 탭이 가려지면 멈춘다
   }
 }
 $('backBtn').onclick = () => {
@@ -644,6 +683,10 @@ guide($('g1'), 'hi', '이 한 입을 만든 두 사람이에요.<br><b>카드를
 guide($('g2'), 'hi', '빵을 만든 밀은 이분들 손을 거쳐 왔어요.<br><b>이 카드도 뒤집어 보세요.</b>');
 
 const f1 = $('flip1'), f2 = $('flip2');
+/* 두 면의 높이가 달라서 컨테이너 높이를 직접 잡아준다.
+   height에 트랜지션을 걸면 화면이 막 보이기 시작한 프레임에서 값이 멈춰버려
+   카드가 통째로 사라진다. 그래서 항상 즉시 확정하고, 교체는 카드가 옆으로
+   서는 순간(faceSwap)에 맞춰 일어나므로 눈에 튀지 않는다. */
 function sizeFlip(f){
   const face = f.classList.contains('on') ? f.querySelector('.back') : f.querySelector('.front');
   f.style.height = face.offsetHeight + 'px';
@@ -655,20 +698,36 @@ function nudge(f){
   void f.offsetWidth;              // 리플로우로 애니메이션 재시작
   f.classList.add('nudge');
 }
+/* 뒷면이 앞을 향한 순간 두 면을 직접 갈아끼운다.
+   iOS Safari는 overflow:hidden + border-radius 조합에서 backface-visibility를 무시해
+   뒷면 위로 앞면이 좌우 반전된 채 비쳐 보인다. CSS만으로는 확실히 못 막는다. */
+function faceSwap(f, immediate){
+  const on = f.classList.contains('on');
+  const fr = f.querySelector('.front'), bk = f.querySelector('.back');
+  const apply = () => {
+    fr.style.visibility = on ? 'hidden' : 'visible';
+    bk.style.visibility = on ? 'visible' : 'hidden';
+    sizeFlip(f);                     // 높이도 이 순간에 함께 확정
+  };
+  clearTimeout(f._swap);
+  if(immediate) apply();
+  else f._swap = setTimeout(apply, 340);   // 카드가 옆으로 서는 지점
+}
 function bindFlip(f, key){
   f.addEventListener('click', () => {
     f.dataset.touched = '1';
     f.classList.remove('nudge');
     f.classList.toggle('on');
-    sizeFlip(f);
+    faceSwap(f);
     if(f.classList.contains('on')) save({ [key]: true });
   });
 }
 bindFlip(f1, 'flip_onion');
 bindFlip(f2, 'flip_wheat');
-addEventListener('resize', () => { sizeFlip(f1); sizeFlip(f2); });
-addEventListener('load', () => { sizeFlip(f1); sizeFlip(f2); });
-document.querySelectorAll('.portrait').forEach(img => img.addEventListener('load', () => { sizeFlip(f1); sizeFlip(f2); }));
+const resize = () => { sizeFlip(f1); sizeFlip(f2); };
+addEventListener('resize', resize);
+addEventListener('load', resize);
+document.querySelectorAll('.portrait').forEach(img => img.addEventListener('load', resize));
 stamp('cover');
 /* 표지가 먼저라 카드는 숨겨진 상태 — 높이 측정과 넛지는 go('s-card1')에서 한다 */
 $('coverNext').onclick = () => go('s-card1');
@@ -787,7 +846,20 @@ $('sendLetter').onclick = async () => {
 $('letterSkip').onclick = () => go('s-interest');
 
 /* ─────────── ⑤ 참여 의사 ─────────── */
-guide($('g7'), 'hi', '지역과 서울을 연결하기 위해<br>이런 자리를 준비하고 있어요.');
+guide($('g7'), 'hi', '거의 다 왔어요.<br>마지막으로 두 가지만요.');
+
+/* 슬라이더 값 = 줄어든 거리. 남은 거리(km)로 뒤집어 보여주고 저장한다.
+   건드리지 않았으면 저장하지 않는다 — 중간값이 응답으로 섞이면 안 된다. */
+let closeTouched = false;
+const closeEl = $('close');
+const closeKm = () => 300 - (+closeEl.value);
+function paintClose(){
+  const km = closeKm();
+  $('closeOut').textContent = km === 0 ? '바로 옆이에요' : km + 'km쯤';
+}
+closeEl.addEventListener('input', () => { closeTouched = true; paintClose(); });
+paintClose();
+
 let interests = [];
 document.querySelectorAll('.chip').forEach(c => c.onclick = () => {
   const v = c.dataset.it;
@@ -801,6 +873,7 @@ document.querySelectorAll('.chip').forEach(c => c.onclick = () => {
 });
 function finish(withContact){
   const patch = { finished: true };
+  if(closeTouched) patch.closeness_km = closeKm();
   if(interests.length) patch.interests = interests.join(',');
   $('emailErr').style.display = 'none';
   $('phoneErr').style.display = 'none';

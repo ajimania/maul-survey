@@ -190,6 +190,7 @@ function demoData(){
       jam_wtp: steps.jam ? pick([7000,8000,8000,10000,10000,12000]) : null,
       jam_free: steps.jam && Math.random() < .3 ? pick(JAM_FREE) : null,
       letter_to: wroteLetter ? to : null,
+      closeness_km: steps.interest ? pick([0,20,50,50,80,100,150,150,200,300]) : null,
       interests: steps.interest ? pick([
         '양파 이야기와 함양파 칼솟 다이닝',
         '우리밀 이야기와 우리밀 빵 다이닝',
@@ -364,6 +365,19 @@ function render(rows, letters){
         예정가 8,000~10,000원과 견줘 보세요. 보기 양 끝(7,000 이하 / 12,000 이상)에 몰리면 구간을 다시 잡아야 합니다.</div>` : ''}`);
   }
 
+  /* 체감 거리 */
+  const close = rows.filter(r => r.closeness_km != null).map(r => r.closeness_km);
+  if(close.length){
+    const buckets = [[0,50,'0~50km · 바로 옆처럼'],[60,100,'60~100km'],[110,180,'110~180km'],
+                     [190,260,'190~260km'],[270,300,'270~300km · 그대로 멀다']];
+    const bRows = buckets.map(([lo,hi,label]) => [label, close.filter(v => v >= lo && v <= hi).length]);
+    sec(`<h2>함양이 얼마나 가까워졌나</h2>
+      <div class="desc">오기 전 300km를 기준으로, 참여를 마친 뒤 체감 거리를 직접 옮겨 답한 값입니다. ${close.length}명 응답.</div>
+      ${bars(bRows, close.length, 'gold')}
+      <div class="insight">체감 거리 중앙값 <b>${median(close)}km</b> · 평균 ${Math.round(avg(close))}km.
+        300km에서 얼마나 줄었는지가 이 팝업이 만든 심리적 거리 변화입니다.</div>`);
+  }
+
   /* 참여 의사 */
   const intMap = tallyCsv(rows, r => r.interests);
   sec(`<h2>다음 자리에 대한 관심</h2>
@@ -401,7 +415,7 @@ function toCsv(rows){
   const cols = ['id','created_at','src','experience','flip_onion','flip_wheat',
     'sw_type','sw_score','sw_price','sw_revisit','sw_free',
     'jam_score','jam_buy','jam_wtp','jam_free',
-    'letter_to','interests','shop_click','finished','has_email','has_phone'];
+    'letter_to','closeness_km','interests','shop_click','finished','has_email','has_phone'];
   const cell = v => {
     if(v === null || v === undefined) return '';
     const s = String(v);

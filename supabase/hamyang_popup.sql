@@ -41,7 +41,8 @@ alter table public.hamyang_popup add column if not exists letter_to          tex
 alter table public.hamyang_popup add column if not exists letter_body        text; -- (each일 때는 양파 농부용)
 alter table public.hamyang_popup add column if not exists letter_body_wheat  text; -- each일 때 우리밀용
 
--- ⑤ 참여 의사 · 연락처
+-- ⑤ 체감 거리 · 참여 의사 · 연락처
+alter table public.hamyang_popup add column if not exists closeness_km int;   -- 함양이 얼마나 가까워졌나 (남은 거리 km, 0~300)
 alter table public.hamyang_popup add column if not exists interests    text;    -- 복수 선택(쉼표)
 alter table public.hamyang_popup add column if not exists email        text;    -- 모임 안내용
 alter table public.hamyang_popup add column if not exists phone        text;    -- 무지개양파 추첨 발송용(선택)
@@ -97,7 +98,7 @@ with (security_invoker = off) as
     flip_onion, flip_wheat, experience,
     sw_type, sw_score, sw_price, sw_revisit, sw_free,
     jam_score, jam_buy, jam_wtp, jam_free,
-    letter_to, interests, shop_click, finished, steps,
+    letter_to, closeness_km, interests, shop_click, finished, steps,
     (email is not null and btrim(email) <> '') as has_email,
     (phone is not null and btrim(phone) <> '') as has_phone
   from public.hamyang_popup;
