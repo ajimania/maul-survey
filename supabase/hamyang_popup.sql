@@ -56,12 +56,13 @@ alter table public.hamyang_popup add column if not exists steps        jsonb;   
 create index if not exists hamyang_popup_created_idx on public.hamyang_popup (created_at desc);
 
 -- 개발 중 저장 동작을 확인하려고 넣었던 점검용 행 제거 (실제 참여 데이터 아님)
-delete from public.hamyang_popup where sid = 'selftest-probe';
+delete from public.hamyang_popup
+ where sid like 'selftest%' or sid like 'probe%' or src in ('test','probe','probe-plain');
 
 -- 세션당 한 행. 웹페이지가 sid로 자기 행을 갱신하므로 유일해야 한다.
 create unique index if not exists hamyang_popup_sid_key on public.hamyang_popup (sid);
 
--- 3) RLS — 익명은 저장만. 이메일이 있으므로 base 테이블은 절대 읽기 개방 금지
+-- 3) RLS — 익명은 저장만. 읽기는 sid 한 컬럼으로만 열어두고 연락처는 차단한다
 alter table public.hamyang_popup enable row level security;
 
 drop policy if exists "anon can insert" on public.hamyang_popup;
@@ -75,8 +76,20 @@ create policy "anon can update recent" on public.hamyang_popup
   using (created_at > now() - interval '6 hours')
   with check (created_at > now() - interval '6 hours');
 
--- ⚠️ base 테이블에 익명 select 정책을 만들지 마세요 (이메일 노출).
--- 실제 이메일은 대시보드 Table Editor / service_role 키로만 조회하세요.
+-- 웹페이지는 upsert(insert … on conflict do update)로 자기 행을 갱신한다.
+-- 이때 Postgres는 충돌한 기존 행을 "읽을 수" 있어야 하므로 select 정책이 필요하다.
+-- 정책만 열면 이메일·휴대폰까지 읽히므로, 컬럼 권한을 sid 하나로 좁혀서 막는다.
+--   · 정책(행 단위)  : 전체 허용
+--   · 권한(열 단위)  : sid 만 허용  ← 연락처는 여기서 차단된다
+revoke select on public.hamyang_popup from anon;
+grant  select (sid) on public.hamyang_popup to anon;
+
+drop policy if exists "anon can match own row" on public.hamyang_popup;
+create policy "anon can match own row" on public.hamyang_popup
+  for select to anon using (true);
+
+-- ⚠️ 위 grant 를 select (sid) 보다 넓히지 마세요. 넓히는 순간 이메일·휴대폰이 익명에게 노출됩니다.
+-- 실제 연락처는 대시보드 Table Editor / service_role 키 / export 함수로만 조회하세요.
 
 -- 4) 편지 벽 공개 뷰 — 편지 본문만. id·연락처 등 일절 노출 안 함
 --    '각각 따로' 작성분은 수신자별로 한 줄씩 펼쳐서 내보냅니다.
