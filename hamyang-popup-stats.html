@@ -187,7 +187,7 @@ function demoData(){
       sw_free: steps.sw && Math.random() < .35 ? pick(SW_FREE) : null,
       jam_score: steps.jam ? pick([4,4,5,5,3]) : null,
       jam_buy: steps.jam ? pick(['사고 싶어요','고민해볼게요','고민해볼게요','아니요']) : null,
-      jam_wtp: steps.jam ? pick([7000,8000,8000,10000,10000,12000]) : null,
+      jam_wtp: steps.jam ? pick([10000,10000,12000,12000,15000,18000]) : null,
       jam_free: steps.jam && Math.random() < .3 ? pick(JAM_FREE) : null,
       letter_to: wroteLetter ? to : null,
       closeness_km: steps.interest ? pick([0,20,50,50,80,100,150,150,200,300]) : null,
@@ -352,7 +352,7 @@ function render(rows, letters){
   if(jam.length){
     const wtp = jam.filter(r => r.jam_wtp != null).map(r => r.jam_wtp);
     const wtpRows = ordered(tally(jam, r => r.jam_wtp ? r.jam_wtp.toLocaleString() + '원' : null),
-      ['7,000원','8,000원','10,000원','12,000원']);
+      ['10,000원','12,000원','15,000원','18,000원']);
     sec(`<h2>양파잼 (${jam.length}명)</h2>
       <div class="desc">미출시 상품. 가격을 알려주지 않고 받은 순수 지불의사입니다. 평균 별점 <b>${avg(jam.map(r=>r.jam_score)).toFixed(2)}</b> / 5</div>
       <div class="grid2">
@@ -362,7 +362,7 @@ function render(rows, letters){
           ${bars(wtpRows, jam.length, 'gold')}</div>
       </div>
       ${wtp.length ? `<div class="insight">지불의사 중앙값 <b>${median(wtp).toLocaleString()}원</b> · 평균 ${Math.round(avg(wtp)).toLocaleString()}원.
-        예정가 8,000~10,000원과 견줘 보세요. 보기 양 끝(7,000 이하 / 12,000 이상)에 몰리면 구간을 다시 잡아야 합니다.</div>` : ''}`);
+        보기 양 끝(10,000 이하 / 18,000)에 응답이 몰리면 구간을 벗어난 것이니 다음 회차에 범위를 다시 잡아야 합니다.</div>` : ''}`);
   }
 
   /* 체감 거리 */
