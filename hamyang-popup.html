@@ -636,18 +636,25 @@ const $ = id => document.getElementById(id);
 /* 처음 도달한 시각만 기록한다 (뒤로 갔다 와도 덮어쓰지 않음) */
 const stamp = k => { if(!S.steps[k]) S.steps[k] = new Date().toISOString(); };
 
-/* 저장은 반드시 upsert 로 한다. 익명에게는 연락처 보호를 위해 base 테이블
-   SELECT 권한이 없는데,
-     · insert 뒤 .select() → 반환을 요구하는 순간 401, 행까지 롤백
-     · update ... where sid=? → WHERE가 컬럼을 읽어야 해서 역시 거부
-   upsert(insert ... on conflict do update)는 읽기가 필요 없어 유일하게 통과한다.
-   그래서 sid 유일 인덱스가 필수다 (supabase/hamyang_popup.sql). */
+/* 저장 경로는 "처음 한 번 insert → 이후 sid로 update" 다.
+   익명 권한이 좁게 잡혀 있어서 다음 두 가지는 쓰면 안 된다.
+     · insert 뒤 .select()  → 반환을 요구하는 순간 401, 행까지 롤백된다
+     · upsert(on conflict)  → 테이블 권한 부족으로 거부된다
+   update 의 WHERE 가 sid 를 읽어야 하므로 sid 한 컬럼만 읽기 허용해 뒀다
+   (supabase/hamyang_popup.sql). 연락처는 읽히지 않는다. */
+let inserted = false;
 async function save(patch = {}){
   Object.assign(S, patch);
   try{ localStorage.setItem('hamyang_popup', JSON.stringify(S)); }catch(e){}
   saving = (saving || Promise.resolve()).then(async () => {
     try{
-      await sb.from('hamyang_popup').upsert({...S}, { onConflict: 'sid' });
+      const body = {...S};
+      if(!inserted){
+        const { error } = await sb.from('hamyang_popup').insert(body);
+        if(!error) inserted = true;
+      }else{
+        await sb.from('hamyang_popup').update(body).eq('sid', S.sid);
+      }
     }catch(e){ /* 저장 실패해도 참여는 계속 */ }
   });
   return saving;
