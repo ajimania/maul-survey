@@ -166,6 +166,8 @@ body{
 .row .opt{flex:1;min-width:0;text-align:center;font-size:13.5px;padding:14px 4px;line-height:1.4;}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px;}
 .grid3 .opt{text-align:center;font-size:13.5px;padding:15px 4px;line-height:1.4;}
+.grid3 .opt small{display:block;font-size:11px;color:var(--muted);margin-top:3px;}
+.grid3 .opt.sel small{color:rgba(255,255,255,.75);}
 .note{margin-top:30px;padding:18px 18px 20px;background:var(--green-soft);border-radius:3px;}
 .note .nt{font-size:12.5px;font-weight:600;color:var(--green);margin-bottom:9px;letter-spacing:0;}
 .note p{font-size:13.5px;line-height:1.85;color:var(--ink-soft);word-break:keep-all;}
@@ -212,11 +214,6 @@ textarea.short{
 .chip{text-align:left;line-height:1.5;}
 textarea:focus,input:focus{outline:none;border-color:var(--green);}
 .cnt{text-align:right;font-size:11.5px;color:var(--muted);margin-top:6px;}
-.split{
-  display:block;margin:14px 0 0;background:none;border:none;padding:0;
-  font-family:inherit;font-size:13px;color:var(--green);cursor:pointer;
-  text-decoration:underline;text-underline-offset:3px;
-}
 .lbl{font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-top:14px;letter-spacing:0;}
 .lbl + textarea{margin-top:7px;min-height:96px;}
 .deliver{position:relative;height:100px;margin-top:24px;}
@@ -227,27 +224,6 @@ textarea:focus,input:focus{outline:none;border-color:var(--green);}
 .deliver .tag.l{left:0;}.deliver .tag.r{right:0;}
 
 /* ── 참여 의사 ── */
-/* 함양이 얼마나 가까워졌나 슬라이더 */
-.slider{margin-top:18px;}
-.slider output{
-  display:block;text-align:center;font-size:26px;font-weight:800;
-  letter-spacing:-1px;color:var(--green);margin-bottom:12px;
-}
-.slider input[type=range]{
-  -webkit-appearance:none;appearance:none;width:100%;height:3px;
-  background:linear-gradient(to right,var(--line) 0%,var(--green) 100%);
-  border-radius:99px;outline:none;
-}
-.slider input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;appearance:none;width:26px;height:26px;border-radius:50%;
-  background:var(--green);border:3px solid var(--card);cursor:pointer;
-  box-shadow:0 1px 5px rgba(74,61,46,.3);
-}
-.slider input[type=range]::-moz-range-thumb{
-  width:22px;height:22px;border-radius:50%;background:var(--green);
-  border:3px solid var(--card);cursor:pointer;
-}
-.slider .ends{display:flex;justify-content:space-between;margin-top:10px;font-size:11.5px;color:var(--muted);letter-spacing:0;}
 
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px;}
 .chip{
@@ -475,8 +451,7 @@ input[type=email],input[type=tel]{
       <button data-to="wheat">지리산우리밀<br>에게</button>
       <button data-to="both">두 분<br>모두에게</button>
     </div>
-    <button class="split" id="splitToggle" style="display:none">각각 따로 쓸래요</button>
-    <div id="oneBox">
+    <div id="oneBox" style="display:none">
       <textarea id="letterBody" maxlength="120" placeholder="예: 양파가 이렇게 단 줄 몰랐어요."></textarea>
       <div class="cnt"><span id="cnt">0</span>/120</div>
     </div>
@@ -485,7 +460,7 @@ input[type=email],input[type=tel]{
       <textarea id="letterOnion" maxlength="120" placeholder="예: 양파가 이렇게 단 줄 몰랐어요."></textarea>
       <div class="lbl" style="margin-top:20px">지리산우리밀에게</div>
       <textarea id="letterWheat" maxlength="120" placeholder="예: 빵이 정말 구수했어요."></textarea>
-      <button class="split" id="splitBack">한 번에 쓸래요</button>
+      <p class="sub">한 분에게만 쓰셔도 괜찮아요.</p>
     </div>
     <button class="cta" id="sendLetter" disabled>함양으로 보내기</button>
     <button class="skip" id="letterSkip">건너뛸게요</button>
@@ -506,10 +481,13 @@ input[type=email],input[type=tel]{
     <div class="guide" id="g7"></div>
     <p class="q" style="margin-top:0">함양이 얼마나 가까워졌나요?</p>
     <p class="sub">오기 전엔 300km 떨어진 낯선 이름이었죠.<br>지금은 어느 정도로 느껴지세요?</p>
-    <div class="slider">
-      <output id="closeOut">150km쯤</output>
-      <input type="range" id="close" min="0" max="300" step="10" value="150" aria-label="함양이 가까워진 정도">
-      <div class="ends"><span>아직 300km</span><span>바로 옆 0km</span></div>
+    <div class="grid3" id="closePick">
+      <button class="opt" data-km="0">0km<br><small>바로 옆</small></button>
+      <button class="opt" data-km="50">50km</button>
+      <button class="opt" data-km="150">150km</button>
+      <button class="opt" data-km="200">200km</button>
+      <button class="opt" data-km="250">250km</button>
+      <button class="opt" data-km="300">300km<br><small>그대로</small></button>
     </div>
 
     <p class="q">지역과 서울을 잇는 프로그램을 준비하고 있어요.</p>
@@ -811,31 +789,23 @@ $('jamNext').onclick = () => {
 
 /* ─────────── ④ 편지 ─────────── */
 guide($('g6'), 'hi', '오늘 드신 것을 만든 분들이에요.<br>한 마디 남겨주실래요?');
-let letterTo = null, eachMode = false;
+/* '두 분 모두에게'를 고르면 처음부터 두 칸이 나온다 */
+let letterTo = null;
+const eachMode = () => letterTo === 'both';
 document.querySelectorAll('[data-to]').forEach(b => b.onclick = () => {
   letterTo = b.dataset.to;
   document.querySelectorAll('[data-to]').forEach(x => x.classList.toggle('sel', x === b));
-  if(letterTo !== 'both' && eachMode) setEach(false);
-  else $('splitToggle').style.display = (letterTo === 'both') ? 'block' : 'none';
+  $('oneBox').style.display  = eachMode() ? 'none'  : 'block';
+  $('eachBox').style.display = eachMode() ? 'block' : 'none';
   refreshSend();
 });
-/* '두 분 모두에게'를 고른 사람만 각각 따로 쓰기로 전환할 수 있다 */
-function setEach(on){
-  eachMode = on;
-  $('oneBox').style.display  = on ? 'none'  : 'block';
-  $('eachBox').style.display = on ? 'block' : 'none';
-  $('splitToggle').style.display = (!on && letterTo === 'both') ? 'block' : 'none';
-  refreshSend();
-}
-$('splitToggle').onclick = () => setEach(true);
-$('splitBack').onclick   = () => setEach(false);
 
 const ta = $('letterBody'), taO = $('letterOnion'), taW = $('letterWheat');
 ta.oninput  = () => { $('cnt').textContent = ta.value.length; refreshSend(); };
 taO.oninput = refreshSend;
 taW.oninput = refreshSend;
 function refreshSend(){
-  const ok = eachMode
+  const ok = eachMode()
     ? (taO.value.trim().length > 0 || taW.value.trim().length > 0)
     : (letterTo && ta.value.trim().length > 0);
   $('sendLetter').disabled = !ok;
@@ -845,7 +815,7 @@ let sent = false;
 $('sendLetter').onclick = async () => {
   if(sent) return;
   sent = true;
-  save(eachMode
+  save(eachMode()
     ? { letter_to:'each',
         letter_body: taO.value.trim() || null,
         letter_body_wheat: taW.value.trim() || null }
@@ -859,17 +829,9 @@ $('letterSkip').onclick = () => go('s-interest');
 /* ─────────── ⑤ 참여 의사 ─────────── */
 guide($('g7'), 'hi', '거의 다 왔어요.<br>마지막으로 두 가지만요.');
 
-/* 슬라이더 값 = 줄어든 거리. 남은 거리(km)로 뒤집어 보여주고 저장한다.
-   건드리지 않았으면 저장하지 않는다 — 중간값이 응답으로 섞이면 안 된다. */
-let closeTouched = false;
-const closeEl = $('close');
-const closeKm = () => 300 - (+closeEl.value);
-function paintClose(){
-  const km = closeKm();
-  $('closeOut').textContent = km === 0 ? '바로 옆이에요' : km + 'km쯤';
-}
-closeEl.addEventListener('input', () => { closeTouched = true; paintClose(); });
-paintClose();
+/* 고르지 않았으면 저장하지 않는다 — 기본값이 응답으로 섞이면 안 된다 */
+let closeKm = null;
+pickOne('closePick', 'km', v => { closeKm = +v; });
 
 let interests = [];
 document.querySelectorAll('.chip').forEach(c => c.onclick = () => {
@@ -884,7 +846,7 @@ document.querySelectorAll('.chip').forEach(c => c.onclick = () => {
 });
 function finish(withContact){
   const patch = { finished: true };
-  if(closeTouched) patch.closeness_km = closeKm();
+  if(closeKm !== null) patch.closeness_km = closeKm;
   if(interests.length) patch.interests = interests.join(',');
   $('emailErr').style.display = 'none';
   $('phoneErr').style.display = 'none';

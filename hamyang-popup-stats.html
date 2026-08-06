@@ -190,7 +190,7 @@ function demoData(){
       jam_wtp: steps.jam ? pick([10000,10000,12000,12000,15000,18000]) : null,
       jam_free: steps.jam && Math.random() < .3 ? pick(JAM_FREE) : null,
       letter_to: wroteLetter ? to : null,
-      closeness_km: steps.interest ? pick([0,20,50,50,80,100,150,150,200,300]) : null,
+      closeness_km: steps.interest ? pick([0,50,50,150,150,200,250,300]) : null,
       interests: steps.interest ? pick([
         '양파 이야기와 함양파 칼솟 다이닝',
         '우리밀 이야기와 우리밀 빵 다이닝',
@@ -365,12 +365,31 @@ function render(rows, letters){
         보기 양 끝(10,000 이하 / 18,000)에 응답이 몰리면 구간을 벗어난 것이니 다음 회차에 범위를 다시 잡아야 합니다.</div>` : ''}`);
   }
 
+  /* 구매 페이지 클릭 조합 */
+  const shopSet = r => new Set((r.shop_click || '').split(',').map(s => s.trim()).filter(Boolean));
+  const bothShop  = rows.filter(r => { const s = shopSet(r); return s.has('onion') && s.has('wheat'); });
+  const onlyOnion = rows.filter(r => { const s = shopSet(r); return s.has('onion') && !s.has('wheat'); });
+  const onlyWheat = rows.filter(r => { const s = shopSet(r); return s.has('wheat') && !s.has('onion'); });
+  const noShop    = rows.filter(r => shopSet(r).size === 0);
+  sec(`<h2>생산자 구매 페이지 클릭</h2>
+    <div class="desc">관심이 실제 구매 동선까지 이어졌는지 보는 지표. 두 곳을 다 눌러본 사람이 가장 깊이 간 사람입니다.</div>
+    ${bars([
+      ['두 곳 모두', bothShop.length],
+      ['강호현 농부만', onlyOnion.length],
+      ['지리산우리밀만', onlyWheat.length],
+      ['누르지 않음', noShop.length]
+    ], n, 'gold')}
+    ${bothShop.length ? `<div class="insight">두 곳을 모두 눌러본 사람이 <b>${bothShop.length}명</b>(${pct(bothShop.length, n)}%)입니다.
+      이 사람들은 편지 작성률 ${pct(bothShop.filter(r=>r.letter_to).length, bothShop.length)}%,
+      연락처 남긴 비율 ${pct(bothShop.filter(r=>r.has_email||r.has_phone).length, bothShop.length)}% 로,
+      가장 멀리 간 집단입니다.</div>` : ''}`);
+
   /* 체감 거리 */
   const close = rows.filter(r => r.closeness_km != null).map(r => r.closeness_km);
   if(close.length){
-    const buckets = [[0,50,'0~50km · 바로 옆처럼'],[60,100,'60~100km'],[110,180,'110~180km'],
-                     [190,260,'190~260km'],[270,300,'270~300km · 그대로 멀다']];
-    const bRows = buckets.map(([lo,hi,label]) => [label, close.filter(v => v >= lo && v <= hi).length]);
+    const bRows = [0,50,150,200,250,300].map(v =>
+      [v === 0 ? '0km · 바로 옆' : v === 300 ? '300km · 그대로' : v + 'km',
+       close.filter(x => x === v).length]);
     sec(`<h2>함양이 얼마나 가까워졌나</h2>
       <div class="desc">오기 전 300km를 기준으로, 참여를 마친 뒤 체감 거리를 직접 옮겨 답한 값입니다. ${close.length}명 응답.</div>
       ${bars(bRows, close.length, 'gold')}
