@@ -55,6 +55,12 @@ alter table public.hamyang_popup add column if not exists steps        jsonb;   
 
 create index if not exists hamyang_popup_created_idx on public.hamyang_popup (created_at desc);
 
+-- 개발 중 저장 동작을 확인하려고 넣었던 점검용 행 제거 (실제 참여 데이터 아님)
+delete from public.hamyang_popup where sid = 'selftest-probe';
+
+-- 세션당 한 행. 웹페이지가 sid로 자기 행을 갱신하므로 유일해야 한다.
+create unique index if not exists hamyang_popup_sid_key on public.hamyang_popup (sid);
+
 -- 3) RLS — 익명은 저장만. 이메일이 있으므로 base 테이블은 절대 읽기 개방 금지
 alter table public.hamyang_popup enable row level security;
 
