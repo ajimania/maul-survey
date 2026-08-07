@@ -498,20 +498,28 @@ input[type=email],input[type=tel]{
       <button class="chip" data-it="생산자를 만나는 함양 여행">생산자를 만나는 함양 여행</button>
       <button class="chip" data-it="아직은 괜찮아요" data-none="1">아직은 괜찮아요</button>
     </div>
-    <p class="q">모집이 시작되면 메일로 알려드릴게요.</p>
-    <input type="email" id="email" placeholder="이메일 주소" autocomplete="email" inputmode="email">
-    <p class="err" id="emailErr">이메일 주소를 확인해주세요.</p>
+    <button class="cta" id="intNext">다음</button>
+  </section>
 
-    <div class="note" style="margin-top:26px">
+  <!-- ⑤-b 연락처 (따로 떼어냄 — 앞 화면까지는 부담 없이 답하게 한다) -->
+  <section class="screen scroller" id="s-contact">
+    <div class="guide" id="g9"></div>
+    <div class="note" style="margin-top:0">
       <div class="nt">무지개양파를 보내드려요</div>
       <p>오늘 참여해주신 분들 중 <b>열 분</b>을 추첨해, 강호현 농부가 보내주신 무지개양파를 보내드립니다. 그린애플어니언 · 아히네 · 함양파 · 블루밍어니언, 네 가지예요.</p>
     </div>
-    <input type="tel" id="phone" placeholder="휴대폰 번호 (추첨 발송용)" autocomplete="tel" inputmode="tel">
+
+    <p class="q">추첨 결과는 문자로 보내드려요.</p>
+    <input type="tel" id="phone" placeholder="휴대폰 번호" autocomplete="tel" inputmode="tel">
     <p class="err" id="phoneErr">휴대폰 번호를 확인해주세요.</p>
 
+    <p class="q">프로그램 모집이 시작되면 메일로 알려드릴게요.</p>
+    <input type="email" id="email" placeholder="이메일 주소" autocomplete="email" inputmode="email">
+    <p class="err" id="emailErr">이메일 주소를 확인해주세요.</p>
+
     <p class="agree">남겨주신 연락처는 함양 소식 안내와 추첨 경품 발송에만 쓰고, 팝업 종료 후 2주 뒤에 지웁니다. 언제든 수신을 거부하실 수 있어요.</p>
-    <button class="cta" id="intNext">남길게요</button>
-    <button class="skip" id="intSkip">괜찮아요, 건너뛸게요</button>
+    <button class="cta" id="conNext">남길게요</button>
+    <button class="skip" id="conSkip">괜찮아요, 건너뛸게요</button>
   </section>
 
   <!-- ⑥ 구매 페이지 -->
@@ -640,7 +648,8 @@ async function save(patch = {}){
 
 /* ─────────── 화면 전환 ─────────── */
 const WEIGHT = { 's-cover':0, 's-card1':1, 's-card2':2, 's-exp':3, 's-sw':4, 's-jam':4,
-                 's-letter':5, 's-fly':5, 's-interest':6, 's-shop':7 };
+                 's-letter':5, 's-fly':5, 's-interest':6, 's-contact':7, 's-shop':8 };
+const STEP_TOTAL = 8;
 /* 뒤로가기는 생산자 이야기 구간(표지·카드)에서만 허용한다.
    설문이 시작되면 이력을 비워 되돌아갈 수 없게 하고, 그래서 화면별
    도달 시각이 한 방향으로만 쌓인다. */
@@ -654,7 +663,7 @@ function go(id, isBack){
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
   $(id).classList.add('on');
   window.scrollTo(0,0);
-  $('prog').style.width = ((WEIGHT[id] || 0) / 7 * 100) + '%';
+  $('prog').style.width = ((WEIGHT[id] || 0) / STEP_TOTAL * 100) + '%';
   $('backBtn').hidden = trail.length === 0;
   stamp(id.replace('s-',''));
   if(id === 's-card1' || id === 's-card2'){
@@ -827,7 +836,7 @@ $('sendLetter').onclick = async () => {
 $('letterSkip').onclick = () => go('s-interest');
 
 /* ─────────── ⑤ 참여 의사 ─────────── */
-guide($('g7'), 'hi', '거의 다 왔어요.<br>마지막으로 두 가지만요.');
+guide($('g7'), 'hi', '거의 다 왔어요.<br>두 가지만 여쭤볼게요.');
 
 /* 고르지 않았으면 저장하지 않는다 — 기본값이 응답으로 섞이면 안 된다 */
 let closeKm = null;
@@ -844,17 +853,27 @@ document.querySelectorAll('.chip').forEach(c => c.onclick = () => {
   }
   document.querySelectorAll('.chip').forEach(x => x.classList.toggle('sel', interests.includes(x.dataset.it)));
 });
-function finish(withContact){
-  const patch = { finished: true };
+/* 거리·관심은 여기서 확정하고 연락처 화면으로 넘긴다.
+   연락처를 같은 화면에 두면 이 화면째로 건너뛰어 거리·관심까지 잃는다. */
+$('intNext').onclick = () => {
+  const patch = {};
   if(closeKm !== null) patch.closeness_km = closeKm;
   if(interests.length) patch.interests = interests.join(',');
+  if(Object.keys(patch).length) save(patch);
+  go('s-contact');
+};
+
+/* ─────────── ⑤-b 연락처 ─────────── */
+guide($('g9'), 'hi', '마지막이에요.<br>연락처는 안 남기셔도 괜찮아요.');
+function finish(withContact){
+  const patch = { finished: true };
   $('emailErr').style.display = 'none';
   $('phoneErr').style.display = 'none';
 
   if(withContact){
     const em = $('email').value.trim();
     const ph = $('phone').value.trim();
-    /* 모임에 관심을 표시했는데 연락처가 하나도 없으면 연락할 방법이 없다 */
+    /* 프로그램에 관심을 표시했는데 연락처가 하나도 없으면 연락할 방법이 없다 */
     const wantsMeet = interests.length > 0 && !interests.includes('아직은 괜찮아요');
 
     if(em && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){
@@ -865,7 +884,7 @@ function finish(withContact){
       $('phoneErr').style.display = 'block'; return;
     }
     if(wantsMeet && !em && !ph){
-      $('emailErr').textContent = '연락드릴 방법이 필요해요. 이메일이나 휴대폰 번호 중 하나는 남겨주세요.';
+      $('emailErr').textContent = '연락드릴 방법이 필요해요. 번호나 이메일 중 하나는 남겨주세요.';
       $('emailErr').style.display = 'block'; return;
     }
     if(em) patch.email = em;
@@ -875,8 +894,8 @@ function finish(withContact){
   $('drawNote').style.display = patch.phone ? 'block' : 'none';
   go('s-shop');
 }
-$('intNext').onclick = () => finish(true);
-$('intSkip').onclick = () => finish(false);
+$('conNext').onclick = () => finish(true);
+$('conSkip').onclick = () => finish(false);
 
 /* ─────────── ⑥ 구매 페이지 ─────────── */
 guide($('g8'), 'bye', '오늘 만난 그 원물,<br>여기서 직접 사실 수 있어요.');

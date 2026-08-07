@@ -170,7 +170,8 @@ function demoData(){
     if(steps.exp && (exp === 'jam' || exp === 'both')) steps.jam = 1;
     if(steps.exp && ate && Math.random() < .8) steps.letter = 1;
     if(steps.exp && Math.random() < .74) steps.interest = 1;
-    if(steps.interest && Math.random() < .9) steps.shop = 1;
+    if(steps.interest) steps.contact = 1;
+    if(steps.contact && Math.random() < .9) steps.shop = 1;
     const wroteLetter = !!steps.letter && Math.random() < .62;
     const to = pick(['onion','wheat','both']);
     if(wroteLetter) letters.push({ letter_to: to, letter_body: pick(LT) });
@@ -280,7 +281,7 @@ function render(rows, letters){
     ['exp','식경험 선택', true],
     ['sw','샌드위치 설문 · 먹은 사람만', false], ['jam','양파잼 설문 · 맛본 사람만', false],
     ['letter','편지 · 먹은 사람만', false],
-    ['interest','참여 의사', true], ['shop','구매 페이지', true]
+    ['interest','거리 · 참여 의사', true], ['contact','연락처', true], ['shop','구매 페이지', true]
   ];
   const reach = STEPS.map(([k, label]) => [label, rows.filter(r => r.steps && r.steps[k]).length]);
   const spine = STEPS.map(([k, label, s], i) => s ? [label, reach[i][1]] : null).filter(Boolean);
