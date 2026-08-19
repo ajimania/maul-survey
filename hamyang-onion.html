@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>함양 양파 — 꿈꾸는 농부 강호현</title>
+<meta name="description" content="남들이 포기한 품종을 붙잡은 농부, 그리고 그 양파를 맛본 사람들이 남긴 응원.">
+<meta property="og:title" content="함양 양파 — 꿈꾸는 농부 강호현">
+<meta property="og:description" content="남들이 포기한 품종을 붙잡은 농부, 그리고 그 양파를 맛본 사람들이 남긴 응원.">
+<meta property="og:image" content="hamyang-img/bg-mountain.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAF5EA;
+  --card:#FFFDF7;
+  --line:#DBD2C0;
+  --line-soft:#E8E1D2;
+  --ink:#4A3D2E;
+  --ink-soft:#6E6152;
+  --muted:#9A9081;
+  --accent:#5C6B3F;
+  --accent-soft:#EDF0E4;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{
+  font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  color:var(--ink);background:var(--paper);
+  -webkit-font-smoothing:antialiased;letter-spacing:-.2px;
+}
+img{max-width:100%;}
+.wrap{max-width:680px;margin:0 auto;padding:0 22px calc(52px + env(safe-area-inset-bottom));}
+
+/* ── 표지 ── */
+.hero{
+  position:relative;margin:0 -22px;padding:96px 22px 34px;
+  background-image:linear-gradient(to bottom,rgba(30,26,18,.18) 0%,rgba(30,26,18,.62) 62%,rgba(30,26,18,.82) 100%),url('hamyang-img/bg-mountain.jpg');
+  background-size:cover;background-position:center;color:#fff;
+}
+.hero .eyebrow{font-size:12.5px;letter-spacing:1px;opacity:.9;margin-bottom:14px;}
+.hero h1{font-size:30px;font-weight:800;line-height:1.4;letter-spacing:-1.2px;}
+.hero .sub{margin-top:14px;font-size:14px;line-height:1.75;opacity:.88;word-break:keep-all;}
+
+/* ── 공통 섹션 ── */
+section{padding:52px 0 0;}
+.label{
+  font-size:12px;font-weight:700;letter-spacing:1px;color:var(--accent);
+  display:flex;align-items:center;gap:9px;margin-bottom:18px;
+}
+.label::after{content:'';flex:1;height:1px;background:var(--line-soft);}
+h2{font-size:21px;font-weight:800;line-height:1.5;letter-spacing:-.8px;word-break:keep-all;}
+.body p{font-size:15px;line-height:1.95;color:var(--ink-soft);word-break:keep-all;margin-top:16px;}
+
+/* ── 생산자 메시지 카드 ── */
+.pcard{
+  background:var(--card);border:1px solid var(--line);border-radius:3px;
+  padding:34px 24px 22px;box-shadow:0 1px 3px rgba(74,61,46,.05);
+}
+.portrait{width:124px;height:124px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 24px;}
+.msg{font-family:'Gaegu',cursive;font-size:19px;line-height:1.75;text-align:center;color:#3d3427;word-break:keep-all;}
+.sign{margin-top:22px;border-top:1px solid var(--line-soft);padding-top:16px;}
+.autograph{display:block;width:172px;height:auto;margin-left:auto;}
+.autograph.wide{width:210px;}
+.credit{margin-top:16px;text-align:center;font-size:11.5px;color:var(--muted);letter-spacing:0;word-break:keep-all;}
+
+/* ── 응원의 벽 ── */
+.wallhead .count{
+  display:inline-block;margin-top:14px;padding:6px 13px;border-radius:99px;
+  background:var(--accent-soft);color:var(--accent);font-size:13px;font-weight:700;
+}
+.wallsub{margin-top:14px;font-size:14px;line-height:1.8;color:var(--ink-soft);word-break:keep-all;}
+.wall{margin-top:24px;}
+@media(min-width:600px){.wall{column-count:2;column-gap:14px;}}
+.note{
+  break-inside:avoid;-webkit-column-break-inside:avoid;
+  background:var(--card);border:1px solid var(--line-soft);border-radius:3px;
+  padding:17px 18px 16px;margin-bottom:14px;
+  box-shadow:0 1px 2px rgba(74,61,46,.04);
+}
+.note p{font-size:14.5px;line-height:1.8;color:var(--ink);word-break:keep-all;}
+.note.hid{display:none;}
+.more{
+  display:block;width:100%;margin-top:6px;padding:15px;cursor:pointer;
+  background:none;border:1px solid var(--line);border-radius:3px;
+  font-family:inherit;font-size:14px;font-weight:700;color:var(--accent);letter-spacing:-.2px;
+}
+.more:active{background:var(--accent-soft);}
+.more[hidden]{display:none;}
+
+/* ── 다른 페이지 / 꼬리말 ── */
+.other{
+  display:block;padding:20px;text-align:center;text-decoration:none;
+  border:1px solid var(--line);border-radius:3px;
+  font-size:14.5px;font-weight:700;color:var(--ink);
+}
+footer{
+  margin-top:46px;padding-top:22px;border-top:1px solid var(--line-soft);
+  font-size:11.5px;line-height:1.9;color:var(--muted);text-align:center;letter-spacing:0;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <p class="eyebrow">함양 양파</p>
+    <h1>꿈꾸는 농부,<br>강호현</h1>
+    <p class="sub">함양에서 지리산의 바람을 맞으며<br>양파를 키우는 사람</p>
+  </div>
+
+  <section>
+    <p class="label">생산자의 메시지</p>
+    <div class="pcard">
+      <img class="portrait" src="hamyang-img/onion-farmer.jpg" alt="꿈꾸는 농부 강호현" width="248" height="248">
+      <p class="msg">“함양 게르마늄 땅에서 자라<br>야구공처럼 딴딴하고<br>사과처럼 달콤합니다!<br>지리산 싱싱한 기운 담은<br>샌드위치 드시고<br>오늘 하루 힘차게 보내세요.”</p>
+      <div class="sign"><img class="autograph" src="hamyang-img/sign-onion.png" alt="꿈꾸는 농부 강호현"></div>
+    </div>
+    <p class="credit">함양의 농부 강호현 × 남가좌439 × 늦여름베이커리</p>
+  </section>
+
+  <section>
+    <p class="label">이야기</p>
+    <h2>꿈꾸는 농부, 강호현 생산자의 이야기</h2>
+    <div class="body"><p>남들이 &#x27;상품성이 없다&#x27;며 포기한 양파 품종을 붙잡고 홀로 연구하고 키워낸 농부가 있습니다. 함양에서 지리산의 바람을 맞으며 농사짓는 &#x27;꿈꾸는 농부&#x27; 강호현 생산자입니다.</p><p>신선한 양파는 껍질에 매끄러운 윤기가 흐르고, 단단하며, 씹을수록 깊고 달큰한 풍미가 터져 나옵니다. 강 대표는 화학비료 대신 생분해 비닐을 쓰고, 사라져가는 토종 품종을 지켜내며 지속가능한 농업을 몸소 실천하고 있습니다.</p><p>양파 한 알에 담긴 다양함과 건강함. 오늘 남가좌동에서 맛보는 이 양파를 통해, 우리의 식탁도 조금 더 풍성하고 다채로워지길 꿈꿔봅니다.</p></div>
+  </section>
+
+  <section>
+    <p class="label">시민들의 응원</p>
+    <div class="wallhead">
+      <h2>농부에게 온 응원</h2>
+      <span class="count">67개의 한 마디</span>
+      <p class="wallsub">남가좌439 팝업에서 함양 양파와 양파잼을 맛본 분들이<br>강호현 농부에게 남긴 말입니다.</p>
+    </div>
+    <div class="wall"><div class="note"><p>양파의 풍미가 좋았아요</p></div><div class="note"><p>명양과 만점</p></div><div class="note"><p>양파가 달고 맛있어요~~</p></div><div class="note"><p>양파잼을 먹어보니 함양 양파가 궁금해졌어요! 종류가 이렇게 많은지 몰랐어요!</p></div><div class="note"><p>양파의 단 맛을 좋아하는데, 이 양파로 만든 잼은 더 좋았습니다. 이번에 받은 양파도 생으로 먹어보려 합니다 :)</p></div><div class="note"><p>양파가 너무 맛있어요</p></div><div class="note"><p>양파가 확실히 다르네요</p></div><div class="note"><p>마시써요~~~</p></div><div class="note"><p>양파 진짜 튼실매끈 맛나요</p></div><div class="note"><p>최근에 먹어봄 양파중에 제일 신선하고 맛도 좋았던거같습니다. 요즘 더운데 고생 많으세요</p></div><div class="note"><p>양파로 만든 잼을 먹어봤는데 식재료가 좋아서 너무 맛 있었어요!</p></div><div class="note"><p>양파가 달달해요.</p></div><div class="note hid"><p>함양의 양파를 맛볼 수 있도록 애써주심에 감사합니다</p></div><div class="note hid"><p>맛잇어요</p></div><div class="note hid"><p>양파가 크고 싱싱하네요. 감사해요</p></div><div class="note hid"><p>더운 날씨에 항상 고생이 많으십니다 덕분에 저희가 이렇게 맛있는 음식을 맛 볼 수 있는 거겠지요 더위더 무탈히 보내시고 작게 나마 응원하겠습니다!</p></div><div class="note hid"><p>새로운 종류의 양파를 맛볼수 있어서 감사합니다!</p></div><div class="note hid"><p>양파가 부속재료가 아니라 주인공처럼 느껴졌어요. 은은하면서도 단단한 맛, 아마 함양과 농부님을 닮아서인가봅니다!</p></div><div class="note hid"><p>양파의 또 다른 매력을 알게되었습니다 감사합니다!</p></div><div class="note hid"><p>너무 맛있게 먹었습니다 !!</p></div><div class="note hid"><p>응원합니다</p></div><div class="note hid"><p>좋은 양파 수확하고 제공해주셔서 감사합니다.</p></div><div class="note hid"><p>더운날에 고생이 많으십니다<br>제가 쉬었음 청년만 아니였어도 양파쨈을 샀을 거예요… 번창하세요!</p></div><div class="note hid"><p>양파가 다를 수 있다는 걸 처음 알았어요! 특별함을 선물해주셔서 감사합니다🩷</p></div><div class="note hid"><p>양파가 진짜 달아요~~ 맛있었어요!!</p></div><div class="note hid"><p>양파가 이렇게 실하고 맛있다니!!</p></div><div class="note hid"><p>일반가정에서 소량주문도 가능하다면 주문해서 먹고싶을정도로 맛있는 양파였어요! 양파짱❤️</p></div><div class="note hid"><p>양파의 풍미가 아주 좋아요</p></div><div class="note hid"><p>고맙습니다.</p></div><div class="note hid"><p>우리나라 양파가 이렇게 달고 맛있고 다양하다니! 감사합니다</p></div><div class="note hid"><p>다양한 양파를 맛볼수있게 해주셔서 감사합니다 누군가의 소신과 땀방울이 오늘의 제 식탁에 올라오기까지 모든분들의 수고에 감사하며 즐기는 식사 였습니다</p></div><div class="note hid"><p>감사합니다</p></div><div class="note hid"><p>우리것을 지키고 연구하시는 모습에 애국심을 느끼며 항상 풍년되시길</p></div><div class="note hid"><p>양파가 단단하고 맛있어요:) 농사 지어 주셔서 감사합니다~</p></div><div class="note hid"><p>양파 요리를 원래 좋아하는데 잼은 생각도 못했어요 맛있어서 더 놀랐네요 잘먹었습니다!</p></div><div class="note hid"><p>너무 맛있는 양파맛을 느꼈습니다.<br>이 계기로 함양 양파 기억하겠습니다.</p></div><div class="note hid"><p>우리것을 사랑하고 연구하는 당신이야말로 애국자십니다. 응원합니다.</p></div><div class="note hid"><p>농부님 성함 기억하겠습니다 <br>응원합니다</p></div><div class="note hid"><p>양파의 건강한 맛에 감탄했습니다.</p></div><div class="note hid"><p>양파가 정말 맛있어요 마트에서 사먹는것과는 차원이 다릅니다!! 양파농사가 쉽지 않을텐데 우리땅의 농산물을 지켜내시는 모습이 멋지십니다 !!</p></div><div class="note hid"><p>양파 너무 맛나요!!</p></div><div class="note hid"><p>맛있어요!!</p></div><div class="note hid"><p>좋은 맛과 가치를 이어가주셔서 감사합니다. 덕분에 맛있는 추억 쌓았어요!</p></div><div class="note hid"><p>양파쨈 맛이 아주 풍성하고 깊어서 놀랐어요! 양파 종류가 많다는 것에도 놀랐고요! 😁👍</p></div><div class="note hid"><p>양파잼이 어색했지만 자꾸 생각나게 맛있어요. 열심히 생산해주셔서 감사합니다.</p></div><div class="note hid"><p>평소에도 양파를 좋아하는 편인데 양파로 잼을 만들어 먹는건 이번에 처음 알았어요!!!</p></div><div class="note hid"><p>양파잼 맛있어요</p></div><div class="note hid"><p>😮🫶</p></div><div class="note hid"><p>양파가 아삭하고 답니다. 건강한 맛과 맛있는 맛을 맛보았습니다</p></div><div class="note hid"><p>양파가 아주 단단하고 달아요! 수고에 감사를^^</p></div><div class="note hid"><p>양파에 종류가.이렇게 많은 지 몰랐어요!</p></div><div class="note hid"><p>양파에 대한 사랑으로 다양한 품종을 소개해주셔서 감사합니다. 계속해서 서울에서 접할 기회가 있다면 좋겠습니다.</p></div><div class="note hid"><p>응원합니다:)</p></div><div class="note hid"><p>이제 양파 특산지 하면 함양이 제일 먼저 떠오를 것 같아요. 온라인으로 장볼 때도 한양양파 검색해서 먹어야겠어요!</p></div><div class="note hid"><p>이게 양파인지 사과잼인지 모르겠을 만큼 달고 맛있었어요</p></div><div class="note hid"><p>양파 인지도 모를만큼 달콤했어요</p></div><div class="note hid"><p>양파의 이야기를 들으며 양파를 맛볼 기회를 주셔서 감사해요</p></div><div class="note hid"><p>양파 맛있어요. 날더운데 고생하세용</p></div><div class="note hid"><p>이 양파가 단 걸까요 양파는 다 단걸까요 잼이라서 단걸까요 ㅎㅎ 맛있습니다</p></div><div class="note hid"><p>양파너무 신선해요, 구매하렵니다!</p></div><div class="note hid"><p>멋진 일을 계속해 주세요.</p></div><div class="note hid"><p>기본 식재료인 양파… 유명한 새벽배송 사이트서 사먹었는데, 함양 양파 정말 단단하고 요리중 생양파 그냥 주워 먹었는데 달큰아삭하고 정말 품질, 맛이 차원이 다르네요. 재배해주셔서.. 알게 되어서 넘 감사해요!!!</p></div><div class="note hid"><p>맛있는 양파 키워주셔서 감사합니다</p></div><div class="note hid"><p>맛있는 양파를, 최상의 조리법으로 맛볼 수 있게 해주셔서 감사합니다.</p></div><div class="note hid"><p>좋은 양파를 만나게 되서 정말 감사드립니다</p></div><div class="note hid"><p>양파의 새로운 도전 같아요</p></div><div class="note hid"><p>좋은 양파 농사 감사해요</p></div></div>
+    <button class="more" id="more">남은 응원 55개 더 보기</button>
+  </section>
+
+  <section>
+    <a class="other" href="hamyang-wheat.html">지리산 우리밀 →</a>
+  </section>
+
+  <footer>
+    고맙습니다. 오늘 한 입이 함양까지 닿았어요.<br>
+    남가좌439 · 늦여름 베이커리 | 서울시 넥스트로컬 8기
+  </footer>
+</div>
+
+<script>
+// 처음에는 12개만 보여주고 나머지는 버튼으로 편다.
+document.getElementById('more').addEventListener('click', function(){
+  document.querySelectorAll('.note.hid').forEach(function(n){ n.classList.remove('hid'); });
+  this.hidden = true;
+});
+</script>
+</body>
+</html>
