@@ -130,11 +130,11 @@ function render(){
   let h='';
 
   /* 회수 현황 */
-  h+=`<h2>회수 현황</h2><div class="card"><table><tr><th>코드</th><th>기관(입력)</th><th>이름</th><th>상태</th><th>진행</th><th>마지막 저장</th></tr>`;
+  h+=`<h2>회수 현황</h2><div class="card"><table><tr><th>코드</th><th>기관(입력)</th><th>상태</th><th>진행</th><th>마지막 저장</th></tr>`;
   ROWS.forEach(r=>{
     const st=r.submitted_at?'<span class="tag done">완료</span>':(r.started&&(r.step>0||Object.keys(r.payload||{}).length)?'<span class="tag ing">작성중</span>':'<span class="tag no">미시작</span>');
     h+=`<tr><td><b>${esc(r.code)}</b>${r.assigned_org?`<br><span style="color:var(--muted);font-size:11px">배정: ${esc(r.assigned_org)}</span>`:''}</td>
-      <td>${esc(r.org||'')}</td><td>${esc(r.name||'')}</td><td>${st}</td>
+      <td>${esc(r.org||'')}</td><td>${st}</td>
       <td>${r.started?esc(STEP_NAMES[Math.min(r.step??0,5)]):''}</td>
       <td>${r.updated_at?new Date(r.updated_at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}):''}</td></tr>`;
   });
@@ -142,8 +142,8 @@ function render(){
 
   /* 응답자 구성 */
   h+=`<h2>응답자 구성</h2>
-  <div class="card"><b style="font-size:14px">담당 업무 분야 (복수)</b>${bars(count(started,'fields'),N)}
-  <div style="height:14px"></div><b style="font-size:14px">청년 대상 업무 연차</b>${bars(count(started,'years'),N,'sea')}</div>`;
+  <div class="card"><b style="font-size:14px">담당 업무 분야</b>${freeTexts(started,'field')}
+  <div style="height:14px"></div><b style="font-size:14px">업무연차</b>${bars(count(started,'years'),N,'sea')}</div>`;
 
   /* 파트 3 — 조사 항목 */
   h+=`<h2>파트 3 — 조사 항목 평가 (설문 1부)</h2><div class="card"><table><tr><th>항목</th><th>글쎄요</th><th>도움됨</th><th>꼭 필요</th><th>제공 어려움</th></tr>`;
