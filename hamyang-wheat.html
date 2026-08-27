@@ -153,6 +153,29 @@ document.getElementById('more').addEventListener('click', function(){
   document.querySelectorAll('.note.hid').forEach(function(n){ n.classList.remove('hid'); });
   this.hidden = true;
 });
+
+// 방문 기록 — 몇 명이 열어봤는지 숫자만 남긴다 (개인정보 없음, hamyang_view 테이블)
+(function(){
+  try{
+    let sid = localStorage.getItem('hy_sid');
+    if(!sid){
+      sid = (crypto.randomUUID ? crypto.randomUUID()
+        : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c){
+            var r = Math.random()*16|0;
+            return (c==='x' ? r : (r&0x3|0x8)).toString(16);
+          }));
+      localStorage.setItem('hy_sid', sid);
+    }
+    var src = (new URLSearchParams(location.search).get('src')||'').toLowerCase() || null;
+    var KEY = 'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB';
+    fetch('https://hncuvjrghniwihhfpata.supabase.co/rest/v1/hamyang_view', {
+      method:'POST',
+      headers:{ 'apikey':KEY, 'Authorization':'Bearer '+KEY,
+                'Content-Type':'application/json', 'Prefer':'return=minimal' },
+      body: JSON.stringify({ page:'wheat', src:src, sid:sid })
+    }).catch(function(){});
+  }catch(e){}
+})();
 </script>
 </body>
 </html>

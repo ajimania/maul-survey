@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>생산자 이야기 · 방문 통계</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAF5EA; --card:#FFFDF7; --line:#DBD2C0; --line-soft:#E8E1D2;
+  --ink:#4A3D2E; --ink-soft:#6E6152; --muted:#9A9081;
+  --accent:#A8792B; --accent-soft:#F4EDDD;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;letter-spacing:-.2px;
+}
+.wrap{max-width:560px;margin:0 auto;padding:44px 22px 60px;}
+h1{font-size:22px;font-weight:800;letter-spacing:-.8px;}
+.sub{margin-top:8px;font-size:13px;color:var(--muted);line-height:1.7;}
+.stamp{margin-top:4px;font-size:12px;color:var(--muted);}
+.card{
+  margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:3px;
+  padding:22px 20px;box-shadow:0 1px 3px rgba(74,61,46,.05);
+}
+.card h2{font-size:16px;font-weight:800;letter-spacing:-.5px;display:flex;align-items:center;gap:8px;}
+.card h2 a{font-size:12px;font-weight:600;color:var(--accent);text-decoration:none;}
+.nums{display:flex;gap:10px;margin-top:16px;}
+.num{flex:1;background:var(--accent-soft);border-radius:3px;padding:13px 8px;text-align:center;}
+.num .k{font-size:11.5px;color:var(--ink-soft);}
+.num .v{margin-top:4px;font-size:22px;font-weight:800;color:var(--accent);}
+.num .v span{font-size:12px;font-weight:600;margin-left:1px;}
+.by{margin-top:14px;font-size:12.5px;color:var(--ink-soft);line-height:1.8;border-top:1px solid var(--line-soft);padding-top:12px;}
+.last{margin-top:6px;font-size:11.5px;color:var(--muted);}
+.msg{margin-top:26px;font-size:14px;color:var(--ink-soft);text-align:center;line-height:1.8;display:none;}
+.msg.on{display:block;}
+.reload{
+  display:block;margin:28px auto 0;padding:12px 26px;cursor:pointer;
+  background:none;border:1px solid var(--line);border-radius:3px;
+  font-family:inherit;font-size:13.5px;font-weight:700;color:var(--accent);
+}
+.reload:active{background:var(--accent-soft);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>생산자 이야기 · 방문 통계</h1>
+  <p class="sub">지리산 우리밀 · 함양 양파 페이지를 몇 명이 열어봤는지 보여줍니다.<br>방문자는 같은 사람이 여러 번 열어봐도 1명으로 셉니다.</p>
+  <p class="stamp" id="stamp"></p>
+  <div id="cards"></div>
+  <p class="msg" id="msg"></p>
+  <button class="reload" id="reload">새로고침</button>
+</div>
+
+<script>
+const PAGES = [
+  { key:'wheat', name:'지리산 우리밀', href:'hamyang-wheat.html' },
+  { key:'onion', name:'함양 양파',     href:'hamyang-onion.html' },
+];
+const KEY = 'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB';
+const URL_ = 'https://hncuvjrghniwihhfpata.supabase.co/rest/v1/hamyang_view_stats?select=*';
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+async function load(){
+  $('msg').classList.remove('on');
+  let stats;
+  try{
+    const res = await fetch(URL_, { headers:{ apikey:KEY, Authorization:'Bearer '+KEY } });
+    if(!res.ok) throw new Error(res.status);
+    stats = await res.json();
+  }catch(e){
+    $('cards').innerHTML = '';
+    $('stamp').textContent = '';
+    $('msg').textContent = '통계를 불러오지 못했어요. 잠시 후 다시 시도해주세요.';
+    $('msg').classList.add('on');
+    return;
+  }
+
+  const n = new Date();
+  $('stamp').textContent =
+    `${n.getMonth()+1}월 ${n.getDate()}일 ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')} 기준`;
+
+  $('cards').innerHTML = PAGES.map(p => {
+    // src=test 는 동작 확인용 기록이라 집계에서 뺀다
+    const mine = stats.filter(r => r.page === p.key && r.src !== 'test');
+    const views    = mine.reduce((a,r) => a + Number(r.views || 0), 0);
+    const visitors = mine.reduce((a,r) => a + Number(r.visitors || 0), 0);
+    const by = mine
+      .sort((a,b) => Number(b.visitors) - Number(a.visitors))
+      .map(r => `${esc(r.src)} ${r.visitors}명`)
+      .join(' · ');
+    const lastAt = mine.map(r => r.last_at).filter(Boolean).sort().pop();
+    const last = lastAt ? (d => `마지막 방문 ${d.getMonth()+1}월 ${d.getDate()}일 ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`)(new Date(lastAt)) : '';
+    return `<div class="card">
+      <h2>${p.name} <a href="${p.href}" target="_blank" rel="noopener">페이지 열기 →</a></h2>
+      <div class="nums">
+        <div class="num"><div class="k">방문자</div><div class="v">${visitors}<span>명</span></div></div>
+        <div class="num"><div class="k">열어본 횟수</div><div class="v">${views}<span>회</span></div></div>
+      </div>
+      ${by ? `<div class="by">유입: ${by}</div>` : ''}
+      ${last ? `<div class="last">${last}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+$('reload').onclick = load;
+load();
+</script>
+</body>
+</html>
