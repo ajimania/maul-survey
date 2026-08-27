@@ -79,7 +79,7 @@ const sb = createClient(
   'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
 );
 
-const STEP_NAMES = ['시작하기','지금, 제주','도의 틀','전달의 문제','1부 조사항목','2부 먼저묻기','연구가 본 것','열 차원','단계','마지막'];
+const STEP_NAMES = ['시작하기','지금, 제주','제주도의 틀','전달의 문제','1부 조사항목','2부 먼저묻기','연구가 본 것','열 차원','단계','마지막'];
 const AREAS=['도전','기회','자립','참여'], STAGES=['탐색기','사회진입기','안정기','전주기'];
 const ITEMS=[['area','지원영역'],['scale','지원규모'],['when','신청시기'],['dur','지원 기간'],['form','지원형태'],['stage','현재 상황·단계'],['repeat','지속성·반복성'],['status','사업 상태']];
 const DIMS={liv1:'생계 · 고용·소득지원',liv2:'생계 · 경력개발·창업',rel1:'관계 · 청년커뮤니티',rel2:'관계 · 지역사회관계',spc1:'공간 · 주거·생활여건',spc2:'공간 · 일·활동공간',cul1:'문화 · 여가·향유',cul2:'문화 · 형성·창작',emo1:'정서 · 개인 정서·안전감',emo2:'정서 · 지역주체 인정',none:'⚠ 틀에 못 넣음'};
@@ -151,8 +151,16 @@ function render(){
   <div style="height:14px"></div><b style="font-size:14px">참여 청년의 유입 경로 (복수)</b>${bars(count(started,'s3_path'),N,'sea')}</div>`;
 
   /* 매트릭스 */
-  const cellCount={};
-  started.forEach(r=>(r.payload?.s2_cells||[]).forEach(v=>cellCount[v]=(cellCount[v]||0)+1));
+  const cellCount={}, placements=[];
+  started.forEach(r=>{
+    const names=r.payload?.s2_names||{};
+    Object.entries(names).forEach(([v,nm])=>{
+      if(!(nm||'').trim())return;
+      cellCount[v]=(cellCount[v]||0)+1;
+      const [ri,ci]=v.split('-').map(Number);
+      placements.push({org:r.org||r.code,nm,area:AREAS[ri]||'',stage:STAGES[ci]||''});
+    });
+  });
   const vague=started.filter(r=>r.payload?.s2_vague).length;
   h+=`<h2>② 보장제 매트릭스 — 우리 사업의 위치</h2><div class="card"><table class="matrix"><tr><th></th>${STAGES.map(s=>`<th>${s}</th>`).join('')}</tr>`;
   AREAS.forEach((a,r)=>{
@@ -162,7 +170,14 @@ function render(){
       return `<td><div class="mc" style="background:${bg};${n>1?'color:#fff':''}">${n||''}</div></td>`;
     }).join('')}</tr>`;
   });
-  h+=`</table><div class="note">"칸이 딱 떨어지지 않아 애매했다" 체크: <b>${vague}명</b> / ${N}</div></div>`;
+  h+=`</table><div class="note">"칸이 딱 떨어지지 않아 애매했다" 체크: <b>${vague}명</b> / ${N}</div>`;
+  if(placements.length){
+    h+='<table style="margin-top:12px"><tr><th>기관</th><th>사업명</th><th>놓은 칸</th></tr>';
+    placements.forEach(p=>h+=`<tr><td>${esc(p.org)}</td><td><b>${esc(p.nm)}</b></td><td>${esc(p.area)} × ${esc(p.stage)}</td></tr>`);
+    h+='</table>';
+  }
+  h+=`</div>
+  <div class="card"><b style="font-size:14px">이 구분(보장영역 × 생애주기), 현장에서 보기에 적절한가</b>${freeTexts(started,'s2_opinion')}</div>`;
 
   /* 1부 항목 */
   h+=`<h2>1부 — 조사 항목 평가</h2><div class="card"><table><tr><th>항목</th><th>글쎄요</th><th>도움됨</th><th>꼭 필요</th><th>제공 어려움</th></tr>`;
@@ -245,6 +260,7 @@ $('#csvBtn').onclick=()=>{
       let v=['code','org','name','step','submitted_at','updated_at'].includes(c)?r[c]:r.payload?.[c];
       if(v===undefined||v===null)v='';
       if(Array.isArray(v))v=v.join('|');
+      else if(typeof v==='object')v=JSON.stringify(v);
       v=String(v).replace(/"/g,'""');
       return /[",\n]/.test(v)?`"${v}"`:v;
     }).join(','));

@@ -199,11 +199,17 @@ input[type=text]{
 .matrix th.rowh{text-align:right;padding-right:10px;color:var(--green-deep);white-space:nowrap;font-size:13px;}
 .mcell{
   background:#FFF;border:1.8px solid var(--line);border-radius:12px;
-  height:52px;width:100%;transition:all .15s;position:relative;font-size:15px;
+  height:52px;width:100%;transition:all .15s;position:relative;
 }
-.mcell:hover{border-color:var(--green);}
+.mcell:focus-within{border-color:var(--green);}
+.mcell input{
+  width:100%;height:100%;border:none;background:transparent;text-align:center;
+  font-size:12.5px;font-weight:700;color:var(--ink);padding:4px 7px;border-radius:12px;
+}
+.mcell input:focus{outline:none;}
+.mcell input::placeholder{color:#C9C2AE;font-weight:400;font-size:17px;}
 .mcell.sel{background:var(--green);border-color:var(--green);}
-.mcell.sel::after{content:'🍊';font-size:19px;}
+.mcell.sel input{color:#fff;}
 .mcell.ghost,.gh{opacity:0;pointer-events:none;transition:opacity .6s;}
 .matrix.revealed .mcell.ghost,.matrix.revealed .gh{opacity:1;}
 .mcell.ghost{background:repeating-linear-gradient(45deg,#FBF3EA,#FBF3EA 6px,#F7E9DA 6px,#F7E9DA 12px);border:2px dashed var(--tangerine);cursor:default;}
@@ -377,7 +383,7 @@ details.more .inner{margin-top:9px;line-height:1.75;background:rgba(47,107,79,.0
     </div>
     <h1>제주 청년 정착 연구<br>현장과 함께 만드는 조사</h1>
     <p class="lp">안내받으신 참여 코드를 입력해 주세요.<br>어느 기기에서든 코드만 있으면 이어서 작성할 수 있습니다.</p>
-    <input class="code-in" id="codeIn" placeholder="JEJU-〇〇〇〇" maxlength="12" autocomplete="off">
+    <input class="code-in" id="codeIn" placeholder="코드 4자리" maxlength="6" autocomplete="off">
     <div class="login-err" id="loginErr"></div>
     <button class="btn btn-next" style="width:100%;margin-top:6px;" id="loginBtn">시작하기</button>
     <div class="resume-box" id="resumeBox">
@@ -413,26 +419,24 @@ details.more .inner{margin-top:9px;line-height:1.75;background:rgba(47,107,79,.0
     <!-- ─────────── S0 시작하기 ─────────── -->
     <section class="screen" id="s0">
       <div class="kicker">시작하기</div>
-      <h2 class="h-title">청년을 지원해 온 현장의 경험을,<br>연구의 뼈대에 넣으려 합니다</h2>
+      <h2 class="h-title">청년을 지원해온 현장의 경험을 바탕으로<br>제주청년지원사업의 지형도를 그립니다</h2>
       <p class="h-sub">본 연구는 제주 청년의 정착을 돕는 지원사업들을 조사해 <b>'제주 청년 정착 지원사업의 지형도'</b>를 그리고, 그 지원이 청년에게 효과적으로 닿는 경로를 설계하는 작업입니다. 기관에는 다음 지원을 설계할 자료가, 청년에게는 자신에게 맞는 사업을 찾는 경로가 되는 것이 목표입니다.</p>
-      <p class="h-sub">이 페이지는 <b>읽는 부분과 답하는 부분이 번갈아</b> 나옵니다. 연구진이 선행연구에서 확인한 것을 짧게 브리핑하고, 그 지점마다 여러분의 현장 경험을 여쭙습니다. 전체 <b>약 30분</b>이 걸립니다.</p>
+      <p class="h-sub">이 설문은 <b>읽는 부분과 답하는 부분이 번갈아</b> 나옵니다. 연구진이 선행연구에서 확인한 것을 짧게 브리핑하고, 그 지점마다 여러분의 현장 경험을 여쭙습니다. <b>예상 소요시간은 30분</b>입니다.</p>
 
       <div class="guide">
         <div class="dol"><svg viewBox="0 0 34 66" xmlns="http://www.w3.org/2000/svg"><ellipse cx="17" cy="14" rx="13" ry="12" fill="#5A5A60"/><path d="M5 12 Q17 -6 29 12 Z" fill="#4A4A50"/><rect x="6" y="26" width="22" height="34" rx="10" fill="#5A5A60"/><circle cx="12.5" cy="12" r="1.8" fill="#2E2E33"/><circle cx="21.5" cy="12" r="1.8" fill="#2E2E33"/><ellipse cx="17" cy="17.5" rx="3" ry="2" fill="#4A4A50"/><path d="M11 21 Q17 24 23 21" fill="none" stroke="#2E2E33" stroke-width="1.4" stroke-linecap="round"/><path d="M6 36 Q1 42 5 50" fill="none" stroke="#4A4A50" stroke-width="5" stroke-linecap="round"/><path d="M28 36 Q33 42 29 50" fill="none" stroke="#4A4A50" stroke-width="5" stroke-linecap="round"/><circle cx="9" cy="31" r="1" fill="#3E3E44"/><circle cx="20" cy="40" r="1.2" fill="#3E3E44"/><circle cx="14" cy="49" r="1" fill="#3E3E44"/></svg></div>
-        <div class="bubble">응답은 <b>화면을 넘길 때마다 자동 저장</b>됩니다. 중간에 닫아도 괜찮아요. 다음에 코드로 다시 들어오면 <b>하던 곳에서 이어집니다.</b> 정답이 있는 질문은 하나도 없습니다 — 현장에서 보고 겪으신 그대로 적어 주세요.</div>
+        <div class="bubble">응답은 <b>화면을 넘길 때마다 자동 저장</b>됩니다. 중간에 닫아도 괜찮습니다. 다시 들어와 코드를 넣고 설문을 진행하면 <b>하던 곳에서 이어집니다.</b> 정답이 있는 질문은 하나도 없습니다! — 현장에서 보고 겪으신 그대로 적어 주세요.</div>
       </div>
 
       <div class="ask">
         <div class="q">먼저, 응답자 정보를 알려주세요</div>
-        <div class="qs">기관명은 응답을 정리할 때 꼭 필요합니다. 이름은 적지 않으셔도 됩니다.</div>
         <div class="tt-label">소속 기관명 <b style="color:var(--tangerine-deep)">*</b></div>
         <input type="text" data-key="org" placeholder="예) 제주청년센터">
-        <div class="tt-label">응답자 이름 (선택)</div>
-        <input type="text" data-key="name" placeholder="적지 않아도 됩니다">
+        <div class="tt-label">응답자 이름 <b style="color:var(--tangerine-deep)">*</b></div>
+        <input type="text" data-key="name" placeholder="이름">
       </div>
       <div class="navrow">
         <span></span>
-        <span class="gate-msg" id="gate0"></span>
         <button class="btn btn-next" data-go="1">시작할게요 →</button>
       </div>
     </section>
@@ -462,6 +466,28 @@ details.more .inner{margin-top:9px;line-height:1.75;background:rgba(47,107,79,.0
         <div class="src">출처: 제주연구원 정책이슈브리프(2024) · 2025 제주청년통계조사 · 국내인구이동통계</div>
       </div>
 
+      <div class="brief">
+        <h3>섬 안에서도, 방향이 갈립니다</h3>
+        <p>유출입을 지역 단위로 들여다보면 상반된 흐름이 보입니다. <b>제주시 동(洞)지역</b>(노형동·연동·이도2동)에서는 순유출이 일어나고, <b>서귀포시 읍면</b>(대정읍·안덕면·표선면)에서는 순유입이 일어납니다.</p>
+        <p>유입이 일어나는 곳에는 이유가 있습니다. <b>안덕면은 정책사업 유치에 따른 '직업'</b>이, <b>대정읍은 '교육 인프라'</b>가 유입 요인으로 해석됩니다. 도시가 아니라 읍면에서, 일자리와 교육이라는 구체적 조건이 만들어진 곳으로 사람이 움직이고 있습니다. 무엇이 갖춰지면 청년이 오는가에 대한 힌트가 섬 안에 이미 있는 셈입니다.</p>
+        <div class="src">출처: 제주연구원 정책이슈브리프(2024)</div>
+      </div>
+
+      <div class="brief">
+        <h3>정주는 단일 요인의 문제가 아닙니다</h3>
+        <p>2025년 제주청년통계조사에서 제주 청년의 <b>3년 후 계속 거주 의향은 67.0%</b>입니다. 그런데 그 이유의 구조가 흥미롭습니다.</p>
+        <table class="calm-table">
+          <tr><td><b>계속 살고 싶은 이유</b> — 학교·직장 위치</td><td>51.5%</td></tr>
+          <tr><td style="padding-left:22px">가족·지인 거주</td><td>28.7%</td></tr>
+          <tr><td style="padding-left:22px">자연환경</td><td>11.6%</td></tr>
+          <tr><td><b>떠나고 싶은 이유</b> — 학교·직장 위치</td><td>51.5%</td></tr>
+          <tr><td style="padding-left:22px">생활·문화·교육 인프라 부족</td><td>26.9%</td></tr>
+          <tr><td style="padding-left:22px">경제적 여건</td><td>10.8%</td></tr>
+        </table>
+        <p style="margin-top:12px;">사는 이유에는 <b>생계와 관계와 정서</b>가, 떠나는 이유에는 <b>생계와 문화와 공간</b>이 함께 등장합니다. 정주가 일자리 하나로 결정되지 않는다는 사실이, 공식 통계의 문항 구조 안에서도 이미 확인되고 있습니다. 이 관찰이 뒤에서 보실 이 연구의 분류 틀로 이어집니다.</p>
+        <div class="src">출처: 2025 제주청년통계조사</div>
+      </div>
+
       <div class="ask">
         <div class="q">이 수치들, 현장에서 체감하시는 것과 비교하면 어떤가요?</div>
         <div class="chips col" data-key="s1_fit">
@@ -475,6 +501,8 @@ details.more .inner{margin-top:9px;line-height:1.75;background:rgba(47,107,79,.0
           <button class="chip" data-val="교육 유출">유출 1위가 '교육'</button>
           <button class="chip" data-val="비대칭">나가는 이유·들어오는 이유의 비대칭</button>
           <button class="chip" data-val="U턴 9.9">U턴 청년 9.9%</button>
+          <button class="chip" data-val="공간 역전">제주시 유출 · 읍면 유입</button>
+          <button class="chip" data-val="정주의사 구조">거주·비거주 이유의 구조</button>
         </div>
         <div class="tt-label">그렇게 느끼신 이유를 한 줄로 남겨주셔도 좋습니다 (선택)</div>
         <textarea data-key="s1_note" style="min-height:64px" placeholder="선택 사항입니다"></textarea>
@@ -487,13 +515,23 @@ details.more .inner{margin-top:9px;line-height:1.75;background:rgba(47,107,79,.0
 
     <!-- ─────────── S2 도의 틀 ─────────── -->
     <section class="screen" id="s2">
-      <div class="kicker">브리핑 ② · 도의 틀</div>
-      <h2 class="h-title">도는 이미 틀을 갖고 있습니다</h2>
-      <p class="h-sub">제주도는 <b>『제주형 청년보장제』</b>라는 명시적 정책 틀을 운영합니다. <b>4개 보장영역</b>(도전·기회·자립·참여)과 <b>생애주기 3+1단계</b>(탐색기·사회진입기·안정기 + 전주기)를 교차시킨 구조로, 2023~2027년 <b>117개 과제, 5,522억 원</b> 규모입니다. 전달체계를 점검하며 <b>'정책 빈공간'의 확인·해소</b>를 공식 과제로 명시한 점은 이 연구와 같은 언어를 씁니다.</p>
+      <div class="kicker">브리핑 ② · 제주도의 틀</div>
+      <h2 class="h-title">제주형 청년보장제를 통해 본<br>청년사업 구분</h2>
+      <p class="h-sub">제주도는 <b>『제주형 청년보장제』</b>라는 명시적 정책 틀을 운영합니다. <b>4개 보장영역</b>(도전·기회·자립·참여)과 <b>생애주기 3+1단계</b>(탐색기·사회진입기·안정기 + 전주기)를 교차한 구조입니다.</p>
+
+      <div class="brief">
+        <h3>생애주기 3+1단계란?</h3>
+        <table class="calm-table">
+          <tr><td><b>탐색기</b></td><td style="text-align:left;font-weight:400;">진로와 적성을 탐색하는 시기</td></tr>
+          <tr><td><b>사회진입기</b></td><td style="text-align:left;font-weight:400;">취업·창업 등 사회로 첫발을 딛는 시기</td></tr>
+          <tr><td><b>안정기</b></td><td style="text-align:left;font-weight:400;">일과 삶의 기반을 다지며 정착해 가는 시기</td></tr>
+          <tr><td><b>전주기</b></td><td style="text-align:left;font-weight:400;">특정 시기와 관계없이 모든 청년에게 해당하는 지원</td></tr>
+        </table>
+      </div>
 
       <div class="guide">
         <div class="dol"><svg viewBox="0 0 34 66"><use href="#dolh"/></svg></div>
-        <div class="bubble">읽기 전에 한 가지 부탁이 있어요. <b>여러분 기관의 대표 사업 한두 개를 떠올려 보세요.</b> 그리고 아래 도의 틀 위에 직접 놓아보세요. 해당된다고 생각하는 칸을 클릭하면 됩니다. (복수 선택)</div>
+        <div class="bubble"><b>여러분 기관의 대표 사업 한두 개를 떠올려 보세요.</b> 그리고 아래 제주도의 틀 위에 직접 놓아보세요. 해당한다고 생각하는 칸을 클릭해 <b>사업 이름을 적어 넣으면</b> 됩니다. (여러 칸 가능, 한 칸에 여러 사업도 가능)</div>
       </div>
 
       <div class="brief">
@@ -509,16 +547,23 @@ details.more .inner{margin-top:9px;line-height:1.75;background:rgba(47,107,79,.0
         <label class="hardchk" style="margin-top:14px;">
           <input type="checkbox" data-key="s2_vague"> 솔직히, 어느 칸인지 <b>딱 떨어지지 않아 애매했다</b>
         </label>
-        <div style="margin-top:18px;">
-          <button class="btn btn-next" id="revealBtn" style="padding:12px 22px;font-size:14px;">다 놓아보았어요</button>
-        </div>
-        <div class="reveal-box" id="revealBox">
-          <div class="miss"><b>그런데, 이 표에는 두 가지가 없습니다.</b><br>
-          ① 지원의 <b>'방식'</b>이라는 축 — 그 사업이 지원금인지, 교육인지, 커뮤니티인지, 공간인지. 청년이 실제로 사업을 탐색할 때 가장 먼저 가늠하는 정보입니다.<br>
-          ② <b>관계·정서</b>라는 분야 — 4개 보장영역 어디에도 사람과의 연결, 마음의 안전을 다루는 칸이 따로 없습니다.</div>
-          <p style="font-size:14.5px;line-height:1.8;margin-top:14px;color:#414B43;">방금 "애매하다"고 느끼셨다면, 그 감각이 정확합니다. <b>이 빈자리가 이번 연구의 출발점이고, 오늘 여러분께 여쭙는 두 파트가 각각 이 두 빈칸을 채우는 작업입니다.</b></p>
-        </div>
         <div class="src">출처: 제주 청년정책 기본계획 2023~2027 (제주형 청년보장제)</div>
+      </div>
+
+      <div class="ask">
+        <div class="q">이 구분, 현장에서 보시기에 적절한가요?</div>
+        <div class="qs">보장영역(도전·기회·자립·참여)과 생애주기를 교차한 지금의 구분이 실제 사업을 담아내기에 적절한지, 직접 놓아보신 경험을 바탕으로 적어주세요.</div>
+        <textarea data-key="s2_opinion" placeholder="예) 우리 사업은 두 영역에 걸쳐 있어 한 칸을 고르기 어려웠다 등"></textarea>
+      </div>
+
+      <div style="margin-top:22px;">
+        <button class="btn btn-next" id="revealBtn" style="padding:12px 22px;font-size:14px;">다 적어보았어요</button>
+      </div>
+      <div class="reveal-box" id="revealBox">
+        <div class="miss"><b>그런데, 이 표에는 두 가지가 없습니다.</b><br>
+        ① 지원의 <b>'방식'</b>이라는 축 — 그 사업이 지원금인지, 교육인지, 커뮤니티인지, 공간인지. 청년이 실제로 사업을 탐색할 때 가장 먼저 가늠하는 정보입니다.<br>
+        ② <b>관계·정서</b>라는 분야 — 4개 보장영역 어디에도 사람과의 연결, 마음의 안전을 다루는 칸이 따로 없습니다.</div>
+        <p style="font-size:14.5px;line-height:1.8;margin-top:14px;color:#414B43;">방금 "애매하다"고 느끼셨다면, 그 감각이 정확합니다. <b>이 빈자리가 이번 연구의 출발점이고, 오늘 여러분께 여쭙는 두 파트가 각각 이 두 빈칸을 채우는 작업입니다.</b></p>
       </div>
 
       <div class="navrow">
@@ -582,7 +627,7 @@ details.more .inner{margin-top:9px;line-height:1.75;background:rgba(47,107,79,.0
     <section class="screen" id="s4">
       <div class="kicker">1부 · 지원사업의 지도를 그리는 방법</div>
       <h2 class="h-title">지도를 그리려면,<br>위도와 경도가 먼저 필요합니다</h2>
-      <p class="h-sub">앞에서 본 <b>탐색·안내의 단절</b>을 잇는 다리는 정보입니다. 그리고 도의 틀에 없던 <b>'방식'의 축</b>이 바로 여기서 만들어집니다. 지원사업을 조사·정리할 때 모든 사업에 공통으로 적용할 규칙 — 그래야 청년이 수요자 입장에서 검색하고 비교할 수 있습니다.</p>
+      <p class="h-sub">앞에서 본 <b>탐색·안내의 단절</b>을 잇는 다리는 정보입니다. 그리고 제주도의 틀에 없던 <b>'방식'의 축</b>이 바로 여기서 만들어집니다. 지원사업을 조사·정리할 때 모든 사업에 공통으로 적용할 규칙 — 그래야 청년이 수요자 입장에서 검색하고 비교할 수 있습니다.</p>
       <p class="h-sub">아래는 연구진이 도내 지원사업 일부를 테스트 조사하며 도출한 정보 항목입니다. 실제 사업 하나를 이 틀에 넣으면 이렇게 됩니다.</p>
 
       <div class="sample-card">
@@ -750,7 +795,7 @@ details.more .inner{margin-top:9px;line-height:1.75;background:rgba(47,107,79,.0
     <section class="screen" id="s7">
       <div class="kicker">2부 · 연구진의 분류 틀</div>
       <h2 class="h-title">다섯 분야, 열 차원</h2>
-      <p class="h-sub">생계·관계·공간·문화·정서 다섯 분야를 각각 두 차원으로 나눈 틀입니다. 도의 표에 없던 <b>관계와 정서가 독립된 분야로</b> 들어 있습니다. 하나의 사업이 여러 차원에 걸칠 수 있습니다(주목적·부목적은 구분해 조사할 계획입니다).</p>
+      <p class="h-sub">생계·관계·공간·문화·정서 다섯 분야를 각각 두 차원으로 나눈 틀입니다. 제주도의 표에 없던 <b>관계와 정서가 독립된 분야로</b> 들어 있습니다. 하나의 사업이 여러 차원에 걸칠 수 있습니다(주목적·부목적은 구분해 조사할 계획입니다).</p>
 
       <div id="dimGrid"></div>
 
@@ -762,7 +807,7 @@ details.more .inner{margin-top:9px;line-height:1.75;background:rgba(47,107,79,.0
 
       <div class="ask">
         <div class="q">여러분 기관의 사업은 어느 차원에 속하나요? (복수 선택)</div>
-        <div class="qs">위 카드에서 해당하는 차원을 직접 클릭해 주세요. 아까 도의 매트릭스에 놓았던 것과 비교해 보셔도 좋습니다.</div>
+        <div class="qs">위 카드에서 해당하는 차원을 직접 클릭해 주세요. 아까 제주도의 매트릭스에 놓았던 것과 비교해 보셔도 좋습니다.</div>
         <div class="chips" data-key="s7_mine" data-multi="1" id="mineChips"></div>
       </div>
 
@@ -894,7 +939,7 @@ const sb = createClient(
 const DEMO = new URLSearchParams(location.search).get('demo') === '1';
 
 /* ══════════ 데이터 정의 ══════════ */
-const STEP_NAMES = ['시작하기','지금, 제주','도의 틀','전달의 문제','1부 · 조사 항목','2부 · 먼저 여쭙기','연구가 본 것','다섯 분야 열 차원','단계로 보기','마지막 질문'];
+const STEP_NAMES = ['시작하기','지금, 제주','제주도의 틀','전달의 문제','1부 · 조사 항목','2부 · 먼저 여쭙기','연구가 본 것','다섯 분야 열 차원','단계로 보기','마지막 질문'];
 
 const AREAS = ['도전','기회','자립','참여'];
 const STAGES = ['탐색기','사회진입기','안정기','전주기'];
@@ -1010,24 +1055,26 @@ function positionClimber(){
 }
 
 /* ══════════ 렌더: 매트릭스 ══════════ */
+const escA = s => String(s??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 function renderMatrix(){
+  const names = S.a.s2_names || {};
   $('#matrixBody').innerHTML = AREAS.map((a,r)=>{
     const cells = STAGES.map((s,c)=>{
-      const v=`${r}-${c}`;
-      const sel=(S.a.s2_cells||[]).includes(v)?' sel':'';
-      return `<td><button class="mcell${sel}" data-v="${v}"></button></td>`;
+      const v=`${r}-${c}`, val=names[v]||'';
+      return `<td><div class="mcell${val?' sel':''}"><input data-cell="${v}" value="${escA(val)}" placeholder="+" maxlength="60"></div></td>`;
     }).join('');
     return `<tr><th class="rowh">${a}</th>${cells}<td><div class="mcell ghost"></div></td></tr>`;
   }).join('') +
   `<tr class="gh-row"><th class="rowh gh" style="color:var(--tangerine-deep)">관계는?</th>${STAGES.map(()=>'<td><div class="mcell ghost gh"></div></td>').join('')}<td></td></tr>` +
   `<tr class="gh-row"><th class="rowh gh" style="color:var(--tangerine-deep)">정서는?</th>${STAGES.map(()=>'<td><div class="mcell ghost gh"></div></td>').join('')}<td></td></tr>`;
-  $$('#matrixBody .mcell[data-v]').forEach(b=>{
-    b.onclick=()=>{
-      const arr=Array.isArray(S.a.s2_cells)?S.a.s2_cells:[];
-      const i=arr.indexOf(b.dataset.v);
-      i>=0?arr.splice(i,1):arr.push(b.dataset.v);
-      S.a.s2_cells=arr; b.classList.toggle('sel'); markDirty();
-    };
+  $$('#matrixBody input[data-cell]').forEach(inp=>{
+    inp.addEventListener('input',()=>{
+      const o = S.a.s2_names || (S.a.s2_names={});
+      const v = inp.value.trim();
+      if(v) o[inp.dataset.cell]=v; else delete o[inp.dataset.cell];
+      inp.closest('.mcell').classList.toggle('sel', !!v);
+      markDirty();
+    });
   });
   if(S.a.s2_revealed) doReveal(false);
 }
@@ -1140,9 +1187,8 @@ function renderMapRows(){
 
 /* ══════════ 게이트 ══════════ */
 function gateCheck(){
-  // S0: 기관명
-  const ok0=!!(S.a.org||'').trim();
-  $('#gate0').textContent = ok0?'':'소속 기관명을 적어주세요';
+  // S0: 기관명 + 이름
+  const ok0 = !!(S.a.org||'').trim() && !!(S.a.name||'').trim();
   // S5: Q3 요소① + 이유①, Q4
   const ok5 = !!(S.a.q3_el1||'').trim() && !!(S.a.q3_why1||'').trim();
   const q4ok = !!(S.a.q4_txt||'').trim() || !!(S.a.q4_el||'').trim();
@@ -1153,7 +1199,10 @@ function gateCheck(){
 
 /* ══════════ 내비게이션 ══════════ */
 function go(i){
-  if(i===1 && !(S.a.org||'').trim()){ gateCheck(); $('input[data-key="org"]').focus(); return; }
+  if(i===1){
+    if(!(S.a.org||'').trim()){ $('input[data-key="org"]').focus(); return; }
+    if(!(S.a.name||'').trim()){ $('input[data-key="name"]').focus(); return; }
+  }
   if(i===6 && S.step===5){ const {ok5}=gateCheck(); if(!ok5) return; }
   S.step=i;
   if(i>S.maxStep) S.maxStep=i;

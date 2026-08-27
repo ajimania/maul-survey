@@ -21,11 +21,11 @@ create table if not exists public.jp_participants (
 );
 
 insert into public.jp_participants (code) values
-  ('JEJU-K3TM'), ('JEJU-9FWA'), ('JEJU-P7DN'), ('JEJU-4HXR'),
-  ('JEJU-B8QS'), ('JEJU-M2VE'), ('JEJU-6TCG'), ('JEJU-XW5H'),
-  ('JEJU-R9JP'), ('JEJU-D4KU'), ('JEJU-7NZB'), ('JEJU-EQ3F'),
-  ('JEJU-S6MW'), ('JEJU-2GYD'), ('JEJU-HV8T'), ('JEJU-N5RC'),
-  ('JEJU-UB7K'), ('JEJU-3DPX'), ('JEJU-WK9G'), ('JEJU-F2SN')
+  ('K3TM'), ('9FWA'), ('P7DN'), ('4HXR'),
+  ('B8QS'), ('M2VE'), ('6TCG'), ('XW5H'),
+  ('R9JP'), ('D4KU'), ('7NZB'), ('EQ3F'),
+  ('S6MW'), ('2GYD'), ('HV8T'), ('N5RC'),
+  ('UB7K'), ('3DPX'), ('WK9G'), ('F2SN')
 on conflict (code) do nothing;
 
 -- 2) 응답
