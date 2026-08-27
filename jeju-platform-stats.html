@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>제주 플랫폼 설문 — 집계</title>
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F1E6; --card:#FFFDF6; --ink:#2E3A32; --green:#2F6B4F; --green-deep:#224F3A;
+  --green-pale:#E4EFE7; --tangerine:#F08A24; --tangerine-deep:#D9740F; --sea:#3E7FA6;
+  --muted:#8B9088; --line:#E3DECE;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);word-break:keep-all;-webkit-font-smoothing:antialiased;}
+.wrap{max-width:1080px;margin:0 auto;padding:34px 22px 100px;}
+h1{font-size:24px;font-weight:900;margin-bottom:4px;}
+.sub{font-size:13px;color:var(--muted);margin-bottom:26px;}
+h2{font-size:17px;font-weight:900;color:var(--green-deep);margin:34px 0 12px;padding-top:22px;border-top:2px solid var(--line);}
+h2:first-of-type{border-top:none;padding-top:0;}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:10px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{font-weight:700;color:var(--muted);text-align:left;padding:7px 8px;border-bottom:2px solid var(--line);white-space:nowrap;}
+td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.55;}
+tr:last-child td{border-bottom:none;}
+.tag{display:inline-block;border-radius:99px;padding:2px 10px;font-size:11.5px;font-weight:700;}
+.tag.done{background:var(--green);color:#fff;}
+.tag.ing{background:var(--tangerine);color:#fff;}
+.tag.no{background:#E5E0D2;color:var(--muted);}
+.bar-row{display:flex;align-items:center;gap:10px;margin-top:7px;font-size:13px;}
+.bar-row .bl{width:230px;flex:none;text-align:right;color:#4C574E;line-height:1.35;}
+.bar-track{flex:1;height:17px;background:#EDE8DA;border-radius:99px;overflow:hidden;}
+.bar-fill{height:100%;background:var(--green);border-radius:99px;min-width:2px;}
+.bar-fill.tg{background:var(--tangerine);}
+.bar-fill.sea{background:var(--sea);}
+.bar-row .bn{width:56px;flex:none;font-weight:900;font-size:12.5px;}
+.free-item{border-left:3px solid var(--green-pale);padding:6px 12px;margin-top:10px;font-size:13.5px;line-height:1.65;}
+.free-item .who{font-size:11.5px;font-weight:700;color:var(--muted);margin-bottom:2px;}
+.matrix{border-collapse:separate;border-spacing:4px;margin-top:6px;}
+.matrix th{border:none;font-size:12px;text-align:center;}
+.matrix th.rh{text-align:right;color:var(--green-deep);}
+.matrix td{border:none;padding:0;}
+.mc{width:86px;height:40px;border-radius:9px;background:#fff;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:var(--green-deep);}
+.stat-line{display:flex;gap:22px;flex-wrap:wrap;margin-top:6px;}
+.stat-line .s{font-size:13px;color:var(--muted);}
+.stat-line .s b{font-size:19px;color:var(--ink);margin-right:3px;}
+.btn{border:none;border-radius:11px;padding:11px 20px;font-size:14px;font-weight:900;cursor:pointer;background:var(--green);color:#fff;font-family:inherit;}
+.btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink);}
+#gate{min-height:100dvh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;}
+#gate input{border:2px solid var(--line);border-radius:12px;padding:13px 16px;font-size:16px;text-align:center;font-family:inherit;}
+#gate .err{color:#C7583F;font-size:13px;font-weight:700;min-height:18px;}
+.note{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div style="font-size:20px;font-weight:900;">🍊 제주 플랫폼 설문 집계</div>
+  <input type="password" id="pw" placeholder="관리자 비밀번호">
+  <div class="err" id="err"></div>
+  <button class="btn" id="goBtn">열기</button>
+</div>
+
+<div class="wrap" id="app" style="display:none;">
+  <h1>제주 청년 정착 연구 — 실무자 설문 집계</h1>
+  <div class="sub" id="meta"></div>
+  <div style="display:flex;gap:10px;">
+    <button class="btn ghost" onclick="location.reload()">새로고침</button>
+    <button class="btn" id="csvBtn">CSV 내려받기</button>
+  </div>
+  <div id="content"></div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+const sb = createClient(
+  'https://hncuvjrghniwihhfpata.supabase.co',
+  'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
+);
+
+const STEP_NAMES = ['시작하기','지금, 제주','도의 틀','전달의 문제','1부 조사항목','2부 먼저묻기','연구가 본 것','열 차원','단계','마지막'];
+const AREAS=['도전','기회','자립','참여'], STAGES=['탐색기','사회진입기','안정기','전주기'];
+const ITEMS=[['area','지원영역'],['scale','지원규모'],['when','신청시기'],['dur','지원 기간'],['form','지원형태'],['stage','현재 상황·단계'],['repeat','지속성·반복성'],['status','사업 상태']];
+const DIMS={liv1:'생계 · 고용·소득지원',liv2:'생계 · 경력개발·창업',rel1:'관계 · 청년커뮤니티',rel2:'관계 · 지역사회관계',spc1:'공간 · 주거·생활여건',spc2:'공간 · 일·활동공간',cul1:'문화 · 여가·향유',cul2:'문화 · 형성·창작',emo1:'정서 · 개인 정서·안전감',emo2:'정서 · 지역주체 인정',none:'⚠ 틀에 못 넣음'};
+
+let ROWS=[];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+async function load(){
+  const pw=$('#pw').value;
+  $('#err').textContent='';
+  const {data,error}=await sb.rpc('jp_admin',{p_pass:pw});
+  if(error){$('#err').textContent='연결 오류';return;}
+  if(!data.ok){$('#err').textContent='비밀번호가 틀렸습니다';return;}
+  ROWS=data.rows;
+  $('#gate').style.display='none';
+  $('#app').style.display='block';
+  render();
+}
+$('#goBtn').onclick=load;
+$('#pw').addEventListener('keydown',e=>{if(e.key==='Enter')load();});
+
+function count(rows,key){
+  const m=new Map();
+  rows.forEach(r=>{
+    let v=r.payload?.[key];
+    if(v===undefined||v===null||v==='')return;
+    (Array.isArray(v)?v:[v]).forEach(x=>m.set(x,(m.get(x)||0)+1));
+  });
+  return [...m.entries()].sort((a,b)=>b[1]-a[1]);
+}
+function bars(entries,total,cls=''){
+  if(!entries.length) return '<div class="note">응답 없음</div>';
+  const max=Math.max(...entries.map(e=>e[1]));
+  return entries.map(([k,n])=>`<div class="bar-row"><span class="bl">${esc(k)}</span><div class="bar-track"><div class="bar-fill ${cls}" style="width:${n/max*100}%"></div></div><span class="bn">${n}${total?` / ${total}`:''}</span></div>`).join('');
+}
+function freeTexts(rows,key){
+  const out=rows.filter(r=>(r.payload?.[key]||'').trim()).map(r=>
+    `<div class="free-item"><div class="who">${esc(r.org||r.payload?.org||r.code)}</div>${esc(r.payload[key])}</div>`);
+  return out.length?out.join(''):'<div class="note">응답 없음</div>';
+}
+
+function render(){
+  const started=ROWS.filter(r=>r.started&&(r.step>0||Object.keys(r.payload||{}).length>0));
+  const done=started.filter(r=>r.submitted_at);
+  const ing=started.filter(r=>!r.submitted_at);
+  const N=started.length;
+  $('#meta').textContent=`발급 ${ROWS.length}개 · 완료 ${done.length} · 작성중 ${ing.length} · 미시작 ${ROWS.length-started.length} — ${new Date().toLocaleString('ko-KR')}`;
+
+  let h='';
+
+  /* 회수 현황 */
+  h+=`<h2>회수 현황</h2><div class="card"><table><tr><th>코드</th><th>기관(입력)</th><th>이름</th><th>상태</th><th>진행</th><th>마지막 저장</th></tr>`;
+  ROWS.forEach(r=>{
+    const st=r.submitted_at?'<span class="tag done">완료</span>':(r.started&&(r.step>0||Object.keys(r.payload||{}).length)?'<span class="tag ing">작성중</span>':'<span class="tag no">미시작</span>');
+    h+=`<tr><td><b>${esc(r.code)}</b>${r.assigned_org?`<br><span style="color:var(--muted);font-size:11px">배정: ${esc(r.assigned_org)}</span>`:''}</td>
+      <td>${esc(r.org||'')}</td><td>${esc(r.name||'')}</td><td>${st}</td>
+      <td>${r.started?esc(STEP_NAMES[Math.min(r.step??0,9)]):''}</td>
+      <td>${r.updated_at?new Date(r.updated_at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}):''}</td></tr>`;
+  });
+  h+='</table></div>';
+
+  /* 브리핑 반응 */
+  h+=`<h2>브리핑 반응</h2>
+  <div class="card"><b style="font-size:14px">① 실태 수치, 현장 체감과 비교하면?</b>${bars(count(started,'s1_fit'),N)}
+  <div style="height:14px"></div><b style="font-size:14px">가장 눈에 들어온 수치</b>${bars(count(started,'s1_pick'),N,'tg')}
+  ${freeTexts(started,'s1_note')}</div>
+  <div class="card"><b style="font-size:14px">③ 인지-참여 격차, 우리 사업에서는?</b>${bars(count(started,'s3_gap'),N)}
+  <div style="height:14px"></div><b style="font-size:14px">참여 청년의 유입 경로 (복수)</b>${bars(count(started,'s3_path'),N,'sea')}</div>`;
+
+  /* 매트릭스 */
+  const cellCount={};
+  started.forEach(r=>(r.payload?.s2_cells||[]).forEach(v=>cellCount[v]=(cellCount[v]||0)+1));
+  const vague=started.filter(r=>r.payload?.s2_vague).length;
+  h+=`<h2>② 보장제 매트릭스 — 우리 사업의 위치</h2><div class="card"><table class="matrix"><tr><th></th>${STAGES.map(s=>`<th>${s}</th>`).join('')}</tr>`;
+  AREAS.forEach((a,r)=>{
+    h+=`<tr><th class="rh">${a}</th>${STAGES.map((s,c)=>{
+      const n=cellCount[`${r}-${c}`]||0;
+      const bg=n?`rgba(47,107,79,${Math.min(.12+n*.15,.85)})`:'#fff';
+      return `<td><div class="mc" style="background:${bg};${n>1?'color:#fff':''}">${n||''}</div></td>`;
+    }).join('')}</tr>`;
+  });
+  h+=`</table><div class="note">"칸이 딱 떨어지지 않아 애매했다" 체크: <b>${vague}명</b> / ${N}</div></div>`;
+
+  /* 1부 항목 */
+  h+=`<h2>1부 — 조사 항목 평가</h2><div class="card"><table><tr><th>항목</th><th>글쎄요</th><th>도움됨</th><th>꼭 필요</th><th>제공 어려움</th></tr>`;
+  ITEMS.forEach(([k,t])=>{
+    const c=[0,0,0,0];
+    started.forEach(r=>{
+      const u=r.payload?.[`it_${k}_u`]; if(u>=1&&u<=3)c[u-1]++;
+      if(r.payload?.[`it_${k}_hard`])c[3]++;
+    });
+    h+=`<tr><td><b>${t}</b></td><td>${c[0]||''}</td><td>${c[1]||''}</td><td><b style="color:var(--green-deep)">${c[2]||''}</b></td><td><b style="color:var(--tangerine-deep)">${c[3]||''}</b></td></tr>`;
+  });
+  h+=`</table></div>
+  <div class="card"><b style="font-size:14px">Q1. 보충·수정 제안</b>${freeTexts(started,'q1')}</div>
+  <div class="card"><b style="font-size:14px">Q2. 정보 제공의 어려움</b>${freeTexts(started,'q2')}</div>`;
+
+  /* Q3/Q4 */
+  h+=`<h2>2부 — 먼저 물은 것 (Q3·Q4)</h2><div class="card"><b style="font-size:14px">Q3. 일자리·주거·문화 외에 필요한 요소</b>`;
+  const els=[];
+  started.forEach(r=>{
+    [1,2,3].forEach(i=>{
+      const el=(r.payload?.[`q3_el${i}`]||'').trim();
+      if(el)els.push({org:r.org||r.code,el,why:r.payload?.[`q3_why${i}`]||'',map:DIMS[r.payload?.[`map${i}`]]||''});
+    });
+  });
+  if(els.length){
+    h+='<table style="margin-top:10px"><tr><th>기관</th><th>요소</th><th>이유</th><th>본인 매핑</th></tr>';
+    els.forEach(e=>h+=`<tr><td>${esc(e.org)}</td><td><b>${esc(e.el)}</b></td><td>${esc(e.why)}</td><td>${e.map.startsWith('⚠')?`<b style="color:var(--tangerine-deep)">${esc(e.map)}</b>`:esc(e.map)}</td></tr>`);
+    h+='</table>';
+  }else h+='<div class="note">응답 없음</div>';
+  h+=`</div><div class="card"><b style="font-size:14px">Q4. '제주라서' 다른 것</b>`;
+  const q4=started.filter(r=>(r.payload?.q4_el||r.payload?.q4_txt||'').trim());
+  h+= q4.length? q4.map(r=>`<div class="free-item"><div class="who">${esc(r.org||r.code)}</div><b>${esc(r.payload.q4_el||'')}</b> — ${esc(r.payload.q4_txt||'')}</div>`).join('') : '<div class="note">응답 없음</div>';
+  h+='</div>';
+
+  /* 연구 카드 반응 */
+  const CARDS=[['c1','발견1 · 단일 집단 아님'],['c2','발견2 · 관계의 공백'],['c3','발견3 · 감각·액체적 관계'],['c4','발견4 · 지역은 미래']];
+  h+=`<h2>연구 발견에 대한 반응</h2><div class="card"><table><tr><th>발견</th><th>우리도 그렇다</th><th>조금 다르다</th><th>코멘트</th></tr>`;
+  CARDS.forEach(([k,t])=>{
+    let same=0,diff=0;const notes=[];
+    started.forEach(r=>{
+      if(r.payload?.[`${k}_r`]==='그렇다')same++;
+      if(r.payload?.[`${k}_r`]==='다르다')diff++;
+      const n=(r.payload?.[`${k}_note`]||'').trim();
+      if(n)notes.push(`<b>${esc(r.org||r.code)}:</b> ${esc(n)}`);
+    });
+    h+=`<tr><td><b>${t}</b></td><td>${same||''}</td><td>${diff||''}</td><td>${notes.join('<br>')}</td></tr>`;
+  });
+  h+='</table></div>';
+
+  /* 10차원 */
+  h+=`<h2>다섯 분야 열 차원</h2>
+  <div class="card"><b style="font-size:14px">우리 기관 사업이 속한 차원 (복수)</b>${bars(count(started,'s7_mine').map(([k,n])=>[DIMS[k]||k,n]),N)}</div>`;
+  const score={};
+  started.forEach(r=>(r.payload?.s7_top3||[]).forEach((k,i)=>score[k]=(score[k]||0)+(3-i)));
+  const scoreArr=Object.entries(score).sort((a,b)=>b[1]-a[1]).map(([k,n])=>[DIMS[k]||k,n]);
+  h+=`<div class="card"><b style="font-size:14px">제주에서 가장 부족한 차원 (1순위 3점 · 2순위 2점 · 3순위 1점)</b>${bars(scoreArr,0,'tg')}</div>
+  <div class="card"><b style="font-size:14px">Q5. 이 구분, 현장에서 쓸 만한가</b>${freeTexts(started,'q5')}</div>
+  <div class="card"><b style="font-size:14px">Q6. 수정·추가·삭제 제안</b>${freeTexts(started,'q6')}</div>`;
+
+  /* 단계 */
+  h+=`<h2>단계 — 결정 vs 지속</h2>
+  <div class="card"><b style="font-size:14px">우리 사업이 닿아 있는 쪽</b>${bars(count(started,'s8_side'),N)}
+  ${freeTexts(started,'s8_note')}</div>`;
+
+  /* Q7 */
+  h+=`<h2>Q7 — 청년에게 묻고 싶은 질문</h2><div class="card">${freeTexts(started,'q7')}</div>
+  <h2>자유 의견</h2><div class="card">${freeTexts(started,'free')}</div>`;
+
+  $('#content').innerHTML=h;
+}
+
+/* CSV */
+$('#csvBtn').onclick=()=>{
+  const keys=new Set();
+  ROWS.forEach(r=>Object.keys(r.payload||{}).forEach(k=>keys.add(k)));
+  const cols=['code','org','name','step','submitted_at','updated_at',...[...keys].sort()];
+  const lines=[cols.join(',')];
+  ROWS.forEach(r=>{
+    lines.push(cols.map(c=>{
+      let v=['code','org','name','step','submitted_at','updated_at'].includes(c)?r[c]:r.payload?.[c];
+      if(v===undefined||v===null)v='';
+      if(Array.isArray(v))v=v.join('|');
+      v=String(v).replace(/"/g,'""');
+      return /[",\n]/.test(v)?`"${v}"`:v;
+    }).join(','));
+  });
+  const blob=new Blob(['﻿'+lines.join('\n')],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='jeju_platform_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+};
+</script>
+</body>
+</html>
