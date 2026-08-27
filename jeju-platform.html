@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>제주 청년 정착 연구 — 현장과 함께 만드는 조사</title>
-<meta name="description" content="청년의 제주지역 정착을 위한 생태계 구축 조사연구 · 선행연구 공유와 조사 틀 검토">
+<meta name="description" content="제주 청년 정착 지원사업 조사 및 활용경로 연구 · 지역문제해결플랫폼 참여조직 협력연구 설문">
 <meta property="og:title" content="제주 청년 정착 연구 — 현장과 함께 만드는 조사">
-<meta property="og:description" content="선행연구가 확인한 것을 소개하고, 현장의 경험을 여쭙습니다. (약 10분)">
+<meta property="og:description" content="연구의 배경과 선행연구를 소개하고, 현장의 의견을 여쭙습니다. (약 15분)">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,7 +37,6 @@ body{
   font-family:'Noto Sans KR',sans-serif;
   color:var(--ink);
   background:var(--paper);
-  /* 현무암 구멍 텍스처 */
   background-image:
     radial-gradient(circle at 30% 40%, rgba(58,58,62,.05) 1.4px, transparent 2px),
     radial-gradient(circle at 70% 80%, rgba(58,58,62,.035) 1px, transparent 1.6px),
@@ -55,7 +54,7 @@ textarea,input,select{font-family:inherit;color:var(--ink);}
 .shell{display:none;max-width:1200px;margin:0 auto;padding:0 24px;}
 .shell.on{display:flex;gap:36px;align-items:flex-start;}
 .side{
-  width:236px;flex:none;position:sticky;top:0;
+  width:240px;flex:none;position:sticky;top:0;
   height:100dvh;display:flex;flex-direction:column;
   padding:28px 0 0;
 }
@@ -66,15 +65,15 @@ textarea,input,select{font-family:inherit;color:var(--ink);}
 .steps{list-style:none;margin-top:18px;}
 .steps li{
   display:flex;align-items:center;gap:9px;
-  padding:6.5px 8px;border-radius:10px;font-size:13px;color:var(--muted);
-  cursor:default;transition:background .15s,color .15s;line-height:1.3;
+  padding:6.5px 8px;border-radius:10px;font-size:12.5px;color:var(--muted);
+  cursor:default;transition:background .15s,color .15s;line-height:1.35;
 }
 .steps li .st-dot{width:9px;height:9px;border-radius:50%;background:var(--line);flex:none;transition:background .2s;}
 .steps li.done{color:var(--ink);cursor:pointer;}
 .steps li.done:hover{background:rgba(47,107,79,.07);}
+.steps li.done .st-dot{background:var(--green);}
 .steps li.now{color:var(--green-deep);font-weight:900;cursor:pointer;}
 .steps li.now .st-dot{background:var(--tangerine);box-shadow:0 0 0 3px rgba(240,138,36,.22);}
-.steps li.done .st-dot{background:var(--green);}
 .save-ind{font-size:11.5px;color:var(--muted);margin-top:14px;padding-left:8px;min-height:16px;transition:color .3s;}
 .save-ind.busy{color:var(--tangerine-deep);}
 .side .mtn{margin-top:auto;width:100%;}
@@ -85,20 +84,25 @@ textarea,input,select{font-family:inherit;color:var(--ink);}
 @keyframes pop{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
 
 .kicker{font-size:13px;font-weight:900;color:var(--tangerine-deep);letter-spacing:.05em;margin-bottom:10px;}
+.kicker .kmode{
+  display:inline-block;margin-left:8px;font-size:11px;font-weight:700;
+  border-radius:99px;padding:2px 10px;vertical-align:1px;
+}
+.kicker .kmode.read{background:var(--sea-pale);color:var(--sea);}
+.kicker .kmode.askm{background:var(--tangerine-pale);color:var(--tangerine-deep);}
 .h-title{font-size:30px;font-weight:900;line-height:1.32;letter-spacing:-.015em;margin-bottom:14px;text-wrap:balance;}
-.h-sub{font-size:15.5px;line-height:1.78;color:#4C574E;max-width:660px;}
+.h-sub{font-size:15.5px;line-height:1.8;color:#4C574E;max-width:680px;}
 .h-sub b{color:var(--ink);}
-.h-sub + .h-sub{margin-top:10px;}
+.h-sub + .h-sub{margin-top:11px;}
 
 .brief{
   background:var(--card);border:1.5px solid var(--line);border-radius:20px;
   padding:26px 28px;margin-top:24px;box-shadow:0 3px 14px var(--shadow);
 }
-.brief h3{font-size:18px;font-weight:900;margin-bottom:12px;color:var(--green-deep);}
+.brief h3{font-size:18.5px;font-weight:900;margin-bottom:12px;color:var(--green-deep);}
 .brief p{font-size:15px;line-height:1.85;color:#414B43;}
 .brief p+p{margin-top:11px;}
 .brief .src{font-size:11.5px;color:var(--muted);margin-top:14px;}
-.blocknum{font-size:12px;font-weight:900;color:var(--muted);letter-spacing:.06em;margin:34px 0 -14px;}
 
 /* 돌하르방 말풍선 */
 .guide{display:flex;gap:16px;align-items:flex-start;margin-top:26px;}
@@ -116,10 +120,11 @@ textarea,input,select{font-family:inherit;color:var(--ink);}
 /* 질문 블록 */
 .ask{
   background:var(--card);border:1.5px solid var(--line);border-left:5px solid var(--tangerine);
-  border-radius:16px;padding:22px 24px;margin-top:16px;box-shadow:0 2px 10px var(--shadow);
+  border-radius:16px;padding:22px 24px;margin-top:18px;box-shadow:0 2px 10px var(--shadow);
 }
 .ask .q{font-size:16px;font-weight:900;line-height:1.55;margin-bottom:6px;}
-.ask .qs{font-size:13.5px;color:var(--muted);line-height:1.65;margin-bottom:14px;}
+.ask .qs{font-size:13.5px;color:var(--muted);line-height:1.68;margin-bottom:14px;}
+.ask .q .qn{color:var(--tangerine-deep);margin-right:6px;}
 
 /* 칩 */
 .chips{display:flex;flex-wrap:wrap;gap:9px;}
@@ -130,30 +135,12 @@ textarea,input,select{font-family:inherit;color:var(--ink);}
 }
 .chip:hover{border-color:var(--green);}
 .chip.sel{background:var(--green);border-color:var(--green);color:#fff;font-weight:700;}
-.chips.tang .chip.sel{background:var(--tangerine);border-color:var(--tangerine);}
-.chips.col{flex-direction:column;align-items:stretch;}
-.chips.col .chip{border-radius:13px;padding:12px 16px;}
-
-/* 리커트 */
-.lik{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.lik .lk-lab{font-size:12px;color:var(--muted);line-height:1.35;max-width:110px;}
-.lik .lk-lab.hi{text-align:left;}
-.lik .lk-lab.lo{text-align:right;}
-.lik .lk-dots{display:flex;gap:7px;}
-.lik .lk-dot{
-  width:38px;height:38px;border-radius:50%;border:2px solid var(--line);background:#fff;
-  font-size:13.5px;font-weight:700;color:var(--muted);transition:all .13s;
-}
-.lik .lk-dot:hover{border-color:var(--green);}
-.lik .lk-dot.sel{background:var(--green);border-color:var(--green);color:#fff;}
-.lik.mini .lk-dot{width:30px;height:30px;font-size:12px;}
 
 textarea{
   width:100%;background:#FFF;border:1.8px solid var(--line);border-radius:13px;
   padding:13px 15px;font-size:14.5px;line-height:1.7;resize:vertical;min-height:92px;
   transition:border-color .15s;
 }
-textarea.oneline{min-height:52px;}
 textarea:focus,input[type=text]:focus{outline:none;border-color:var(--green);}
 input[type=text]{
   width:100%;background:#FFF;border:1.8px solid var(--line);border-radius:12px;
@@ -174,11 +161,45 @@ input[type=text]{
 .btn-prev{background:transparent;color:var(--muted);font-weight:700;padding:15px 14px;}
 .btn-prev:hover{color:var(--ink);}
 .btn-ghost{background:#fff;border:1.8px solid var(--line);color:var(--ink);box-shadow:none;font-weight:700;}
+.gate-msg{font-size:12.5px;color:var(--tangerine-deep);font-weight:700;text-align:right;flex:1;}
 
 /* ══════════ 시각화 공통 ══════════ */
 .viz{margin:18px 0 4px;}
 .viz svg{width:100%;height:auto;display:block;}
 .viz-cap{font-size:11.5px;color:var(--muted);margin-top:8px;line-height:1.6;}
+
+/* 오늘 여쭙는 두 가지 */
+.two-asks{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:20px;}
+.ta-card{
+  background:var(--card);border:1.8px solid var(--green);border-radius:16px;
+  padding:19px 21px;box-shadow:0 3px 12px var(--shadow);
+}
+.ta-card .ta-n{font-size:12px;font-weight:900;color:var(--tangerine-deep);letter-spacing:.04em;margin-bottom:6px;}
+.ta-card .ta-t{font-size:16.5px;font-weight:900;line-height:1.45;margin-bottom:7px;}
+.ta-card p{font-size:13px;color:#5A6459;line-height:1.65;}
+
+/* 인지-참여 격차 바 */
+.gapviz{margin-top:16px;display:grid;gap:16px;}
+.gap-set .gap-y{font-size:13px;font-weight:900;color:var(--basalt);margin-bottom:7px;}
+.gap-row{display:flex;align-items:center;gap:10px;margin-top:6px;}
+.gap-row .gl{width:52px;font-size:12px;color:var(--muted);font-weight:700;flex:none;text-align:right;}
+.gap-track{flex:1;height:19px;background:#EDE8DA;border-radius:99px;overflow:hidden;}
+.gap-fill{height:100%;border-radius:99px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:11px;font-weight:900;color:#fff;min-width:34px;}
+.gap-fill.know{background:var(--sea);}
+.gap-fill.use{background:var(--tangerine);}
+
+/* 보장제 정적 매트릭스 */
+.matrix-wrap{overflow-x:auto;margin-top:16px;}
+.smx{border-collapse:separate;border-spacing:5px;width:100%;min-width:560px;}
+.smx th{font-size:12px;font-weight:900;color:var(--basalt-soft);padding:5px 4px;line-height:1.3;text-align:center;}
+.smx th.rowh{text-align:right;padding-right:10px;color:var(--green-deep);white-space:nowrap;font-size:13px;}
+.smx th.gh,.smx .ghc{color:var(--tangerine-deep);}
+.smx td{padding:0;}
+.smx .cell{height:40px;border-radius:10px;background:#fff;border:1.5px solid var(--line);}
+.smx .cell.ghost{
+  background:repeating-linear-gradient(45deg,#FBF3EA,#FBF3EA 6px,#F7E9DA 6px,#F7E9DA 12px);
+  border:2px dashed var(--tangerine);
+}
 
 /* 유형 카드 */
 .type-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;}
@@ -216,18 +237,42 @@ input[type=text]{
 .stat .num.sea{color:var(--sea);}
 .stat .lb{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.55;}
 
-/* 인지-참여 격차 바 */
-.gapviz{margin-top:16px;display:grid;gap:16px;}
-.gap-set .gap-y{font-size:13px;font-weight:900;color:var(--basalt);margin-bottom:7px;}
-.gap-row{display:flex;align-items:center;gap:10px;margin-top:6px;}
-.gap-row .gl{width:52px;font-size:12px;color:var(--muted);font-weight:700;flex:none;text-align:right;}
-.gap-track{flex:1;height:19px;background:#EDE8DA;border-radius:99px;overflow:hidden;}
-.gap-fill{height:100%;border-radius:99px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:11px;font-weight:900;color:#fff;min-width:34px;}
-.gap-fill.know{background:var(--sea);}
-.gap-fill.use{background:var(--tangerine);}
+/* ══════════ 파트 3 항목 평가 ══════════ */
+.sample-card{
+  background:var(--sea-pale);border:1.5px solid #CBDEE9;border-radius:16px;
+  padding:19px 21px;margin-top:18px;font-size:13.5px;line-height:1.7;
+}
+.sample-card .sc-t{font-size:15px;font-weight:900;color:var(--sea);margin-bottom:8px;}
+.sample-card .row{display:flex;gap:8px;padding:3px 0;border-bottom:1px dashed #CBDEE9;}
+.sample-card .row:last-child{border-bottom:none;}
+.sample-card .k{width:118px;flex:none;font-weight:700;color:#33688A;}
+.item-list{margin-top:20px;display:grid;gap:13px;}
+.item{
+  background:var(--card);border:1.5px solid var(--line);border-radius:15px;
+  padding:17px 19px;box-shadow:0 2px 8px var(--shadow);
+}
+.item .it-t{font-size:15.5px;font-weight:900;}
+.item .it-def{font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:4px;}
+.item .it-ctrl{display:flex;align-items:center;gap:14px;margin-top:12px;flex-wrap:wrap;}
+.seg{display:flex;border:1.8px solid var(--line);border-radius:99px;overflow:hidden;background:#fff;}
+.seg button{border:none;background:transparent;padding:8px 15px;font-size:13px;font-weight:700;color:var(--muted);border-right:1.5px solid var(--line);}
+.seg button:last-child{border-right:none;}
+.seg button.sel{background:var(--green);color:#fff;}
+.hardchk{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--basalt-soft);cursor:pointer;user-select:none;}
+.hardchk input{width:17px;height:17px;accent-color:var(--tangerine);cursor:pointer;flex:none;}
 
-/* ══════════ 파트 3 차원 카드 ══════════ */
-.dim-group{margin-top:24px;}
+/* 선질문 요소 입력 */
+.el-row{display:grid;grid-template-columns:1fr 1.6fr;gap:10px;margin-top:10px;}
+.el-row .idx{grid-column:1/-1;font-size:12.5px;font-weight:900;color:var(--tangerine-deep);margin-top:6px;}
+
+/* ══════════ 파트 4 차원 카드 ══════════ */
+.locked-note{
+  background:var(--card);border:2px dashed var(--line);border-radius:16px;
+  padding:22px;margin-top:20px;text-align:center;font-size:14px;color:var(--muted);line-height:1.7;
+}
+#frameWrap{display:none;}
+#frameWrap.on{display:block;animation:pop .5s ease both;}
+.dim-group{margin-top:22px;}
 .dim-group .dg-t{font-size:15px;font-weight:900;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
 .dim-group .dg-t .tag{color:#fff;font-size:11.5px;border-radius:7px;padding:3px 10px;}
 .dim-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
@@ -236,8 +281,8 @@ input[type=text]{
   padding:16px 18px;
 }
 .dim3 .d-t{font-size:15px;font-weight:900;margin-bottom:4px;}
-.dim3 .d-d{font-size:12.5px;color:#5A6459;line-height:1.6;margin-bottom:13px;}
-.dim3 .d-imp{font-size:12px;font-weight:700;color:var(--basalt-soft);margin-bottom:6px;}
+.dim3 .d-d{font-size:12.5px;color:#5A6459;line-height:1.6;}
+.dim3 .d-ex{font-size:11.5px;color:var(--muted);margin-top:7px;}
 .minechk{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--basalt-soft);cursor:pointer;user-select:none;margin-top:12px;padding-top:11px;border-top:1.5px dashed var(--line);}
 .minechk input{width:17px;height:17px;accent-color:var(--tangerine);cursor:pointer;flex:none;}
 .crossband{
@@ -246,6 +291,14 @@ input[type=text]{
   font-size:13.5px;line-height:1.7;color:#41534A;
 }
 .crossband b{color:var(--green-deep);}
+
+/* 선질문 → 차원 매핑 */
+.map-row{display:flex;align-items:center;gap:12px;margin-top:10px;flex-wrap:wrap;}
+.map-chip{background:var(--yellow);border-radius:99px;padding:8px 16px;font-size:14px;font-weight:900;color:#5C4A0E;}
+.map-row select{
+  flex:1;min-width:220px;background:#fff;border:1.8px solid var(--line);border-radius:11px;
+  padding:10px 12px;font-size:13.5px;
+}
 
 details.more{margin-top:16px;font-size:13px;color:#5A6459;}
 details.more summary{cursor:pointer;font-weight:700;color:var(--green-deep);font-size:13px;}
@@ -277,7 +330,10 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
 .resume-btns .btn{flex:1;padding:12px;font-size:14px;}
 
 /* 완료 */
-.done-wrap{text-align:center;padding-top:20px;}
+.done-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:22px;}
+.done-cell{background:var(--card);border:1.5px solid var(--line);border-radius:15px;padding:17px 18px;}
+.done-cell .dc-t{font-size:13px;font-weight:900;color:var(--tangerine-deep);margin-bottom:6px;}
+.done-cell p{font-size:13.5px;line-height:1.65;color:#4C574E;}
 
 /* 좁은 화면 */
 @media (max-width:1000px){
@@ -290,6 +346,9 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
   .dim-pair{grid-template-columns:1fr;}
   .type-cards{grid-template-columns:1fr;}
   .cmp-grid{grid-template-columns:1fr;}
+  .el-row{grid-template-columns:1fr;}
+  .two-asks{grid-template-columns:1fr;}
+  .done-grid{grid-template-columns:1fr;}
   .mobile-prog{display:block;position:sticky;top:0;z-index:40;background:rgba(245,241,230,.94);backdrop-filter:blur(8px);padding:10px 18px;margin:0 -18px;}
 }
 .mobile-prog{display:none;}
@@ -362,9 +421,11 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
 
     <!-- ─────────── S0 들어가는 화면 ─────────── -->
     <section class="screen" id="s0">
-      <div class="kicker">시작하기</div>
-      <h2 class="h-title">선행연구가 확인한 것을 소개하고,<br>현장의 경험을 여쭙습니다</h2>
-      <p class="h-sub">이 설문은 <b>「청년의 제주지역 정착을 위한 생태계 구축」</b> 조사연구의 한 부분입니다. 조사에 앞서 제주 발간자료 3종과 청년 정주·이주 연구 8편을 검토했습니다. 세 개의 화면에 걸쳐 그 내용을 소개하면서, 중간중간 여쭙겠습니다 — 연구가 확인한 것이 현장에서 보아온 것과 같은지. 여러분의 답이 이 연구의 조사 틀을 다듬는 데 쓰입니다. <b>10분이면 충분합니다.</b></p>
+      <div class="kicker">들어가며</div>
+      <h2 class="h-title">제주 청년 정착 지원사업의<br>지형도를 그리려 합니다</h2>
+      <p class="h-sub">안녕하세요. 제주 청년들이 제주에서 안정적으로 거주하며 정착의 기반을 만들어가는 과정을 지원하기 위해, 제주도의 많은 주체들이 노력하고 있습니다. 본 연구는 그 지원의 내용을 조사해 <b>'제주 청년 정착 지원사업의 지형도'</b>를 그리고, 그 많은 지원이 청년들에게 효과적으로 닿고 있는지 살펴보려 합니다.</p>
+      <p class="h-sub">이 지형도가 완성되면 — 각 기관은 지원사업의 제공자로서 <b>더 필요한 지원을 설계할 수 있는 자료</b>로 활용할 수 있고, 수요자인 청년은 <b>자신에게 적합한 사업을 찾아가는 경로</b>를 얻게 됩니다.</p>
+      <p class="h-sub">연구를 맡은 커먼즈웍스(주)는 연구 과정을 현장과 공유하고 의견을 수렴하며 진행하는 방식으로 일해 왔습니다. 이 설문도 같은 이유로 마련했습니다. 직접 제주의 청년을 만나고 지원해 오신 <b>현장의 경험이 연구에 적용될 수 있도록</b>, 읽어보시고 답변을 부탁드립니다. 앞의 두 파트는 읽는 자료이고, 뒤의 두 파트에서 의견을 여쭙습니다. 전체 15분 안팎입니다.</p>
 
       <div class="guide">
         <div class="dol"><svg viewBox="0 0 34 66"><use href="#dolh"/></svg></div>
@@ -396,19 +457,18 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
       </div>
       <div class="navrow">
         <span></span>
-        <button class="btn btn-next" data-go="1">파트 1 시작하기 →</button>
+        <button class="btn btn-next" data-go="1">파트 1 읽으러 가기 →</button>
       </div>
     </section>
 
-    <!-- ─────────── S1 파트 1 ─────────── -->
+    <!-- ─────────── S1 파트 1 (설명) 왜 이 조사인가 ─────────── -->
     <section class="screen" id="s1">
-      <div class="kicker">파트 1</div>
-      <h2 class="h-title">제주 청년, 지금 — 움직임과 격차</h2>
+      <div class="kicker">파트 1<span class="kmode read">읽는 자료</span></div>
+      <h2 class="h-title">왜 이 조사인가</h2>
 
-      <div class="blocknum">1-1</div>
       <div class="brief">
-        <h3>어디로 움직이고 있나</h3>
-        <p>제주는 2010년대 순유입의 대표 지역이었습니다. 2016년 한 해에만 만 사천 명 넘게 들어왔습니다. 지금은 반대입니다. 청년(19~39세)은 2022년부터 순유출로 돌아섰고, 2024년에는 2,400명이 줄었습니다. 최근 2년 연속, 제주는 전국에서 순유출률이 가장 높은 지역입니다.</p>
+        <h3>제주 청년의 흐름이 달라졌습니다</h3>
+        <p>제주는 2010년대 순유입의 대표 지역이었습니다. 2016년 한 해에만 만 사천 명 넘게 들어왔습니다. 지금은 방향이 바뀌었습니다. 청년(19~39세)은 2022년부터 순유출로 돌아섰고, 2024년에는 2,400명이 줄었습니다. 최근 2년 연속, 제주는 전국에서 순유출률이 가장 높은 지역이기도 합니다.</p>
         <div class="viz">
           <svg viewBox="0 0 640 190" xmlns="http://www.w3.org/2000/svg">
             <line x1="40" y1="110" x2="610" y2="110" stroke="#E3DECE" stroke-width="1.5"/>
@@ -425,79 +485,12 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
             <text x="560" y="180" text-anchor="middle" font-size="11" fill="#8B9088">2024 · 청년 순유출</text>
           </svg>
         </div>
-        <p>나가는 이유와 들어오는 이유는 다릅니다. 떠나는 사유의 1위는 <b>교육</b>, 들어오는 사유의 1위는 <b>직업</b>입니다. 움직임의 지도도 단순하지 않습니다. 제주시 동지역(노형동·연동·이도2동)에서는 청년이 빠져나가고, 서귀포시 읍면(대정읍·안덕면·표선면)으로는 들어옵니다. 떠난 청년의 절반 이상이 서울·경기로 갑니다.</p>
-        <div class="viz">
-          <svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg">
-            <!-- 제주 섬 -->
-            <path d="M110 130 Q150 92 230 84 Q320 76 400 90 Q470 100 500 128 Q510 146 490 162 Q430 190 330 196 Q220 200 150 178 Q104 158 110 130 Z" fill="#EAF2EC" stroke="#2F6B4F" stroke-width="2.5"/>
-            <path d="M270 128 Q305 108 340 128 Q322 120 305 120 Q288 120 270 128 Z" fill="#2F6B4F" opacity=".75"/>
-            <text x="305" y="152" text-anchor="middle" font-size="11" fill="#4C574E">한라산</text>
-            <!-- 유출: 제주시 동지역 -->
-            <circle cx="300" cy="99" r="9" fill="#3E7FA6"/>
-            <text x="300" y="80" text-anchor="middle" font-size="12" font-weight="900" fill="#3E7FA6">제주시 동지역 → 유출</text>
-            <text x="418" y="72" text-anchor="middle" font-size="10.5" fill="#8B9088">노형동 · 연동 · 이도2동</text>
-            <!-- 유입: 서귀포 읍면 -->
-            <circle cx="196" cy="172" r="9" fill="#F08A24"/>
-            <circle cx="255" cy="184" r="7" fill="#F08A24" opacity=".8"/>
-            <circle cx="385" cy="184" r="7" fill="#F08A24" opacity=".8"/>
-            <text x="268" y="218" text-anchor="middle" font-size="12" font-weight="900" fill="#D9740F">서귀포시 읍면 ← 유입</text>
-            <text x="268" y="233" text-anchor="middle" font-size="10.5" fill="#8B9088">대정읍 · 안덕면 · 표선면</text>
-            <!-- 도외 유출 화살표 -->
-            <path d="M330 92 Q420 40 540 34" fill="none" stroke="#3E7FA6" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
-            <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#3E7FA6"/></marker></defs>
-            <text x="556" y="28" font-size="12" font-weight="900" fill="#3E7FA6">서울 32.7%</text>
-            <text x="556" y="44" font-size="12" font-weight="900" fill="#3E7FA6">경기 21.5%</text>
-          </svg>
-        </div>
-      </div>
-      <div class="ask">
-        <div class="q">제주시 도심에서 빠져나가고 서귀포·읍면으로 들어오는 흐름 — 담당 사업의 현장에서도 느껴지시나요?</div>
-        <div class="lik" data-key="q11_lik" data-lo="거의 느끼지 못한다" data-hi="뚜렷이 느낀다"></div>
-        <div class="tt-label">체감하시는 방향이 다르다면, 어떻게 다른지 한 줄 남겨 주세요 (선택)</div>
-        <textarea class="oneline" data-key="q11_txt"></textarea>
       </div>
 
-      <div class="blocknum">1-2</div>
       <div class="brief">
-        <h3>청년은 한 종류가 아니다</h3>
-        <p>지금 제주에 사는 청년 열 명을 세워 보면, 일곱 명은 제주에서 계속 살아온 청년, 한 명은 나갔다 돌아온 U턴 청년, 두 명은 다른 지역에서 온 이주 청년입니다. 2025년부터 공식 통계가 이렇게 세 유형을 구분합니다. 세 유형은 온 길이 다릅니다. U턴 청년의 절반 이상은 교육 때문에 나갔다가 돌아왔고, 이주 청년은 직업과 가족을 따라 왔으며 절반 이상이 수도권에서 왔습니다.</p>
-        <div class="viz">
-          <svg viewBox="0 0 640 96" xmlns="http://www.w3.org/2000/svg" id="pictoRow">
-            <!-- 사람 픽토그램 10명: JS 없이 정적 -->
-            <g id="pg"></g>
-          </svg>
-        </div>
-        <div class="type-cards">
-          <div class="tcard"><div class="tc-h"><span class="tc-dot" style="background:var(--green)"></span>계속거주 71.9%</div><p>제주에서 계속 살아온 청년. 열 명 중 일곱입니다.</p></div>
-          <div class="tcard"><div class="tc-h"><span class="tc-dot" style="background:var(--tangerine)"></span>U턴 9.9%</div><p>나갔다 돌아온 청년. 과거에 떠난 사유의 56.5%가 교육이었습니다.</p></div>
-          <div class="tcard"><div class="tc-h"><span class="tc-dot" style="background:var(--sea)"></span>이주 18.2%</div><p>다른 지역에서 온 청년. 전입 사유는 직업 39.2%·가족 36.3%, 직전 거주지의 57.7%가 수도권입니다.</p></div>
-        </div>
-      </div>
-      <div class="ask">
-        <div class="q">담당하고 계신 사업에는 어떤 청년이 가장 많이 오는지 잠시 떠올려 보세요. 가장 가까운 쪽을 골라 주세요.</div>
-        <div class="chips" data-key="q12_type">
-          <button class="chip" data-val="계속거주">계속거주 청년</button>
-          <button class="chip" data-val="U턴">U턴 청년</button>
-          <button class="chip" data-val="이주">이주 청년</button>
-          <button class="chip" data-val="구분 안 해봄">구분해 본 적이 없다</button>
-        </div>
-      </div>
-
-      <div class="blocknum">1-3</div>
-      <div class="brief">
-        <h3>사업은 늘었는데, 닿고 있을까</h3>
-        <p>제주 청년정책의 규모는 작지 않습니다. 기본계획에 117개 과제, 5,522억 원이 편성되어 있고, 청년 1인당 예산은 전국 상위권입니다. 사업 수는 5년 사이 94개에서 117개로 늘었습니다. 같은 기간 청년 쪽의 수치는 이렇습니다. 정책을 알고 있다는 청년 27~29%. 실제 참여해 본 청년은 영역별로 0.7~0.9%. 심리상담을 받지 못한 이유의 1위는 <b>"어디로 가야 할지 몰라서"</b>였습니다.</p>
-        <div class="viz">
-          <svg viewBox="0 0 640 170" xmlns="http://www.w3.org/2000/svg">
-            <!-- 깔때기 -->
-            <path d="M60 20 L580 20 L470 75 L170 75 Z" fill="#2F6B4F" opacity=".88"/>
-            <path d="M170 82 L470 82 L400 130 L240 130 Z" fill="#3E7FA6" opacity=".85"/>
-            <path d="M240 137 L400 137 L340 162 L300 162 Z" fill="#F08A24"/>
-            <text x="320" y="53" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">사업 117개</text>
-            <text x="320" y="112" text-anchor="middle" font-size="14" font-weight="900" fill="#fff">알고 있다 ~29%</text>
-            <text x="320" y="155" text-anchor="middle" font-size="12" font-weight="900" fill="#fff">참여 ~1%</text>
-          </svg>
-        </div>
+        <h3>지원이 부족해서는 아닙니다</h3>
+        <p>제주 청년정책의 규모는 작지 않습니다. 기본계획에 117개 과제, 5,522억 원이 편성되어 있고, 청년 1인당 예산은 전국 상위권입니다. 사업 수는 5년 사이 94개에서 117개로 늘었습니다.</p>
+        <p>같은 기간 청년 쪽의 수치는 이렇습니다. 정책을 알고 있다는 청년 27~29%. 실제 참여해 본 청년은 영역별로 0.7~0.9%. 심리상담을 받지 못한 이유의 1위는 <b>"어디로 가야 할지 몰라서"(20.8%)</b>였습니다.</p>
         <div class="gapviz">
           <div class="gap-set">
             <div class="gap-y">2022년 (사업 94개)</div>
@@ -510,22 +503,23 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
             <div class="gap-row"><span class="gl">참여율</span><div class="gap-track"><div class="gap-fill use" style="width:3%;min-width:58px;">0.7~0.9%</div></div></div>
           </div>
         </div>
-        <p class="viz-cap">사업이 늘어나는 동안, 알고 있는 청년과 참여한 청년 사이의 간격은 좁혀지지 않았습니다.</p>
+        <p style="margin-top:14px;">사업이 늘어나는 동안에도 이 간격은 좁혀지지 않았습니다. 지원사업이 존재하는 것과 청년이 그 지원을 이용하는 것 사이에, <b>탐색과 안내의 다리</b>가 아직 놓이지 못한 상태라고 볼 수 있습니다.</p>
       </div>
-      <div class="ask">
-        <div class="q">청년이 지원사업에 닿지 못하는 이유, 현장에서 보시기엔 무엇이 큰가요?</div>
-        <div class="qs">두 개까지 골라 주세요.</div>
-        <div class="chips col" data-key="q13_why" data-multi="1" data-max="2">
-          <button class="chip" data-val="존재를 모른다">존재를 모른다</button>
-          <button class="chip" data-val="자격·조건 확인이 어렵다">알아도 자격·조건 확인이 어렵다</button>
-          <button class="chip" data-val="신청 절차 부담">신청 절차가 부담스럽다</button>
-          <button class="chip" data-val="해당된다고 생각 안 함">자기에게 해당된다고 생각하지 않는다</button>
-          <button class="chip" data-val="정보가 흩어져 있다">기관마다 정보가 흩어져 있다</button>
-          <button class="chip" data-val="기타">기타</button>
-        </div>
-        <div id="q13etcWrap" style="display:none;">
-          <div class="tt-label">기타 — 적어 주세요</div>
-          <input type="text" data-key="q13_etc">
+
+      <div class="brief">
+        <h3>그래서, 두 가지를 여쭙습니다</h3>
+        <p>지형도가 이 다리의 역할을 하려면 두 가지가 준비되어야 합니다. 실제 지도가 위도와 경도로 위치를 가늠하게 해 주듯, 지원사업을 조사하고 정리하는 데에도 <b>공통으로 적용할 규칙</b>이 필요합니다. 그리고 청년이 제주에 정착해 살아가는 데 <b>어떤 분야의 지원이 필요한지</b>, 그 범위를 담는 틀이 필요합니다. 이 둘은 서로 연결되어 있습니다 — 청년에게 실제로 필요한 것을 확인하고, 그 지원이 적절하게 전달되는 방법을 함께 고민하는 일이기 때문입니다.</p>
+        <div class="two-asks">
+          <div class="ta-card">
+            <div class="ta-n">파트 3에서</div>
+            <div class="ta-t">지도를 그리는 규칙</div>
+            <p>지원사업을 조사·정리할 때 어떤 정보 항목을 표준으로 삼을지 — 청년에게 유용한지, 기관이 제공할 수 있는지를 여쭙습니다.</p>
+          </div>
+          <div class="ta-card">
+            <div class="ta-n">파트 4에서</div>
+            <div class="ta-t">지원 분야의 틀</div>
+            <p>연구진이 정리한 다섯 분야 열 차원의 구분이 현장을 담아내는지 — 빠진 것, 맞지 않는 것을 여쭙습니다.</p>
+          </div>
         </div>
       </div>
 
@@ -539,15 +533,24 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
       </div>
     </section>
 
-    <!-- ─────────── S2 파트 2 ─────────── -->
+    <!-- ─────────── S2 파트 2 (설명) 선행연구에서 알게 된 것 ─────────── -->
     <section class="screen" id="s2">
-      <div class="kicker">파트 2</div>
-      <h2 class="h-title">연구들이 알려준 것</h2>
+      <div class="kicker">파트 2<span class="kmode read">읽는 자료</span></div>
+      <h2 class="h-title">선행연구에서 알게 된 것</h2>
+      <p class="h-sub">조사에 앞서 제주 발간자료 3종과 청년 정주·이주 연구 8편을 검토했습니다. 그 가운데 이 연구의 틀에 직접 반영된 발견 네 가지를 소개합니다. 여기서는 따로 여쭙는 것 없이, 읽어보시기만 하면 됩니다.</p>
 
-      <div class="blocknum">2-1</div>
       <div class="brief">
-        <h3>같은 질문, 유형마다 다른 답</h3>
-        <p>다른 지역의 연구들이 반복해서 확인한 것이 있습니다. 청년을 한 덩어리로 조사하면 보이지 않던 것이, 나눠서 보면 보인다는 것입니다. 강원도에 사는 청년과 밖에서 온 청년을 나눠 분석한 연구에서, 이주해 온 청년의 정주는 청년정책 만족도가 좌우했지만 나고 자란 청년에게는 정책이 아니라 자연환경이 작동했습니다. 광주 청년 1,000명을 분석한 연구에서도 정책을 아는 것이 광주 출신 청년의 이탈은 막았지만, 타지에서 온 청년에게는 효과가 없었고 대신 여가 만족이 작동했습니다. 전체 평균으로 물으면 이 차이는 전부 사라집니다.</p>
+        <h3>① 청년은 한 종류가 아닙니다</h3>
+        <p>지금 제주에 사는 청년 열 명을 세워 보면, 일곱 명은 제주에서 계속 살아온 청년, 한 명은 나갔다 돌아온 U턴 청년, 두 명은 다른 지역에서 온 이주 청년입니다. 2025년부터 공식 통계가 이렇게 세 유형을 구분합니다.</p>
+        <div class="viz">
+          <svg viewBox="0 0 640 96" xmlns="http://www.w3.org/2000/svg"><g id="pg"></g></svg>
+        </div>
+        <div class="type-cards">
+          <div class="tcard"><div class="tc-h"><span class="tc-dot" style="background:var(--green)"></span>계속거주 71.9%</div><p>제주에서 계속 살아온 청년. 열 명 중 일곱입니다.</p></div>
+          <div class="tcard"><div class="tc-h"><span class="tc-dot" style="background:var(--tangerine)"></span>U턴 9.9%</div><p>나갔다 돌아온 청년. 과거에 떠난 사유의 56.5%가 교육이었습니다.</p></div>
+          <div class="tcard"><div class="tc-h"><span class="tc-dot" style="background:var(--sea)"></span>이주 18.2%</div><p>다른 지역에서 온 청년. 전입 사유는 직업 39.2%·가족 36.3%입니다.</p></div>
+        </div>
+        <p style="margin-top:14px;">다른 지역의 연구들은, 이 유형에 따라 정주를 좌우하는 요인 자체가 달라진다는 것을 반복해서 확인했습니다. 청년을 한 덩어리로 조사하면 보이지 않던 것이, 나눠서 보면 보입니다.</p>
         <div class="cmp-grid">
           <div class="cmp"><div class="cm-h">강원 — 나고 자란 청년</div>
             <div class="row"><span>자연환경</span><span class="ox o">작동 ○</span></div>
@@ -565,17 +568,11 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
             <div class="row"><span>정책 인지·이용</span><span class="ox x">효과 없음 ×</span></div>
           </div>
         </div>
-      </div>
-      <div class="ask">
-        <div class="q">토착 청년과 이주 청년에게 필요한 지원이 다르다는 결과 — 현장 경험과 얼마나 가까운가요?</div>
-        <div class="lik" data-key="q21_lik" data-lo="현장과는 거리가 있다" data-hi="현장 경험과 가깝다"></div>
-        <div class="tt-label">떠오르는 사례가 있다면 한 줄로 들려주세요 (선택)</div>
-        <textarea class="oneline" data-key="q21_txt"></textarea>
+        <p style="margin-top:14px;">전체 평균으로 물으면 이 차이는 사라집니다. 본 조사의 표집과 분석이 세 유형 구분을 기본 축으로 삼는 이유입니다.</p>
       </div>
 
-      <div class="blocknum">2-2</div>
       <div class="brief">
-        <h3>조사 항목에 없던 것 — 관계와 마음</h3>
+        <h3>② 조사 항목에 없던 것 — 관계와 마음</h3>
         <p>기존 정주 조사의 항목을 그대로 펼치면 이렇습니다.</p>
         <div class="chk-grid">
           <span class="chk-item">일자리</span><span class="chk-item">주거</span><span class="chk-item">교육·돌봄</span>
@@ -583,36 +580,35 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
           <span class="chk-item">안전</span><span class="chk-item">보건의료</span><span class="chk-item">자연환경</span>
           <span class="chk-item blank">관계 — ?</span><span class="chk-item blank">마음 — ?</span>
         </div>
-        <p style="margin-top:14px;">아홉 개 가운데 사람과의 관계를 묻는 항목은 없습니다. 지역이 나를 받아들이는가, 나는 여기서 어떤 마음으로 사는가를 물은 조사도 없습니다.</p>
-        <p>그런데 실태는 바로 그 빈칸에서 움직이고 있습니다. 청년이 가장 중요하게 꼽는 가치는 여전히 '좋은 사람들과의 관계'입니다. 그런데 급히 큰돈이 필요할 때 도움받을 곳이 없다는 청년은 4년 사이 10.6%에서 17.7%로 늘었고, 우울 유병률은 두 배가 됐습니다(경남 조사, 전국 추세 동일). 제주에서도 계속 살고 싶은 이유의 2위는 가족·지인(28.7%)이고, 은둔 상태로 추정되는 청년이 8.4%입니다. 묻지 않아서 안 보였을 뿐, 청년의 답 속에는 이미 있었습니다.</p>
-        <div class="viz">
-          <svg viewBox="0 0 640 150" xmlns="http://www.w3.org/2000/svg">
-            <line x1="60" y1="120" x2="580" y2="120" stroke="#E3DECE" stroke-width="1.5"/>
-            <path d="M100 42 L540 40" fill="none" stroke="#2F6B4F" stroke-width="3" stroke-linecap="round"/>
-            <circle cx="100" cy="42" r="6" fill="#2F6B4F"/><circle cx="540" cy="40" r="6" fill="#2F6B4F"/>
-            <text x="320" y="28" text-anchor="middle" font-size="12.5" font-weight="900" fill="#2F6B4F">'좋은 사람들과의 관계가 매우 중요하다' 51.2% — 높게 유지</text>
-            <path d="M100 104 L540 74" fill="none" stroke="#F08A24" stroke-width="3" stroke-linecap="round"/>
-            <circle cx="100" cy="104" r="6" fill="#F08A24"/><circle cx="540" cy="74" r="6" fill="#F08A24"/>
-            <text x="100" y="140" text-anchor="middle" font-size="11.5" fill="#8B9088">2020 · 10.6%</text>
-            <text x="540" y="140" text-anchor="middle" font-size="11.5" fill="#8B9088">2024 · 17.7%</text>
-            <text x="320" y="98" text-anchor="middle" font-size="12.5" font-weight="900" fill="#D9740F">'급히 큰돈이 필요할 때 도움받을 곳이 없다' — 늘어나는 중</text>
-          </svg>
-        </div>
+        <p style="margin-top:14px;">아홉 개 가운데 사람과의 관계를 묻는 항목은 없습니다. 그런데 실태는 바로 그 빈칸에서 움직이고 있습니다. 청년이 가장 중요하게 꼽는 가치는 여전히 '좋은 사람들과의 관계'입니다. 그런데 급히 큰돈이 필요할 때 도움받을 곳이 없다는 청년은 4년 사이 10.6%에서 17.7%로 늘었고, 우울 유병률은 두 배가 됐습니다(경남 조사, 전국 추세 동일). 제주에서도 계속 살고 싶은 이유의 2위는 가족·지인(28.7%)이고, 은둔 상태로 추정되는 청년이 8.4%입니다. 묻지 않아서 보이지 않았을 뿐, 청년의 답 속에는 이미 있었습니다.</p>
         <div class="stats">
+          <div class="stat"><div class="num">51.2%</div><div class="lb">'좋은 사람들과의 관계'가 매우 중요 — 가치 항목 중 최상위 유지</div></div>
+          <div class="stat"><div class="num tg">10.6 → 17.7%</div><div class="lb">급히 큰돈이 필요할 때 도움받을 곳이 없다 (4년 사이)</div></div>
           <div class="stat"><div class="num tg">8.4%</div><div class="lb">제주 청년 중 은둔 상태로 추정</div></div>
-          <div class="stat"><div class="num sea">6.7%</div><div class="lb">심리상담을 이용해 본 청년</div></div>
         </div>
-      </div>
-      <div class="ask">
-        <div class="q">지원사업의 항목으로는 잡히지 않는 관계나 마음의 어려움 — 현장에서 만난 적이 있다면, 그 모습을 짧게 들려주세요.</div>
-        <div class="qs">이 답은 이후 청년 인터뷰의 질문을 만드는 데 쓰입니다.</div>
-        <textarea data-key="q22_txt"></textarea>
       </div>
 
-      <div class="blocknum">2-3</div>
       <div class="brief">
-        <h3>문화·여가, 그리고 머물게 하는 것</h3>
-        <p>강원 대학생 1,765명 조사에서 아홉 항목 중 만족도가 가장 낮은 것이 문화·여가였습니다. 그런데 정착 의사에 미치는 영향력은 일자리 다음이었습니다. 가장 채워지지 않았는데 가장 세게 작동하는 영역입니다. 제주 청년이 꼽은 문화·여가 필요 정책도 활동공간(57.9%), 프로그램(54.7%), 비용 지원(52.0%) — 절반 넘는 청년이 셋 다 원했습니다.</p>
+        <h3>제주도의 틀에서도, 같은 빈칸이 보입니다</h3>
+        <p>제주도는 『제주형 청년보장제』라는 정책 틀을 운영하고 있습니다. 4개 보장영역(도전·기회·자립·참여)과 생애주기 3+1단계(탐색기·사회진입기·안정기 + 전주기)를 교차한 구조입니다. 이 표 위에 실제 사업들을 놓아 보면, 두 개의 빈자리가 눈에 들어옵니다.</p>
+        <div class="matrix-wrap">
+          <table class="smx">
+            <tr><th></th><th>탐색기</th><th>사회진입기</th><th>안정기</th><th>전주기</th><th class="gh">지원 '방식'은?</th></tr>
+            <tr><th class="rowh">도전</th><td><div class="cell"></div></td><td><div class="cell"></div></td><td><div class="cell"></div></td><td><div class="cell"></div></td><td><div class="cell ghost"></div></td></tr>
+            <tr><th class="rowh">기회</th><td><div class="cell"></div></td><td><div class="cell"></div></td><td><div class="cell"></div></td><td><div class="cell"></div></td><td><div class="cell ghost"></div></td></tr>
+            <tr><th class="rowh">자립</th><td><div class="cell"></div></td><td><div class="cell"></div></td><td><div class="cell"></div></td><td><div class="cell"></div></td><td><div class="cell ghost"></div></td></tr>
+            <tr><th class="rowh">참여</th><td><div class="cell"></div></td><td><div class="cell"></div></td><td><div class="cell"></div></td><td><div class="cell"></div></td><td><div class="cell ghost"></div></td></tr>
+            <tr><th class="rowh ghc">관계는?</th><td><div class="cell ghost"></div></td><td><div class="cell ghost"></div></td><td><div class="cell ghost"></div></td><td><div class="cell ghost"></div></td><td></td></tr>
+            <tr><th class="rowh ghc">정서는?</th><td><div class="cell ghost"></div></td><td><div class="cell ghost"></div></td><td><div class="cell ghost"></div></td><td><div class="cell ghost"></div></td><td></td></tr>
+          </table>
+        </div>
+        <p style="margin-top:14px;">하나는 지원의 <b>'방식'</b>이라는 축입니다. 그 사업이 지원금인지, 교육인지, 커뮤니티인지 — 청년이 사업을 탐색할 때 가장 먼저 가늠하는 정보인데, 틀에는 이 축이 없습니다. 다른 하나는 <b>관계·정서</b>라는 분야입니다. 앞서 본 조사 항목의 빈칸이 정책 틀에서도 같은 자리에 있습니다. 파트 3과 파트 4에서 여쭙는 두 가지가 각각 이 두 빈자리와 닿아 있습니다.</p>
+        <div class="src">출처: 제주 청년정책 기본계획 2023~2027 (제주형 청년보장제)</div>
+      </div>
+
+      <div class="brief">
+        <h3>③ 문화·여가 — 가장 채워지지 않았는데, 크게 작동하는 영역</h3>
+        <p>강원 대학생 1,765명 조사에서 아홉 항목 중 만족도가 가장 낮은 것이 문화·여가였습니다. 그런데 정착 의사에 미치는 영향력은 일자리 다음이었습니다. 제주 청년이 꼽은 문화·여가 필요 정책도 활동공간(57.9%), 프로그램(54.7%), 비용 지원(52.0%) — 절반 넘는 청년이 셋 다 원했습니다. 문화를 '누리는 것'만이 아니라 '만드는 것'까지 넓혀 봐야 한다는 단서도 여러 연구에서 확인됩니다.</p>
         <div class="viz">
           <svg viewBox="0 0 640 210" xmlns="http://www.w3.org/2000/svg">
             <line x1="70" y1="170" x2="590" y2="170" stroke="#B9B29C" stroke-width="1.5"/>
@@ -628,10 +624,14 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
             <text x="360" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="#3E7FA6">주거</text>
           </svg>
         </div>
-        <p>하나 더 있습니다. 관계나 커뮤니티 같은 요인은 '들어올지 말지'를 정하는 시점의 조사에서는 통계에 잡히지 않았습니다. 연구자들은 이 요인이 정착한 뒤의 삶에서 작동한다고 단서를 달았습니다. 애착을 분해한 연구가 이를 뒷받침합니다. '고향이라서'와 '여기서 만든 관계와 앞으로의 계획이 있어서'는 별개의 애착이었고, 행복을 높이는 쪽은 후자였습니다. 고향 출신이라는 사실만으로 정주가 유지되지는 않고, 관계는 살면서 따로 만들어져야 합니다. 이동의 경로도 한 방향이 아닙니다. 몇 년 배우고 돌아올 계획으로 떠나는 청년들이 면접 연구에서 확인됐습니다. 제주 U턴 9.9%의 앞에도 이런 계획된 이동이 있을 수 있습니다.</p>
+      </div>
+
+      <div class="brief">
+        <h3>④ 오게 하는 것과, 머물게 하는 것</h3>
+        <p>관계나 커뮤니티 같은 요인은 '들어올지 말지'를 정하는 시점의 조사에서는 통계에 잡히지 않았습니다. 연구자들은 이 요인이 정착한 뒤의 삶에서 작동한다고 단서를 달았습니다. 애착을 분해한 연구도 이를 뒷받침합니다. '고향이라서'와 '여기서 만든 관계와 앞으로의 계획이 있어서'는 별개의 애착이었고, 행복을 높이는 쪽은 후자였습니다. 고향 출신이라는 사실만으로 정주가 유지되지는 않고, 관계는 살면서 따로 만들어져야 합니다.</p>
+        <p>이동의 경로도 한 방향이 아닙니다. 몇 년 배우고 돌아올 계획으로 떠나는 청년들이 면접 연구에서 확인됐습니다. 제주 U턴 9.9%의 앞에도 이런 계획된 이동이 있을 수 있습니다.</p>
         <div class="viz">
           <svg viewBox="0 0 640 190" xmlns="http://www.w3.org/2000/svg">
-            <!-- 경로: 탐색기 → 이주기 → 정착기 + U턴 회로 -->
             <rect x="60" y="76" width="130" height="44" rx="12" fill="#E4EFE7" stroke="#2F6B4F" stroke-width="1.8"/>
             <rect x="255" y="76" width="130" height="44" rx="12" fill="#E3EEF4" stroke="#3E7FA6" stroke-width="1.8"/>
             <rect x="450" y="76" width="130" height="44" rx="12" fill="#FDEEDC" stroke="#F08A24" stroke-width="1.8"/>
@@ -653,55 +653,155 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
           </svg>
         </div>
       </div>
-      <div class="ask">
-        <div class="q">문화·여가가 일자리 못지않게 정착에 작동한다는 결과, 얼마나 공감되시나요?</div>
-        <div class="lik" data-key="q23_lik1" data-lo="공감이 어렵다" data-hi="크게 공감한다"></div>
-      </div>
-      <div class="ask">
-        <div class="q">청년을 '오게 하는 것'과 '머물게 하는 것'이 다르다는 구분 — 담당 사업을 설명하는 데 쓸모가 있을까요?</div>
-        <div class="lik" data-key="q23_lik2" data-lo="글쎄, 잘 모르겠다" data-hi="쓸모가 있겠다"></div>
+
+      <div class="guide">
+        <div class="dol"><svg viewBox="0 0 34 66"><use href="#dolh"/></svg></div>
+        <div class="bubble">여기까지가 읽는 자료입니다. 이 발견들이 뒤에 나올 <b>다섯 분야 열 차원의 틀</b>에 반영되어 있습니다. 이제 여쭙는 파트로 넘어갑니다.</div>
       </div>
 
       <details class="more"><summary>이 파트의 출처</summary>
-        <div class="inner">김화연·이대웅(2022) · 최선·이정은(2022) · 최용석(2024) · 김주진·나주몽(2021) · 안성수·정세영(2025) · 송유진(2025) · 2025 제주청년통계조사</div>
+        <div class="inner">김화연·이대웅(2022) · 최선·이정은(2022) · 최용석(2024) · 김주진·나주몽(2021) · 안성수·정세영(2025) · 송유진(2025) · 노혜진 외(2024) · 2025 제주청년통계조사</div>
       </details>
 
       <div class="navrow">
         <button class="btn btn-prev" data-go="1">← 이전</button><span></span>
-        <button class="btn btn-next" data-go="3">파트 3으로 →</button>
+        <button class="btn btn-next" data-go="3">파트 3 · 설문 시작 →</button>
       </div>
     </section>
 
-    <!-- ─────────── S3 파트 3 ─────────── -->
+    <!-- ─────────── S3 파트 3 (설문) 1부: 지도를 그리는 규칙 ─────────── -->
     <section class="screen" id="s3">
-      <div class="kicker">파트 3</div>
-      <h2 class="h-title">이 틀이 현장을 담고 있나요</h2>
-      <p class="h-sub">지금까지의 내용을 모아, 이 연구는 청년 정착의 조건을 <b>다섯 분야 열 개 차원</b>으로 정리했습니다. 앞으로 도내 지원사업 전체를 이 좌표 위에 놓고, 사업이 몰린 자리와 비어 있는 자리를 확인하려 합니다. 그 전에, 이 틀을 현장의 눈으로 한번 살펴봐 주세요.</p>
+      <div class="kicker">파트 3 · 설문 1부<span class="kmode askm">여쭙는 자료</span></div>
+      <h2 class="h-title">지도를 그리는 규칙<br>— 조사 항목에 대한 의견</h2>
+      <p class="h-sub">제주도 내 지원사업의 종류는 다양하고, 청년에게 제공되는 정보도 기관이나 사업마다 다릅니다. 일정이나 참여 방법처럼 필수로 제공되는 정보도 있지만, 청년이 실제 참여를 고려할 때 필요한 정보는 따로 있습니다. 아래는 연구진이 도내 지원사업 일부를 테스트로 조사하면서 도출한 정보 항목입니다. 실제 사업 하나를 이 틀에 넣으면 이렇게 됩니다.</p>
+
+      <div class="sample-card">
+        <div class="sc-t">📄 예시 — 청년 전입 축하장려금 (탐라청년출발패키지)</div>
+        <div class="row"><span class="k">기관명</span><span>제주특별자치도 청년정책담당관</span></div>
+        <div class="row"><span class="k">지원영역</span><span>생계_생존 · 정서_지역애착</span></div>
+        <div class="row"><span class="k">사업 내용</span><span>도외 전입 청년에게 전입 축하장려금(탐나는전) 지급</span></div>
+        <div class="row"><span class="k">지원대상</span><span>도외에서 전입하는 19~39세 청년</span></div>
+        <div class="row"><span class="k">신청시기</span><span>상시신청</span></div>
+        <div class="row"><span class="k">지원 기간</span><span>최초 1회</span></div>
+        <div class="row"><span class="k">지원형태</span><span>지원금</span></div>
+        <div class="row"><span class="k">현재 상황·단계</span><span>이주 초기</span></div>
+        <div class="row"><span class="k">지속성</span><span>상시 활용 가능</span></div>
+        <div class="row"><span class="k">사업 상태</span><span>운영중</span></div>
+      </div>
 
       <div class="guide">
         <div class="dol"><svg viewBox="0 0 34 66"><use href="#dolh"/></svg></div>
-        <div class="bubble">각 차원마다 두 가지를 여쭙습니다. <b>① 청년의 정착에 얼마나 중요하다고 보시는지</b>를 현장의 감각으로 매겨 주시고, <b>② 담당 기관의 사업이 그 차원에 있다면</b> 아래 체크를 눌러 주세요. 체크해 주신 내용은 그대로 도내 사업 분포의 1차 자료가 됩니다.</div>
+        <div class="bubble">항목을 하나씩 살펴보면서 두 가지를 여쭙습니다. <b>① 사업을 찾는 청년에게 이 정보가 얼마나 도움이 될지</b>, 그리고 <b>② 여러분 기관이 이 정보를 제공하기 어려운지</b>. 어렵다는 체크가 많을수록 연구에는 더 값진 정보가 됩니다.</div>
       </div>
 
-      <div id="dimGrid"></div>
-
-      <div class="crossband"><b>가로지르는 축 — 주체성과 참여.</b> 열 개 차원 어디에서든, 청년이 대상에 머무는지 주체로 참여하는지를 함께 봅니다. 이 축은 별도 차원이 아니라 전체를 읽는 관점으로 둡니다.</div>
+      <div class="item-list" id="itemList"></div>
 
       <div class="ask">
-        <div class="q">이 틀에 담기지 않는 것이 있다면 — 현장에서 보아온 청년 정착의 조건 가운데 여기 없는 것을 적어 주세요.</div>
-        <div class="qs">이 문항이 이 설문에서 가장 중요한 질문입니다. 틀에 없는 것을 알려주시는 답이 연구에 가장 큰 도움이 됩니다.</div>
-        <textarea data-key="q33_txt"></textarea>
+        <div class="q"><span class="qn">Q1.</span>위 항목들에 대해 — 보충하거나 수정을 제안하고 싶은 내용이 있다면 적어주세요</div>
+        <div class="qs">각 기관이 이 항목들을 표준적으로 제공한다면 청년이 원하는 사업을 찾는 데 도움이 될지, 빠져 있는 항목은 없는지, 구분값(선택지)이 현장과 맞는지 — 자유롭게 적어주시면 됩니다.</div>
+        <textarea data-key="q1" placeholder="예) '지원대상'에 소득 기준 여부를 따로 표기하면 좋겠다 등"></textarea>
+      </div>
+      <div class="ask">
+        <div class="q"><span class="qn">Q2.</span>정보를 제공하는 입장에서 겪는 어려움이 있다면 적어주세요</div>
+        <div class="qs">위에서 '제공이 어렵다'고 체크한 항목이 왜 어려운지, 그리고 평소 청년 지원 업무에서 정보 제공·홍보와 관련해 겪었던 어려움이 있다면 함께 적어주세요.</div>
+        <textarea data-key="q2" placeholder="예) 예산이 연말에 확정되어 신청시기를 미리 안내하기 어렵다 등"></textarea>
+      </div>
+      <div class="navrow">
+        <button class="btn btn-prev" data-go="2">← 이전</button><span></span>
+        <button class="btn btn-next" data-go="4">파트 4로 →</button>
+      </div>
+    </section>
+
+    <!-- ─────────── S4 파트 4 (설문) 2부: 다섯 분야 열 차원 ─────────── -->
+    <section class="screen" id="s4">
+      <div class="kicker">파트 4 · 설문 2부<span class="kmode askm">여쭙는 자료</span></div>
+      <h2 class="h-title">한 청년이 제주에 정착하려면,<br>무엇이 필요할까요?</h2>
+
+      <div class="ask">
+        <div class="q"><span class="qn">Q3.</span>일자리·주거·문화인프라, 그다음은 무엇인가요?</div>
+        <div class="qs">잠시 뒤 연구진이 정리한 틀을 보여드릴 텐데, 그 전에 여러분의 경험을 먼저 듣고 싶습니다. 틀에 기대지 않은 현장의 언어가 연구에 필요해서요. 선행연구들이 공통으로 꼽는 일자리·주거·문화인프라 <b>외에</b>, 청년이 지역에 정착하기 위해 필요한 요소를 2~3가지 꼽는다면 무엇일까요? 이유도 함께 적어주세요. (최소 1가지)</div>
+        <div class="el-row">
+          <div class="idx">요소 ①</div>
+          <input type="text" data-key="q3_el1" placeholder="필요한 요소">
+          <input type="text" data-key="q3_why1" placeholder="이유">
+          <div class="idx">요소 ②</div>
+          <input type="text" data-key="q3_el2" placeholder="필요한 요소">
+          <input type="text" data-key="q3_why2" placeholder="이유">
+          <div class="idx">요소 ③ (선택)</div>
+          <input type="text" data-key="q3_el3" placeholder="필요한 요소">
+          <input type="text" data-key="q3_why3" placeholder="이유">
+        </div>
+        <div class="tt-label" style="margin-top:18px;">덧붙여 — '제주라서' 다르게 작동하거나, 지원을 설계할 때 특별히 고려할 요소가 있다면 하나 골라 적어주세요 (선택)</div>
+        <input type="text" data-key="q4_el" placeholder="제주라서 다른 요소 하나">
+        <div style="height:10px"></div>
+        <textarea data-key="q4_txt" placeholder="그것이 제주에서 어떻게 다른지" style="min-height:70px;"></textarea>
+        <div style="margin-top:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+          <button class="btn btn-next" id="openFrameBtn" style="padding:12px 22px;font-size:14px;">다 적었어요 — 틀을 보여주세요</button>
+          <span class="gate-msg" id="gate4" style="text-align:left;"></span>
+        </div>
+      </div>
+
+      <div class="locked-note" id="lockedNote">연구진의 틀은 위 질문에 답하신 뒤에 열립니다.<br>여러분의 답이 틀보다 먼저인 것이 이 조사의 순서입니다.</div>
+
+      <div id="frameWrap">
+        <div class="brief" style="margin-top:26px;">
+          <h3>연구진이 정리한 틀 — 다섯 분야, 열 차원</h3>
+          <p>지금까지의 검토를 모아, 청년 정착의 조건을 다섯 분야 열 개 차원으로 정리했습니다. 파트 2에서 보신 관계와 마음이 독립된 분야로 들어 있습니다. 하나의 사업이 여러 차원에 걸칠 수 있고, 주목적과 부목적은 구분해 조사할 계획입니다. 앞으로 도내 지원사업 전체를 이 좌표 위에 놓고, 사업이 몰린 자리와 비어 있는 자리를 확인하려 합니다.</p>
+        </div>
+
+        <div id="dimGrid"></div>
+
+        <div class="crossband"><b>가로지르는 축 — 주체성과 참여.</b> 열 개 차원 어디에서든, 청년이 대상에 머무는지 주체로 참여하는지를 함께 봅니다. 이 축은 별도 차원이 아니라 전체를 읽는 관점으로 둡니다.</div>
+
+        <div class="ask" id="mapAsk">
+          <div class="q"><span class="qn">Q4.</span>방금 적어주신 요소는 이 틀 어디에 들어가나요?</div>
+          <div class="qs">위에서 적어주신 요소를 차원에 이어 보세요. <b>"어디에도 넣기 어렵다"면 그렇게 골라주세요 — 그 답이 이 틀의 빈틈을 알려주는 가장 값진 답입니다.</b></div>
+          <div id="mapRows"></div>
+        </div>
+
+        <div class="ask">
+          <div class="q"><span class="qn">Q5.</span>이 구분, 실제 현장에서 활용하기에 적합할까요?</div>
+          <div class="qs">이런 구분이 있다면 지원정책을 설계하거나 제공할 때 어떤 도움이 될 수 있을지, 혹은 현장에서는 어떤 지점이 잘 맞지 않을지 적어주세요.</div>
+          <textarea data-key="q5"></textarea>
+        </div>
+        <div class="ask">
+          <div class="q"><span class="qn">Q6.</span>수정하거나, 추가·삭제가 필요한 영역이 있다면 적어주세요</div>
+          <div class="qs">위에서 "어디에도 넣기 어렵다"고 하신 요소가 있다면, 그 요소를 담을 자리를 제안해 주셔도 좋습니다.</div>
+          <textarea data-key="q6"></textarea>
+        </div>
       </div>
 
       <div class="navrow">
-        <button class="btn btn-prev" data-go="2">← 이전</button><span></span>
+        <button class="btn btn-prev" data-go="3">← 이전</button>
+        <span class="gate-msg" id="gate4b"></span>
+        <button class="btn btn-next" data-go="5" id="next4" disabled>마지막으로 →</button>
+      </div>
+    </section>
+
+    <!-- ─────────── S5 마지막 질문 ─────────── -->
+    <section class="screen" id="s5">
+      <div class="kicker">마지막<span class="kmode askm">여쭙는 자료</span></div>
+      <h2 class="h-title">이번에는 저희가<br>청년을 만나러 갑니다</h2>
+      <p class="h-sub">이 조사가 끝나면 연구진은 설문과 인터뷰로 제주 청년들을 직접 만납니다. 지원사업을 제공해 오면서 <b>청년들에게 궁금했지만 물을 기회가 없었던 것</b>이 있다면, 저희가 대신 여쭤보겠습니다.</p>
+
+      <div class="ask">
+        <div class="q"><span class="qn">Q7.</span>청년들에게 직접 묻고 싶은 질문이 있다면 적어주세요</div>
+        <div class="qs">지원정책의 활용과 접근에 관한 것이면 더 좋지만, 무엇이든 괜찮습니다.</div>
+        <textarea data-key="q7" placeholder="예) 우리 사업을 신청하려다 그만둔 적이 있는지, 왜였는지 궁금하다"></textarea>
+      </div>
+      <div class="ask">
+        <div class="q">연구에 하고 싶은 말씀이 있다면 자유롭게 남겨주세요 (선택)</div>
+        <textarea data-key="free"></textarea>
+      </div>
+      <div class="navrow">
+        <button class="btn btn-prev" data-go="4">← 이전</button><span></span>
         <button class="btn btn-next" id="submitBtn">제출하기 🍊</button>
       </div>
     </section>
 
     <!-- ─────────── 완료 ─────────── -->
     <section class="screen" id="sdone">
-      <div class="done-wrap">
+      <div style="text-align:center;padding-top:20px;">
         <svg viewBox="0 0 260 110" style="max-width:300px;margin:0 auto;" xmlns="http://www.w3.org/2000/svg">
           <path d="M0 92 Q40 84 70 64 Q100 42 130 35 Q160 42 190 64 Q220 84 260 92 L260 110 L0 110 Z" fill="#2F6B4F" opacity=".92"/>
           <ellipse cx="130" cy="39" rx="13" ry="4" fill="#5B8FAE" opacity=".55"/>
@@ -710,12 +810,18 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
           <circle cx="208" cy="24" r="10" fill="#F08A24"/>
           <path d="M208 14 Q210 10 214 9" fill="none" stroke="#2F6B4F" stroke-width="2" stroke-linecap="round"/>
         </svg>
-        <h2 class="h-title" style="margin-top:16px;">답해 주셔서 고맙습니다</h2>
-        <p class="h-sub" style="margin:0 auto;max-width:520px;">응답은 이 연구의 조사 틀을 확정하고 청년 인터뷰를 설계하는 데 쓰입니다.<br>결과는 <b>10월 지역상생축제</b>에서 다시 공유드리겠습니다.</p>
-        <p class="h-sub" style="margin:18px auto 0;max-width:520px;">제출 후에도 코드로 다시 들어오면 답을 수정할 수 있습니다.<br>— 커먼즈웍스(주)</p>
-        <div style="margin-top:22px;">
-          <button class="btn btn-ghost" id="reviewBtn">내 답변 다시 보기 / 수정하기</button>
-        </div>
+        <h2 class="h-title" style="margin-top:16px;">귀한 시간 내어 답해주셔서<br>감사합니다</h2>
+        <p class="h-sub" style="margin:0 auto;">답해주신 내용은 이렇게 쓰입니다.</p>
+      </div>
+      <div class="done-grid">
+        <div class="done-cell"><div class="dc-t">Q1·Q2 → 조사 항목 확정</div><p>항목별 평가와 '제공이 어렵다'는 체크는 전수조사 항목을 확정하고, 기관에 무리가 가지 않는 수집 방식을 정하는 데 반영됩니다.</p></div>
+        <div class="done-cell"><div class="dc-t">Q3~Q6 → 틀의 검증</div><p>틀을 보기 전에 적어주신 요소와, 틀에 대한 의견은 다섯 분야 열 차원이 현장을 담아내는지 확인하는 근거가 됩니다.</p></div>
+        <div class="done-cell"><div class="dc-t">사업 위치 체크 → 분포 자료</div><p>우리 기관 사업이 있다고 체크해 주신 차원은 도내 사업 분포의 1차 자료가 됩니다.</p></div>
+        <div class="done-cell"><div class="dc-t">Q7 → 청년에게 전달</div><p>청년에게 묻고 싶다고 적어주신 질문은 설문·인터뷰 문항 설계에 검토·반영하고, 결과를 공유드립니다.</p></div>
+      </div>
+      <p class="h-sub" style="margin-top:24px;text-align:center;">제출 후에도 코드로 다시 들어오면 답을 수정할 수 있습니다.<br>결과는 10월 지역상생축제에서 다시 공유드리겠습니다. — 커먼즈웍스(주)</p>
+      <div style="text-align:center;margin-top:18px;">
+        <button class="btn btn-ghost" id="reviewBtn">내 답변 다시 보기 / 수정하기</button>
       </div>
     </section>
 
@@ -751,20 +857,31 @@ const sb = createClient(
 const DEMO = new URLSearchParams(location.search).get('demo') === '1';
 
 /* ══════════ 데이터 정의 ══════════ */
-const STEP_NAMES = ['시작하기','파트 1 · 지금, 제주','파트 2 · 연구가 알려준 것','파트 3 · 틀 살펴보기'];
-const LAST = 3;
+const STEP_NAMES = ['들어가며','파트 1 · 왜 이 조사인가','파트 2 · 선행연구','파트 3 · 지도를 그리는 규칙','파트 4 · 다섯 분야 열 차원','마지막 질문'];
+const LAST = 5;
+
+const ITEMS = [
+  {k:'area',  t:'지원영역',        def:'생계 · 관계 · 공간 · 정서 · 문화 — 어떤 분야의 지원인지 (파트 4의 틀과 연결됩니다)'},
+  {k:'scale', t:'지원규모',        def:'예산 규모, 모집 인원 등 — 지원의 크기를 가늠하는 정보'},
+  {k:'when',  t:'신청시기',        def:'상시 / 월별 / 분기별 / 특정 시기 / 비정기 — 청년이 자신의 일정과 참여 가능성을 판단하는 기준'},
+  {k:'dur',   t:'지원 기간',       def:'일회성 / 단기(1개월 미만) / 중기(1~6개월) / 장기(6개월 이상)'},
+  {k:'form',  t:'지원형태',        def:'지원금 / 교육 / 커뮤니티 / 인턴십 등 — 자신에게 필요한 지원의 형태로 사업을 탐색하는 분류'},
+  {k:'stage', t:'청년의 현재 상황·단계', def:'이주·정착 / 진로·취업 준비 / 재직 / 창업 준비 / 창업·사업 운영 / 일·생활 전환 / 결혼·출산기 / 모든 청년 — 취·창업 준비에 집중된 기존 분류를 넓힌 구분'},
+  {k:'repeat',t:'지속성·반복성',    def:'상시 / 정기 / 비정기 / 일회성 — 앞으로도, 반복적으로 이용할 수 있는 사업인지'},
+  {k:'status',t:'사업 상태',        def:'운영중 / 26년 미운영 — 25·26년 연속 미운영 사업은 조사에서 제외'},
+];
 
 const DIMS = [
-  {k:'liv1', f:'생계', c:'#2F6B4F', t:'생존을 유지하는 일',        d:'고용·소득, 생활비 등 살아가는 기반을 받치는 지원'},
-  {k:'liv2', f:'생계', c:'#2F6B4F', t:'하고 싶은 일로 성장하는 일', d:'경력 개발, 창업, 일 경험 등 자기 일을 만들어 가는 지원'},
-  {k:'rel1', f:'관계', c:'#F08A24', t:'또래 커뮤니티를 만드는 일',  d:'또래 관계, 모임·커뮤니티를 만들고 이어 가는 지원'},
-  {k:'rel2', f:'관계', c:'#F08A24', t:'지역의 주민이 되는 일',      d:'주민과의 관계, 지역에 스며드는 과정을 돕는 지원'},
-  {k:'spc1', f:'공간', c:'#3E7FA6', t:'살 곳',                     d:'주거, 그리고 의료·안전 같은 생활 인프라'},
-  {k:'spc2', f:'공간', c:'#3E7FA6', t:'일하고 활동할 곳',           d:'업무·창작·활동을 위한 공간'},
-  {k:'emo1', f:'정서', c:'#8A5FA0', t:'지역이 청년을 대하는 태도',  d:'청년을 주체로 받아들이는 분위기, 참여의 통로'},
-  {k:'emo2', f:'정서', c:'#8A5FA0', t:'청년 자신의 마음',           d:'심리·마음 건강, 고립에 대한 지원'},
-  {k:'cul1', f:'문화', c:'#B08126', t:'누리는 것',                  d:'문화 향유, 여가·취미 활동'},
-  {k:'cul2', f:'문화', c:'#B08126', t:'만드는 것',                  d:'창작·표현, 청년이 주도하는 문화'},
+  {k:'liv1', f:'생계', c:'#2F6B4F', t:'생존을 유지하는 일',        d:'고용·소득, 생활비 등 살아가는 기반을 받치는 지원', ex:'면접지원 · 수당 · 생활비 지원'},
+  {k:'liv2', f:'생계', c:'#2F6B4F', t:'하고 싶은 일로 성장하는 일', d:'경력 개발, 창업, 일 경험 등 자기 일을 만들어 가는 지원', ex:'직무역량개발 · 일경험 제공'},
+  {k:'rel1', f:'관계', c:'#F08A24', t:'또래 커뮤니티를 만드는 일',  d:'또래 관계, 모임·커뮤니티를 만들고 이어 가는 지원', ex:'커뮤니티지원 · 동아리 활동비'},
+  {k:'rel2', f:'관계', c:'#F08A24', t:'지역의 주민이 되는 일',      d:'주민과의 관계, 지역에 스며드는 과정을 돕는 지원', ex:'지역소개 · 정착안내'},
+  {k:'spc1', f:'공간', c:'#3E7FA6', t:'살 곳',                     d:'주거, 그리고 의료·안전 같은 생활 인프라', ex:'주거비 지원 · 청년 주택'},
+  {k:'spc2', f:'공간', c:'#3E7FA6', t:'일하고 활동할 곳',           d:'업무·창작·활동을 위한 공간', ex:'코워킹 공간 · 레지던시'},
+  {k:'emo1', f:'정서', c:'#8A5FA0', t:'청년 자신의 마음',           d:'심리·마음 건강, 고립에 대한 지원', ex:'심리검사 · 진료비 지원'},
+  {k:'emo2', f:'정서', c:'#8A5FA0', t:'지역이 청년을 대하는 태도',  d:'청년을 주체로 받아들이는 분위기, 참여의 통로', ex:'청년정책협의체 · 위원회 참여'},
+  {k:'cul1', f:'문화', c:'#B08126', t:'누리는 것',                  d:'문화 향유, 여가·취미 활동', ex:'문화비 지원 · 할인'},
+  {k:'cul2', f:'문화', c:'#B08126', t:'만드는 것',                  d:'창작·표현, 청년이 주도하는 문화', ex:'청년주도 축제 · 창작활동 지원'},
 ];
 
 /* ══════════ 상태 ══════════ */
@@ -807,65 +924,26 @@ document.addEventListener('click', e=>{
     if(g.dataset.multi){
       const arr = Array.isArray(S.a[key]) ? S.a[key] : [];
       const i = arr.indexOf(val);
-      if(i>=0) arr.splice(i,1);
-      else{
-        const max=+g.dataset.max||99;
-        if(arr.length>=max){
-          // 가장 먼저 고른 것을 빼고 새로 담는다
-          const old=arr.shift();
-          g.querySelector(`.chip[data-val="${CSS.escape(old)}"]`)?.classList.remove('sel');
-        }
-        arr.push(val);
-      }
-      S.a[key]=arr; chip.classList.toggle('sel', arr.includes(val));
+      i>=0 ? arr.splice(i,1) : arr.push(val);
+      S.a[key]=arr; chip.classList.toggle('sel');
     }else{
       S.a[key]=val;
       g.querySelectorAll('.chip').forEach(c=>c.classList.toggle('sel', c===chip));
     }
-    if(key==='q13_why') paintQ13();
-    markDirty();
-  }
-  const dot = e.target.closest('.lk-dot');
-  if(dot){
-    const g = dot.closest('.lik');
-    S.a[g.dataset.key]=+dot.dataset.v;
-    g.querySelectorAll('.lk-dot').forEach(d=>d.classList.toggle('sel', d===dot));
     markDirty();
   }
 });
 document.addEventListener('input', e=>{
   const el=e.target;
   if(el.dataset.key!==undefined && (el.tagName==='TEXTAREA'||el.type==='text')){
-    S.a[el.dataset.key]=el.value; markDirty();
+    S.a[el.dataset.key]=el.value; markDirty(); gateCheck();
   }
 });
 document.addEventListener('change', e=>{
   const el=e.target;
   if(el.dataset.key && el.type==='checkbox'){ S.a[el.dataset.key]=el.checked; markDirty(); }
+  if(el.dataset.key && el.tagName==='SELECT'){ S.a[el.dataset.key]=el.value; markDirty(); }
 });
-
-function paintQ13(){
-  const on=(S.a.q13_why||[]).includes('기타');
-  $('#q13etcWrap').style.display = on?'block':'none';
-}
-
-/* ══════════ 렌더: 리커트 ══════════ */
-function renderLiks(){
-  $$('.lik').forEach(g=>{
-    if(g.dataset.built) return;
-    g.dataset.built='1';
-    g.innerHTML =
-      `<span class="lk-lab lo">${g.dataset.lo||''}</span>`+
-      `<span class="lk-dots">${[1,2,3,4,5].map(v=>`<button class="lk-dot" data-v="${v}">${v}</button>`).join('')}</span>`+
-      `<span class="lk-lab hi">${g.dataset.hi||''}</span>`;
-  });
-}
-function paintLiks(){
-  $$('.lik').forEach(g=>{
-    const v=S.a[g.dataset.key];
-    if(v) g.querySelectorAll('.lk-dot').forEach(d=>d.classList.toggle('sel',+d.dataset.v===v));
-  });
-}
 
 /* ══════════ 렌더: 픽토그램 (7·1·2) ══════════ */
 function renderPicto(){
@@ -877,7 +955,31 @@ function renderPicto(){
      <text x="542" y="16" text-anchor="middle" font-size="11" fill="#8B9088">이주 2</text>`;
 }
 
-/* ══════════ 렌더: 파트 3 차원 카드 ══════════ */
+/* ══════════ 렌더: 파트 3 항목 ══════════ */
+function renderItems(){
+  $('#itemList').innerHTML = ITEMS.map(it=>`
+    <div class="item">
+      <div class="it-t">${it.t}</div>
+      <div class="it-def">${it.def}</div>
+      <div class="it-ctrl">
+        <div class="seg" data-seg="it_${it.k}_u">
+          <button data-v="1">글쎄요</button><button data-v="2">도움됨</button><button data-v="3">꼭 필요</button>
+        </div>
+        <label class="hardchk"><input type="checkbox" data-key="it_${it.k}_hard"> 우리 기관은 <b>제공이 어려움</b></label>
+      </div>
+    </div>`).join('');
+  $$('#itemList .seg').forEach(seg=>{
+    seg.querySelectorAll('button').forEach(b=>{
+      b.onclick=()=>{
+        S.a[seg.dataset.seg]=+b.dataset.v;
+        seg.querySelectorAll('button').forEach(x=>x.classList.toggle('sel',x===b));
+        markDirty();
+      };
+    });
+  });
+}
+
+/* ══════════ 렌더: 파트 4 차원 카드 ══════════ */
 function renderDims(){
   const groups={};
   DIMS.forEach(d=>{ (groups[d.f]=groups[d.f]||[]).push(d); });
@@ -888,12 +990,53 @@ function renderDims(){
         <div class="dim3">
           <div class="d-t">${d.t}</div>
           <div class="d-d">${d.d}</div>
-          <div class="d-imp">청년의 정착에 얼마나 중요할까요?</div>
-          <div class="lik mini" data-key="imp_${d.k}" data-lo="낮다" data-hi="매우 높다"></div>
+          <div class="d-ex">예) ${d.ex}</div>
           <label class="minechk"><input type="checkbox" data-key="mine_${d.k}"> 우리 기관 사업이 <b>이 차원에 있다</b></label>
         </div>`).join('')}
       </div>
     </div>`).join('');
+}
+
+/* Q3 요소 → 차원 매핑 */
+function renderMapRows(){
+  const els=[S.a.q3_el1,S.a.q3_el2,S.a.q3_el3].map(x=>(x||'').trim());
+  const opts = `<option value="">— 고르세요 —</option>`+
+    DIMS.map(d=>`<option value="${d.k}">${d.f} · ${d.t}</option>`).join('')+
+    `<option value="none">🔍 이 틀 어디에도 넣기 어려움</option>`;
+  let html='';
+  els.forEach((el,i)=>{
+    if(!el) return;
+    html+=`<div class="map-row"><span class="map-chip">${el.replace(/[<>&"]/g,'')}</span><select data-key="map${i+1}">${opts}</select></div>`;
+  });
+  $('#mapRows').innerHTML = html || '<p style="font-size:13.5px;color:var(--muted)">위 Q3에 적어주신 요소가 없습니다. 채워주시면 여기 나타납니다.</p>';
+  [1,2,3].forEach(i=>{
+    const sel=$(`select[data-key="map${i}"]`);
+    if(sel && S.a['map'+i]) sel.value=S.a['map'+i];
+  });
+}
+
+/* 파트 4 틀 열기 */
+function openFrame(saveIt=true){
+  $('#frameWrap').classList.add('on');
+  $('#lockedNote').style.display='none';
+  $('#openFrameBtn').style.display='none';
+  $('#gate4').textContent='';
+  $('#next4').disabled=false;
+  $('#gate4b').textContent='';
+  renderMapRows();
+  if(saveIt){ S.a.s4_open=true; markDirty(); }
+}
+$('#openFrameBtn').onclick=()=>{
+  const ok = !!(S.a.q3_el1||'').trim() && !!(S.a.q3_why1||'').trim();
+  if(!ok){ $('#gate4').textContent='요소 ①과 이유를 채워주시면 열립니다'; return; }
+  openFrame();
+};
+
+/* ══════════ 게이트 ══════════ */
+function gateCheck(){
+  if(!$('#frameWrap').classList.contains('on')){
+    $('#gate4b').textContent = S.step===4 ? '틀을 열고 의견을 남기신 뒤 넘어갈 수 있습니다' : '';
+  }
 }
 
 /* ══════════ 렌더: 사이드바 ══════════ */
@@ -929,6 +1072,8 @@ function go(i){
   if(i>S.maxStep) S.maxStep=i;
   $$('.screen').forEach(s=>s.classList.remove('active'));
   $('#s'+i).classList.add('active');
+  if(i===4 && $('#frameWrap').classList.contains('on')) renderMapRows();
+  gateCheck();
   renderSteps();
   window.scrollTo({top:0,behavior:'smooth'});
   markDirty(); save();
@@ -950,13 +1095,17 @@ function restore(){
     const v=S.a[el.dataset.key];
     if(v===undefined) return;
     if(el.type==='checkbox') el.checked=!!v;
-    else if(el.tagName==='TEXTAREA'||el.type==='text') el.value=v;
+    else if(el.tagName==='TEXTAREA'||el.type==='text'||el.tagName==='SELECT') el.value=v;
     else if(el.classList.contains('chips')){
       const vals=Array.isArray(v)?v:[v];
       el.querySelectorAll('.chip').forEach(c=>c.classList.toggle('sel',vals.includes(c.dataset.val)));
     }
   });
-  paintLiks(); paintQ13();
+  $$('#itemList .seg').forEach(seg=>{
+    const v=S.a[seg.dataset.seg];
+    if(v) seg.querySelectorAll('button').forEach(b=>b.classList.toggle('sel',+b.dataset.v===v));
+  });
+  if(S.a.s4_open) openFrame(false);
 }
 
 /* ══════════ 로그인 ══════════ */
@@ -1019,7 +1168,7 @@ $('#codeIn').addEventListener('keydown',e=>{ if(e.key==='Enter') tryLogin(); });
 if(DEMO){ $('#codeIn').value='DEMO'; }
 
 /* 초기 렌더 */
-renderDims(); renderLiks(); renderPicto(); renderSteps();
+renderItems(); renderDims(); renderPicto(); renderSteps();
 </script>
 </body>
 </html>

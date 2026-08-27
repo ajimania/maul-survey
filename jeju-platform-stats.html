@@ -37,11 +37,6 @@ tr:last-child td{border-bottom:none;}
 .bar-row .bn{width:64px;flex:none;font-weight:900;font-size:12.5px;}
 .free-item{border-left:3px solid var(--green-pale);padding:6px 12px;margin-top:10px;font-size:13.5px;line-height:1.65;}
 .free-item .who{font-size:11.5px;font-weight:700;color:var(--muted);margin-bottom:2px;}
-.lik-line{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:13px;}
-.lik-line .ll{width:250px;flex:none;text-align:right;color:#4C574E;line-height:1.35;}
-.lik-cells{display:flex;gap:4px;flex:1;}
-.lik-cell{flex:1;height:26px;border-radius:7px;background:#EDE8DA;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:var(--muted);}
-.lik-mean{width:70px;flex:none;font-weight:900;font-size:13px;color:var(--green-deep);}
 .btn{border:none;border-radius:11px;padding:11px 20px;font-size:14px;font-weight:900;cursor:pointer;background:var(--green);color:#fff;font-family:inherit;}
 .btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink);}
 #gate{min-height:100dvh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;}
@@ -76,19 +71,16 @@ const sb = createClient(
   'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
 );
 
-const STEP_NAMES = ['시작하기','파트 1','파트 2','파트 3'];
-const DIMS = [
-  ['liv1','생계 · 생존을 유지하는 일'],
-  ['liv2','생계 · 하고 싶은 일로 성장하는 일'],
-  ['rel1','관계 · 또래 커뮤니티를 만드는 일'],
-  ['rel2','관계 · 지역의 주민이 되는 일'],
-  ['spc1','공간 · 살 곳'],
-  ['spc2','공간 · 일하고 활동할 곳'],
-  ['emo1','정서 · 지역이 청년을 대하는 태도'],
-  ['emo2','정서 · 청년 자신의 마음'],
-  ['cul1','문화 · 누리는 것'],
-  ['cul2','문화 · 만드는 것'],
-];
+const STEP_NAMES = ['들어가며','파트 1','파트 2','파트 3 · 조사항목','파트 4 · 열 차원','마지막'];
+const ITEMS=[['area','지원영역'],['scale','지원규모'],['when','신청시기'],['dur','지원 기간'],['form','지원형태'],['stage','현재 상황·단계'],['repeat','지속성·반복성'],['status','사업 상태']];
+const DIMS={
+  liv1:'생계 · 생존을 유지하는 일', liv2:'생계 · 하고 싶은 일로 성장하는 일',
+  rel1:'관계 · 또래 커뮤니티를 만드는 일', rel2:'관계 · 지역의 주민이 되는 일',
+  spc1:'공간 · 살 곳', spc2:'공간 · 일하고 활동할 곳',
+  emo1:'정서 · 청년 자신의 마음', emo2:'정서 · 지역이 청년을 대하는 태도',
+  cul1:'문화 · 누리는 것', cul2:'문화 · 만드는 것',
+  none:'⚠ 틀에 못 넣음'
+};
 
 let ROWS=[];
 const $=s=>document.querySelector(s);
@@ -127,17 +119,6 @@ function freeTexts(rows,key){
     `<div class="free-item"><div class="who">${esc(r.org||r.payload?.org||r.code)}${r.name?` · ${esc(r.name)}`:''}</div>${esc(r.payload[key])}</div>`);
   return out.length?out.join(''):'<div class="note">응답 없음</div>';
 }
-/* 리커트(1~5): 분포 + 평균 한 줄 */
-function likRow(rows,key,label){
-  const c=[0,0,0,0,0]; let sum=0,n=0;
-  rows.forEach(r=>{const v=+r.payload?.[key]; if(v>=1&&v<=5){c[v-1]++;sum+=v;n++;}});
-  const max=Math.max(...c,1);
-  const cells=c.map((x,i)=>{
-    const a=x?0.18+(x/max)*0.72:0;
-    return `<div class="lik-cell" style="${x?`background:rgba(47,107,79,${a});color:${a>0.5?'#fff':'var(--ink)'}`:''}">${i+1}${x?` · ${x}`:''}</div>`;
-  }).join('');
-  return `<div class="lik-line"><span class="ll">${esc(label)}</span><div class="lik-cells">${cells}</div><span class="lik-mean">${n?('평균 '+(sum/n).toFixed(1)):'—'}</span></div>`;
-}
 
 function render(){
   const started=ROWS.filter(r=>r.started&&(r.step>0||Object.keys(r.payload||{}).length>0));
@@ -154,7 +135,7 @@ function render(){
     const st=r.submitted_at?'<span class="tag done">완료</span>':(r.started&&(r.step>0||Object.keys(r.payload||{}).length)?'<span class="tag ing">작성중</span>':'<span class="tag no">미시작</span>');
     h+=`<tr><td><b>${esc(r.code)}</b>${r.assigned_org?`<br><span style="color:var(--muted);font-size:11px">배정: ${esc(r.assigned_org)}</span>`:''}</td>
       <td>${esc(r.org||'')}</td><td>${esc(r.name||'')}</td><td>${st}</td>
-      <td>${r.started?esc(STEP_NAMES[Math.min(r.step??0,3)]):''}</td>
+      <td>${r.started?esc(STEP_NAMES[Math.min(r.step??0,5)]):''}</td>
       <td>${r.updated_at?new Date(r.updated_at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}):''}</td></tr>`;
   });
   h+='</table></div>';
@@ -164,33 +145,49 @@ function render(){
   <div class="card"><b style="font-size:14px">담당 업무 분야 (복수)</b>${bars(count(started,'fields'),N)}
   <div style="height:14px"></div><b style="font-size:14px">청년 대상 업무 연차</b>${bars(count(started,'years'),N,'sea')}</div>`;
 
-  /* 파트 1 */
-  h+=`<h2>파트 1 — 지금, 제주</h2>
-  <div class="card"><b style="font-size:14px">1-1. 도심 유출·읍면 유입 흐름의 체감 (1 거의 못 느낌 ~ 5 뚜렷이 느낌)</b>
-  ${likRow(started,'q11_lik','체감 정도')}
-  ${freeTexts(started,'q11_txt')}</div>
-  <div class="card"><b style="font-size:14px">1-2. 담당 사업에 가장 많이 오는 청년</b>${bars(count(started,'q12_type'),N)}</div>
-  <div class="card"><b style="font-size:14px">1-3. 청년이 지원사업에 닿지 못하는 이유 (2개까지)</b>${bars(count(started,'q13_why'),N,'tg')}
-  ${freeTexts(started,'q13_etc')}</div>`;
+  /* 파트 3 — 조사 항목 */
+  h+=`<h2>파트 3 — 조사 항목 평가 (설문 1부)</h2><div class="card"><table><tr><th>항목</th><th>글쎄요</th><th>도움됨</th><th>꼭 필요</th><th>제공 어려움</th></tr>`;
+  ITEMS.forEach(([k,t])=>{
+    const c=[0,0,0,0];
+    started.forEach(r=>{
+      const u=r.payload?.[`it_${k}_u`]; if(u>=1&&u<=3)c[u-1]++;
+      if(r.payload?.[`it_${k}_hard`])c[3]++;
+    });
+    h+=`<tr><td><b>${t}</b></td><td>${c[0]||''}</td><td>${c[1]||''}</td><td><b style="color:var(--green-deep)">${c[2]||''}</b></td><td><b style="color:var(--tangerine-deep)">${c[3]||''}</b></td></tr>`;
+  });
+  h+=`</table></div>
+  <div class="card"><b style="font-size:14px">Q1. 보충·수정 제안</b>${freeTexts(started,'q1')}</div>
+  <div class="card"><b style="font-size:14px">Q2. 정보 제공의 어려움</b>${freeTexts(started,'q2')}</div>`;
 
-  /* 파트 2 */
-  h+=`<h2>파트 2 — 연구들이 알려준 것</h2>
-  <div class="card"><b style="font-size:14px">2-1. 유형별로 필요한 지원이 다르다 — 현장과의 거리 (1 멀다 ~ 5 가깝다)</b>
-  ${likRow(started,'q21_lik','현장 경험과의 거리')}
-  ${freeTexts(started,'q21_txt')}</div>
-  <div class="card"><b style="font-size:14px">2-2. 항목으로 잡히지 않는 관계·마음의 어려움 (주관식)</b>${freeTexts(started,'q22_txt')}</div>
-  <div class="card"><b style="font-size:14px">2-3. 리커트 2문항</b>
-  ${likRow(started,'q23_lik1','문화·여가가 정착에 작동한다는 결과에 대한 공감')}
-  ${likRow(started,'q23_lik2',"'오게 하는 것'과 '머물게 하는 것' 구분의 쓸모")}</div>`;
-
-  /* 파트 3 */
-  h+=`<h2>파트 3 — 다섯 분야 열 차원</h2>
-  <div class="card"><b style="font-size:14px">차원별 중요도 (1 낮다 ~ 5 매우 높다)</b>`;
-  DIMS.forEach(([k,t])=>{ h+=likRow(started,'imp_'+k,t); });
-  h+=`</div>`;
-  const mine=DIMS.map(([k,t])=>[t,started.filter(r=>r.payload?.['mine_'+k]).length]).filter(e=>e[1]>0).sort((a,b)=>b[1]-a[1]);
+  /* 파트 4 — 열 차원 */
+  h+=`<h2>파트 4 — 다섯 분야 열 차원 (설문 2부)</h2>
+  <div class="card"><b style="font-size:14px">Q3. 일자리·주거·문화 외에 필요한 요소 (틀 공개 전 응답)</b>`;
+  const els=[];
+  started.forEach(r=>{
+    [1,2,3].forEach(i=>{
+      const el=(r.payload?.[`q3_el${i}`]||'').trim();
+      if(el)els.push({org:r.org||r.code,el,why:r.payload?.[`q3_why${i}`]||'',map:DIMS[r.payload?.[`map${i}`]]||''});
+    });
+  });
+  if(els.length){
+    h+='<table style="margin-top:10px"><tr><th>기관</th><th>요소</th><th>이유</th><th>본인 매핑</th></tr>';
+    els.forEach(e=>h+=`<tr><td>${esc(e.org)}</td><td><b>${esc(e.el)}</b></td><td>${esc(e.why)}</td><td>${e.map.startsWith('⚠')?`<b style="color:var(--tangerine-deep)">${esc(e.map)}</b>`:esc(e.map)}</td></tr>`);
+    h+='</table>';
+  }else h+='<div class="note">응답 없음</div>';
+  h+=`</div><div class="card"><b style="font-size:14px">'제주라서' 다르게 작동하는 것</b>`;
+  const q4=started.filter(r=>((r.payload?.q4_el||'')+(r.payload?.q4_txt||'')).trim());
+  h+= q4.length? q4.map(r=>`<div class="free-item"><div class="who">${esc(r.org||r.code)}</div><b>${esc(r.payload.q4_el||'')}</b> — ${esc(r.payload.q4_txt||'')}</div>`).join('') : '<div class="note">응답 없음</div>';
+  h+='</div>';
+  const mine=Object.entries(DIMS).filter(([k])=>k!=='none')
+    .map(([k,t])=>[t,started.filter(r=>r.payload?.['mine_'+k]).length])
+    .filter(e=>e[1]>0).sort((a,b)=>b[1]-a[1]);
   h+=`<div class="card"><b style="font-size:14px">우리 기관 사업이 있는 차원 (도내 사업 분포 1차 자료)</b>${bars(mine,N)}</div>
-  <div class="card"><b style="font-size:14px">이 틀에 담기지 않는 것 (핵심 주관식)</b>${freeTexts(started,'q33_txt')}</div>`;
+  <div class="card"><b style="font-size:14px">Q5. 이 구분, 현장에서 활용하기에 적합한가</b>${freeTexts(started,'q5')}</div>
+  <div class="card"><b style="font-size:14px">Q6. 수정·추가·삭제 제안</b>${freeTexts(started,'q6')}</div>`;
+
+  /* 마지막 */
+  h+=`<h2>Q7 — 청년에게 묻고 싶은 질문</h2><div class="card">${freeTexts(started,'q7')}</div>
+  <h2>자유 의견</h2><div class="card">${freeTexts(started,'free')}</div>`;
 
   $('#content').innerHTML=h;
 }
