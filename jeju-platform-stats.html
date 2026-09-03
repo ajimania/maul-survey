@@ -174,7 +174,7 @@ function render(){
     els.forEach(e=>h+=`<tr><td>${esc(e.org)}</td><td><b>${esc(e.el)}</b></td><td>${esc(e.why)}</td><td>${e.map.startsWith('⚠')?`<b style="color:var(--tangerine-deep)">${esc(e.map)}</b>`:esc(e.map)}</td></tr>`);
     h+='</table>';
   }else h+='<div class="note">응답 없음</div>';
-  h+=`</div><div class="card"><b style="font-size:14px">'제주라서' 다르게 작동하는 것</b>`;
+  h+=`</div><div class="card"><b style="font-size:14px">Q4. '제주라서' 다르게 작동하는 것</b>`;
   const q4=started.filter(r=>((r.payload?.q4_el||'')+(r.payload?.q4_txt||'')).trim());
   h+= q4.length? q4.map(r=>`<div class="free-item"><div class="who">${esc(r.org||r.code)}</div><b>${esc(r.payload.q4_el||'')}</b> — ${esc(r.payload.q4_txt||'')}</div>`).join('') : '<div class="note">응답 없음</div>';
   h+='</div>';
