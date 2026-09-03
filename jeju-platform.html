@@ -689,26 +689,21 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
 
       <div class="ask">
         <div class="q"><span class="qn">Q3.</span>일자리·주거·문화인프라, 그다음은 무엇인가요?</div>
-        <div class="qs">잠시 뒤 연구진이 정리한 틀을 보여드릴 텐데, 그 전에 여러분의 경험을 먼저 듣고 싶습니다. 틀에 기대지 않은 현장의 언어가 연구에 필요해서요. 선행연구들이 공통으로 꼽는 일자리·주거·문화인프라 <b>외에</b>, 청년이 지역에 정착하기 위해 필요한 요소를 2~3가지 꼽는다면 무엇일까요? 이유도 함께 적어주세요. (최소 1가지)</div>
+        <div class="qs">잠시 뒤 연구진이 정리한 틀을 보여드릴 텐데, 그 전에 여러분의 경험을 먼저 듣고 싶습니다. 틀에 기대지 않은 현장의 언어가 연구에 필요해서요. 선행연구들이 공통으로 꼽는 일자리·주거·문화인프라 <b>외에</b>, 청년이 지역에 정착하기 위해 필요한 요소를 하나만 꼽는다면 무엇일까요? 이유도 함께 적어주세요. (하나 더 있다면 ②에)</div>
         <div class="el-row">
           <div class="idx">요소 ①</div>
           <input type="text" data-key="q3_el1" placeholder="필요한 요소">
           <input type="text" data-key="q3_why1" placeholder="이유">
-          <div class="idx">요소 ②</div>
+          <div class="idx">요소 ② (선택)</div>
           <input type="text" data-key="q3_el2" placeholder="필요한 요소">
           <input type="text" data-key="q3_why2" placeholder="이유">
-          <div class="idx">요소 ③ (선택)</div>
-          <input type="text" data-key="q3_el3" placeholder="필요한 요소">
-          <input type="text" data-key="q3_why3" placeholder="이유">
         </div>
       </div>
 
       <div class="ask">
         <div class="q"><span class="qn">Q4.</span>같은 요소라도, '제주라서' 다르게 작동하는 것이 있나요? (선택)</div>
-        <div class="qs">위에 적어주신 요소든 일자리·주거·문화든 — 제주에서는 다르게 나타나거나, 지원을 설계할 때 특별히 고려해야 하는 것이 있다면 하나를 골라 적어주세요.</div>
-        <input type="text" data-key="q4_el" placeholder="제주라서 다른 요소 하나">
-        <div style="height:10px"></div>
-        <textarea data-key="q4_txt" placeholder="그것이 제주에서 어떻게 다른지" style="min-height:70px;"></textarea>
+        <div class="qs">위에 적어주신 요소든 일자리·주거·문화든 — 제주에서는 다르게 나타나거나 지원을 설계할 때 특별히 고려해야 하는 것이 있다면, 무엇이 어떻게 다른지 적어주세요.</div>
+        <textarea data-key="q4_txt" placeholder="예) 주거 — 연세 문화 때문에 목돈 부담이 다르다 등" style="min-height:70px;"></textarea>
         <div style="margin-top:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
           <button class="btn btn-next" id="openFrameBtn" style="padding:12px 22px;font-size:14px;">다 적었어요 — 틀을 보여주세요</button>
           <span class="gate-msg" id="gate4" style="text-align:left;"></span>
@@ -727,21 +722,10 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
 
         <div class="crossband"><b>가로지르는 축 — 주체성과 참여.</b> 열 개 차원 어디에서든, 청년이 대상에 머무는지 주체로 참여하는지를 함께 봅니다. 이 축은 별도 차원이 아니라 전체를 읽는 관점으로 둡니다.</div>
 
-        <div class="ask" id="mapAsk">
-          <div class="q">이어서 — 방금 적어주신 요소는 이 틀 어디에 들어가나요?</div>
-          <div class="qs">위에서 적어주신 요소를 차원에 이어 보세요. <b>"어디에도 넣기 어렵다"면 그렇게 골라주세요 — 그 답이 이 틀의 빈틈을 알려주는 가장 값진 답입니다.</b></div>
-          <div id="mapRows"></div>
-        </div>
-
         <div class="ask">
-          <div class="q"><span class="qn">Q5.</span>이 구분, 실제 현장에서 활용하기에 적합할까요?</div>
-          <div class="qs">이런 구분이 있다면 지원정책을 설계하거나 제공할 때 어떤 도움이 될 수 있을지, 혹은 현장에서는 어떤 지점이 잘 맞지 않을지 적어주세요.</div>
-          <textarea data-key="q5"></textarea>
-        </div>
-        <div class="ask">
-          <div class="q"><span class="qn">Q6.</span>수정하거나, 추가·삭제가 필요한 영역이 있다면 적어주세요</div>
-          <div class="qs">위에서 "어디에도 넣기 어렵다"고 하신 요소가 있다면, 그 요소를 담을 자리를 제안해 주셔도 좋습니다.</div>
-          <textarea data-key="q6"></textarea>
+          <div class="q"><span class="qn">Q5.</span>이 틀, 현장을 담고 있나요?</div>
+          <div class="qs">이 구분이 현장에서 보기에 적절한지, 빠져 있거나 잘 맞지 않는 분야는 없는지, 수정·추가·삭제할 부분이 있다면 무엇인지 적어주세요. 방금 Q3에 적어주신 요소가 이 틀 어디에 들어가는지도 한번 찾아봐 주세요 — <b>들어갈 자리가 없다면, 그것이 저희에게 가장 중요한 의견입니다.</b></div>
+          <textarea data-key="q5" placeholder="예) ○○ 분야가 더 필요하다 / 내가 적은 '△△'는 이 틀 어디에도 넣기 어렵다 등"></textarea>
         </div>
       </div>
 
@@ -759,7 +743,7 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
       <p class="h-sub">이 조사가 끝나면 연구진은 설문과 인터뷰로 제주 청년들을 직접 만납니다. 지원사업을 제공해 오면서 <b>청년들에게 궁금했지만 물을 기회가 없었던 것</b>이 있다면, 저희가 대신 여쭤보겠습니다.</p>
 
       <div class="ask">
-        <div class="q"><span class="qn">Q7.</span>청년들에게 직접 묻고 싶은 질문이 있다면 적어주세요</div>
+        <div class="q"><span class="qn">Q6.</span>청년들에게 직접 묻고 싶은 질문이 있다면 적어주세요</div>
         <div class="qs">지원정책의 활용과 접근에 관한 것이면 더 좋지만, 무엇이든 괜찮습니다.</div>
         <textarea data-key="q7" placeholder="예) 우리 사업을 신청하려다 그만둔 적이 있는지, 왜였는지 궁금하다"></textarea>
       </div>
@@ -789,9 +773,8 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
       </div>
       <div class="done-grid">
         <div class="done-cell"><div class="dc-t">Q1·Q2 → 조사 항목 확정</div><p>분류에 대한 의견과 정보 제공의 어려움은 전수조사 항목을 확정하고, 기관에 무리가 가지 않는 수집 방식을 정하는 데 반영됩니다.</p></div>
-        <div class="done-cell"><div class="dc-t">Q3~Q6 → 틀의 검증</div><p>틀을 보기 전에 적어주신 요소와, 틀에 대한 의견은 다섯 분야 열 차원이 현장을 담아내는지 확인하는 근거가 됩니다.</p></div>
-        <div class="done-cell"><div class="dc-t">사업 위치 체크 → 분포 자료</div><p>우리 기관 사업이 있다고 체크해 주신 차원은 도내 사업 분포의 1차 자료가 됩니다.</p></div>
-        <div class="done-cell"><div class="dc-t">Q7 → 청년에게 전달</div><p>청년에게 묻고 싶다고 적어주신 질문은 설문·인터뷰 문항 설계에 검토·반영하고, 결과를 공유드립니다.</p></div>
+        <div class="done-cell"><div class="dc-t">Q3~Q5 → 틀의 검증</div><p>틀을 보기 전에 적어주신 요소와, 틀에 대한 의견은 다섯 분야 열 차원이 현장을 담아내는지 확인하는 근거가 됩니다.</p></div>
+        <div class="done-cell"><div class="dc-t">Q6 → 청년에게 전달</div><p>청년에게 묻고 싶다고 적어주신 질문은 설문·인터뷰 문항 설계에 검토·반영하고, 결과를 공유드립니다.</p></div>
       </div>
       <p class="h-sub" style="margin-top:24px;text-align:center;">제출 후에도 코드로 다시 들어오면 답을 수정할 수 있습니다.<br>결과는 10월 지역상생축제에서 다시 공유드리겠습니다. — 커먼즈웍스(주)</p>
       <div style="text-align:center;margin-top:18px;">
@@ -982,28 +965,9 @@ function renderDims(){
           <div class="d-t">${d.t}</div>
           <div class="d-d">${d.d}</div>
           <div class="d-ex">예) ${d.ex}</div>
-          <label class="minechk"><input type="checkbox" data-key="mine_${d.k}"> 우리 기관 사업이 <b>이 차원에 있다</b></label>
         </div>`).join('')}
       </div>
     </div>`).join('');
-}
-
-/* Q3 요소 → 차원 매핑 */
-function renderMapRows(){
-  const els=[S.a.q3_el1,S.a.q3_el2,S.a.q3_el3].map(x=>(x||'').trim());
-  const opts = `<option value="">— 고르세요 —</option>`+
-    DIMS.map(d=>`<option value="${d.k}">${d.f} · ${d.t}</option>`).join('')+
-    `<option value="none">🔍 이 틀 어디에도 넣기 어려움</option>`;
-  let html='';
-  els.forEach((el,i)=>{
-    if(!el) return;
-    html+=`<div class="map-row"><span class="map-chip">${el.replace(/[<>&"]/g,'')}</span><select data-key="map${i+1}">${opts}</select></div>`;
-  });
-  $('#mapRows').innerHTML = html || '<p style="font-size:13.5px;color:var(--muted)">위 Q3에 적어주신 요소가 없습니다. 채워주시면 여기 나타납니다.</p>';
-  [1,2,3].forEach(i=>{
-    const sel=$(`select[data-key="map${i}"]`);
-    if(sel && S.a['map'+i]) sel.value=S.a['map'+i];
-  });
 }
 
 /* 파트 4 틀 열기 */
@@ -1014,7 +978,6 @@ function openFrame(saveIt=true){
   $('#gate4').textContent='';
   $('#next4').disabled=false;
   $('#gate4b').textContent='';
-  renderMapRows();
   if(saveIt){ S.a.s4_open=true; markDirty(); }
 }
 $('#openFrameBtn').onclick=()=>{
@@ -1060,7 +1023,6 @@ function go(i){
   if(i>S.maxStep) S.maxStep=i;
   $$('.screen').forEach(s=>s.classList.remove('active'));
   $('#s'+i).classList.add('active');
-  if(i===4 && $('#frameWrap').classList.contains('on')) renderMapRows();
   gateCheck();
   renderSteps();
   window.scrollTo({top:0,behavior:'smooth'});

@@ -72,14 +72,6 @@ const sb = createClient(
 );
 
 const STEP_NAMES = ['들어가며','파트 1','파트 2','파트 3 · 조사항목','파트 4 · 열 차원','마지막'];
-const DIMS={
-  liv1:'생계 · 생존을 유지하는 일', liv2:'생계 · 하고 싶은 일로 성장하는 일',
-  rel1:'관계 · 또래 커뮤니티를 만드는 일', rel2:'관계 · 지역의 주민이 되는 일',
-  spc1:'공간 · 살 곳', spc2:'공간 · 일하고 활동할 곳',
-  emo1:'정서 · 청년 자신의 마음', emo2:'정서 · 지역이 청년을 대하는 태도',
-  cul1:'문화 · 누리는 것', cul2:'문화 · 만드는 것',
-  none:'⚠ 틀에 못 넣음'
-};
 
 let ROWS=[];
 const $=s=>document.querySelector(s);
@@ -154,29 +146,24 @@ function render(){
   <div class="card"><b style="font-size:14px">Q3. 일자리·주거·문화 외에 필요한 요소 (틀 공개 전 응답)</b>`;
   const els=[];
   started.forEach(r=>{
-    [1,2,3].forEach(i=>{
+    [1,2].forEach(i=>{
       const el=(r.payload?.[`q3_el${i}`]||'').trim();
-      if(el)els.push({org:r.org||r.code,el,why:r.payload?.[`q3_why${i}`]||'',map:DIMS[r.payload?.[`map${i}`]]||''});
+      if(el)els.push({org:r.org||r.code,el,why:r.payload?.[`q3_why${i}`]||''});
     });
   });
   if(els.length){
-    h+='<table style="margin-top:10px"><tr><th>기관</th><th>요소</th><th>이유</th><th>본인 매핑</th></tr>';
-    els.forEach(e=>h+=`<tr><td>${esc(e.org)}</td><td><b>${esc(e.el)}</b></td><td>${esc(e.why)}</td><td>${e.map.startsWith('⚠')?`<b style="color:var(--tangerine-deep)">${esc(e.map)}</b>`:esc(e.map)}</td></tr>`);
+    h+='<table style="margin-top:10px"><tr><th>기관</th><th>요소</th><th>이유</th></tr>';
+    els.forEach(e=>h+=`<tr><td>${esc(e.org)}</td><td><b>${esc(e.el)}</b></td><td>${esc(e.why)}</td></tr>`);
     h+='</table>';
   }else h+='<div class="note">응답 없음</div>';
   h+=`</div><div class="card"><b style="font-size:14px">Q4. '제주라서' 다르게 작동하는 것</b>`;
   const q4=started.filter(r=>((r.payload?.q4_el||'')+(r.payload?.q4_txt||'')).trim());
-  h+= q4.length? q4.map(r=>`<div class="free-item"><div class="who">${esc(r.org||r.code)}</div><b>${esc(r.payload.q4_el||'')}</b> — ${esc(r.payload.q4_txt||'')}</div>`).join('') : '<div class="note">응답 없음</div>';
-  h+='</div>';
-  const mine=Object.entries(DIMS).filter(([k])=>k!=='none')
-    .map(([k,t])=>[t,started.filter(r=>r.payload?.['mine_'+k]).length])
-    .filter(e=>e[1]>0).sort((a,b)=>b[1]-a[1]);
-  h+=`<div class="card"><b style="font-size:14px">우리 기관 사업이 있는 차원 (도내 사업 분포 1차 자료)</b>${bars(mine,N)}</div>
-  <div class="card"><b style="font-size:14px">Q5. 이 구분, 현장에서 활용하기에 적합한가</b>${freeTexts(started,'q5')}</div>
-  <div class="card"><b style="font-size:14px">Q6. 수정·추가·삭제 제안</b>${freeTexts(started,'q6')}</div>`;
+  h+= q4.length? q4.map(r=>`<div class="free-item"><div class="who">${esc(r.org||r.code)}</div>${r.payload.q4_el?`<b>${esc(r.payload.q4_el)}</b> — `:''}${esc(r.payload.q4_txt||'')}</div>`).join('') : '<div class="note">응답 없음</div>';
+  h+=`</div>
+  <div class="card"><b style="font-size:14px">Q5. 이 틀, 현장을 담고 있나 (적합성 · 빠진 것 · 수정 제안)</b>${freeTexts(started,'q5')}</div>`;
 
   /* 마지막 */
-  h+=`<h2>Q7 — 청년에게 묻고 싶은 질문</h2><div class="card">${freeTexts(started,'q7')}</div>
+  h+=`<h2>Q6 — 청년에게 묻고 싶은 질문</h2><div class="card">${freeTexts(started,'q7')}</div>
   <h2>자유 의견</h2><div class="card">${freeTexts(started,'free')}</div>`;
 
   $('#content').innerHTML=h;
