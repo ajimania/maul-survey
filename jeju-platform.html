@@ -661,19 +661,19 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
 
       <div class="guide">
         <div class="dol"><svg viewBox="0 0 34 66"><use href="#dolh"/></svg></div>
-        <div class="bubble">기관명 · 사업명 · 사업 내용 · 지원대상 · 관련링크는 모든 사업에 담는 기본 항목입니다. 아래는 그 외에 <b>판단이 필요한 여덟 항목</b>인데, 하나씩 살펴보면서 두 가지를 여쭙습니다. <b>① 사업을 찾는 청년에게 이 정보가 얼마나 도움이 될지</b>, 그리고 <b>② 여러분 기관이 이 정보를 제공하기 어려운지</b>. 어렵다는 체크가 많을수록 연구에는 더 값진 정보가 됩니다.</div>
+        <div class="bubble">기관명 · 사업명 · 사업 내용 · 지원대상 · 관련링크는 모든 사업에 담는 기본 항목입니다. 여기에 아래 <b>여덟 항목</b>을 더해 조사하려 합니다. 사업을 찾는 청년의 눈으로, 그리고 정보를 제공하는 기관의 입장에서 한번 살펴봐 주세요. 다 보신 뒤에 <b>의견을 여쭙겠습니다.</b></div>
       </div>
 
       <div class="item-list" id="itemList"></div>
 
       <div class="ask">
-        <div class="q"><span class="qn">Q1.</span>위 항목들에 대해 — 보충하거나 수정을 제안하고 싶은 내용이 있다면 적어주세요</div>
-        <div class="qs">각 기관이 이 항목들을 표준적으로 제공한다면 청년이 원하는 사업을 찾는 데 도움이 될지, 빠져 있는 항목은 없는지, 구분값(선택지)이 현장과 맞는지 — 자유롭게 적어주시면 됩니다.</div>
-        <textarea data-key="q1" placeholder="예) '지원대상'에 소득 기준 여부를 따로 표기하면 좋겠다 등"></textarea>
+        <div class="q"><span class="qn">Q1.</span>이 분류, 현장에서 보시기에 어떤가요?</div>
+        <div class="qs">지금의 항목 구성에 문제는 없는지, 청년이 사업을 찾는 데 충분한지, 보충하거나 더 필요한 항목·분야는 없는지 — 자유롭게 적어주세요.</div>
+        <textarea data-key="q1" placeholder="예) '지원대상'에 소득 기준 여부를 따로 표기하면 좋겠다 / ○○ 항목이 더 필요하다 등"></textarea>
       </div>
       <div class="ask">
         <div class="q"><span class="qn">Q2.</span>정보를 제공하는 입장에서 겪는 어려움이 있다면 적어주세요</div>
-        <div class="qs">위에서 '제공이 어렵다'고 체크한 항목이 왜 어려운지, 그리고 평소 청년 지원 업무에서 정보 제공·홍보와 관련해 겪었던 어려움이 있다면 함께 적어주세요.</div>
+        <div class="qs">위 항목 가운데 우리 기관이 제공하기 어려운 정보가 있다면 무엇이 왜 어려운지, 그리고 평소 청년 지원 업무에서 정보 제공·홍보와 관련해 겪었던 어려움이 있다면 함께 적어주세요.</div>
         <textarea data-key="q2" placeholder="예) 예산이 연말에 확정되어 신청시기를 미리 안내하기 어렵다 등"></textarea>
       </div>
       <div class="navrow">
@@ -788,7 +788,7 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
         <p class="h-sub" style="margin:0 auto;">답해주신 내용은 이렇게 쓰입니다.</p>
       </div>
       <div class="done-grid">
-        <div class="done-cell"><div class="dc-t">Q1·Q2 → 조사 항목 확정</div><p>항목별 평가와 '제공이 어렵다'는 체크는 전수조사 항목을 확정하고, 기관에 무리가 가지 않는 수집 방식을 정하는 데 반영됩니다.</p></div>
+        <div class="done-cell"><div class="dc-t">Q1·Q2 → 조사 항목 확정</div><p>분류에 대한 의견과 정보 제공의 어려움은 전수조사 항목을 확정하고, 기관에 무리가 가지 않는 수집 방식을 정하는 데 반영됩니다.</p></div>
         <div class="done-cell"><div class="dc-t">Q3~Q6 → 틀의 검증</div><p>틀을 보기 전에 적어주신 요소와, 틀에 대한 의견은 다섯 분야 열 차원이 현장을 담아내는지 확인하는 근거가 됩니다.</p></div>
         <div class="done-cell"><div class="dc-t">사업 위치 체크 → 분포 자료</div><p>우리 기관 사업이 있다고 체크해 주신 차원은 도내 사업 분포의 1차 자료가 됩니다.</p></div>
         <div class="done-cell"><div class="dc-t">Q7 → 청년에게 전달</div><p>청년에게 묻고 싶다고 적어주신 질문은 설문·인터뷰 문항 설계에 검토·반영하고, 결과를 공유드립니다.</p></div>
@@ -961,28 +961,13 @@ function renderPicto(){
      <text x="542" y="16" text-anchor="middle" font-size="11" fill="#8B9088">이주 2</text>`;
 }
 
-/* ══════════ 렌더: 파트 3 항목 ══════════ */
+/* ══════════ 렌더: 파트 3 항목 (열람용) ══════════ */
 function renderItems(){
   $('#itemList').innerHTML = ITEMS.map(it=>`
     <div class="item">
       <div class="it-t">${it.t}</div>
       <div class="it-def">${it.def}</div>
-      <div class="it-ctrl">
-        <div class="seg" data-seg="it_${it.k}_u">
-          <button data-v="1">글쎄요</button><button data-v="2">도움됨</button><button data-v="3">꼭 필요</button>
-        </div>
-        <label class="hardchk"><input type="checkbox" data-key="it_${it.k}_hard"> 우리 기관은 <b>제공이 어려움</b></label>
-      </div>
     </div>`).join('');
-  $$('#itemList .seg').forEach(seg=>{
-    seg.querySelectorAll('button').forEach(b=>{
-      b.onclick=()=>{
-        S.a[seg.dataset.seg]=+b.dataset.v;
-        seg.querySelectorAll('button').forEach(x=>x.classList.toggle('sel',x===b));
-        markDirty();
-      };
-    });
-  });
 }
 
 /* ══════════ 렌더: 파트 4 차원 카드 ══════════ */
@@ -1103,10 +1088,6 @@ function restore(){
       const vals=Array.isArray(v)?v:[v];
       el.querySelectorAll('.chip').forEach(c=>c.classList.toggle('sel',vals.includes(c.dataset.val)));
     }
-  });
-  $$('#itemList .seg').forEach(seg=>{
-    const v=S.a[seg.dataset.seg];
-    if(v) seg.querySelectorAll('button').forEach(b=>b.classList.toggle('sel',+b.dataset.v===v));
   });
   if(S.a.s4_open) openFrame(false);
 }

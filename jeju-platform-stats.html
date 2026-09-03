@@ -72,7 +72,6 @@ const sb = createClient(
 );
 
 const STEP_NAMES = ['들어가며','파트 1','파트 2','파트 3 · 조사항목','파트 4 · 열 차원','마지막'];
-const ITEMS=[['area','지원영역'],['scale','지원규모'],['when','신청시기'],['dur','지원 기간'],['form','지원형태'],['stage','현재 상황·단계'],['repeat','지속성·반복성'],['status','사업 상태']];
 const DIMS={
   liv1:'생계 · 생존을 유지하는 일', liv2:'생계 · 하고 싶은 일로 성장하는 일',
   rel1:'관계 · 또래 커뮤니티를 만드는 일', rel2:'관계 · 지역의 주민이 되는 일',
@@ -146,17 +145,8 @@ function render(){
   <div style="height:14px"></div><b style="font-size:14px">업무연차</b>${bars(count(started,'years'),N,'sea')}</div>`;
 
   /* 파트 3 — 조사 항목 */
-  h+=`<h2>파트 3 — 조사 항목 평가 (설문 1부)</h2><div class="card"><table><tr><th>항목</th><th>글쎄요</th><th>도움됨</th><th>꼭 필요</th><th>제공 어려움</th></tr>`;
-  ITEMS.forEach(([k,t])=>{
-    const c=[0,0,0,0];
-    started.forEach(r=>{
-      const u=r.payload?.[`it_${k}_u`]; if(u>=1&&u<=3)c[u-1]++;
-      if(r.payload?.[`it_${k}_hard`])c[3]++;
-    });
-    h+=`<tr><td><b>${t}</b></td><td>${c[0]||''}</td><td>${c[1]||''}</td><td><b style="color:var(--green-deep)">${c[2]||''}</b></td><td><b style="color:var(--tangerine-deep)">${c[3]||''}</b></td></tr>`;
-  });
-  h+=`</table></div>
-  <div class="card"><b style="font-size:14px">Q1. 보충·수정 제안</b>${freeTexts(started,'q1')}</div>
+  h+=`<h2>파트 3 — 조사 항목에 대한 의견 (설문 1부)</h2>
+  <div class="card"><b style="font-size:14px">Q1. 분류의 적합성·충분성, 더 필요한 항목·분야</b>${freeTexts(started,'q1')}</div>
   <div class="card"><b style="font-size:14px">Q2. 정보 제공의 어려움</b>${freeTexts(started,'q2')}</div>`;
 
   /* 파트 4 — 열 차원 */
