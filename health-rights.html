@@ -63,7 +63,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .eyebrow{font-size:12px;font-weight:900;letter-spacing:.09em;color:var(--coral-deep);margin-bottom:16px;}
 h1{font-size:31px;font-weight:900;line-height:1.35;letter-spacing:-.02em;margin-bottom:20px;}
 h1 em{font-style:normal;color:var(--green);}
-.lede{font-size:15.5px;color:var(--ink-soft);margin-bottom:28px;}
 .quote{background:var(--card);border-left:4px solid var(--green);border-radius:0 12px 12px 0;
   padding:20px 22px;box-shadow:0 2px 10px var(--shadow);margin-bottom:26px;}
 .quote p{font-size:15.5px;font-weight:700;line-height:1.65;}
@@ -85,7 +84,6 @@ h1 em{font-style:normal;color:var(--green);}
 .sec-num{font-size:12px;font-weight:900;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;}
 .sec-title{font-size:25px;font-weight:900;letter-spacing:-.015em;}
 .sec-title span{font-size:14px;font-weight:700;color:var(--ink-soft);margin-left:9px;letter-spacing:0;}
-.sec-desc{font-size:14px;color:var(--ink-soft);margin-top:9px;}
 
 .q{background:var(--card);border-radius:16px;padding:20px 20px 16px;margin-top:16px;
   box-shadow:0 2px 10px var(--shadow);border:1px solid var(--line);}
@@ -199,7 +197,6 @@ const sb = createClient(
 const AREAS = [
 {
   key:'body', name:'몸', sub:'행동 요인', axis:'p',
-  desc:'보고서가 청년에게 물었을 때, 직접 경험한 위험요인 1~3위가 이 안에 있습니다.',
   questions:[
     {q:'잠드는 시간과 일어나는 시간이 일정한가요?',
      o:['거의 매일 들쭉날쭉하다','자주 흐트러진다','대체로 일정하다','거의 일정하다']},
@@ -218,7 +215,6 @@ const AREAS = [
 },
 {
   key:'mind', name:'마음', sub:'정신적 요인', axis:'p',
-  desc:'보고서에서 청년이 가장 많이 직접 경험했다고 답한 것이 이 영역에 있습니다.',
   questions:[
     {q:'지난 2주, 혼자라고 느낀 날은 얼마나 되나요?',
      o:['대부분 그랬다','절반쯤 된다','며칠 있었다','거의 없었다']},
@@ -237,7 +233,6 @@ const AREAS = [
 },
 {
   key:'place', name:'터전', sub:'물리적 환경 요인', axis:'c',
-  desc:'여기서부터는 내 의지로 바꾸기 어려운 영역으로 넘어갑니다.',
   questions:[
     {q:'지금 사는 집은 여름 더위와 겨울 추위를 견딜 만한가요?',
      o:['매우 힘들다','힘든 편이다','견딜 만하다','문제없다']},
@@ -256,7 +251,6 @@ const AREAS = [
 },
 {
   key:'care', name:'의료', sub:'보건의료 요인', axis:'c',
-  desc:'보고서에서 청년의 수치가 전체 국민의 두 배로 나온 영역입니다.',
   questions:[
     {q:'지난 1년, 돈 때문에 병원·치과·약을 미룬 적이 있나요?',
      o:['여러 번 있다','몇 번 있다','한 번 있다','없다']},
@@ -275,7 +269,6 @@ const AREAS = [
 },
 {
   key:'social', name:'관계', sub:'사회적 요인', axis:'c',
-  desc:'보고서에서 차별과 괴롭힘은 기분의 문제가 아니라 건강위험요인으로 조사되었습니다.',
   questions:[
     {q:'힘든 일을 솔직하게 털어놓을 수 있는 사람이 있나요?',
      o:['없다','있지만 말하지 못한다','한 명 있다','두 명 이상 있다']},
@@ -294,7 +287,6 @@ const AREAS = [
 },
 {
   key:'context', name:'시대', sub:'사회경제정치적 맥락', axis:'c',
-  desc:'건강 설문에 거의 등장하지 않는 영역입니다. 보고서에서는 위험수준이 가장 높게 나왔습니다.',
   questions:[
     {q:'지금의 일자리나 진로가 1년 뒤에도 이어질 거라고 생각하나요?',
      o:['전혀 그렇지 않다','그렇지 않은 편이다','대체로 그렇다','분명히 그렇다']},
@@ -378,23 +370,17 @@ function viewIntro(){
   <div class="screen on intro">
     <div class="eyebrow">청년 건강권 자가진단</div>
     <h1>나는 충분히<br><em>건강한 삶</em>을<br>살고 있는가</h1>
-    <p class="lede">건강한지를 묻는 검사가 아닙니다.
-    <b>건강할 수 있는 조건이 내 삶에 갖춰져 있는지</b>를 묻는 30개의 질문입니다.</p>
     <div class="quote">
       <p>"건강할 권리는 양질의 교육, 좋은 주거,<br>괜찮은 임금을 주는 일자리, 사회보장 등<br>건강에 영향을 미치는 <b>사회적 결정요인에<br>접근할 권리</b>를 포함한다."</p>
       <cite>한국보건사회연구원, 「청년 건강 실태와 정책과제」, 2025</cite>
     </div>
-    <p class="lede">문항은 위 보고서가 실제로 조사한
-    <b>청년 건강위험요인</b>에서 뽑았습니다.
-    보고서와 같이 <b>WHO 건강불평등 발생 기전 모형(2008)</b>의 여섯 영역을 따릅니다.</p>
     <div class="meta">
       <span class="chip">30문항 · 약 5분</span>
       <span class="chip">6개 영역</span>
       <span class="chip warm">익명 · 개인정보 없음</span>
     </div>
     <button class="btn" onclick="next()">시작하기</button>
-    <p class="foot">이 도구는 의학적 진단이 아니며,<br>건강권 개념의 범위를 함께 확인하기 위한 워크숍용 자료입니다.<br>
-    이름·연락처 등 개인을 알아볼 수 있는 정보는 수집하지 않습니다.</p>
+    <p class="foot">의학적 진단이 아닙니다. 개인정보는 수집하지 않습니다.</p>
   </div>`;
 }
 
@@ -418,7 +404,6 @@ function viewQ(i){
     <div class="sec-head">
       <div class="sec-num">영역 ${i+1} / 6</div>
       <div class="sec-title">${a.name}<span>${a.sub}</span></div>
-      <p class="sec-desc">${a.desc}</p>
     </div>
     ${qs}
     <div class="nav">
@@ -445,9 +430,9 @@ function viewRes(){
   const low = AREAS[lowIdx];
 
   let gapNote;
-  if(p - c >= 15) gapNote = `<strong>몸과 마음보다 조건이 ${p-c}포인트 낮습니다.</strong> 지금의 건강은 좋은 환경이 만들어준 것이 아니라, 당신이 부족한 조건을 개인의 노력으로 메워서 유지되고 있다는 뜻입니다.`;
-  else if(c - p >= 15) gapNote = `<strong>조건은 갖춰져 있는데 몸과 마음이 ${c-p}포인트 낮습니다.</strong> 회복에 쓸 수 있는 자원이 주변에 남아 있다는 뜻이기도 합니다.`;
-  else gapNote = `<strong>두 축의 차이가 크지 않습니다.</strong> 상태와 조건이 비슷한 수준에서 맞물려 움직이고 있습니다.`;
+  if(p - c >= 15)      gapNote = `몸과 마음보다 <strong>조건이 ${p-c}포인트 낮습니다.</strong>`;
+  else if(c - p >= 15) gapNote = `조건보다 <strong>몸과 마음이 ${c-p}포인트 낮습니다.</strong>`;
+  else                 gapNote = `두 축의 차이는 <strong>${Math.abs(p-c)}포인트</strong>입니다.`;
 
   const mapItems = AREAS.map((a,i)=>`
     <div class="map-item">
@@ -477,7 +462,6 @@ function viewRes(){
 
     <div class="card">
       <h3>내 몸과 마음 vs 나를 둘러싼 조건</h3>
-      <p class="sub">이 설문의 핵심은 이 두 막대의 차이입니다</p>
       <div class="axis-row">
         <div class="axis-lab"><span>내 몸과 마음 <small>몸 · 마음</small></span><b style="color:var(--coral-deep)">${p}%</b></div>
         <div class="track"><i class="p" style="width:${p}%"></i></div>
@@ -486,7 +470,7 @@ function viewRes(){
         <div class="axis-lab"><span>나를 둘러싼 조건 <small>터전 · 의료 · 관계 · 시대</small></span><b style="color:var(--green)">${c}%</b></div>
         <div class="track"><i class="c" style="width:${c}%"></i></div>
       </div>
-      <p class="gap-note">${gapNote}<br><br>아래 축은 <strong>노력으로 바꾸기 어려운 영역</strong>이고, 보고서가 <strong>사회적 결정요인</strong>이라고 부른 영역입니다. 여기가 낮다면 그것은 의지의 문제가 아니라 <strong>권리가 보장되지 않은 상태</strong>입니다.</p>
+      <p class="gap-note">${gapNote}</p>
     </div>
 
     <div class="type-card">
@@ -498,16 +482,10 @@ function viewRes(){
     <div class="card low-card">
       <h3 style="color:var(--muted);font-size:12px;letter-spacing:.06em;">가장 낮게 나온 영역</h3>
       <div class="ln">${low.name} · ${low.sub} <span style="font-size:15px;color:var(--muted)">${scores[lowIdx]}/15</span></div>
-      <p style="font-size:14.5px;line-height:1.75;color:var(--ink-soft)">
-        ${low.axis==='c'
-          ? '이 영역은 개인이 혼자 개선하기 가장 어려운 영역입니다. 오늘 워크숍에서 <b>당신이 가장 할 말이 많은 자리</b>이자, 정책이 개입할 여지가 가장 큰 지점입니다.'
-          : '이 영역은 개인의 상태에 해당하지만, 그 상태를 만든 원인은 대개 나머지 네 영역에 있습니다. <b>무엇이 이 점수를 끌어내렸는지</b> 조건 쪽에서 찾아보세요.'}
-      </p>
     </div>
 
     <div class="card map">
       <h3>방금 답한 30문항은 무엇이었나</h3>
-      <p class="sub">모두 보고서가 실제로 조사한 청년 건강위험요인입니다</p>
       ${mapItems}
     </div>
 
@@ -516,10 +494,9 @@ function viewRes(){
       <button class="btn ghost" onclick="restart()">처음부터 다시하기</button>
     </div>
     <p class="foot"><span id="saveind">응답을 저장하는 중…</span><br><br>
-    이 도구는 의학적 진단이 아닙니다. 이름·연락처 등 개인을 알아볼 수 있는 정보는 수집하지 않으며,<br>
-    응답은 워크숍 집계용으로만 익명 저장됩니다.<br><br>
-    근거 · 한국보건사회연구원 「청년 건강 실태와 정책과제」(연구보고서 2025-29, 2025)<br>
-    WHO 건강불평등 발생 기전 모형(2008) · WHO 헌장(1948) · 사회권규약 일반논평 14호(2000)</p>
+    의학적 진단이 아닙니다.<br><br>
+    한국보건사회연구원 「청년 건강 실태와 정책과제」(연구보고서 2025-29, 2025)<br>
+    WHO 건강불평등 발생 기전 모형(2008)</p>
   </div>`;
 }
 

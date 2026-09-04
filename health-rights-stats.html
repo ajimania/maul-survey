@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>청년 건강권 자가진단 — 응답 집계</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4F1E9; --card:#FFFDF7; --ink:#26302B; --ink-soft:#5C6A62; --muted:#8D968F;
+  --green:#2E6A55; --green-deep:#1F4C3C; --green-pale:#E4EEE9;
+  --coral:#D2603F; --coral-deep:#B24A2C; --coral-pale:#FAE7DF;
+  --line:#E2DCCC; --shadow:rgba(38,48,43,.10);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans KR',-apple-system,sans-serif;color:var(--ink);background:var(--paper);
+  -webkit-font-smoothing:antialiased;min-height:100dvh;word-break:keep-all;line-height:1.6;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+select{font-family:inherit;}
+.wrap{max-width:820px;margin:0 auto;padding:34px 20px 100px;}
+
+.head{margin-bottom:22px;}
+.eyebrow{font-size:12px;font-weight:900;letter-spacing:.09em;color:var(--coral-deep);margin-bottom:10px;}
+h1{font-size:29px;font-weight:900;letter-spacing:-.02em;line-height:1.3;}
+.sub{font-size:13.5px;color:var(--muted);margin-top:8px;}
+
+.bar-tools{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin:18px 0 22px;}
+select#cohort{font-size:13.5px;font-weight:700;padding:9px 13px;border:1.5px solid var(--line);
+  border-radius:10px;background:var(--card);color:var(--ink);}
+.tbtn{font-size:13px;font-weight:700;padding:9px 15px;border-radius:10px;
+  border:1.5px solid var(--line);background:var(--card);color:var(--ink-soft);transition:all .13s;}
+.tbtn:hover{border-color:var(--green);color:var(--green);}
+
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 16px;
+  box-shadow:0 2px 10px var(--shadow);text-align:center;}
+.kpi .v{font-size:34px;font-weight:900;letter-spacing:-.03em;line-height:1.1;color:var(--green);}
+.kpi .v small{font-size:15px;font-weight:700;color:var(--muted);letter-spacing:0;}
+.kpi .k{font-size:12px;font-weight:700;color:var(--muted);margin-top:6px;}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;
+  box-shadow:0 2px 10px var(--shadow);margin-bottom:16px;}
+.card h2{font-size:16px;font-weight:900;margin-bottom:4px;}
+.card .cs{font-size:12.5px;color:var(--muted);margin-bottom:18px;}
+
+.axis-row{margin-bottom:15px;}
+.axis-lab{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;font-weight:900;margin-bottom:7px;}
+.axis-lab small{font-size:11.5px;font-weight:500;color:var(--muted);}
+.track{height:13px;background:var(--line);border-radius:99px;overflow:hidden;}
+.track i{display:block;height:100%;border-radius:99px;transition:width .8s cubic-bezier(.4,0,.2,1);}
+.gapline{font-size:14px;margin-top:14px;padding-top:13px;border-top:1px dashed var(--line);color:var(--ink-soft);}
+.gapline b{color:var(--ink);}
+
+.radar{display:block;margin:0 auto;max-width:100%;}
+
+.rows{margin-top:4px;}
+.row{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px dashed var(--line);}
+.row:last-child{border-bottom:none;}
+.row .rk{width:22px;flex:none;font-size:12px;font-weight:900;color:var(--muted);text-align:right;}
+.row .nm{flex:1;min-width:0;font-size:13.5px;font-weight:700;line-height:1.45;}
+.row .nm em{font-style:normal;font-size:11px;font-weight:700;color:#fff;background:var(--muted);
+  padding:2px 7px;border-radius:99px;margin-right:7px;vertical-align:1px;}
+.row .mini{width:110px;flex:none;height:9px;background:var(--line);border-radius:99px;overflow:hidden;}
+.row .mini i{display:block;height:100%;border-radius:99px;}
+.row .vv{width:42px;flex:none;text-align:right;font-size:13px;font-weight:900;}
+@media (max-width:560px){
+  .row .mini{width:60px;}
+  .kpis{gap:8px;}
+  .kpi{padding:14px 8px;}
+  .kpi .v{font-size:26px;}
+  .kpi .v small{font-size:12px;}
+  .kpi .k{font-size:11px;}
+}
+
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:11.5px;font-weight:700;color:var(--muted);margin-bottom:14px;}
+.legend span{display:flex;align-items:center;gap:5px;}
+.legend i{width:9px;height:9px;border-radius:50%;display:block;}
+
+.state{text-align:center;padding:70px 20px;color:var(--muted);font-size:14.5px;line-height:1.8;}
+.state b{color:var(--ink);}
+.state code{background:var(--green-pale);color:var(--green-deep);padding:2px 7px;border-radius:6px;
+  font-size:13px;font-weight:700;}
+.foot{font-size:11.5px;color:var(--muted);text-align:center;margin-top:26px;line-height:1.7;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="eyebrow">운영자 페이지</div>
+    <h1>청년 건강권 자가진단<br>응답 집계</h1>
+    <p class="sub" id="meta">불러오는 중…</p>
+  </div>
+  <div class="bar-tools" id="tools" style="display:none">
+    <select id="cohort"></select>
+    <button class="tbtn" onclick="load()">새로고침</button>
+    <button class="tbtn" onclick="exportCsv()">CSV 내려받기</button>
+  </div>
+  <div id="body"><div class="state">불러오는 중…</div></div>
+  <p class="foot">문항 출처 · 한국보건사회연구원 「청년 건강 실태와 정책과제」(연구보고서 2025-29, 2025)<br>
+  WHO 건강불평등 발생 기전 모형(2008)</p>
+</div>
+
+<script>
+const SB  = 'https://hncuvjrghniwihhfpata.supabase.co';
+const KEY = 'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB';
+
+const AREAS = [
+  {key:'body',    name:'몸',    sub:'행동 요인',            col:'s_body',    axis:'p'},
+  {key:'mind',    name:'마음',  sub:'정신적 요인',          col:'s_mind',    axis:'p'},
+  {key:'place',   name:'터전',  sub:'물리적 환경 요인',      col:'s_place',   axis:'c'},
+  {key:'care',    name:'의료',  sub:'보건의료 요인',         col:'s_care',    axis:'c'},
+  {key:'social',  name:'관계',  sub:'사회적 요인',          col:'s_social',  axis:'c'},
+  {key:'context', name:'시대',  sub:'사회경제정치적 맥락',   col:'s_context', axis:'c'}
+];
+const QLABEL = [
+  '수면 규칙성','스마트폰 취침 지연','제대로 챙긴 끼니','폭음','규칙적 운동',
+  '외로움','소진','우울·무흥미','외모로 인한 위축','쉴 수 있는 시간',
+  '냉난방','주거 안정','집이 쉼의 공간인가','근로 중 상해·질병 위험','혼밥·배달 비중',
+  '돈 때문에 진료 미룸','시간 때문에 진료 미룸','원정진료','병원 동행자','건강검진',
+  '털어놓을 사람','새로운 관계 기회','괴롭힘 경험','차별 경험','가족 돌봄 부담',
+  '고용 지속 전망','부채 부담','사회이동성','5년 뒤 전망','경쟁 압박'
+];
+const TYPE_NAME = {hh:'볕이 드는 자리', hl:'혼자 힘으로 버티는 중', lh:'잠깐 쉬어갈 때', ll:'혼자 감당할 일이 아닙니다'};
+
+let ROWS = [];
+
+const el  = id => document.getElementById(id);
+const avg = (a) => a.length ? a.reduce((x,y)=>x+y,0)/a.length : null;
+const nums = (rows, f) => rows.map(f).filter(v => typeof v === 'number' && !isNaN(v));
+const f1 = v => v===null ? '–' : (Math.round(v*10)/10).toFixed(1);
+const f0 = v => v===null ? '–' : Math.round(v);
+
+async function load(){
+  el('body').innerHTML = '<div class="state">불러오는 중…</div>';
+  try{
+    const r = await fetch(`${SB}/rest/v1/health_rights?select=*&order=created_at.desc&limit=5000`,
+      {headers:{apikey:KEY, Authorization:'Bearer '+KEY}});
+    if(!r.ok){
+      const t = await r.text();
+      return fail(r.status, t);
+    }
+    ROWS = await r.json();
+    buildCohorts();
+    render();
+  }catch(e){ fail(0, String(e)); }
+}
+
+function fail(status, msg){
+  el('tools').style.display = 'none';
+  el('meta').textContent = '';
+  let hint;
+  if(status===404) hint = `<b>테이블이 아직 없습니다.</b><br>Supabase SQL Editor에서 <code>supabase/health_rights.sql</code>을 먼저 실행하세요.`;
+  else if(status===401 || status===403) hint = `<b>조회 권한이 없습니다.</b><br>SQL의 <code>anon can read</code> 정책을 지우셨다면,<br>이 페이지 대신 Supabase 대시보드에서 확인하셔야 합니다.`;
+  else hint = `<b>데이터를 불러오지 못했습니다.</b><br>${msg.slice(0,160)}`;
+  el('body').innerHTML = `<div class="state">${hint}</div>`;
+}
+
+function buildCohorts(){
+  const set = [...new Set(ROWS.map(r => r.cohort).filter(Boolean))].sort().reverse();
+  const sel = el('cohort');
+  sel.innerHTML = `<option value="">전체 회차 (${ROWS.length}명)</option>` +
+    set.map(c => `<option value="${c}">${c} (${ROWS.filter(r=>r.cohort===c).length}명)</option>`).join('');
+  sel.onchange = render;
+  el('tools').style.display = 'flex';
+}
+
+function current(){
+  const c = el('cohort').value;
+  return c ? ROWS.filter(r => r.cohort === c) : ROWS;
+}
+
+function render(){
+  const rows = current();
+  if(!rows.length){
+    el('meta').textContent = '';
+    el('body').innerHTML = '<div class="state"><b>아직 응답이 없습니다.</b><br>설문을 한 번 완료하면 여기에 집계가 나타납니다.</div>';
+    return;
+  }
+  const last = rows[0] && rows[0].created_at ? new Date(rows[0].created_at) : null;
+  el('meta').textContent = `응답 ${rows.length}명` +
+    (last ? ` · 마지막 응답 ${last.toLocaleString('ko-KR',{dateStyle:'medium',timeStyle:'short'})}` : '');
+
+  const aTotal = avg(nums(rows, r=>r.total_pct));
+  const aP     = avg(nums(rows, r=>r.personal_pct));
+  const aC     = avg(nums(rows, r=>r.condition_pct));
+  const gap    = (aP!==null && aC!==null) ? aP-aC : null;
+  const aArea  = AREAS.map(a => avg(nums(rows, r=>r[a.col])));
+
+  /* 문항별 평균 (0~3) */
+  const qAvg = QLABEL.map((lab,i) => {
+    const v = avg(nums(rows, r=>r['q'+(i+1)]));
+    return {i, lab, v, area: AREAS[Math.floor(i/5)]};
+  }).filter(q => q.v !== null);
+  const qLow = [...qAvg].sort((a,b)=>a.v-b.v);
+
+  /* 유형 분포 */
+  const types = ['hl','ll','lh','hh'].map(k => ({
+    k, name: TYPE_NAME[k], n: rows.filter(r=>r.type_key===k).length
+  })).filter(t=>t.n>0).sort((a,b)=>b.n-a.n);
+
+  /* 최저 영역 분포 */
+  const lows = AREAS.map(a => ({a, n: rows.filter(r=>r.lowest_area===a.key).length}))
+                    .filter(x=>x.n>0).sort((a,b)=>b.n-a.n);
+
+  const areaColor = a => a.axis==='p' ? 'var(--coral)' : 'var(--green)';
+
+  el('body').innerHTML = `
+    <div class="kpis">
+      <div class="kpi"><div class="v">${rows.length}<small>명</small></div><div class="k">응답자</div></div>
+      <div class="kpi"><div class="v">${f0(aTotal)}<small>점</small></div><div class="k">평균 총점</div></div>
+      <div class="kpi"><div class="v" style="color:var(--coral-deep)">${gap===null?'–':(gap>0?'+':'')+f0(gap)}<small>p</small></div><div class="k">두 축 격차</div></div>
+    </div>
+
+    <div class="card">
+      <h2>내 몸과 마음 vs 나를 둘러싼 조건</h2>
+      <p class="cs">응답자 ${rows.length}명 평균</p>
+      <div class="axis-row">
+        <div class="axis-lab"><span>내 몸과 마음 <small>몸 · 마음</small></span><b style="color:var(--coral-deep)">${f0(aP)}%</b></div>
+        <div class="track"><i style="width:${f0(aP)||0}%;background:var(--coral)"></i></div>
+      </div>
+      <div class="axis-row">
+        <div class="axis-lab"><span>나를 둘러싼 조건 <small>터전 · 의료 · 관계 · 시대</small></span><b style="color:var(--green)">${f0(aC)}%</b></div>
+        <div class="track"><i style="width:${f0(aC)||0}%;background:var(--green)"></i></div>
+      </div>
+      <p class="gapline">${gap===null ? '–' :
+        (gap >= 5  ? `평균적으로 <b>조건이 몸과 마음보다 ${f0(gap)}포인트 낮습니다.</b>` :
+         gap <= -5 ? `평균적으로 <b>몸과 마음이 조건보다 ${f0(-gap)}포인트 낮습니다.</b>` :
+                     `두 축의 평균 차이는 <b>${f0(Math.abs(gap))}포인트</b>입니다.`)}</p>
+    </div>
+
+    <div class="card">
+      <h2>6개 영역 평균</h2>
+      <p class="cs">각 15점 만점</p>
+      <svg class="radar" id="radar" width="340" height="300" viewBox="0 0 340 300" role="img" aria-label="6개 영역 평균 육각형 그래프"></svg>
+      <div class="rows" style="margin-top:10px">
+        ${AREAS.map((a,i)=>({a,v:aArea[i]})).sort((x,y)=>(x.v??99)-(y.v??99)).map((x,idx)=>`
+          <div class="row">
+            <div class="rk">${idx+1}</div>
+            <div class="nm">${x.a.name} <span style="font-weight:500;color:var(--muted);font-size:12px">${x.a.sub}</span></div>
+            <div class="mini"><i style="width:${x.v===null?0:x.v/15*100}%;background:${areaColor(x.a)}"></i></div>
+            <div class="vv" style="color:${areaColor(x.a)}">${f1(x.v)}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>문항별 평균 — 낮은 순</h2>
+      <p class="cs">각 3점 만점 · 낮을수록 그 조건이 무너져 있다는 뜻입니다</p>
+      <div class="legend">
+        <span><i style="background:var(--coral)"></i>내 몸과 마음</span>
+        <span><i style="background:var(--green)"></i>나를 둘러싼 조건</span>
+      </div>
+      <div class="rows">
+        ${qLow.map((q,idx)=>`
+          <div class="row">
+            <div class="rk">${idx+1}</div>
+            <div class="nm"><em style="background:${areaColor(q.area)}">${q.area.name}</em>${q.lab}</div>
+            <div class="mini"><i style="width:${q.v/3*100}%;background:${areaColor(q.area)}"></i></div>
+            <div class="vv" style="color:${areaColor(q.area)}">${f1(q.v)}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>유형 분포</h2>
+      <p class="cs">응답자 ${rows.length}명 기준</p>
+      <div class="rows">
+        ${types.map(t=>`
+          <div class="row">
+            <div class="rk"></div>
+            <div class="nm">${t.name}</div>
+            <div class="mini"><i style="width:${t.n/rows.length*100}%;background:var(--green)"></i></div>
+            <div class="vv">${Math.round(t.n/rows.length*100)}%</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>가장 낮게 나온 영역</h2>
+      <p class="cs">응답자별로 최저 점수가 나온 영역이 무엇이었나</p>
+      <div class="rows">
+        ${lows.map(x=>`
+          <div class="row">
+            <div class="rk"></div>
+            <div class="nm">${x.a.name} <span style="font-weight:500;color:var(--muted);font-size:12px">${x.a.sub}</span></div>
+            <div class="mini"><i style="width:${x.n/rows.length*100}%;background:${areaColor(x.a)}"></i></div>
+            <div class="vv" style="color:${areaColor(x.a)}">${x.n}명</div>
+          </div>`).join('')}
+      </div>
+    </div>
+  `;
+  drawRadar(aArea);
+}
+
+function drawRadar(vals){
+  const svg = el('radar'); if(!svg) return;
+  const cx=170, cy=148, R=92;
+  const pt=(i,r)=>{const a=-Math.PI/2+i*Math.PI/3; return [cx+Math.cos(a)*R*r, cy+Math.sin(a)*R*r];};
+  let h='';
+  [0.25,0.5,0.75,1].forEach(r=>{
+    h += `<polygon points="${[0,1,2,3,4,5].map(i=>pt(i,r).join(',')).join(' ')}" fill="none" stroke="#E2DCCC" stroke-width="1"/>`;
+  });
+  for(let i=0;i<6;i++){const[x,y]=pt(i,1); h+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#E2DCCC" stroke-width="1"/>`;}
+  const poly = vals.map((v,i)=>pt(i, Math.max((v??0)/15, 0.04)).join(',')).join(' ');
+  h += `<polygon points="${poly}" fill="rgba(46,106,85,.22)" stroke="#2E6A55" stroke-width="2.5" stroke-linejoin="round"/>`;
+  vals.forEach((v,i)=>{const[x,y]=pt(i,Math.max((v??0)/15,0.04)); h+=`<circle cx="${x}" cy="${y}" r="4" fill="#2E6A55"/>`;});
+  for(let i=0;i<6;i++){
+    const[x,y]=pt(i,1.30);
+    const col = AREAS[i].axis==='p' ? '#B24A2C' : '#1F4C3C';
+    h += `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="900" fill="${col}" font-family="Noto Sans KR">${AREAS[i].name}</text>`;
+    h += `<text x="${x}" y="${y+15}" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="700" fill="#8D968F" font-family="Noto Sans KR">${vals[i]===null?'–':(Math.round(vals[i]*10)/10)}</text>`;
+  }
+  svg.innerHTML = h;
+}
+
+function exportCsv(){
+  const rows = current();
+  if(!rows.length) return;
+  const cols = ['id','created_at','cohort',
+    ...Array.from({length:30},(_,i)=>'q'+(i+1)),
+    ...AREAS.map(a=>a.col),
+    'personal_pct','condition_pct','total_pct','type_key','lowest_area'];
+  const esc = v => v===null||v===undefined ? '' :
+    (/[",\n]/.test(String(v)) ? '"'+String(v).replace(/"/g,'""')+'"' : String(v));
+  const csv = '﻿' + [cols.join(','), ...rows.map(r=>cols.map(c=>esc(r[c])).join(','))].join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const tag = el('cohort').value || 'all';
+  a.href=url; a.download=`health-rights-${tag}-${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 2000);
+}
+
+load();
+</script>
+</body>
+</html>
