@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>나는 충분히 건강한 삶을 살고 있는가 — 청년 건강권 자가진단</title>
+<meta name="description" content="한국보건사회연구원 「청년 건강 실태와 정책과제」(2025)가 조사한 청년 건강위험요인으로 만든 워크숍용 자가진단. 30문항 · 약 5분 · 익명.">
+<meta property="og:title" content="나는 충분히 건강한 삶을 살고 있는가">
+<meta property="og:description" content="청년 건강권 자가진단 · 30문항 · 약 5분">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4F1E9;
+  --card:#FFFDF7;
+  --ink:#26302B;
+  --ink-soft:#5C6A62;
+  --muted:#8D968F;
+  --green:#2E6A55;
+  --green-deep:#1F4C3C;
+  --green-pale:#E4EEE9;
+  --coral:#D2603F;
+  --coral-deep:#B24A2C;
+  --coral-pale:#FAE7DF;
+  --gold:#C99A3A;
+  --line:#E2DCCC;
+  --shadow:rgba(38,48,43,.10);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;
+  color:var(--ink);background:var(--paper);
+  background-image:
+    radial-gradient(circle at 28% 38%, rgba(38,48,43,.045) 1.4px, transparent 2px),
+    radial-gradient(circle at 72% 78%, rgba(38,48,43,.03) 1px, transparent 1.6px);
+  background-size:56px 56px, 36px 36px;
+  -webkit-font-smoothing:antialiased;
+  min-height:100dvh;word-break:keep-all;line-height:1.6;
+}
+b,strong{font-weight:700;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+
+.wrap{max-width:620px;margin:0 auto;padding:0 20px 120px;}
+
+/* 진행바 */
+.topbar{position:sticky;top:0;z-index:20;background:rgba(244,241,233,.94);backdrop-filter:blur(8px);
+  padding:14px 20px 12px;border-bottom:1px solid var(--line);}
+.topbar.hide{display:none;}
+.topbar-in{max-width:620px;margin:0 auto;}
+.pbar{height:5px;background:var(--line);border-radius:99px;overflow:hidden;}
+.pbar i{display:block;height:100%;background:var(--green);border-radius:99px;transition:width .45s cubic-bezier(.4,0,.2,1);}
+.plabel{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-top:7px;font-weight:500;}
+
+/* 화면 */
+.screen{display:none;animation:pop .4s ease both;}
+.screen.on{display:block;}
+@keyframes pop{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+
+/* 인트로 */
+.intro{padding:56px 0 0;}
+.eyebrow{font-size:12px;font-weight:900;letter-spacing:.09em;color:var(--coral-deep);margin-bottom:16px;}
+h1{font-size:31px;font-weight:900;line-height:1.35;letter-spacing:-.02em;margin-bottom:20px;}
+h1 em{font-style:normal;color:var(--green);}
+.lede{font-size:15.5px;color:var(--ink-soft);margin-bottom:28px;}
+.quote{background:var(--card);border-left:4px solid var(--green);border-radius:0 12px 12px 0;
+  padding:20px 22px;box-shadow:0 2px 10px var(--shadow);margin-bottom:26px;}
+.quote p{font-size:15.5px;font-weight:700;line-height:1.65;}
+.quote cite{display:block;font-style:normal;font-size:12.5px;color:var(--muted);margin-top:10px;font-weight:500;}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:30px;}
+.chip{font-size:12px;font-weight:700;background:var(--green-pale);color:var(--green-deep);
+  padding:6px 13px;border-radius:99px;}
+.chip.warm{background:var(--coral-pale);color:var(--coral-deep);}
+
+.btn{display:block;width:100%;background:var(--green);color:#fff;font-size:16px;font-weight:900;
+  padding:17px;border-radius:14px;box-shadow:0 4px 14px rgba(46,106,85,.28);transition:transform .15s,box-shadow .15s,opacity .15s;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(46,106,85,.34);}
+.btn:disabled{background:var(--line);color:var(--muted);box-shadow:none;cursor:not-allowed;transform:none;}
+.btn.ghost{background:transparent;color:var(--ink-soft);box-shadow:none;font-size:14px;font-weight:700;padding:13px;}
+.btn.ghost:hover{transform:none;color:var(--ink);}
+
+/* 문항 */
+.sec-head{padding:30px 0 4px;}
+.sec-num{font-size:12px;font-weight:900;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;}
+.sec-title{font-size:25px;font-weight:900;letter-spacing:-.015em;}
+.sec-title span{font-size:14px;font-weight:700;color:var(--ink-soft);margin-left:9px;letter-spacing:0;}
+.sec-desc{font-size:14px;color:var(--ink-soft);margin-top:9px;}
+
+.q{background:var(--card);border-radius:16px;padding:20px 20px 16px;margin-top:16px;
+  box-shadow:0 2px 10px var(--shadow);border:1px solid var(--line);}
+.q-num{font-size:11.5px;font-weight:900;color:var(--coral-deep);letter-spacing:.06em;margin-bottom:7px;}
+.q-text{font-size:16px;font-weight:700;line-height:1.55;margin-bottom:15px;}
+.opts{display:flex;flex-direction:column;gap:7px;}
+.opt{display:flex;align-items:center;gap:11px;padding:12px 14px;border:1.5px solid var(--line);
+  border-radius:11px;font-size:14.5px;text-align:left;transition:all .13s;background:#fff;width:100%;}
+.opt:hover{border-color:var(--green);background:var(--green-pale);}
+.opt .dot{width:17px;height:17px;border-radius:50%;border:2px solid var(--line);flex:none;transition:all .13s;}
+.opt.sel{border-color:var(--green);background:var(--green-pale);font-weight:700;}
+.opt.sel .dot{border-color:var(--green);background:var(--green);box-shadow:inset 0 0 0 3px var(--green-pale);}
+.nav{margin-top:24px;}
+
+/* 리빌 카드 */
+.reveal{padding:44px 0 0;}
+.rv-tag{display:inline-block;font-size:11.5px;font-weight:900;letter-spacing:.06em;
+  background:var(--ink);color:var(--paper);padding:6px 14px;border-radius:99px;margin-bottom:18px;}
+.rv-hook{font-size:24px;font-weight:900;line-height:1.45;letter-spacing:-.02em;margin-bottom:18px;}
+.rv-hook em{font-style:normal;color:var(--coral-deep);}
+.rv-body{background:var(--card);border-radius:16px;padding:22px;box-shadow:0 2px 10px var(--shadow);
+  border:1px solid var(--line);margin-bottom:16px;}
+.rv-src{font-size:11.5px;font-weight:900;color:var(--green);letter-spacing:.04em;margin-bottom:10px;}
+.rv-quote{font-size:15px;font-weight:700;line-height:1.7;color:var(--ink);}
+.rv-note{font-size:14.5px;color:var(--ink-soft);line-height:1.75;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);}
+.rv-note strong{color:var(--ink);}
+
+/* 결과 */
+.result{padding:44px 0 0;}
+.res-score{text-align:center;margin-bottom:8px;}
+.res-score .n{font-size:66px;font-weight:900;line-height:1;letter-spacing:-.04em;color:var(--green);}
+.res-score .n small{font-size:22px;font-weight:700;color:var(--muted);letter-spacing:0;}
+.res-score .cap{font-size:13px;color:var(--muted);font-weight:700;margin-top:8px;}
+
+.radar{display:block;margin:6px auto 4px;max-width:100%;}
+.card{background:var(--card);border-radius:16px;padding:22px;box-shadow:0 2px 10px var(--shadow);
+  border:1px solid var(--line);margin-top:16px;}
+.card h3{font-size:16px;font-weight:900;margin-bottom:6px;}
+.card .sub{font-size:13px;color:var(--muted);margin-bottom:16px;}
+
+.axis-row{margin-bottom:16px;}
+.axis-row:last-child{margin-bottom:0;}
+.axis-lab{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;font-weight:900;margin-bottom:7px;}
+.axis-lab small{font-size:12px;font-weight:500;color:var(--muted);}
+.axis-lab b{font-size:17px;}
+.track{height:13px;background:var(--line);border-radius:99px;overflow:hidden;}
+.track i{display:block;height:100%;border-radius:99px;transition:width .9s cubic-bezier(.4,0,.2,1);}
+.track i.p{background:var(--coral);}
+.track i.c{background:var(--green);}
+.gap-note{font-size:14px;line-height:1.7;color:var(--ink-soft);margin-top:16px;padding-top:15px;border-top:1px dashed var(--line);}
+.gap-note strong{color:var(--ink);}
+
+.type-card{background:var(--green-deep);color:#fff;border-radius:16px;padding:26px 22px;margin-top:16px;
+  box-shadow:0 4px 16px rgba(31,76,60,.3);}
+.type-card .tl{font-size:11.5px;font-weight:900;letter-spacing:.09em;opacity:.72;margin-bottom:11px;}
+.type-card .tn{font-size:27px;font-weight:900;letter-spacing:-.02em;line-height:1.3;margin-bottom:13px;}
+.type-card .td{font-size:14.5px;line-height:1.75;opacity:.93;}
+
+.low-card{border-left:4px solid var(--coral);}
+.low-card .ln{font-size:20px;font-weight:900;color:var(--coral-deep);margin-bottom:10px;}
+
+.map{margin-top:16px;}
+.map-item{padding:14px 0;border-bottom:1px dashed var(--line);}
+.map-item:last-child{border-bottom:none;}
+.map-bullet{width:9px;height:9px;border-radius:50%;flex:none;margin-top:8px;}
+.map-body{flex:1;min-width:0;}
+.map-name{font-size:14.5px;font-weight:900;}
+.map-name em{font-style:normal;font-size:11.5px;font-weight:700;color:var(--muted);margin-left:7px;}
+.map-src{font-size:12.5px;color:var(--ink-soft);margin-top:3px;line-height:1.55;}
+.map-score{font-size:13px;font-weight:900;color:var(--muted);flex:none;align-self:center;}
+
+
+.foot{font-size:12px;color:var(--muted);line-height:1.7;margin-top:28px;text-align:center;}
+/* 결과 · 근거 아코디언 */
+.map-row{display:flex;gap:13px;}
+.src-toggle{font-size:12.5px;font-weight:700;color:var(--green);padding:7px 0 0 22px;}
+.src-toggle:hover{text-decoration:underline;}
+.src-detail{display:none;margin:10px 0 2px 22px;padding:14px 16px;background:var(--green-pale);
+  border-radius:11px;}
+.src-detail.open{display:block;}
+
+
+@media (max-width:400px){
+  h1{font-size:27px;}
+  .rv-hook{font-size:21px;}
+  .type-card .tn{font-size:23px;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar hide" id="topbar">
+  <div class="topbar-in">
+    <div class="pbar"><i id="pfill" style="width:0%"></i></div>
+    <div class="plabel"><span id="plab-l">시작</span><span id="plab-r"></span></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div id="stage"></div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+const sb = createClient(
+  'https://hncuvjrghniwihhfpata.supabase.co',
+  'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
+);
+
+/* ══════════ 데이터 ══════════ */
+const AREAS = [
+{
+  key:'body', name:'몸', sub:'행동 요인', axis:'p',
+  desc:'보고서가 청년에게 물었을 때, 직접 경험한 위험요인 1~3위가 이 안에 있습니다.',
+  questions:[
+    {q:'잠드는 시간과 일어나는 시간이 일정한가요?',
+     o:['거의 매일 들쭉날쭉하다','자주 흐트러진다','대체로 일정하다','거의 일정하다']},
+    {q:'지난 일주일, 스마트폰을 보다가 예정보다 늦게 잔 날은 며칠인가요?',
+     o:['5일 이상','3~4일','1~2일','거의 없다']},
+    {q:'하루 중 제대로 챙겨 먹은 끼니는 몇 끼인가요?',
+     o:['거의 없다','한 끼','두 끼','세 끼']},
+    {q:'지난 한 달, 한자리에서 소주 1병(맥주 4캔) 이상 마신 날이 있나요?',
+     o:['여러 번 있다','몇 번 있다','한 번 있다','없다']},
+    {q:'주 3회 이상 규칙적으로 운동하나요?',
+     o:['거의 하지 않는다','주 1회 정도','주 2회 정도','주 3회 이상']}
+  ],
+  rvSrc:'보고서 5장 행동 요인 · 3장 청년 주요 건강행태',
+  rvQuote:'청년이 직접 경험한 건강위험요인 1~3위는 남녀 모두 수면부족·불규칙한 수면 습관, 스마트폰 과다 사용, 불균형적 영양섭취였다.',
+  rvNote:'보고서는 청년 흡연율이 2024년 23.5%로 2년 새 3.4%포인트 올랐고, <strong>여성 흡연자의 52.7%가 전자담배</strong>를 쓴다고 보고합니다. 그러면서도 이 행동들이 "대학 진학, 군 입대, 취업 준비, 직장 문화 등 급격한 환경 변화"에서 비롯된다고 짚습니다. <strong>행동은 개인의 것이지만, 그 행동을 만든 조건은 개인의 것이 아닙니다.</strong>'
+},
+{
+  key:'mind', name:'마음', sub:'정신적 요인', axis:'p',
+  desc:'보고서에서 청년이 가장 많이 직접 경험했다고 답한 것이 이 영역에 있습니다.',
+  questions:[
+    {q:'지난 2주, 혼자라고 느낀 날은 얼마나 되나요?',
+     o:['대부분 그랬다','절반쯤 된다','며칠 있었다','거의 없었다']},
+    {q:'지난 한 달, 완전히 지쳐서 아무것도 할 수 없다고 느낀 적이 있나요?',
+     o:['자주 있었다','몇 번 있었다','한두 번 있었다','없었다']},
+    {q:'지난 2주, 기분이 가라앉고 아무 흥미가 없던 날은 얼마나 되나요?',
+     o:['대부분 그랬다','절반쯤 된다','며칠 있었다','거의 없었다']},
+    {q:'내 몸이나 외모 때문에 위축된 적이 있나요?',
+     o:['자주 있다','종종 있다','가끔 있다','거의 없다']},
+    {q:'걱정을 잠시 내려놓고 쉴 수 있는 시간이 하루 중 있었나요?',
+     o:['전혀 없었다','거의 없었다','가끔 있었다','거의 매일 있었다']}
+  ],
+  rvSrc:'보고서 5장 정신적 요인 · 3장 청년 주요 사망원인 분석',
+  rvQuote:'정신적 요인 중 직접 경험한 비율이 높은 건강위험요인은 남녀 모두 외로움인 것으로 나타났다.',
+  rvNote:'1위가 <strong>외로움</strong>이었습니다. 우울도 소진도 중독도 아닌 외로움입니다. 그리고 보고서의 사망원인 분석에서 <strong>청년의 사망원인 1위는 고의적 자해(자살)</strong>입니다. 전체 인구의 1위가 암인 것과 다릅니다. 청년 건강정책은 그동안 정신건강에 치우쳐 있다는 지적을 받아왔지만, 정작 <strong>외로움을 다루는 정책은 거의 없습니다.</strong>'
+},
+{
+  key:'place', name:'터전', sub:'물리적 환경 요인', axis:'c',
+  desc:'여기서부터는 내 의지로 바꾸기 어려운 영역으로 넘어갑니다.',
+  questions:[
+    {q:'지금 사는 집은 여름 더위와 겨울 추위를 견딜 만한가요?',
+     o:['매우 힘들다','힘든 편이다','견딜 만하다','문제없다']},
+    {q:'앞으로 2년 안에 원치 않게 이사해야 할 걱정이 있나요?',
+     o:['매우 걱정된다','걱정되는 편이다','별로 걱정 없다','전혀 걱정 없다']},
+    {q:'지금 사는 집은 쉴 수 있는 곳인가요, 잠만 자는 곳인가요?',
+     o:['잠만 자는 곳이다','쉬기는 어렵다','어느 정도 쉴 수 있다','충분히 쉴 수 있다']},
+    {q:'일하거나 배우는 동안, 다치거나 병들 위험이 있다고 느끼나요?',
+     o:['늘 느낀다','자주 느낀다','가끔 느낀다','거의 느끼지 않는다']},
+    {q:'하루 끼니 중 혼자 대충 때우거나 배달로 해결하는 비중은 얼마나 되나요?',
+     o:['거의 전부','절반 이상','가끔 그렇다','거의 없다']}
+  ],
+  rvSrc:'보고서 5장 물리적 환경 요인 · 6장 질적 연구',
+  rvQuote:'좁은 주거공간이 주는 답답함으로 인해 이들에게는 주거가 쉼의 공간이라기보다 잠만 자는 공간이었다.',
+  rvNote:'보고서가 꼽은 물리적 환경 위험요인은 셋입니다. <strong>열악한 근로환경, 열악한 주거환경, 부적절한 식생활 환경.</strong> 경험한 비율은 식생활 환경이 가장 높았지만, 청년들이 가장 <strong>위험하다고 인식한 것은 근로환경</strong>이었습니다. 집과 일터와 밥상은 보건 부서 소관이 아니지만, 국제 기준에서는 모두 건강권이 다루는 대상입니다.'
+},
+{
+  key:'care', name:'의료', sub:'보건의료 요인', axis:'c',
+  desc:'보고서에서 청년의 수치가 전체 국민의 두 배로 나온 영역입니다.',
+  questions:[
+    {q:'지난 1년, 돈 때문에 병원·치과·약을 미룬 적이 있나요?',
+     o:['여러 번 있다','몇 번 있다','한 번 있다','없다']},
+    {q:'지난 1년, 시간을 낼 수 없어서 진료를 미룬 적이 있나요?',
+     o:['여러 번 있다','몇 번 있다','한 번 있다','없다']},
+    {q:'진료를 받으려고 다른 시·군·구까지 이동한 적이 있나요?',
+     o:['여러 번 있다','몇 번 있다','한 번 있다','없다']},
+    {q:'아파서 병원에 갈 때, 같이 가달라고 부탁할 사람이 있나요?',
+     o:['없다','있지만 부탁하기 어렵다','한 명 있다','두 명 이상 있다']},
+    {q:'최근 2년 안에 건강검진을 받은 적이 있나요?',
+     o:['받은 적 없다','3년 이상 됐다','2년쯤 됐다','1년 안에 받았다']}
+  ],
+  rvSrc:'보고서 5장 보건의료 요인 · 7장 정책 제언',
+  rvQuote:'미충족 의료를 경험한 비율은 남자 13.3%, 여자 13.5%로 전국의 연간 미충족 의료 경험률 6.7%(2021년)와 비교하면 2배 정도 더 높은 수준이다.',
+  rvNote:'청년이 필요한 진료를 못 받은 비율이 <strong>전체 국민의 두 배</strong>입니다. 이유에 대해 보고서의 질적 조사는 이렇게 적습니다. "생계유지가 질병 치료에 우선될 수밖에 없는 현실." 그래서 보고서는 검진 확대만으로는 부족하고 <strong>의료비 지원이나 병원 동행 서비스</strong> 같은 적극적 수단이 필요하다고 제언합니다. 아플 때 같이 가줄 사람이 없다는 것이 정책 과제가 되는 이유입니다. 참고로 청년 고혈압 유병자의 <strong>인지율은 35.7%</strong>에 그칩니다.'
+},
+{
+  key:'social', name:'관계', sub:'사회적 요인', axis:'c',
+  desc:'보고서에서 차별과 괴롭힘은 기분의 문제가 아니라 건강위험요인으로 조사되었습니다.',
+  questions:[
+    {q:'힘든 일을 솔직하게 털어놓을 수 있는 사람이 있나요?',
+     o:['없다','있지만 말하지 못한다','한 명 있다','두 명 이상 있다']},
+    {q:'새로운 사람을 만나거나, 새로운 모임에 들어갈 기회가 있나요?',
+     o:['거의 없다','드물게 있다','가끔 있다','자주 있다']},
+    {q:'일하거나 배우는 곳에서 괴롭힘을 겪은 적이 있나요?',
+     o:['여러 번 있다','몇 번 있다','한 번 있다','없다']},
+    {q:'나이·성별·소득·학력·출신지역·고용형태 때문에 불편한 대우를 받은 적이 있나요?',
+     o:['여러 번 있다','몇 번 있다','한 번 있다','없다']},
+    {q:'가족을 돌보느라 내 시간을 쓰고 있나요?',
+     o:['거의 매일 쓴다','자주 쓴다','가끔 쓴다','그렇지 않다']}
+  ],
+  rvSrc:'보고서 5장 사회적 요인 · 6장 질적 연구',
+  rvQuote:'응답자들은 사회적 요인 중 직장 내 괴롭힘, 사회관계 단절, 과도한 경쟁을 가장 위험한 요인으로 인식하고 있었다.',
+  rvNote:'직접 경험한 비율은 남성이 과도한 경쟁·경제수준 차별·학력차별 순, 여성이 <strong>성차별</strong>·과도한 경쟁·연령차별 순이었습니다. 보고서의 질적 조사는 더 나아갑니다. 취업 실패가 곧 관계를 넓힐 기회의 상실로 이어지고, 일부 청년은 <strong>은둔을 선택</strong>했다고 기록합니다. 관계의 단절은 결과가 아니라 <strong>건강을 무너뜨리는 원인</strong>으로 다뤄집니다.'
+},
+{
+  key:'context', name:'시대', sub:'사회경제정치적 맥락', axis:'c',
+  desc:'건강 설문에 거의 등장하지 않는 영역입니다. 보고서에서는 위험수준이 가장 높게 나왔습니다.',
+  questions:[
+    {q:'지금의 일자리나 진로가 1년 뒤에도 이어질 거라고 생각하나요?',
+     o:['전혀 그렇지 않다','그렇지 않은 편이다','대체로 그렇다','분명히 그렇다']},
+    {q:'갚아야 할 빚 때문에 부담을 느끼나요?',
+     o:['매우 크게 느낀다','부담되는 편이다','조금 느낀다','빚이 없거나 부담 없다']},
+    {q:'지금처럼 노력하면 원하는 삶에 닿을 수 있다고 생각하나요?',
+     o:['전혀 그렇지 않다','그렇지 않은 편이다','대체로 그렇다','분명히 그렇다']},
+    {q:'5년 뒤 내 삶이 지금보다 나아져 있을 거라고 생각하나요?',
+     o:['전혀 그렇지 않다','그렇지 않은 편이다','대체로 그렇다','분명히 그렇다']},
+    {q:'쉬거나 속도를 늦추면 뒤처진다는 압박을 느끼나요?',
+     o:['늘 느낀다','자주 느낀다','가끔 느낀다','거의 느끼지 않는다']}
+  ],
+  rvSrc:'보고서 5장 사회경제정치적 맥락 요인 · 7장 정책 제언',
+  rvQuote:'청년 실업 증가, 청년 부채 증가, 소득(자산) 격차 증가는 상대적으로 위험수준이 가장 높은 요인으로 인식되고 있었다.',
+  rvNote:'실업률과 부채는 경제 지표이지 건강 지표가 아니라고 여겨집니다. 그래서 건강 설문에 이런 질문이 없습니다. 그러나 보고서는 이렇게 끝맺습니다. "<strong>고용과 주거 등의 문제는 스스로 통제할 수 없는 요인이므로, 건강에 영향을 미치는 사회적 결정요인의 불평등한 분포를 개선하기 위한 전 사회적 노력이 필요하다.</strong>"'
+}
+];
+
+const TYPES = {
+  hh:{n:'볕이 드는 자리',
+      d:'몸과 마음의 상태도, 그것을 떠받치는 조건도 함께 갖춰져 있습니다. 보고서가 그린 청년의 평균과는 꽤 다른 자리입니다. 다만 이 자리가 <b>내 노력의 결과인지, 주어진 조건의 결과인지</b>는 구분해볼 필요가 있습니다. 정책은 이 자리를 개인의 성취가 아니라 기본값으로 만드는 일입니다.'},
+  hl:{n:'혼자 힘으로 버티는 중',
+      d:'몸과 마음은 관리하고 있지만, 그것을 떠받쳐야 할 조건은 비어 있습니다. 지금의 건강은 <b>좋은 조건 덕분이 아니라 당신이 애써 메우고 있기 때문에</b> 유지됩니다. 보고서가 "건강은 개인의 책임이라는 인식과 사회에 대한 불신, 체념"이라고 적은 바로 그 자리입니다.'},
+  lh:{n:'잠깐 쉬어갈 때',
+      d:'조건은 비교적 갖춰져 있는데 몸과 마음이 따라오지 못하고 있습니다. 회복에 쓸 수 있는 자원이 주변에 남아 있다는 뜻이기도 합니다. 보고서 기준에서 이 상태는 <b>개입하면 회복 가능한 구간</b>이며, 쉬는 것 자체가 권리 행사입니다.'},
+  ll:{n:'혼자 감당할 일이 아닙니다',
+      d:'몸과 마음이 힘든 동시에, 그것을 회복시킬 조건도 부족합니다. 보고서가 말하는 <b>취약청년</b>의 조건에 가깝습니다. 이것은 의지나 자기관리의 문제가 아니라 건강권이 보장되지 않은 상태이며, <b>국가가 개선할 의무를 지는 영역</b>입니다.'}
+};
+
+/* ══════════ 상태 ══════════ */
+const ans = {};
+const flow = [{t:'intro'}];
+AREAS.forEach((a,i)=> flow.push({t:'q',i:i}));
+flow.push({t:'res'});
+let step = 0;
+let saved = false;
+
+/* 워크숍 회차 구분용 (예: ?w=20260910) · 없으면 null */
+const COHORT = new URLSearchParams(location.search).get('w') || null;
+
+const stage  = document.getElementById('stage');
+const topbar = document.getElementById('topbar');
+const pfill  = document.getElementById('pfill');
+const plabL  = document.getElementById('plab-l');
+const plabR  = document.getElementById('plab-r');
+
+function areaScore(i){
+  return AREAS[i].questions.reduce((s,_,qi)=> s + (ans[i+'-'+qi] ?? 0), 0);
+}
+function areaDone(i){
+  return AREAS[i].questions.every((_,qi)=> ans[i+'-'+qi] !== undefined);
+}
+function answered(){ return Object.keys(ans).length; }
+function nextLabel(i){ return i < AREAS.length-1 ? '다음' : '결과 보기'; }
+
+function syncBar(){
+  const f = flow[step];
+  if(f.t==='intro'){ topbar.classList.add('hide'); return; }
+  topbar.classList.remove('hide');
+  pfill.style.width = (answered()/30*100)+'%';
+  if(f.t==='res'){ plabL.textContent='완료'; plabR.textContent='30 / 30'; }
+  else{
+    plabL.textContent = AREAS[f.i].name + ' · ' + AREAS[f.i].sub;
+    plabR.textContent = answered() + ' / 30';
+  }
+}
+
+function render(){
+  const f = flow[step];
+  if(f.t==='intro')       stage.innerHTML = viewIntro();
+  else if(f.t==='q')      stage.innerHTML = viewQ(f.i);
+  else                    stage.innerHTML = viewRes();
+  syncBar();
+  window.scrollTo(0,0);
+  if(f.t==='res'){ drawRadar(); save(); }
+}
+
+/* ══════════ 화면 ══════════ */
+function viewIntro(){
+  return `
+  <div class="screen on intro">
+    <div class="eyebrow">청년 건강권 자가진단</div>
+    <h1>나는 충분히<br><em>건강한 삶</em>을<br>살고 있는가</h1>
+    <p class="lede">건강한지를 묻는 검사가 아닙니다.
+    <b>건강할 수 있는 조건이 내 삶에 갖춰져 있는지</b>를 묻는 30개의 질문입니다.</p>
+    <div class="quote">
+      <p>"건강할 권리는 양질의 교육, 좋은 주거,<br>괜찮은 임금을 주는 일자리, 사회보장 등<br>건강에 영향을 미치는 <b>사회적 결정요인에<br>접근할 권리</b>를 포함한다."</p>
+      <cite>한국보건사회연구원, 「청년 건강 실태와 정책과제」, 2025</cite>
+    </div>
+    <p class="lede">문항은 위 보고서가 실제로 조사한
+    <b>청년 건강위험요인</b>에서 뽑았습니다.
+    보고서와 같이 <b>WHO 건강불평등 발생 기전 모형(2008)</b>의 여섯 영역을 따릅니다.</p>
+    <div class="meta">
+      <span class="chip">30문항 · 약 5분</span>
+      <span class="chip">6개 영역</span>
+      <span class="chip warm">익명 · 개인정보 없음</span>
+    </div>
+    <button class="btn" onclick="next()">시작하기</button>
+    <p class="foot">이 도구는 의학적 진단이 아니며,<br>건강권 개념의 범위를 함께 확인하기 위한 워크숍용 자료입니다.<br>
+    이름·연락처 등 개인을 알아볼 수 있는 정보는 수집하지 않습니다.</p>
+  </div>`;
+}
+
+function viewQ(i){
+  const a = AREAS[i];
+  const qs = a.questions.map((q,qi)=>{
+    const key = i+'-'+qi;
+    const opts = q.o.map((o,oi)=>`
+      <button class="opt ${ans[key]===oi?'sel':''}" onclick="pick(${i},${qi},${oi})">
+        <span class="dot"></span><span>${o}</span>
+      </button>`).join('');
+    return `<div class="q">
+      <div class="q-num">Q${i*5+qi+1}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="opts">${opts}</div>
+    </div>`;
+  }).join('');
+  const done = areaDone(i);
+  return `
+  <div class="screen on">
+    <div class="sec-head">
+      <div class="sec-num">영역 ${i+1} / 6</div>
+      <div class="sec-title">${a.name}<span>${a.sub}</span></div>
+      <p class="sec-desc">${a.desc}</p>
+    </div>
+    ${qs}
+    <div class="nav">
+      <button class="btn" id="nextbtn" ${done?'':'disabled'} onclick="next()">
+        ${done? nextLabel(i) : '5문항에 모두 답해주세요'}
+      </button>
+      ${i>0?'<button class="btn ghost" onclick="prev()">이전으로</button>':''}
+    </div>
+  </div>`;
+}
+
+function viewRes(){
+  const scores = AREAS.map((_,i)=>areaScore(i));
+  const total  = scores.reduce((a,b)=>a+b,0);
+  const pct    = Math.round(total/90*100);
+  const pRaw   = scores[0]+scores[1];
+  const cRaw   = total - pRaw;
+  const p      = Math.round(pRaw/30*100);
+  const c      = Math.round(cRaw/60*100);
+  const type   = TYPES[(p>=60?'h':'l') + (c>=60?'h':'l')];
+
+  let lowIdx = 0;
+  scores.forEach((s,i)=>{ if(s < scores[lowIdx]) lowIdx = i; });
+  const low = AREAS[lowIdx];
+
+  let gapNote;
+  if(p - c >= 15) gapNote = `<strong>몸과 마음보다 조건이 ${p-c}포인트 낮습니다.</strong> 지금의 건강은 좋은 환경이 만들어준 것이 아니라, 당신이 부족한 조건을 개인의 노력으로 메워서 유지되고 있다는 뜻입니다.`;
+  else if(c - p >= 15) gapNote = `<strong>조건은 갖춰져 있는데 몸과 마음이 ${c-p}포인트 낮습니다.</strong> 회복에 쓸 수 있는 자원이 주변에 남아 있다는 뜻이기도 합니다.`;
+  else gapNote = `<strong>두 축의 차이가 크지 않습니다.</strong> 상태와 조건이 비슷한 수준에서 맞물려 움직이고 있습니다.`;
+
+  const mapItems = AREAS.map((a,i)=>`
+    <div class="map-item">
+      <div class="map-row">
+        <div class="map-bullet" style="background:${a.axis==='p'?'var(--coral)':'var(--green)'}"></div>
+        <div class="map-body">
+          <div class="map-name">${a.name} <em>${a.sub}</em></div>
+          <div class="map-src">${a.rvSrc}</div>
+        </div>
+        <div class="map-score">${scores[i]}<span style="font-weight:500">/15</span></div>
+      </div>
+      <button class="src-toggle" onclick="toggleSrc(${i})">보고서 근거 보기</button>
+      <div class="src-detail" id="src-${i}">
+        <div class="rv-quote" style="font-size:14px">"${a.rvQuote}"</div>
+        <div class="rv-note" style="margin-top:12px;padding-top:12px">${a.rvNote}</div>
+      </div>
+    </div>`).join('');
+
+  return `
+  <div class="screen on result">
+    <div class="res-score">
+      <div class="n">${pct}<small>점</small></div>
+      <div class="cap">6개 영역 종합 · 100점 환산</div>
+    </div>
+
+    <svg class="radar" id="radar" width="340" height="300" viewBox="0 0 340 300" role="img" aria-label="6개 영역 점수 육각형 그래프"></svg>
+
+    <div class="card">
+      <h3>내 몸과 마음 vs 나를 둘러싼 조건</h3>
+      <p class="sub">이 설문의 핵심은 이 두 막대의 차이입니다</p>
+      <div class="axis-row">
+        <div class="axis-lab"><span>내 몸과 마음 <small>몸 · 마음</small></span><b style="color:var(--coral-deep)">${p}%</b></div>
+        <div class="track"><i class="p" style="width:${p}%"></i></div>
+      </div>
+      <div class="axis-row">
+        <div class="axis-lab"><span>나를 둘러싼 조건 <small>터전 · 의료 · 관계 · 시대</small></span><b style="color:var(--green)">${c}%</b></div>
+        <div class="track"><i class="c" style="width:${c}%"></i></div>
+      </div>
+      <p class="gap-note">${gapNote}<br><br>아래 축은 <strong>노력으로 바꾸기 어려운 영역</strong>이고, 보고서가 <strong>사회적 결정요인</strong>이라고 부른 영역입니다. 여기가 낮다면 그것은 의지의 문제가 아니라 <strong>권리가 보장되지 않은 상태</strong>입니다.</p>
+    </div>
+
+    <div class="type-card">
+      <div class="tl">당신의 유형</div>
+      <div class="tn">${type.n}</div>
+      <div class="td">${type.d}</div>
+    </div>
+
+    <div class="card low-card">
+      <h3 style="color:var(--muted);font-size:12px;letter-spacing:.06em;">가장 낮게 나온 영역</h3>
+      <div class="ln">${low.name} · ${low.sub} <span style="font-size:15px;color:var(--muted)">${scores[lowIdx]}/15</span></div>
+      <p style="font-size:14.5px;line-height:1.75;color:var(--ink-soft)">
+        ${low.axis==='c'
+          ? '이 영역은 개인이 혼자 개선하기 가장 어려운 영역입니다. 오늘 워크숍에서 <b>당신이 가장 할 말이 많은 자리</b>이자, 정책이 개입할 여지가 가장 큰 지점입니다.'
+          : '이 영역은 개인의 상태에 해당하지만, 그 상태를 만든 원인은 대개 나머지 네 영역에 있습니다. <b>무엇이 이 점수를 끌어내렸는지</b> 조건 쪽에서 찾아보세요.'}
+      </p>
+    </div>
+
+    <div class="card map">
+      <h3>방금 답한 30문항은 무엇이었나</h3>
+      <p class="sub">모두 보고서가 실제로 조사한 청년 건강위험요인입니다</p>
+      ${mapItems}
+    </div>
+
+    <div class="nav">
+      <button class="btn" id="dlbtn" onclick="downloadCard()">결과 이미지 저장하기</button>
+      <button class="btn ghost" onclick="restart()">처음부터 다시하기</button>
+    </div>
+    <p class="foot"><span id="saveind">응답을 저장하는 중…</span><br><br>
+    이 도구는 의학적 진단이 아닙니다. 이름·연락처 등 개인을 알아볼 수 있는 정보는 수집하지 않으며,<br>
+    응답은 워크숍 집계용으로만 익명 저장됩니다.<br><br>
+    근거 · 한국보건사회연구원 「청년 건강 실태와 정책과제」(연구보고서 2025-29, 2025)<br>
+    WHO 건강불평등 발생 기전 모형(2008) · WHO 헌장(1948) · 사회권규약 일반논평 14호(2000)</p>
+  </div>`;
+}
+
+/* ══════════ 레이더 차트 ══════════ */
+function drawRadar(){
+  const svg = document.getElementById('radar');
+  if(!svg) return;
+  const cx=170, cy=148, R=92;
+  const scores = AREAS.map((_,i)=>areaScore(i));
+  const pt=(i,r)=>{
+    const ang = -Math.PI/2 + i*Math.PI/3;
+    return [cx + Math.cos(ang)*R*r, cy + Math.sin(ang)*R*r];
+  };
+  let h='';
+  [0.25,0.5,0.75,1].forEach(r=>{
+    const p = [0,1,2,3,4,5].map(i=>pt(i,r).join(',')).join(' ');
+    h += `<polygon points="${p}" fill="none" stroke="#E2DCCC" stroke-width="1"/>`;
+  });
+  for(let i=0;i<6;i++){
+    const [x,y]=pt(i,1);
+    h += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#E2DCCC" stroke-width="1"/>`;
+  }
+  const poly = scores.map((s,i)=>pt(i, Math.max(s/15,0.04)).join(',')).join(' ');
+  h += `<polygon points="${poly}" fill="rgba(46,106,85,.22)" stroke="#2E6A55" stroke-width="2.5" stroke-linejoin="round"/>`;
+  scores.forEach((s,i)=>{
+    const [x,y]=pt(i, Math.max(s/15,0.04));
+    h += `<circle cx="${x}" cy="${y}" r="4" fill="#2E6A55"/>`;
+  });
+  for(let i=0;i<6;i++){
+    const [x,y]=pt(i,1.30);
+    const col = AREAS[i].axis==='p' ? '#B24A2C' : '#1F4C3C';
+    h += `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle"
+      font-size="13" font-weight="900" fill="${col}" font-family="Noto Sans KR">${AREAS[i].name}</text>`;
+    h += `<text x="${x}" y="${y+15}" text-anchor="middle" dominant-baseline="middle"
+      font-size="11" font-weight="700" fill="#8D968F" font-family="Noto Sans KR">${scores[i]}/15</text>`;
+  }
+  svg.innerHTML = h;
+}
+
+/* ══════════ 저장 ══════════ */
+async function save(){
+  if(saved) return;
+  saved = true;
+  const ind = document.getElementById('saveind');
+  const scores = AREAS.map((_,i)=>areaScore(i));
+  const total  = scores.reduce((a,b)=>a+b,0);
+  const pRaw = scores[0]+scores[1], cRaw = total - pRaw;
+  const p = Math.round(pRaw/30*100);
+  const c = Math.round(cRaw/60*100);
+  let lowIdx = 0;
+  scores.forEach((s,i)=>{ if(s < scores[lowIdx]) lowIdx = i; });
+
+  const payload = {
+    cohort: COHORT,
+    s_body:scores[0], s_mind:scores[1], s_place:scores[2],
+    s_care:scores[3], s_social:scores[4], s_context:scores[5],
+    personal_pct: p,
+    condition_pct: c,
+    total_pct: Math.round(total/90*100),
+    type_key: (p>=60?'h':'l') + (c>=60?'h':'l'),
+    lowest_area: AREAS[lowIdx].key
+  };
+  AREAS.forEach((a,i)=> a.questions.forEach((_,qi)=>{
+    payload['q'+(i*5+qi+1)] = ans[i+'-'+qi];
+  }));
+
+  try{
+    const { error } = await sb.from('health_rights').insert(payload);
+    if(error){ console.warn(error); if(ind) ind.textContent = '저장에 실패했습니다 (결과는 그대로 보실 수 있습니다)'; }
+    else if(ind) ind.textContent = '응답이 익명으로 저장되었습니다';
+  }catch(e){
+    console.warn(e);
+    if(ind) ind.textContent = '저장에 실패했습니다 (결과는 그대로 보실 수 있습니다)';
+  }
+}
+
+/* ══════════ 결과 이미지 저장 ══════════ */
+function rr(g,x,y,w,h,r){
+  g.beginPath();
+  g.moveTo(x+r,y);
+  g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r);
+  g.arcTo(x,y+h,x,y,r);     g.arcTo(x,y,x+w,y,r);
+  g.closePath();
+}
+
+async function downloadCard(){
+  const btn = document.getElementById('dlbtn');
+  const label = btn ? btn.textContent : '';
+  if(btn){ btn.disabled = true; btn.textContent = '이미지를 만드는 중…'; }
+  try{
+    if(document.fonts && document.fonts.ready) await document.fonts.ready;
+
+    const W=1080, H=1420;
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    const g=cv.getContext('2d');
+    const F=(w,px)=>`${w} ${px}px 'Noto Sans KR', -apple-system, sans-serif`;
+    const C={paper:'#F4F1E9',ink:'#26302B',muted:'#8D968F',line:'#E2DCCC',
+             green:'#2E6A55',greenDeep:'#1F4C3C',coral:'#D2603F',coralDeep:'#B24A2C'};
+
+    const scores=AREAS.map((_,i)=>areaScore(i));
+    const total=scores.reduce((a,b)=>a+b,0);
+    const pct=Math.round(total/90*100);
+    const pRaw=scores[0]+scores[1], cRaw=total-pRaw;
+    const pp=Math.round(pRaw/30*100), cc=Math.round(cRaw/60*100);
+    const type=TYPES[(pp>=60?'h':'l')+(cc>=60?'h':'l')];
+
+    g.fillStyle=C.paper; g.fillRect(0,0,W,H);
+    g.textAlign='center';
+
+    g.fillStyle=C.coralDeep; g.font=F(900,26);
+    g.fillText('청년 건강권 자가진단', W/2, 96);
+    g.fillStyle=C.ink; g.font=F(900,46);
+    g.fillText('나는 충분히 건강한 삶을 살고 있는가', W/2, 158);
+
+    /* 총점 */
+    g.font=F(900,132); const w1=g.measureText(String(pct)).width;
+    g.font=F(700,44);  const w2=g.measureText('점').width;
+    const sx=(W-(w1+w2+12))/2;
+    g.textAlign='left';
+    g.font=F(900,132); g.fillStyle=C.green; g.fillText(String(pct), sx, 302);
+    g.font=F(700,44);  g.fillStyle=C.muted;  g.fillText('점', sx+w1+12, 302);
+    g.textAlign='center';
+    g.fillStyle=C.muted; g.font=F(700,24);
+    g.fillText('6개 영역 종합 · 100점 환산', W/2, 348);
+
+    /* 레이더 */
+    const cx=540, cy=662, R=195;
+    const pt=(i,r)=>{const a=-Math.PI/2+i*Math.PI/3; return [cx+Math.cos(a)*R*r, cy+Math.sin(a)*R*r];};
+    g.strokeStyle=C.line; g.lineWidth=2;
+    [0.25,0.5,0.75,1].forEach(r=>{
+      g.beginPath();
+      for(let i=0;i<6;i++){const[x,y]=pt(i,r); i?g.lineTo(x,y):g.moveTo(x,y);}
+      g.closePath(); g.stroke();
+    });
+    for(let i=0;i<6;i++){const[x,y]=pt(i,1); g.beginPath(); g.moveTo(cx,cy); g.lineTo(x,y); g.stroke();}
+    g.beginPath();
+    scores.forEach((v,i)=>{const[x,y]=pt(i,Math.max(v/15,0.04)); i?g.lineTo(x,y):g.moveTo(x,y);});
+    g.closePath();
+    g.fillStyle='rgba(46,106,85,.22)'; g.fill();
+    g.strokeStyle=C.green; g.lineWidth=5; g.lineJoin='round'; g.stroke();
+    scores.forEach((v,i)=>{const[x,y]=pt(i,Math.max(v/15,0.04));
+      g.beginPath(); g.arc(x,y,8,0,Math.PI*2); g.fillStyle=C.green; g.fill();});
+    for(let i=0;i<6;i++){
+      const[x,y]=pt(i,1.27);
+      g.fillStyle=AREAS[i].axis==='p'?C.coralDeep:C.greenDeep; g.font=F(900,28);
+      g.fillText(AREAS[i].name, x, y+8);
+      g.fillStyle=C.muted; g.font=F(700,23);
+      g.fillText(scores[i]+' / 15', x, y+42);
+    }
+
+    /* 두 축 막대 */
+    const bx=110, bw=W-220;
+    const bar=(y,lab,val,col)=>{
+      g.textAlign='left';  g.font=F(900,30); g.fillStyle=C.ink;  g.fillText(lab, bx, y);
+      g.textAlign='right'; g.font=F(900,34); g.fillStyle=col;    g.fillText(val+'%', bx+bw, y);
+      g.textAlign='left';
+      g.fillStyle=C.line; rr(g,bx,y+18,bw,22,11); g.fill();
+      g.fillStyle=col;    rr(g,bx,y+18,Math.max(bw*val/100,22),22,11); g.fill();
+    };
+    bar(1012,'내 몸과 마음', pp, C.coral);
+    bar(1100,'나를 둘러싼 조건', cc, C.green);
+
+    /* 유형 */
+    g.fillStyle=C.greenDeep; rr(g,110,1168,W-220,124,22); g.fill();
+    g.textAlign='center';
+    g.fillStyle='rgba(255,255,255,.68)'; g.font=F(900,20);
+    g.fillText('당신의 유형', W/2, 1212);
+    g.fillStyle='#ffffff'; g.font=F(900,42);
+    g.fillText(type.n, W/2, 1266);
+
+    /* 출처 */
+    g.fillStyle=C.muted; g.font=F(500,20);
+    g.fillText('문항 출처 · 한국보건사회연구원 「청년 건강 실태와 정책과제」(2025)', W/2, 1344);
+    g.fillText('WHO 건강불평등 발생 기전 모형(2008) · 의학적 진단이 아닙니다', W/2, 1376);
+
+    const blob = await new Promise(res=>cv.toBlob(res,'image/png'));
+    const name = '건강권-자가진단-결과.png';
+
+    /* 모바일에서는 공유 시트가 저장에 더 편합니다 */
+    if(navigator.canShare){
+      try{
+        const file = new File([blob], name, {type:'image/png'});
+        if(navigator.canShare({files:[file]})){
+          await navigator.share({files:[file]});
+          return;
+        }
+      }catch(e){ /* 취소하거나 미지원이면 아래 내려받기로 */ }
+    }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 2000);
+  }catch(e){
+    console.warn(e);
+    alert('이미지를 만들지 못했습니다. 화면을 캡처해 주세요.');
+  }finally{
+    if(btn){ btn.disabled = false; btn.textContent = label || '결과 이미지 저장하기'; }
+  }
+}
+
+/* ══════════ 동작 ══════════ */
+function pick(i,qi,oi){
+  ans[i+'-'+qi] = oi;
+  const qEl = stage.querySelectorAll('.q')[qi];
+  if(qEl) qEl.querySelectorAll('.opt').forEach((el,idx)=> el.classList.toggle('sel', idx===oi));
+  const btn = document.getElementById('nextbtn');
+  if(btn){
+    const done = areaDone(i);
+    btn.disabled = !done;
+    btn.textContent = done ? nextLabel(i) : '5문항에 모두 답해주세요';
+  }
+  syncBar();
+}
+function toggleSrc(i){
+  const el = document.getElementById('src-'+i);
+  if(!el) return;
+  const open = el.classList.toggle('open');
+  el.previousElementSibling.textContent = open ? '접기' : '보고서 근거 보기';
+}
+function next(){ if(step < flow.length-1){ step++; render(); } }
+function prev(){ if(step > 0){ step--; render(); } }
+function restart(){
+  Object.keys(ans).forEach(k=>delete ans[k]);
+  step = 0; saved = false; render();
+}
+
+Object.assign(window, {next, prev, pick, restart, toggleSrc, downloadCard});
+render();
+</script>
+</body>
+</html>
