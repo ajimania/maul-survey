@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 미라클헬씨모닝 — 청도 청년 정책개발 워크숍</title>
+<meta name="description" content="청도군민의 건강한 일상을 위한 정책을, 청년의 눈으로 만들어가는 4회차 워크숍">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{
+    --ink:#20261F;
+    --ink-soft:#5A6355;
+    --green:#1C5741;
+    --green-deep:#123A2C;
+    --sun:#F6B73C;
+    --sun-soft:#FBE3AE;
+    --paper:#FBFBF7;
+    --line:#DDE2D8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{transition:none!important;animation:none!important;} }
+  body{
+    font-family:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    color:var(--ink);
+    background:var(--paper);
+    line-height:1.7;
+    word-break:keep-all;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:0 20px;}
+  h1,h2,.serif{font-family:Hahmlet,"Nanum Myeongjo",serif;}
+
+  /* ---------- hero ---------- */
+  header{
+    background:linear-gradient(180deg, var(--green-deep) 0%, var(--green) 78%);
+    color:#F3F6EE;
+    overflow:hidden;
+    position:relative;
+  }
+  .hero{
+    padding:64px 20px 0;
+    max-width:640px;margin:0 auto;
+    text-align:center;
+    position:relative;
+  }
+  .hero .season{
+    font-size:.95rem;
+    letter-spacing:.06em;
+    color:var(--sun-soft);
+    margin-bottom:14px;
+  }
+  .hero h1{
+    font-size:clamp(2rem, 8vw, 2.8rem);
+    font-weight:700;
+    line-height:1.3;
+    margin-bottom:16px;
+  }
+  .hero p.tagline{
+    font-size:1.02rem;
+    color:#DCE5D4;
+    max-width:30em;
+    margin:0 auto 40px;
+  }
+  /* 떠오르는 해 */
+  .sunrise{
+    position:relative;
+    height:120px;
+    margin-top:8px;
+  }
+  .sunrise .sun{
+    position:absolute;
+    left:50%;bottom:0;
+    transform:translateX(-50%);
+    width:200px;height:100px;
+    background:radial-gradient(ellipse at 50% 100%, var(--sun) 0%, var(--sun) 55%, rgba(246,183,60,0) 72%);
+    border-radius:200px 200px 0 0;
+  }
+  .sunrise .horizon{
+    position:absolute;
+    left:0;right:0;bottom:0;
+    height:4px;
+    background:var(--paper);
+    border-radius:4px 4px 0 0;
+  }
+  .keyinfo{
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .keyinfo .wrap{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:2px;
+    transform:translateY(-2px);
+    padding-top:26px;
+    padding-bottom:8px;
+  }
+  .keyinfo div{padding:6px 4px;}
+  .keyinfo dt{font-size:.85rem;color:var(--ink-soft);margin-bottom:2px;}
+  .keyinfo dd{font-weight:600;font-size:1.02rem;}
+
+  /* ---------- sections ---------- */
+  section{padding:52px 0 8px;}
+  section .wrap > h2{
+    font-size:1.45rem;
+    font-weight:600;
+    color:var(--green-deep);
+    margin-bottom:20px;
+  }
+  section p{margin-bottom:14px;color:var(--ink);}
+  .lead{font-size:1.05rem;}
+
+  /* ---------- timeline ---------- */
+  .timeline{list-style:none;position:relative;margin-top:8px;}
+  .timeline::before{
+    content:"";
+    position:absolute;
+    left:11px;top:8px;bottom:8px;
+    width:2px;
+    background:var(--line);
+  }
+  .timeline li{
+    position:relative;
+    padding:0 0 18px 40px;
+  }
+  .timeline li::before{
+    content:"";
+    position:absolute;
+    left:4px;top:8px;
+    width:16px;height:16px;
+    border-radius:50%;
+    background:var(--sun);
+    border:3px solid var(--paper);
+    box-shadow:0 0 0 2px var(--sun);
+  }
+  .timeline .date{
+    font-size:.9rem;
+    color:var(--green);
+    font-weight:600;
+  }
+  .timeline .name{
+    font-weight:700;
+    font-size:1.08rem;
+    margin:2px 0 2px;
+  }
+  .timeline .desc{
+    font-size:.95rem;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- accordion ---------- */
+  details{
+    border-top:1px solid var(--line);
+  }
+  details:last-of-type{border-bottom:1px solid var(--line);}
+  summary{
+    cursor:pointer;
+    padding:18px 4px;
+    font-weight:600;
+    font-size:1.05rem;
+    list-style:none;
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+  }
+  summary::-webkit-details-marker{display:none;}
+  summary .no{
+    font-family:Hahmlet,serif;
+    color:var(--sun);
+    font-weight:700;
+    min-width:1.4em;
+  }
+  summary::after{
+    content:"+";
+    margin-left:auto;
+    color:var(--ink-soft);
+    font-weight:400;
+    font-size:1.2rem;
+    transition:transform .2s ease;
+  }
+  details[open] summary::after{transform:rotate(45deg);}
+  summary:focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:4px;}
+  .detail-body{padding:0 4px 22px 4px;}
+  .detail-body .meta{
+    font-size:.92rem;
+    color:var(--green);
+    font-weight:600;
+    margin-bottom:10px;
+  }
+  .detail-body ul{
+    margin:0 0 12px 1.1em;
+  }
+  .detail-body li{margin-bottom:5px;font-size:.98rem;}
+  .homework{
+    background:var(--sun-soft);
+    border-radius:10px;
+    padding:12px 16px;
+    font-size:.95rem;
+  }
+  .homework strong{color:var(--green-deep);}
+
+  /* ---------- members ---------- */
+  .member-grid{
+    list-style:none;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:10px;
+  }
+  .member-grid button{
+    width:100%;
+    text-align:left;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:12px 14px;
+    background:#fff;
+    font-family:inherit;
+    cursor:pointer;
+    color:var(--ink);
+  }
+  .member-grid button:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
+  .member-grid .m-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:6px;
+  }
+  .member-grid .m-name{
+    font-weight:700;
+    font-size:1.02rem;
+  }
+  .member-grid .m-suns{
+    font-size:.78rem;
+    letter-spacing:1px;
+    white-space:nowrap;
+  }
+  .member-grid .m-info{
+    display:block;
+    font-size:.85rem;
+    color:var(--ink-soft);
+    margin-top:2px;
+  }
+  @media (max-width:420px){
+    .member-grid{grid-template-columns:1fr;}
+  }
+
+  /* ---------- profile page ---------- */
+  .profile-page{
+    position:fixed;
+    inset:0;
+    background:var(--paper);
+    overflow-y:auto;
+    z-index:50;
+    display:none;
+  }
+  .profile-page.open{display:block;}
+  .profile-head{
+    background:linear-gradient(180deg, var(--green-deep) 0%, var(--green) 100%);
+    color:#F3F6EE;
+    padding:20px 20px 28px;
+  }
+  .profile-head .wrap{max-width:640px;}
+  .back-btn{
+    background:none;
+    border:none;
+    color:var(--sun-soft);
+    font-family:inherit;
+    font-size:.95rem;
+    cursor:pointer;
+    padding:6px 0;
+    margin-bottom:14px;
+  }
+  .back-btn:focus-visible{outline:2px solid var(--sun);outline-offset:2px;}
+  .profile-head h2{
+    font-family:Hahmlet,serif;
+    font-size:1.7rem;
+    font-weight:600;
+  }
+  .profile-head .p-info{color:#DCE5D4;font-size:.95rem;margin-top:4px;}
+  .profile-body{max-width:640px;margin:0 auto;padding:28px 20px 60px;}
+  .p-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:20px;
+    margin-bottom:20px;
+  }
+  .p-card h3{
+    font-size:1.05rem;
+    color:var(--green-deep);
+    margin-bottom:12px;
+  }
+  .p-card textarea{
+    width:100%;
+    min-height:110px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:12px;
+    font-family:inherit;
+    font-size:.98rem;
+    line-height:1.6;
+    resize:vertical;
+    color:var(--ink);
+  }
+  .p-card textarea:focus-visible{outline:2px solid var(--green);}
+  .save-btn{
+    margin-top:10px;
+    background:var(--green);
+    color:#fff;
+    border:none;
+    border-radius:999px;
+    padding:10px 22px;
+    font-family:inherit;
+    font-weight:600;
+    font-size:.95rem;
+    cursor:pointer;
+  }
+  .save-btn:focus-visible{outline:2px solid var(--green-deep);outline-offset:2px;}
+  .save-msg{font-size:.88rem;color:var(--green);margin-left:10px;}
+  .att-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 0;
+    border-bottom:1px dashed var(--line);
+    gap:10px;
+  }
+  .att-row:last-child{border-bottom:none;}
+  .att-label{font-size:.98rem;}
+  .att-label small{display:block;color:var(--ink-soft);font-size:.83rem;}
+  .att-btn{
+    border:1.5px solid var(--line);
+    background:#fff;
+    border-radius:999px;
+    padding:8px 16px;
+    font-family:inherit;
+    font-size:.9rem;
+    cursor:pointer;
+    color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .att-btn.checked{
+    border-color:var(--sun);
+    background:var(--sun-soft);
+    color:var(--green-deep);
+    font-weight:600;
+  }
+  .att-btn:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
+  .p-note{font-size:.85rem;color:var(--ink-soft);}
+
+  /* ---------- place / contact ---------- */
+  .place-card{
+    border:1.5px solid var(--green);
+    border-radius:14px;
+    padding:22px;
+    margin-top:6px;
+  }
+  .place-card .name{font-weight:700;font-size:1.1rem;margin-bottom:4px;}
+  .place-card .addr{color:var(--ink-soft);font-size:.96rem;margin-bottom:14px;}
+  .btn{
+    display:inline-block;
+    background:var(--green);
+    color:#fff;
+    text-decoration:none;
+    padding:11px 20px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:.96rem;
+  }
+  .btn:focus-visible{outline:2px solid var(--green-deep);outline-offset:2px;}
+  .btn.sub{
+    background:transparent;
+    color:var(--green);
+    border:1.5px solid var(--green);
+    margin-left:8px;
+  }
+
+  footer{
+    margin-top:64px;
+    padding:36px 20px 48px;
+    background:var(--green-deep);
+    color:#C9D6C4;
+    text-align:center;
+    font-size:.9rem;
+    line-height:1.9;
+  }
+  footer .serif{color:#F3F6EE;font-size:1.05rem;margin-bottom:6px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hero">
+    <p class="season">청도혁신센터 청년 정책개발 워크숍</p>
+    <h1>2026 미라클헬씨모닝</h1>
+    <p class="tagline">청도군민의 건강한 일상을 위한 정책을,<br>청년의 눈으로 함께 만들어가는 네 번의 저녁</p>
+    <div class="sunrise" aria-hidden="true">
+      <div class="sun"></div>
+      <div class="horizon"></div>
+    </div>
+  </div>
+</header>
+
+<dl class="keyinfo">
+  <div class="wrap">
+    <div><dt>기간</dt><dd>2026. 9. 10 ~ 11. 5</dd></div>
+    <div><dt>시간</dt><dd>목요일 18:30~21:30</dd></div>
+    <div><dt>장소</dt><dd>청도혁신센터</dd></div>
+    <div><dt>참여</dt><dd>청도 청년 18명</dd></div>
+  </div>
+</dl>
+
+<section id="about">
+  <div class="wrap">
+    <h2>어떤 워크숍인가요</h2>
+    <p class="lead">건강하게 산다는 건 병원이 가깝다는 것만은 아닙니다. 안심하고 걷는 길, 제때 챙겨 먹는 밥, 함께 몸을 움직일 사람과 장소 — 이 모든 것이 건강의 조건입니다.</p>
+    <p>미라클헬씨모닝은 청도의 청년들이 군민의 생활 속에서 건강과 관련한 문제를 직접 발견하고, 주민을 만나 이야기를 듣고, 그 목소리를 정책 제안으로 완성해가는 4회차 과정입니다. 한 달에 한 번 저녁에 모이고, 회차 사이에는 팀별로 현장에 나갑니다.</p>
+    <p>좋은 제안은 실제 정책과 사업으로 이어질 수 있도록 연계합니다.</p>
+  </div>
+</section>
+
+<section id="journey">
+  <div class="wrap">
+    <h2>네 번의 여정</h2>
+    <ol class="timeline">
+      <li>
+        <div class="date">9월 10일 목요일</div>
+        <div class="name">문제 발견과 팀 세우기</div>
+        <div class="desc">건강권을 이해하고, 청도의 문제를 찾고, 함께할 팀을 만듭니다</div>
+      </li>
+      <li>
+        <div class="date">10월 8일 목요일</div>
+        <div class="name">묻는 법 배우기</div>
+        <div class="desc">인터뷰를 배우고 연습해서, 주민을 만날 준비를 마칩니다</div>
+      </li>
+      <li>
+        <div class="date">10월 22일 목요일</div>
+        <div class="name">문제 정의와 아이디어 발산</div>
+        <div class="desc">주민의 이야기에서 진짜 문제를 찾고, 해법을 쏟아냅니다</div>
+      </li>
+      <li>
+        <div class="date">11월 5일 목요일</div>
+        <div class="name">제안서 완성과 발표</div>
+        <div class="desc">정책 제안서를 완성하고 발표하며, 과정을 함께 돌아봅니다</div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section id="detail">
+  <div class="wrap">
+    <h2>회차별 자세히 보기</h2>
+
+    <details>
+      <summary><span class="no">1</span>문제 발견과 팀 세우기 <span class="serif" hidden>Discover</span></summary>
+      <div class="detail-body">
+        <p class="meta">9/10(목) 18:30~21:30 · 결과물: 문제 리스트, 팀 구성</p>
+        <ul>
+          <li>공공서비스디자인과 건강권 이해하기</li>
+          <li>'내가 바라는 청도'를 꼴라쥬로 표현하기</li>
+          <li>청도 지도를 그리며 문제와 가능성 찾기</li>
+          <li>관심 문제를 중심으로 팀 만들기 — 팀 이름, 역할, 우리의 약속 정하기</li>
+        </ul>
+        <p class="homework"><strong>다음 만남까지</strong> 팀의 문제와 관련한 현장을 관찰하고, 기사·통계·사례를 찾아옵니다.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="no">2</span>묻는 법 배우기</summary>
+      <div class="detail-body">
+        <p class="meta">10/8(목) 18:30~21:30 · 결과물: 인터뷰 계획서</p>
+        <ul>
+          <li>관찰하고 조사해온 것 함께 나누기</li>
+          <li>질문지 만드는 법과 인터뷰 진행 기술 배우기</li>
+          <li>서로를 인터뷰하며 바로 연습해보기</li>
+          <li>누구를 만나 무엇을 물을지 팀별 계획 세우기</li>
+        </ul>
+        <p class="homework"><strong>다음 만남까지</strong> 계획한 대로 주민과 이해관계자를 만나 인터뷰합니다.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="no">3</span>문제 정의와 아이디어 발산</summary>
+      <div class="detail-body">
+        <p class="meta">10/22(목) 18:30~21:30 · 결과물: 팀별 핵심 문제(HMW), 아이디어</p>
+        <ul>
+          <li>인터뷰에서 들은 이야기로 퍼소나 만들기</li>
+          <li>여정지도를 그리며 불편의 순간 찾기</li>
+          <li>"우리가 어떻게 하면 ~할 수 있을까?" 핵심 질문 확정하기</li>
+          <li>해법 아이디어를 쏟아내고 골라내기</li>
+        </ul>
+        <p class="homework"><strong>다음 만남까지</strong> 고른 아이디어를 스토리보드와 제안서 초안으로 만들어옵니다.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary><span class="no">4</span>제안서 완성과 발표</summary>
+      <div class="detail-body">
+        <p class="meta">11/5(목) 18:30~21:30 · 결과물: 최종 정책 제안서</p>
+        <ul>
+          <li>제안서 초안을 서로 살펴보고 최종 완성하기</li>
+          <li>팀별 발표와 피드백 — 좋았던 점, 바라는 점, 이런 건 어때요?</li>
+          <li>네 번의 여정 함께 돌아보기</li>
+        </ul>
+        <p class="homework"><strong>발표 이후</strong> 우수 제안은 청도군 정책 부서 검토와 후속 지원으로 연계합니다.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<section id="members">
+  <div class="wrap">
+    <h2>함께하는 사람들</h2>
+    <p>청도 곳곳에서 저마다의 일상을 살아온 열여덟 명이 모였습니다. 이름을 누르면 각자의 페이지에서 소개를 남기고 출석을 체크할 수 있어요. 해 하나가 출석 한 번입니다.</p>
+    <ul class="member-grid" id="memberGrid"></ul>
+  </div>
+</section>
+
+<section id="drive">
+  <div class="wrap">
+    <h2>함께 쓰는 공유 폴더</h2>
+    <div class="place-card">
+      <div class="name">청년정책참여단 워크숍 공유 폴더</div>
+      <div class="addr">워크숍 자료와 팀별 과제, 결과물을 이곳에 모읍니다.</div>
+      <a class="btn" href="https://drive.google.com/drive/folders/1Cw7rIyCOvyjchWWieNVIp3uQbVdPfqM1?usp=drive_link" target="_blank" rel="noopener">공유 폴더 열기</a>
+    </div>
+    <p style="margin-top:18px;font-size:.95rem;color:var(--ink-soft);">
+      문의 · 청도혁신센터 054-996-9952<br>
+      운영 · 커먼즈웍스
+    </p>
+  </div>
+</section>
+
+<footer>
+  <p class="serif">청도의 건강한 아침을, 청년의 손으로</p>
+  <p>2026 미라클헬씨모닝 · 청도혁신센터 × 커먼즈웍스</p>
+</footer>
+
+<div class="profile-page" id="profilePage" role="dialog" aria-modal="true" aria-labelledby="pName">
+  <div class="profile-head">
+    <div class="wrap">
+      <button class="back-btn" id="backBtn">← 목록으로 돌아가기</button>
+      <h2 id="pName"></h2>
+      <p class="p-info" id="pInfo"></p>
+    </div>
+  </div>
+  <div class="profile-body">
+    <div class="p-card">
+      <h3>나의 소개</h3>
+      <textarea id="introText" placeholder="청도에서 어떤 일상을 보내고 있는지, 이 워크숍에서 무엇을 기대하는지 자유롭게 남겨주세요."></textarea>
+      <div>
+        <button class="save-btn" id="saveIntro">소개 저장하기</button>
+        <span class="save-msg" id="saveMsg"></span>
+      </div>
+    </div>
+    <div class="p-card">
+      <h3>출석 체크</h3>
+      <div id="attRows"></div>
+    </div>
+    <p class="p-note">이곳에 남긴 소개와 출석은 이 페이지를 보는 모든 참여자에게 공개됩니다.</p>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+const sb = createClient(
+  'https://hncuvjrghniwihhfpata.supabase.co',
+  'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
+);
+
+const MEMBERS = [
+  {name:"이상권", info:"주식회사 화담채 · 화양읍"},
+  {name:"지예슬", info:"주식회사 화담채 · 화양읍"},
+  {name:"이지연", info:"청년후계농 · 이서면"},
+  {name:"황창현", info:"대장군농원 · 화양읍"},
+  {name:"김기훈", info:"이륜마굿간 · 청도읍"},
+  {name:"박지연", info:"청도혁신센터 · 청도읍"},
+  {name:"정광훈", info:"농업 · 청도읍"},
+  {name:"박상범", info:"환경업무 보조 · 금천면"},
+  {name:"전창환", info:"민원업무 보조 · 운문면"},
+  {name:"변종희", info:"경북농약사 · 풍각면"},
+  {name:"임미나", info:"노는엄마들 매니저 · 화양읍"},
+  {name:"최형규", info:"농업회사법인 에코엠 대표 · 대구"},
+  {name:"이용진", info:"한아름영농조합법인 과장 · 청도읍"},
+  {name:"유정은", info:"청도혁신센터 · 대구"},
+  {name:"강민구", info:"몰트앤파머스(주) 이사 · 청도읍"},
+  {name:"배정란", info:"노는엄마들 대표 · 화양읍"},
+  {name:"이영우", info:"영남대학교 재학 · 청도읍"},
+  {name:"최주원", info:"청도혁신센터 · 청도읍"}
+];
+const SESSIONS = [
+  {id:"s1", label:"1회차 · 문제 발견과 팀 세우기", date:"9월 10일"},
+  {id:"s2", label:"2회차 · 묻는 법 배우기", date:"10월 8일"},
+  {id:"s3", label:"3회차 · 문제 정의와 아이디어 발산", date:"10월 22일"},
+  {id:"s4", label:"4회차 · 제안서 완성과 발표", date:"11월 5일"}
+];
+const cache = {}; // name -> {intro, att}
+let current = null;
+
+function sunBadge(att){
+  const n = SESSIONS.filter(s => att && att[s.id]).length;
+  return n ? "☀️".repeat(n) : "";
+}
+
+async function saveMember(name){
+  try{
+    const {data, error} = await sb.rpc('mhm_save', {
+      p_name:  name,
+      p_intro: cache[name].intro || "",
+      p_att:   cache[name].att   || {}
+    });
+    if(error) throw error;
+    return !!(data && data.ok);
+  }catch(e){
+    console.error("저장 실패", e);
+    return false;
+  }
+}
+
+function renderGrid(){
+  const grid = document.getElementById("memberGrid");
+  grid.innerHTML = "";
+  MEMBERS.forEach(m => {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.innerHTML =
+      '<span class="m-top"><span class="m-name"></span><span class="m-suns" id="suns-'+m.name+'"></span></span>' +
+      '<span class="m-info"></span>';
+    btn.querySelector(".m-name").textContent = m.name;
+    btn.querySelector(".m-info").textContent = m.info;
+    btn.addEventListener("click", () => openProfile(m));
+    li.appendChild(btn);
+    grid.appendChild(li);
+  });
+}
+
+function refreshBadge(name){
+  const el = document.getElementById("suns-" + name);
+  if(el) el.textContent = sunBadge((cache[name]||{}).att);
+}
+
+async function loadAll(){
+  try{
+    const {data, error} = await sb.rpc('mhm_load');
+    if(error) throw error;
+    MEMBERS.forEach(m => {
+      const row = data && data[m.name];
+      cache[m.name] = {intro:(row && row.intro) || "", att:(row && row.att) || {}};
+    });
+  }catch(e){
+    console.error("불러오기 실패", e);
+    MEMBERS.forEach(m => { if(!cache[m.name]) cache[m.name] = {intro:"", att:{}}; });
+  }
+  MEMBERS.forEach(m => refreshBadge(m.name));
+}
+
+function renderAttRows(){
+  const box = document.getElementById("attRows");
+  box.innerHTML = "";
+  const data = cache[current.name];
+  SESSIONS.forEach(s => {
+    const row = document.createElement("div");
+    row.className = "att-row";
+    const label = document.createElement("div");
+    label.className = "att-label";
+    label.innerHTML = "<span></span><small></small>";
+    label.querySelector("span").textContent = s.label;
+    label.querySelector("small").textContent = s.date;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    const checked = !!data.att[s.id];
+    btn.className = "att-btn" + (checked ? " checked" : "");
+    btn.textContent = checked ? "☀️ 출석했어요" : "출석 체크";
+    btn.addEventListener("click", async () => {
+      data.att[s.id] = !data.att[s.id];
+      renderAttRows();
+      refreshBadge(current.name);
+      const ok = await saveMember(current.name);
+      if(!ok){
+        data.att[s.id] = !data.att[s.id];
+        renderAttRows();
+        refreshBadge(current.name);
+        alert("저장에 실패했어요. 잠시 후 다시 시도해주세요.");
+      }
+    });
+    row.appendChild(label);
+    row.appendChild(btn);
+    box.appendChild(row);
+  });
+}
+
+async function openProfile(m){
+  current = m;
+  document.getElementById("pName").textContent = m.name;
+  document.getElementById("pInfo").textContent = m.info;
+  document.getElementById("saveMsg").textContent = "";
+  document.getElementById("introText").value = "";
+  document.getElementById("attRows").innerHTML =
+    '<p class="p-note">불러오는 중…</p>';
+  document.getElementById("profilePage").classList.add("open");
+  document.body.style.overflow = "hidden";
+  await loadAll();
+  document.getElementById("introText").value = cache[m.name].intro || "";
+  renderAttRows();
+}
+
+document.getElementById("backBtn").addEventListener("click", () => {
+  document.getElementById("profilePage").classList.remove("open");
+  document.body.style.overflow = "";
+  current = null;
+});
+
+document.getElementById("saveIntro").addEventListener("click", async () => {
+  if(!current) return;
+  cache[current.name].intro = document.getElementById("introText").value;
+  const msg = document.getElementById("saveMsg");
+  msg.textContent = "저장 중…";
+  const ok = await saveMember(current.name);
+  msg.textContent = ok ? "저장되었어요 ☀️" : "저장에 실패했어요. 다시 시도해주세요.";
+});
+
+renderGrid();
+loadAll();
+</script>
+
+</body>
+</html>
