@@ -118,6 +118,7 @@ textarea,input,select{font-family:inherit;color:var(--ink);}
   border:9px solid transparent;border-right-color:var(--green-pale);border-left:none;
 }
 .guide .bubble b{font-weight:900;}
+.guide.nodol .bubble::before{display:none;}
 
 /* 질문 블록 */
 .ask{
@@ -171,7 +172,7 @@ input[type=text]{
 .viz-cap{font-size:11.5px;color:var(--muted);margin-top:8px;line-height:1.6;}
 
 /* 오늘 여쭙는 두 가지 */
-.two-asks{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:20px;}
+.two-asks{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:20px;}
 .ta-card{
   background:var(--card);border:1.8px solid var(--green);border-radius:16px;
   padding:19px 21px;box-shadow:0 3px 12px var(--shadow);
@@ -186,9 +187,12 @@ input[type=text]{
 .gap-row{display:flex;align-items:center;gap:10px;margin-top:6px;}
 .gap-row .gl{width:52px;font-size:12px;color:var(--muted);font-weight:700;flex:none;text-align:right;}
 .gap-track{flex:1;height:19px;background:#EDE8DA;border-radius:99px;overflow:hidden;}
-.gap-fill{height:100%;border-radius:99px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:11px;font-weight:900;color:#fff;min-width:34px;}
+.gap-fill{height:100%;border-radius:99px;min-width:2px;}
 .gap-fill.know{background:var(--sea);}
 .gap-fill.use{background:var(--tangerine);}
+.gap-num{flex:none;min-width:82px;font-size:12px;font-weight:900;}
+.gap-num.k{color:var(--sea);}
+.gap-num.u{color:var(--tangerine-deep);}
 
 /* 보장제 정적 매트릭스 */
 .matrix-wrap{overflow-x:auto;margin-top:16px;}
@@ -418,13 +422,14 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
     <section class="screen" id="s0">
       <div class="kicker">들어가며</div>
       <h2 class="h-title">제주 청년 정착 지원사업의<br>지형도를 그리려 합니다</h2>
-      <p class="h-sub">안녕하세요. 제주 청년들이 제주에서 안정적으로 거주하며 정착의 기반을 만들어가는 과정을 지원하기 위해, 제주도의 많은 주체들이 노력하고 있습니다. 본 연구는 그 지원의 내용을 조사해 <b>'제주 청년 정착 지원사업의 지형도'</b>를 그리고, 그 많은 지원이 청년들에게 효과적으로 닿고 있는지 살펴보려 합니다.</p>
+      <p class="h-sub">2026년 제주지역문제해결플랫폼 운영사업 — 제주 청년 정착 지원사업 조사 및 활용 경로 연구를 진행하고 있는 <b>커먼즈웍스(주)</b>입니다.</p>
+      <p class="h-sub">저희는 이번에 제주 청년들이 제주에서 안정적으로 거주하며 정착의 기반을 만들어가는 과정을 지원하기 위한 연구를 진행하고 있습니다. 제주도의 많은 주체들이 청년 정착의 기반을 만들어가고 있는 데에 기여하려 합니다.</p>
+      <p class="h-sub">특히 현재 제주 지역에서 진행되고 있는 <b>'청년 정착 지원사업'</b>을 조사하고 그 지형을 파악하는 것이 중요한 과제입니다. 그리고 그 지원이 청년들에게 효과적으로 닿고 있는지 살펴보려 합니다.</p>
       <p class="h-sub">이 지형도가 완성되면 — 각 기관은 지원사업의 제공자로서 <b>더 필요한 지원을 설계할 수 있는 자료</b>로 활용할 수 있고, 수요자인 청년은 <b>자신에게 적합한 사업을 찾아가는 경로</b>를 얻게 됩니다.</p>
-      <p class="h-sub">연구를 맡은 커먼즈웍스(주)는 연구 과정을 현장과 공유하고 의견을 수렴하며 진행하는 방식으로 일해 왔습니다. 이 설문도 같은 이유로 마련했습니다. 직접 제주의 청년을 만나고 지원해 오신 <b>현장의 경험이 연구에 적용될 수 있도록</b>, 읽어보시고 답변을 부탁드립니다. 앞의 두 파트는 읽는 자료이고, 뒤의 두 파트에서 의견을 여쭙습니다. 전체 15분 안팎입니다.</p>
+      <p class="h-sub">연구를 맡은 커먼즈웍스(주)는 연구 과정을 현장과 공유하고 의견을 수렴하며 진행하는 방식으로 일해 왔습니다. 이 설문도 같은 이유로 마련했습니다. 직접 제주의 청년을 만나고 지원해 오신 <b>현장의 경험이 연구에 적용될 수 있도록</b>, 읽어보시고 답변을 부탁드립니다.</p>
 
-      <div class="guide">
-        <div class="dol"><svg viewBox="0 0 34 66"><use href="#dolh"/></svg></div>
-        <div class="bubble">응답은 <b>화면을 넘길 때마다 자동 저장</b>됩니다. 중간에 닫아도 괜찮습니다. 다시 들어와 코드를 넣고 설문을 진행하면 <b>하던 곳에서 이어집니다.</b> 정답이 있는 질문은 하나도 없습니다! — 현장에서 보고 겪으신 그대로 적어 주세요.</div>
+      <div class="guide nodol">
+        <div class="bubble">응답은 <b>화면을 넘길 때마다 자동 저장</b>됩니다. 중간에 닫아도 괜찮습니다. 다시 들어와 ID와 비밀번호를 넣고 설문을 진행하면 <b>하던 곳에서 이어집니다.</b> 정답이 있는 질문은 하나도 없습니다! — 현장에서 보고 겪으신 그대로 적어 주세요.</div>
       </div>
 
       <div class="ask">
@@ -453,8 +458,8 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
       <h2 class="h-title">왜 이 조사인가</h2>
 
       <div class="brief">
-        <h3>제주 청년의 흐름이 달라졌습니다</h3>
-        <p>제주는 2010년대 순유입의 대표 지역이었습니다. 2016년 한 해에만 만 사천 명 넘게 들어왔습니다. 지금은 방향이 바뀌었습니다. 청년(19~39세)은 2022년부터 순유출로 돌아섰고, 2024년에는 2,400명이 줄었습니다. <b>최근 2년(2024·2025) 연속, 제주는 청년을 포함한 전체 인구 기준 전국 17개 시도 가운데 순유출률이 가장 높은 지역이기도 합니다.</b> <span style="font-size:11.5px;color:var(--muted);">(국내인구이동통계)</span></p>
+        <h3>순유입에서 순유출로 — 제주 청년의 흐름이 달라졌습니다</h3>
+        <p>제주는 2010년대 인구 순유입의 대표 지역이었습니다. 2016년 한 해에만 14,000명 넘게 들어왔습니다. 하지만 지금은 제주를 떠나는 인구가 더 많습니다. 청년(19~39세)은 2022년부터 순유출로 돌아섰고, 2024년에는 2,400명이 줄었습니다. <b>최근 2년(2024·2025) 연속으로 제주는 청년을 포함한 전체 인구 기준 순유출률이 전국에서 가장 높은 지역입니다.</b> <span style="font-size:11.5px;color:var(--muted);">(국내인구이동통계)</span></p>
         <div class="stats">
           <div class="stat"><div class="num">+14,632명</div><div class="lb">2016년, 순유입 정점</div></div>
           <div class="stat"><div class="num tg">−2,400명</div><div class="lb">2024년 청년(19~39세) 순유출<br>2022년부터 유출로 전환</div></div>
@@ -463,39 +468,44 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
       </div>
 
       <div class="brief">
-        <h3>지원이 부족해서는 아닙니다</h3>
+        <h3>지원은 늘어나고 있습니다</h3>
         <p>제주 청년정책의 규모는 작지 않습니다. 제주청년정책 기본계획에 따르면 23년에서 27년 사이 제주 청년 지원 정책에는 5,522억 원이 편성되어 있고, 제주도 차원의 지원 정책의 수도 94개에서 117개로 늘었습니다. 청년 1인당 예산은 전국 상위권입니다.</p>
-        <p>그런데 청년 쪽의 수치는 이렇습니다. 정책을 알고 있다는 청년 27~29%. 실제 참여해 본 청년은 영역별로 0.7~0.9%. 심리상담을 받지 못한 이유의 1위는 <b>"어디로 가야 할지 몰라서"(20.8%)</b>였습니다.</p>
+        <p>하지만 제주청년통계조사를 살펴보면, 자신에게 필요한 정책을 알고 있다는 청년은 27~29%이고 실제 참여해 본 청년은 영역별로 0.7~0.9%에 머무릅니다.</p>
         <div class="gapviz">
           <div class="gap-set">
             <div class="gap-y">2022년 (사업 94개)</div>
-            <div class="gap-row"><span class="gl">인지도</span><div class="gap-track"><div class="gap-fill know" style="width:45%">30.9~45.1%</div></div></div>
-            <div class="gap-row"><span class="gl">참여율</span><div class="gap-track"><div class="gap-fill use" style="width:7.6%">2.1~7.6%</div></div></div>
+            <div class="gap-row"><span class="gl">인지도</span><div class="gap-track"><div class="gap-fill know" style="width:45.1%"></div></div><span class="gap-num k">30.9~45.1%</span></div>
+            <div class="gap-row"><span class="gl">참여율</span><div class="gap-track"><div class="gap-fill use" style="width:7.6%"></div></div><span class="gap-num u">2.1~7.6%</span></div>
           </div>
           <div class="gap-set">
             <div class="gap-y">2025년 (사업 117개)</div>
-            <div class="gap-row"><span class="gl">인지도</span><div class="gap-track"><div class="gap-fill know" style="width:29%">27~29%</div></div></div>
-            <div class="gap-row"><span class="gl">참여율</span><div class="gap-track"><div class="gap-fill use" style="width:3%;min-width:58px;">0.7~0.9%</div></div></div>
+            <div class="gap-row"><span class="gl">인지도</span><div class="gap-track"><div class="gap-fill know" style="width:29%"></div></div><span class="gap-num k">27~29%</span></div>
+            <div class="gap-row"><span class="gl">참여율</span><div class="gap-track"><div class="gap-fill use" style="width:0.9%"></div></div><span class="gap-num u">0.7~0.9%</span></div>
           </div>
         </div>
-        <p style="margin-top:14px;">사업이 늘어나는 동안에도 이 간격은 좁혀지지 않았습니다. 지원사업이 존재하는 것과 청년이 그 지원을 이용하는 것 사이에, <b>탐색과 안내의 다리</b>가 아직 놓이지 못한 상태라고 볼 수 있습니다.</p>
+        <p style="margin-top:14px;">사업은 늘어났지만 이 간격은 오히려 늘어나고 있습니다. 지원사업이 존재하는 것과 청년이 그 지원을 이용하는 것 사이에, <b>탐색과 안내의 다리</b>가 아직 놓이지 못한 상태라고 볼 수 있습니다.</p>
       </div>
 
       <div class="brief">
-        <h3>그래서, 두 가지를 여쭙습니다</h3>
-        <p>지형도가 이 다리의 역할을 하려면 두 가지가 준비되어야 합니다. 실제 지도가 위도와 경도로 위치를 가늠하게 해 주듯, 지원사업을 조사하고 정리하는 데에도 <b>공통으로 적용할 규칙</b>이 필요합니다. 그리고 청년이 제주에 정착해 살아가는 데 <b>어떤 분야의 지원이 필요한지</b>, 그 범위를 담는 틀이 필요합니다. 이 둘은 서로 연결되어 있습니다 — 청년에게 실제로 필요한 것을 확인하고, 그 지원이 적절하게 전달되는 방법을 함께 고민하는 일이기 때문입니다.</p>
+        <h3>설문조사는 아래 세 파트로 진행합니다</h3>
         <div class="two-asks">
           <div class="ta-card">
-            <div class="ta-n">파트 3에서</div>
-            <div class="ta-t">지도를 그리는 규칙</div>
-            <p>지원사업을 조사·정리할 때 어떤 정보 항목을 표준으로 삼을지 — 청년에게 유용한지, 기관이 제공할 수 있는지를 여쭙습니다.</p>
+            <div class="ta-n">파트 2</div>
+            <div class="ta-t">선행연구 내용 소개</div>
+            <p>이번 연구의 틀이 되는 선행연구의 내용을 간략히 소개드립니다.</p>
           </div>
           <div class="ta-card">
-            <div class="ta-n">파트 4에서</div>
-            <div class="ta-t">지원 분야의 틀</div>
-            <p>연구진이 정리한 다섯 분야 열 차원의 구분이 현장을 담아내는지 — 빠진 것, 맞지 않는 것을 여쭙습니다.</p>
+            <div class="ta-n">파트 3</div>
+            <div class="ta-t">조사 항목 검증</div>
+            <p>지원사업을 조사·정리할 때 어떤 정보 항목을 표준으로 삼을지, 앞으로도 활용할 규칙을 검증합니다.</p>
+          </div>
+          <div class="ta-card">
+            <div class="ta-n">파트 4</div>
+            <div class="ta-t">정착 지원 분야 검증</div>
+            <p>청년이 지역에 정착해 살기 위해 필요한 것은 무엇인지, 구분한 요소가 적합한지 검증합니다.</p>
           </div>
         </div>
+        <p style="margin-top:16px;">연구의 결과가 책상에만 남지 않고 현장에서 필요한 자료가 될 수 있도록, 여러분의 생각을 나누어주세요.</p>
       </div>
 
       <details class="more"><summary>이 파트의 출처</summary>
@@ -646,8 +656,8 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
 
     <!-- ─────────── S3 파트 3 (설문) 1부: 지도를 그리는 규칙 ─────────── -->
     <section class="screen" id="s3">
-      <div class="kicker">파트 3 · 설문 1부<span class="kmode askm">여쭙는 자료</span></div>
-      <h2 class="h-title">지도를 그리는 규칙<br>— 조사 항목에 대한 의견</h2>
+      <div class="kicker">파트 3 · 조사 항목 검증<span class="kmode askm">여쭙는 자료</span></div>
+      <h2 class="h-title">조사 항목 검증<br>— 지도를 그리는 규칙</h2>
       <p class="h-sub">제주도 내 지원사업의 종류는 다양하고, 청년에게 제공되는 정보도 기관이나 사업마다 다릅니다. 일정이나 참여 방법처럼 필수로 제공되는 정보도 있지만, 청년이 실제 참여를 고려할 때 필요한 정보는 따로 있습니다. 아래는 연구진이 도내 지원사업 일부를 테스트로 조사하면서 도출한 정보 항목입니다. 실제 사업 하나를 이 틀에 넣으면 이렇게 됩니다.</p>
 
       <div class="sample-card">
@@ -689,7 +699,7 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
 
     <!-- ─────────── S4 파트 4 (설문) 2부: 다섯 분야 열 차원 ─────────── -->
     <section class="screen" id="s4">
-      <div class="kicker">파트 4 · 설문 2부<span class="kmode askm">여쭙는 자료</span></div>
+      <div class="kicker">파트 4 · 정착 지원 분야 검증<span class="kmode askm">여쭙는 자료</span></div>
       <h2 class="h-title">한 청년이 제주에 정착하려면,<br>무엇이 필요할까요?</h2>
 
       <div class="ask">
@@ -851,7 +861,7 @@ const sb = createClient(
 const DEMO = new URLSearchParams(location.search).get('demo') === '1';
 
 /* ══════════ 데이터 정의 ══════════ */
-const STEP_NAMES = ['들어가며','파트 1 · 왜 이 조사인가','파트 2 · 선행연구','파트 3 · 지도를 그리는 규칙','파트 4 · 다섯 분야 열 차원','마지막 질문'];
+const STEP_NAMES = ['들어가며','파트 1 · 왜 이 조사인가','파트 2 · 선행연구','파트 3 · 조사 항목 검증','파트 4 · 정착 지원 분야 검증','마지막 질문'];
 const LAST = 5;
 
 const ITEMS = [
