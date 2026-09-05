@@ -721,6 +721,27 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
 
       <div class="navrow">
         <button class="btn btn-prev" data-go="3">← 이전</button><span></span>
+        <button class="btn btn-next" data-go="5">마지막으로 →</button>
+      </div>
+    </section>
+
+    <!-- ─────────── S5 마지막 질문 ─────────── -->
+    <section class="screen" id="s5">
+      <div class="kicker">마지막<span class="kmode askm">여쭙는 자료</span></div>
+      <h2 class="h-title">이번에는 저희가<br>청년을 만나러 갑니다</h2>
+      <p class="h-sub">이 조사가 끝나면 연구진은 설문과 인터뷰로 제주 청년들을 직접 만납니다. 지원사업을 제공해 오면서 <b>청년들에게 궁금했지만 물을 기회가 없었던 것</b>이 있다면, 저희가 대신 여쭤보겠습니다.</p>
+
+      <div class="ask">
+        <div class="q"><span class="qn">Q7.</span>청년들에게 직접 묻고 싶은 질문이 있다면 적어주세요</div>
+        <div class="qs">지원정책의 활용과 접근에 관한 것이면 더 좋지만, 무엇이든 괜찮습니다.</div>
+        <textarea data-key="q7" placeholder="예) 우리 사업을 신청하려다 그만둔 적이 있는지, 왜였는지 궁금하다"></textarea>
+      </div>
+      <div class="ask">
+        <div class="q">연구에 하고 싶은 말씀이 있다면 자유롭게 남겨주세요 (선택)</div>
+        <textarea data-key="free"></textarea>
+      </div>
+      <div class="navrow">
+        <button class="btn btn-prev" data-go="4">← 이전</button><span></span>
         <button class="btn btn-next" id="submitBtn">제출하기 🍊</button>
       </div>
     </section>
@@ -743,7 +764,8 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
       <div class="done-grid">
         <div class="done-cell"><div class="dc-t">Q1~Q3 → 조사 항목과 리스트 확정</div><p>분류에 대한 의견, 정보 제공의 어려움, 리스트 수정 의견은 조사 항목과 제주청년지원사업 리스트를 다듬는 데 반영됩니다.</p></div>
         <div class="done-cell"><div class="dc-t">Q4·Q5 → 틀의 검증</div><p>분류의 적합성과 기획 활용에 대한 의견은 다섯 분야 열 차원을 확정하고, 사업의 매트릭스를 만들어 가는 근거가 됩니다.</p></div>
-        <div class="done-cell"><div class="dc-t">Q6 → 제주의 특수성</div><p>'제주라서' 다르다고 짚어주신 지점은 이후 청년 조사와 인터뷰 설계에 반영됩니다.</p></div>
+        <div class="done-cell"><div class="dc-t">Q6 → 제주의 특수성</div><p>제주의 특수성을 반영해 짚어주신 지점은 이후 청년 조사와 인터뷰 설계에 반영됩니다.</p></div>
+        <div class="done-cell"><div class="dc-t">Q7 → 청년에게 전달</div><p>청년에게 묻고 싶다고 적어주신 질문은 설문·인터뷰 문항 설계에 검토·반영하고, 결과를 공유드립니다.</p></div>
       </div>
       <p class="h-sub" style="margin-top:24px;text-align:center;">제출 후에도 코드로 다시 들어오면 답을 수정할 수 있습니다.<br>결과는 10월 지역상생축제에서 다시 공유드리겠습니다. — 커먼즈웍스(주)</p>
       <div style="text-align:center;margin-top:18px;">
@@ -768,8 +790,8 @@ const sb = createClient(
 const DEMO = new URLSearchParams(location.search).get('demo') === '1';
 
 /* ══════════ 데이터 정의 ══════════ */
-const STEP_NAMES = ['들어가며','파트 1 · 왜 이 조사인가','파트 2 · 선행연구','파트 3 · 조사 항목 검증','파트 4 · 정착 지원 분야 검증'];
-const LAST = 4;
+const STEP_NAMES = ['들어가며','파트 1 · 왜 이 조사인가','파트 2 · 선행연구','파트 3 · 조사 항목 검증','파트 4 · 정착 지원 분야 검증','마지막 질문'];
+const LAST = 5;
 
 const ITEMS = [
   {k:'area',  t:'지원영역',        def:'생계 · 관계 · 공간 · 정서 · 문화 — 어떤 분야의 지원인지 (파트 4의 틀과 연결됩니다)'},

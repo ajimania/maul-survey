@@ -71,7 +71,7 @@ const sb = createClient(
   'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
 );
 
-const STEP_NAMES = ['들어가며','파트 1','파트 2','파트 3 · 항목 검증','파트 4 · 분야 검증'];
+const STEP_NAMES = ['들어가며','파트 1','파트 2','파트 3 · 항목 검증','파트 4 · 분야 검증','마지막'];
 
 let ROWS=[];
 const $=s=>document.querySelector(s);
@@ -126,7 +126,7 @@ function render(){
     const st=r.submitted_at?'<span class="tag done">완료</span>':'<span class="tag ing">작성중</span>';
     h+=`<tr><td><b>${esc(r.uid)}</b></td>
       <td>${esc(r.org||'')}</td><td>${esc(r.name||'')}</td><td>${st}</td>
-      <td>${esc(STEP_NAMES[Math.min(r.step??0,4)])}</td>
+      <td>${esc(STEP_NAMES[Math.min(r.step??0,5)])}</td>
       <td>${r.updated_at?new Date(r.updated_at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}):''}</td></tr>`;
   });
   h+='</table></div>';
@@ -146,7 +146,11 @@ function render(){
   h+=`<h2>파트 4 — 정착 지원 분야 검증</h2>
   <div class="card"><b style="font-size:14px">Q4. 분류가 정착에 필요한 요소를 잘 구분·충분히 담아내는가</b>${freeTexts(started,'q4_fit')}</div>
   <div class="card"><b style="font-size:14px">Q5. 이 구분 틀로 사업을 기획한다면 도움이 되겠는가</b>${freeTexts(started,'q5_plan')}</div>
-  <div class="card"><b style="font-size:14px">Q6. '제주라서' 육지 연구와 다를 것이라 예상하는 내용</b>${freeTexts(started,'q6_jeju')}</div>`;
+  <div class="card"><b style="font-size:14px">Q6. 제주의 특수성을 반영해 차별화해야 할 내용</b>${freeTexts(started,'q6_jeju')}</div>`;
+
+  /* 마지막 */
+  h+=`<h2>Q7 — 청년에게 묻고 싶은 질문</h2><div class="card">${freeTexts(started,'q7')}</div>
+  <h2>자유 의견</h2><div class="card">${freeTexts(started,'free')}</div>`;
 
   $('#content').innerHTML=h;
 }
