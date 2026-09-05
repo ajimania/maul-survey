@@ -71,7 +71,7 @@ const sb = createClient(
   'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB'
 );
 
-const STEP_NAMES = ['들어가며','파트 1','파트 2','파트 3 · 항목 검증','파트 4 · 분야 검증','마지막'];
+const STEP_NAMES = ['들어가며','파트 1','파트 2','파트 3 · 항목 검증','파트 4 · 분야 검증'];
 
 let ROWS=[];
 const $=s=>document.querySelector(s);
@@ -126,7 +126,7 @@ function render(){
     const st=r.submitted_at?'<span class="tag done">완료</span>':'<span class="tag ing">작성중</span>';
     h+=`<tr><td><b>${esc(r.uid)}</b></td>
       <td>${esc(r.org||'')}</td><td>${esc(r.name||'')}</td><td>${st}</td>
-      <td>${esc(STEP_NAMES[Math.min(r.step??0,5)])}</td>
+      <td>${esc(STEP_NAMES[Math.min(r.step??0,4)])}</td>
       <td>${r.updated_at?new Date(r.updated_at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}):''}</td></tr>`;
   });
   h+='</table></div>';
@@ -136,35 +136,17 @@ function render(){
   <div class="card"><b style="font-size:14px">담당 업무 분야</b>${freeTexts(started,'field')}
   <div style="height:14px"></div><b style="font-size:14px">업무연차</b>${bars(count(started,'years'),N,'sea')}</div>`;
 
-  /* 파트 3 — 조사 항목 */
+  /* 파트 3 — 조사 항목 검증 */
   h+=`<h2>파트 3 — 조사 항목 검증</h2>
   <div class="card"><b style="font-size:14px">Q1. 분류의 적합성·충분성, 더 필요한 항목·분야</b>${freeTexts(started,'q1')}</div>
-  <div class="card"><b style="font-size:14px">Q2. 정보 제공의 어려움</b>${freeTexts(started,'q2')}</div>`;
+  <div class="card"><b style="font-size:14px">Q2. 정보 제공의 어려움</b>${freeTexts(started,'q2')}</div>
+  <div class="card"><b style="font-size:14px">Q3. 제주청년지원사업 리스트 수정 의견</b>${freeTexts(started,'q3_list')}</div>`;
 
-  /* 파트 4 — 열 차원 */
+  /* 파트 4 — 정착 지원 분야 검증 */
   h+=`<h2>파트 4 — 정착 지원 분야 검증</h2>
-  <div class="card"><b style="font-size:14px">Q3. 일자리·주거·문화 외에 필요한 요소 (틀 공개 전 응답)</b>`;
-  const els=[];
-  started.forEach(r=>{
-    [1,2].forEach(i=>{
-      const el=(r.payload?.[`q3_el${i}`]||'').trim();
-      if(el)els.push({org:r.org||r.uid,el,why:r.payload?.[`q3_why${i}`]||''});
-    });
-  });
-  if(els.length){
-    h+='<table style="margin-top:10px"><tr><th>기관</th><th>요소</th><th>이유</th></tr>';
-    els.forEach(e=>h+=`<tr><td>${esc(e.org)}</td><td><b>${esc(e.el)}</b></td><td>${esc(e.why)}</td></tr>`);
-    h+='</table>';
-  }else h+='<div class="note">응답 없음</div>';
-  h+=`</div><div class="card"><b style="font-size:14px">Q4. '제주라서' 다르게 작동하는 것</b>`;
-  const q4=started.filter(r=>((r.payload?.q4_el||'')+(r.payload?.q4_txt||'')).trim());
-  h+= q4.length? q4.map(r=>`<div class="free-item"><div class="who">${esc(r.org||r.uid)}</div>${r.payload.q4_el?`<b>${esc(r.payload.q4_el)}</b> — `:''}${esc(r.payload.q4_txt||'')}</div>`).join('') : '<div class="note">응답 없음</div>';
-  h+=`</div>
-  <div class="card"><b style="font-size:14px">Q5. 이 틀, 현장을 담고 있나 (적합성 · 빠진 것 · 수정 제안)</b>${freeTexts(started,'q5')}</div>`;
-
-  /* 마지막 */
-  h+=`<h2>Q6 — 청년에게 묻고 싶은 질문</h2><div class="card">${freeTexts(started,'q7')}</div>
-  <h2>자유 의견</h2><div class="card">${freeTexts(started,'free')}</div>`;
+  <div class="card"><b style="font-size:14px">Q4. 분류가 정착에 필요한 요소를 잘 구분·충분히 담아내는가</b>${freeTexts(started,'q4_fit')}</div>
+  <div class="card"><b style="font-size:14px">Q5. 이 구분 틀로 사업을 기획한다면 도움이 되겠는가</b>${freeTexts(started,'q5_plan')}</div>
+  <div class="card"><b style="font-size:14px">Q6. '제주라서' 육지 연구와 다를 것이라 예상하는 내용</b>${freeTexts(started,'q6_jeju')}</div>`;
 
   $('#content').innerHTML=h;
 }
