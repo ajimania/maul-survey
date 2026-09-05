@@ -225,19 +225,17 @@ input[type=text]{
 
 /* 만족도 4집단 */
 .gcards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
-.gcard{
-  background:#fff;border:1.5px solid var(--line);border-top:4px solid var(--line);
-  border-radius:13px;padding:14px 16px;
-}
+.gcard{background:#fff;border:1.5px solid var(--line);border-radius:13px;padding:14px 16px;}
 .gcard .gc-h{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:900;margin-bottom:7px;}
-.gcard .gc-dot{width:10px;height:10px;border-radius:50%;flex:none;}
+.gc-dot{width:10px;height:10px;border-radius:50%;flex:none;}
 .gcard .gc-pct{margin-left:auto;font-size:15px;font-weight:900;color:var(--green-deep);}
 .gcard p{font-size:12.5px;color:#5A6459;line-height:1.65;}
-.gcard .gc-need{
-  margin-top:10px;padding:8px 11px;border-radius:9px;background:var(--tangerine-pale);
-  font-size:12px;line-height:1.55;color:#8A5A1E;
-}
-.gcard .gc-need b{color:var(--tangerine-deep);}
+.need-list{border:1.5px solid var(--line);border-radius:13px;background:#fff;padding:4px 18px;margin-top:12px;}
+.need-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 9px;padding:11px 0;border-bottom:1px dashed var(--line);font-size:13.5px;line-height:1.6;}
+.need-row:last-child{border-bottom:none;}
+.need-row .ng{flex:none;min-width:132px;font-weight:700;}
+.need-row .nv{color:#5A6459;flex:1;min-width:220px;}
+.need-row .nv b{color:var(--tangerine-deep);}
 /* 질적 연구 인용 */
 .qcard{background:#fff;border-left:4px solid var(--sea);border-radius:12px;padding:14px 17px;margin-top:12px;font-size:14.5px;line-height:1.78;color:#41534A;}
 .qcard .qsrc{font-size:11.5px;color:var(--muted);margin-top:7px;}
@@ -547,30 +545,36 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
           <div class="tcard"><div class="tc-h"><span class="tc-dot" style="background:var(--tangerine)"></span>U턴 9.9%</div><p>육지에 나갔다 돌아온 청년. 과거에 떠난 사유의 56.5%가 교육이었습니다.</p></div>
           <div class="tcard"><div class="tc-h"><span class="tc-dot" style="background:var(--sea)"></span>이주 18.2%</div><p>다른 지역에서 온 청년. 전입 사유는 직업 39.2%·가족 36.3%입니다.</p></div>
         </div>
-        <p style="margin-top:14px;">특히 2026년 제주연구원의 연구는 <b>청년 집단 내부의 이질성을 반영한 연구가 필요하다</b>고 밝히고 있습니다. 실제로 제주의 청년 집단을 삶의 만족도 수준을 기준으로 네 개의 층위로 구분했을 때, 각 집단이 기본적으로 보유한 삶의 조건과 앞으로 제주에 지속적으로 살기 위한 정착의 조건이 서로 다르다는 것을 확인했습니다.</p>
+      </div>
+
+      <div class="brief">
+        <h3>만족도로 나누면, 다시 네 집단입니다</h3>
+        <p>2026년 제주연구원의 연구는 <b>청년 집단 내부의 이질성을 반영한 연구가 필요하다</b>고 밝히고 있습니다. 제주의 청년 집단을 삶의 만족도 수준으로 나눠 보면 네 집단이 되고, 각 집단이 보유한 삶의 조건과 정착의 조건이 서로 다릅니다.</p>
         <div class="gcards">
-          <div class="gcard" style="border-top-color:var(--tangerine)">
+          <div class="gcard">
             <div class="gc-h"><span class="gc-dot" style="background:var(--tangerine)"></span>정주지향 고만족 집단<span class="gc-pct">7.3%</span></div>
-            <p>만족도가 가장 높고, 제주 계속 거주 비율과 앞으로의 정주 의향이 높은 집단입니다. 평균 27.7세로 가장 젊고, 남성·무배우자 비중이 높습니다.</p>
-            <div class="gc-need">2순위 수요 — <b>청년 사회참여 확대(34.2%)·교류 확대</b> 응답이 타 집단보다 높음</div>
+            <p>만족도가 가장 높고, 계속 거주 비율과 정주 의향이 높습니다. 평균 27.7세로 가장 젊습니다.</p>
           </div>
-          <div class="gcard" style="border-top-color:var(--green)">
+          <div class="gcard">
             <div class="gc-h"><span class="gc-dot" style="background:var(--green)"></span>생활안정형 만족 집단<span class="gc-pct">39.8%</span></div>
-            <p>높은 수준의 삶의 만족을 보이고, 자가·상용근로·계속 거주 비율이 비교적 높은 집단입니다. 평균 29.6세.</p>
-            <div class="gc-need">2순위 수요 — <b>출산·육아 부담</b> 관련 응답이 상대적으로 높음</div>
+            <p>삶의 만족이 높은 수준이고, 자가·상용근로·계속 거주 비율이 비교적 높습니다. 평균 29.6세.</p>
           </div>
-          <div class="gcard" style="border-top-color:var(--sea)">
+          <div class="gcard">
             <div class="gc-h"><span class="gc-dot" style="background:var(--sea)"></span>보편형 중간 만족 집단<span class="gc-pct">43.9%</span></div>
-            <p>규모가 가장 큰 집단으로, 전체 평균에 가까운 일반적 특성을 보입니다. 평균 29.9세, 여성 비중이 조금 높습니다.</p>
-            <div class="gc-need">2순위 수요 — <b>출산·육아 부담</b> 관련 응답이 상대적으로 높음</div>
+            <p>규모가 가장 큰 집단으로, 전체 평균에 가까운 특성을 보입니다. 평균 29.9세.</p>
           </div>
-          <div class="gcard" style="border-top-color:var(--basalt-soft)">
+          <div class="gcard">
             <div class="gc-h"><span class="gc-dot" style="background:var(--basalt-soft)"></span>정주 불안정형 저만족 집단<span class="gc-pct">9.0%</span></div>
-            <p>도외 전입 청년 비율이 타 집단보다 높고, 정주를 유보하거나 부정하는 응답과 스트레스·외로움이 높은 집단입니다. 평균 31.8세, 혼인가족 비중이 높습니다.</p>
-            <div class="gc-need">2순위 수요 — <b>주거·생활안정 지원 58.6%</b>로 가장 높음</div>
+            <p>도외 전입 비율이 높고, 정주 유보·부정 응답과 스트레스·외로움이 높습니다. 평균 31.8세.</p>
           </div>
         </div>
-        <p style="margin-top:16px;">모든 집단에서 1순위 필요는 일자리로 같았지만, 2순위 이하에서는 이렇게 방향이 갈립니다. 지역에 계속 머물고자 하는 청년일수록 <b>지역사회 안에서의 역할과 관계망 형성</b>에 대한 욕구가 강했고, 생활 기반을 갖춘 청년에게는 가족 형성과 장기 정주를 뒷받침하는 <b>보육·돌봄·교육 여건</b>이, 정착이 불안정한 청년에게는 고용환경 개선과 함께 <b>주거와 생활의 안정</b>이 중요한 과제로 나타났습니다. 사회참여가 부가적인 활동이 아니라, 정주 의향을 공고히 하고 지역에 대한 심리적·사회적 애착을 강화하는 매개 요인으로 기능할 수 있다는 해석도 이 연구가 보여주는 대목입니다.</p>
+        <p style="margin-top:16px;">모든 집단에서 1순위 필요는 <b>일자리</b>로 같았습니다. 2순위부터는 이렇게 갈립니다.</p>
+        <div class="need-list">
+          <div class="need-row"><span class="gc-dot" style="background:var(--tangerine)"></span><span class="ng">정주지향 고만족</span><span class="nv"><b>청년 사회참여·교류 확대</b> (34.2%)</span></div>
+          <div class="need-row"><span class="gc-dot" style="background:var(--green)"></span><span class="gc-dot" style="background:var(--sea)"></span><span class="ng">생활안정형 · 보편형</span><span class="nv"><b>출산·육아 부담</b> 관련 지원</span></div>
+          <div class="need-row"><span class="gc-dot" style="background:var(--basalt-soft)"></span><span class="ng">정주 불안정형</span><span class="nv"><b>주거·생활안정 지원</b> (58.6%)</span></div>
+        </div>
+        <p style="margin-top:14px;">특히 사회참여가 부가적인 활동이 아니라, 정주 의향을 공고히 하고 지역에 대한 심리적·사회적 애착을 강화하는 매개 요인으로 기능할 수 있다는 해석은 눈여겨볼 대목입니다.</p>
       </div>
 
       <div class="brief">
