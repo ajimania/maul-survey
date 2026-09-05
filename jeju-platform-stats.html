@@ -107,26 +107,26 @@ function bars(entries,total,cls=''){
 }
 function freeTexts(rows,key){
   const out=rows.filter(r=>(r.payload?.[key]||'').toString().trim()).map(r=>
-    `<div class="free-item"><div class="who">${esc(r.org||r.payload?.org||r.code)}${r.name?` · ${esc(r.name)}`:''}</div>${esc(r.payload[key])}</div>`);
+    `<div class="free-item"><div class="who">${esc(r.org||r.payload?.org||r.uid)}${r.name?` · ${esc(r.name)}`:''}</div>${esc(r.payload[key])}</div>`);
   return out.length?out.join(''):'<div class="note">응답 없음</div>';
 }
 
 function render(){
-  const started=ROWS.filter(r=>r.started&&(r.step>0||Object.keys(r.payload||{}).length>0));
+  const started=ROWS;
   const done=started.filter(r=>r.submitted_at);
   const ing=started.filter(r=>!r.submitted_at);
   const N=started.length;
-  $('#meta').textContent=`발급 ${ROWS.length}개 · 완료 ${done.length} · 작성중 ${ing.length} · 미시작 ${ROWS.length-started.length} — ${new Date().toLocaleString('ko-KR')}`;
+  $('#meta').textContent=`계정 ${ROWS.length}개 · 완료 ${done.length} · 작성중 ${ing.length} — ${new Date().toLocaleString('ko-KR')}`;
 
   let h='';
 
   /* 회수 현황 */
-  h+=`<h2>회수 현황</h2><div class="card"><table><tr><th>코드</th><th>기관(입력)</th><th>상태</th><th>진행</th><th>마지막 저장</th></tr>`;
+  h+=`<h2>회수 현황</h2><div class="card"><table><tr><th>아이디</th><th>기관(입력)</th><th>이름</th><th>상태</th><th>진행</th><th>마지막 저장</th></tr>`;
   ROWS.forEach(r=>{
-    const st=r.submitted_at?'<span class="tag done">완료</span>':(r.started&&(r.step>0||Object.keys(r.payload||{}).length)?'<span class="tag ing">작성중</span>':'<span class="tag no">미시작</span>');
-    h+=`<tr><td><b>${esc(r.code)}</b>${r.assigned_org?`<br><span style="color:var(--muted);font-size:11px">배정: ${esc(r.assigned_org)}</span>`:''}</td>
-      <td>${esc(r.org||'')}</td><td>${st}</td>
-      <td>${r.started?esc(STEP_NAMES[Math.min(r.step??0,5)]):''}</td>
+    const st=r.submitted_at?'<span class="tag done">완료</span>':'<span class="tag ing">작성중</span>';
+    h+=`<tr><td><b>${esc(r.uid)}</b></td>
+      <td>${esc(r.org||'')}</td><td>${esc(r.name||'')}</td><td>${st}</td>
+      <td>${esc(STEP_NAMES[Math.min(r.step??0,5)])}</td>
       <td>${r.updated_at?new Date(r.updated_at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}):''}</td></tr>`;
   });
   h+='</table></div>';
@@ -148,7 +148,7 @@ function render(){
   started.forEach(r=>{
     [1,2].forEach(i=>{
       const el=(r.payload?.[`q3_el${i}`]||'').trim();
-      if(el)els.push({org:r.org||r.code,el,why:r.payload?.[`q3_why${i}`]||''});
+      if(el)els.push({org:r.org||r.uid,el,why:r.payload?.[`q3_why${i}`]||''});
     });
   });
   if(els.length){
@@ -158,7 +158,7 @@ function render(){
   }else h+='<div class="note">응답 없음</div>';
   h+=`</div><div class="card"><b style="font-size:14px">Q4. '제주라서' 다르게 작동하는 것</b>`;
   const q4=started.filter(r=>((r.payload?.q4_el||'')+(r.payload?.q4_txt||'')).trim());
-  h+= q4.length? q4.map(r=>`<div class="free-item"><div class="who">${esc(r.org||r.code)}</div>${r.payload.q4_el?`<b>${esc(r.payload.q4_el)}</b> — `:''}${esc(r.payload.q4_txt||'')}</div>`).join('') : '<div class="note">응답 없음</div>';
+  h+= q4.length? q4.map(r=>`<div class="free-item"><div class="who">${esc(r.org||r.uid)}</div>${r.payload.q4_el?`<b>${esc(r.payload.q4_el)}</b> — `:''}${esc(r.payload.q4_txt||'')}</div>`).join('') : '<div class="note">응답 없음</div>';
   h+=`</div>
   <div class="card"><b style="font-size:14px">Q5. 이 틀, 현장을 담고 있나 (적합성 · 빠진 것 · 수정 제안)</b>${freeTexts(started,'q5')}</div>`;
 
@@ -173,11 +173,11 @@ function render(){
 $('#csvBtn').onclick=()=>{
   const keys=new Set();
   ROWS.forEach(r=>Object.keys(r.payload||{}).forEach(k=>keys.add(k)));
-  const cols=['code','org','name','step','submitted_at','updated_at',...[...keys].sort()];
+  const cols=['uid','org','name','step','submitted_at','updated_at',...[...keys].sort()];
   const lines=[cols.join(',')];
   ROWS.forEach(r=>{
     lines.push(cols.map(c=>{
-      let v=['code','org','name','step','submitted_at','updated_at'].includes(c)?r[c]:r.payload?.[c];
+      let v=['uid','org','name','step','submitted_at','updated_at'].includes(c)?r[c]:r.payload?.[c];
       if(v===undefined||v===null)v='';
       if(Array.isArray(v))v=v.join('|');
       else if(typeof v==='object')v=JSON.stringify(v);

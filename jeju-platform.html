@@ -315,12 +315,14 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
 .login-card .art{max-width:250px;margin:0 auto 6px;}
 .login-card h1{font-size:22px;font-weight:900;line-height:1.4;margin-bottom:6px;letter-spacing:-.01em;}
 .login-card .lp{font-size:13.5px;color:var(--muted);line-height:1.7;margin-bottom:22px;}
-.code-in{
-  width:100%;text-align:center;font-size:21px;font-weight:900;letter-spacing:.12em;
-  border:2px solid var(--line);border-radius:14px;padding:14px;text-transform:uppercase;
+.login-lb{font-size:12.5px;font-weight:700;color:var(--basalt-soft);text-align:left;margin:12px 0 6px;}
+.id-in{
+  width:100%;font-size:16px;font-weight:700;
+  border:2px solid var(--line);border-radius:14px;padding:13px 16px;
   background:#fff;transition:border-color .15s;
 }
-.code-in:focus{outline:none;border-color:var(--green);}
+.id-in:focus{outline:none;border-color:var(--green);}
+.pw-in{text-align:center;font-size:21px;font-weight:900;letter-spacing:.35em;}
 .login-err{font-size:13px;color:#C7583F;font-weight:700;margin-top:10px;min-height:18px;}
 .resume-box{
   display:none;background:var(--green-pale);border-radius:14px;padding:16px;margin-top:16px;
@@ -376,8 +378,11 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
       </svg>
     </div>
     <h1>제주 청년 정착 연구<br>현장과 함께 만드는 조사</h1>
-    <p class="lp">안내받으신 참여 코드를 입력해 주세요.<br>어느 기기에서든 코드만 있으면 이어서 작성할 수 있습니다.</p>
-    <input class="code-in" id="codeIn" placeholder="코드 4자리" maxlength="6" autocomplete="off">
+    <p class="lp">사용할 아이디와 비밀번호를 정해 입력해 주세요. 처음 입력하면 그대로 시작되고,<br>다음에 같은 아이디·비밀번호로 들어오면 <b>어느 기기에서든 하던 곳에서 이어집니다.</b></p>
+    <div class="login-lb">아이디</div>
+    <input class="id-in" id="uidIn" placeholder="기관명이나 이름처럼 기억하기 쉬운 것" autocomplete="off">
+    <div class="login-lb">비밀번호 (숫자 4자리)</div>
+    <input class="id-in pw-in" id="pwIn" type="password" inputmode="numeric" maxlength="4" placeholder="····" autocomplete="off">
     <div class="login-err" id="loginErr"></div>
     <button class="btn btn-next" style="width:100%;margin-top:6px;" id="loginBtn">시작하기</button>
     <div class="resume-box" id="resumeBox">
@@ -874,7 +879,7 @@ const DIMS = [
 ];
 
 /* ══════════ 상태 ══════════ */
-const S = { code:null, a:{}, step:0, maxStep:0, submitted:false };
+const S = { uid:null, pw:null, a:{}, step:0, maxStep:0, submitted:false };
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 
@@ -883,21 +888,21 @@ let saveTimer=null, dirty=false;
 function markDirty(){ dirty=true; clearTimeout(saveTimer); saveTimer=setTimeout(save, 2500); }
 async function save(submit=false){
   clearTimeout(saveTimer);
-  if(!S.code) return;
+  if(!S.uid) return;
   if(!dirty && !submit) return;
   dirty=false;
   const ind=$('#saveInd');
   if(DEMO){ ind.textContent='데모 모드 — 저장 안 함'; return; }
   ind.textContent='저장 중…'; ind.classList.add('busy');
   try{
-    const {data,error} = await sb.rpc('jp_save',{p_code:S.code,p_payload:S.a,p_step:S.maxStep,p_submit:submit});
+    const {data,error} = await sb.rpc('jp_save',{p_uid:S.uid,p_pw:S.pw,p_payload:S.a,p_step:S.maxStep,p_submit:submit});
     if(error||!data?.ok) throw error||new Error('save fail');
-    localStorage.setItem('jp_backup', JSON.stringify({code:S.code,a:S.a,step:S.maxStep,t:Date.now()}));
+    localStorage.setItem('jp_backup', JSON.stringify({uid:S.uid,a:S.a,step:S.maxStep,t:Date.now()}));
     const t=new Date();
     ind.textContent='저장됨 · '+String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
   }catch(e){
     dirty=true;
-    localStorage.setItem('jp_backup', JSON.stringify({code:S.code,a:S.a,step:S.maxStep,t:Date.now()}));
+    localStorage.setItem('jp_backup', JSON.stringify({uid:S.uid,a:S.a,step:S.maxStep,t:Date.now()}));
     ind.textContent='오프라인 — 기기에 임시 저장됨';
   }
   ind.classList.remove('busy');
@@ -1056,15 +1061,17 @@ function restore(){
 
 /* ══════════ 로그인 ══════════ */
 async function tryLogin(){
-  const code=($('#codeIn').value||'').trim().toUpperCase();
-  if(!code){ $('#loginErr').textContent='코드를 입력해 주세요'; return; }
+  const uid=($('#uidIn').value||'').trim();
+  const pw=($('#pwIn').value||'').trim();
+  if(!uid){ $('#loginErr').textContent='아이디를 입력해 주세요'; $('#uidIn').focus(); return; }
+  if(!/^\d{4}$/.test(pw)){ $('#loginErr').textContent='비밀번호는 숫자 4자리로 입력해 주세요'; $('#pwIn').focus(); return; }
   $('#loginBtn').disabled=true; $('#loginErr').textContent='';
   let res;
   if(DEMO){
-    res={ok:true,step:0,submitted:false,payload:{}};
+    res={ok:true,created:true,step:0,submitted:false,payload:{}};
   }else{
     try{
-      const {data,error}=await sb.rpc('jp_login',{p_code:code});
+      const {data,error}=await sb.rpc('jp_signin',{p_uid:uid,p_pw:pw});
       if(error) throw error;
       res=data;
     }catch(e){
@@ -1073,14 +1080,16 @@ async function tryLogin(){
     }
   }
   if(!res.ok){
-    $('#loginErr').textContent='등록되지 않은 코드입니다. 안내받은 코드를 다시 확인해 주세요.';
+    $('#loginErr').textContent = res.reason==='pw'
+      ? '이미 사용 중인 아이디입니다. 본인 것이 맞다면 비밀번호를 확인하시고, 아니라면 다른 아이디를 써 주세요.'
+      : '아이디와 숫자 4자리 비밀번호를 확인해 주세요.';
     $('#loginBtn').disabled=false; return;
   }
-  S.code=code;
+  S.uid=uid; S.pw=pw;
   S.a=res.payload||{};
   try{
     const bk=JSON.parse(localStorage.getItem('jp_backup')||'null');
-    if(bk && bk.code===code && Object.keys(bk.a||{}).length>Object.keys(S.a).length){ S.a=bk.a; dirty=true; }
+    if(bk && bk.uid===uid && Object.keys(bk.a||{}).length>Object.keys(S.a).length){ S.a=bk.a; dirty=true; }
   }catch(e){}
   S.maxStep=Math.min(res.step||0,LAST);
   S.submitted=!!res.submitted;
@@ -1110,8 +1119,10 @@ function enter(step){
   dirty=false;
 }
 $('#loginBtn').onclick=tryLogin;
-$('#codeIn').addEventListener('keydown',e=>{ if(e.key==='Enter') tryLogin(); });
-if(DEMO){ $('#codeIn').value='DEMO'; }
+$('#uidIn').addEventListener('keydown',e=>{ if(e.key==='Enter') $('#pwIn').focus(); });
+$('#pwIn').addEventListener('keydown',e=>{ if(e.key==='Enter') tryLogin(); });
+$('#pwIn').addEventListener('input',e=>{ e.target.value=e.target.value.replace(/\D/g,'').slice(0,4); });
+if(DEMO){ $('#uidIn').value='DEMO'; $('#pwIn').value='0000'; }
 
 /* 초기 렌더 */
 renderItems(); renderDims(); renderPicto(); renderSteps();
