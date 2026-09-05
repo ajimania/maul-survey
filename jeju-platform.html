@@ -224,6 +224,18 @@ input[type=text]{
 .cmp .o{color:var(--green);}
 .cmp .x{color:#C7583F;}
 
+/* 만족도 4층위 */
+.tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px;}
+.tier{border:1.5px solid var(--line);border-radius:12px;padding:12px 8px;text-align:center;}
+.tier .tt{font-size:13.5px;font-weight:900;}
+.tier small{display:block;font-size:11px;color:#5A6459;margin-top:3px;line-height:1.45;}
+.tier-note{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6;}
+.tier-band{border-radius:11px;padding:10px 15px;font-size:13.5px;margin-top:10px;line-height:1.6;}
+.tier-band.common{background:var(--green-pale);color:var(--green-deep);}
+.tier-band.diff{background:var(--tangerine-pale);border:1.5px dashed var(--tangerine);color:#8A5A1E;}
+/* 질적 연구 인용 */
+.qcard{background:#fff;border-left:4px solid var(--sea);border-radius:12px;padding:14px 17px;margin-top:12px;font-size:14.5px;line-height:1.78;color:#41534A;}
+.qcard .qsrc{font-size:11.5px;color:var(--muted);margin-top:7px;}
 /* 체크리스트 연출 */
 .chk-grid{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px;}
 .chk-item{
@@ -522,81 +534,48 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
     <section class="screen" id="s2">
       <div class="kicker">파트 2<span class="kmode read">읽는 자료</span></div>
       <h2 class="h-title">선행연구에서 알게 된 것</h2>
-      <p class="h-sub">조사에 앞서 제주 발간자료 3종과 청년 정주·이주 연구 8편을 검토했습니다. 그 가운데 이 연구의 틀에 직접 반영된 발견 네 가지를 소개하고, 마지막으로 제주도의 정책 틀을 같은 눈으로 살펴봅니다. 여기서는 따로 여쭙는 것 없이, 읽어보시기만 하면 됩니다.</p>
+      <p class="h-sub">조사에 앞서 제주 및 전국의 청년 정착, 지원사업과 관련한 연구를 검토했습니다. 그 중에 이번 연구에 시사점을 줄 만한 내용을 정리했습니다. 현장에서 청년의 지원을 고민하는 여러분께도 도움이 되었으면 합니다. 여기서는 따로 여쭙는 것 없이, 읽어보시기만 하면 됩니다.</p>
 
       <div class="brief">
-        <h3>① 청년은 한 종류가 아닙니다</h3>
-        <p>지금 제주에 사는 청년 열 명을 세워 보면, 일곱 명은 제주에서 계속 살아온 청년, 한 명은 나갔다 돌아온 U턴 청년, 두 명은 다른 지역에서 온 이주 청년입니다. 2025년부터 공식 통계가 이렇게 세 유형을 구분합니다.</p>
-        <div class="viz">
-          <svg viewBox="0 0 640 96" xmlns="http://www.w3.org/2000/svg"><g id="pg"></g></svg>
-        </div>
+        <h3>청년은 단일한 집단이 아닙니다</h3>
+        <p>지금 제주에 사는 청년 열 명을 세워 보면, 일곱 명은 제주에서 계속 살아온 청년, 한 명은 육지에 나갔다 돌아온 U턴 청년, 두 명은 다른 지역에서 온 이주 청년입니다. 2025년부터 공식 통계가 이렇게 세 유형을 구분합니다.</p>
         <div class="type-cards">
           <div class="tcard"><div class="tc-h"><span class="tc-dot" style="background:var(--green)"></span>계속거주 71.9%</div><p>제주에서 계속 살아온 청년. 열 명 중 일곱입니다.</p></div>
-          <div class="tcard"><div class="tc-h"><span class="tc-dot" style="background:var(--tangerine)"></span>U턴 9.9%</div><p>나갔다 돌아온 청년. 과거에 떠난 사유의 56.5%가 교육이었습니다.</p></div>
+          <div class="tcard"><div class="tc-h"><span class="tc-dot" style="background:var(--tangerine)"></span>U턴 9.9%</div><p>육지에 나갔다 돌아온 청년. 과거에 떠난 사유의 56.5%가 교육이었습니다.</p></div>
           <div class="tcard"><div class="tc-h"><span class="tc-dot" style="background:var(--sea)"></span>이주 18.2%</div><p>다른 지역에서 온 청년. 전입 사유는 직업 39.2%·가족 36.3%입니다.</p></div>
         </div>
-        <p style="margin-top:14px;">다른 지역의 연구들은, 이 유형에 따라 정주를 좌우하는 요인 자체가 달라진다는 것을 반복해서 확인했습니다. 청년을 한 덩어리로 조사하면 보이지 않던 것이, 나눠서 보면 보입니다.</p>
-        <div class="cmp-grid">
-          <div class="cmp"><div class="cm-h">강원 — 나고 자란 청년</div>
-            <div class="row"><span>자연환경</span><span class="ox o">작동 ○</span></div>
-            <div class="row"><span>청년정책</span><span class="ox x">효과 없음 ×</span></div>
-          </div>
-          <div class="cmp"><div class="cm-h">강원 — 이주해 온 청년</div>
-            <div class="row"><span>청년정책 만족도</span><span class="ox o">작동 ○</span></div>
-            <div class="row"><span>자연환경</span><span class="ox x">효과 없음 ×</span></div>
-          </div>
-          <div class="cmp"><div class="cm-h">광주 — 광주 출신 청년</div>
-            <div class="row"><span>정책 인지·이용</span><span class="ox o">이탈을 낮춤 ○</span></div>
-          </div>
-          <div class="cmp"><div class="cm-h">광주 — 타지에서 온 청년</div>
-            <div class="row"><span>여가 만족</span><span class="ox o">작동 ○</span></div>
-            <div class="row"><span>정책 인지·이용</span><span class="ox x">효과 없음 ×</span></div>
-          </div>
+        <p style="margin-top:14px;">특히 2025년 제주연구원의 연구는 <b>청년 집단 내부의 이질성을 반영한 연구가 필요하다</b>고 밝히고 있습니다. 실제로 제주의 청년 집단을 삶의 만족도 수준을 기준으로 네 개의 층위로 구분했을 때, 각 집단이 기본적으로 보유한 삶의 조건과 앞으로 제주에 지속적으로 살기 위한 정착의 조건이 서로 다르다는 것을 확인했습니다.</p>
+        <div class="tiers">
+          <div class="tier" style="background:rgba(47,107,79,.26)"><div class="tt">1층위</div><small>만족도 가장 높음</small></div>
+          <div class="tier" style="background:rgba(47,107,79,.18)"><div class="tt">2층위</div><small>만족도 높음</small></div>
+          <div class="tier" style="background:rgba(47,107,79,.10)"><div class="tt">3층위</div><small>만족도 낮음</small></div>
+          <div class="tier" style="background:rgba(47,107,79,.04)"><div class="tt">4층위</div><small>만족도 가장 낮음</small></div>
         </div>
-        <p style="margin-top:14px;">전체 평균으로 물으면 이 차이는 사라집니다. 본 조사의 표집과 분석이 세 유형 구분을 기본 축으로 삼는 이유입니다.</p>
+        <div class="tier-note">◀ 만족도가 높은 집단일수록 남성·무배우자 청년의 비중이 높고, 평균 연령도 높았습니다</div>
+        <div class="tier-band common">모든 집단에서 삶의 필요 1순위 — <b>일자리</b></div>
+        <div class="tier-band diff">2순위 이하의 필요 — <b>집단마다 서로 달랐습니다</b></div>
       </div>
 
       <div class="brief">
-        <h3>② 조사 항목에 없던 것 — 관계와 마음</h3>
-        <p>기존 정주 조사의 항목을 그대로 펼치면 이렇습니다.</p>
+        <h3>청년이 지역에 정착하기 위해 필요한 요소</h3>
+        <p>청년의 정주 의향과 정책의 관계를 묻는 연구도 시대에 따라 변해 왔습니다. 청년 정책이 도입되던 초기에는 주로 일자리, 주거, 문화시설 유무 같은 물리적 조건이 보기로 주어졌습니다. 최근에는 청년의 삶과 필요에 대한 이해가 깊어지면서, 더 다양한 요인을 포함해 묻는 연구들이 등장하고 있습니다.</p>
+        <p>최근 정주에 영향을 주는 요인을 조사한 연구들에 제시되는 지원 영역은 이렇습니다.</p>
         <div class="chk-grid">
-          <span class="chk-item">일자리</span><span class="chk-item">주거</span><span class="chk-item">교육·돌봄</span>
-          <span class="chk-item">기초생활</span><span class="chk-item">문화·여가</span><span class="chk-item">교통</span>
-          <span class="chk-item">안전</span><span class="chk-item">보건의료</span><span class="chk-item">자연환경</span>
-          <span class="chk-item blank">관계 — ?</span><span class="chk-item blank">마음 — ?</span>
+          <span class="chk-item">일자리</span><span class="chk-item">창업</span><span class="chk-item">주거</span>
+          <span class="chk-item">교육</span><span class="chk-item">기초생활</span><span class="chk-item">문화여가</span>
+          <span class="chk-item">학습(성장)</span><span class="chk-item">커뮤니티</span><span class="chk-item">발언권(거버넌스 참여)</span>
         </div>
-        <p style="margin-top:14px;">아홉 개 가운데 사람과의 관계를 묻는 항목은 없습니다. 그런데 실태는 바로 그 빈칸에서 움직이고 있습니다. 청년이 가장 중요하게 꼽는 가치는 여전히 '좋은 사람들과의 관계'입니다. 그런데 급히 큰돈이 필요할 때 도움받을 곳이 없다는 청년은 4년 사이 10.6%에서 17.7%로 늘었고, 우울 유병률은 두 배가 됐습니다(경남 조사, 전국 추세 동일). 제주에서도 계속 살고 싶은 이유의 2위는 가족·지인(28.7%)이고, 은둔 상태로 추정되는 청년이 8.4%입니다. 묻지 않아서 보이지 않았을 뿐, 청년의 답 속에는 이미 있었습니다.</p>
-        <div class="stats">
-          <div class="stat"><div class="num">51.2%</div><div class="lb">'좋은 사람들과의 관계'가 매우 중요 — 가치 항목 중 최상위 유지</div></div>
-          <div class="stat"><div class="num tg">10.6 → 17.7%</div><div class="lb">급히 큰돈이 필요할 때 도움받을 곳이 없다 (4년 사이)</div></div>
-          <div class="stat"><div class="num tg">8.4%</div><div class="lb">제주 청년 중 은둔 상태로 추정</div></div>
-        </div>
+        <p style="margin-top:14px;">양적인 연구에서는 대상과 지역에 따라, 정주에 영향을 주는 요소가 같기도 하고 다르기도 합니다. 흥미로운 것은 질적인 연구들에서 발견되는 내용입니다.</p>
+        <div class="qcard">"청년이 특정 지역을 선호하는 것은 지역 자체의 선호가 아니라, 자신이 지향하는 미래의 삶과 가까운 곳을 고르는 일"<div class="qsrc">— 노혜진 외(2024), 지역은 미래와 연결된 공간</div></div>
+        <div class="qcard">"서울 거주의 핵심 혜택은 향유의 빈도가 아니라, 마음만 먹으면 갈 수 있다는 실현 감각"<div class="qsrc">— 김재원 외(2024), 문화생활과 관련한 만족도</div></div>
+        <p style="margin-top:14px;">청년의 생각에 대한 이런 이해가 깊어질 때, 청년에게 와닿는 지원을 설계하는 디테일의 요소 — 질적인 차이를 만들 수 있습니다.</p>
       </div>
 
       <div class="brief">
-        <h3>③ 문화·여가 — 가장 채워지지 않았는데, 크게 작동하는 영역</h3>
-        <p>강원 대학생 1,765명 조사에서 아홉 항목 중 만족도가 가장 낮은 것이 문화·여가였습니다. 그런데 정착 의사에 미치는 영향력은 일자리 다음이었습니다. 제주 청년이 꼽은 문화·여가 필요 정책도 활동공간(57.9%), 프로그램(54.7%), 비용 지원(52.0%) — 절반 넘는 청년이 셋 다 원했습니다. 문화를 '누리는 것'만이 아니라 '만드는 것'까지 넓혀 봐야 한다는 단서도 여러 연구에서 확인됩니다.</p>
-        <div class="viz">
-          <svg viewBox="0 0 640 210" xmlns="http://www.w3.org/2000/svg">
-            <line x1="70" y1="170" x2="590" y2="170" stroke="#B9B29C" stroke-width="1.5"/>
-            <line x1="70" y1="170" x2="70" y2="20" stroke="#B9B29C" stroke-width="1.5"/>
-            <text x="330" y="196" text-anchor="middle" font-size="11.5" fill="#8B9088">만족도 →</text>
-            <text x="40" y="95" text-anchor="middle" font-size="11.5" fill="#8B9088" transform="rotate(-90 40 95)">정착 영향력 →</text>
-            <circle cx="150" cy="52" r="11" fill="#F08A24"/>
-            <text x="150" y="34" text-anchor="middle" font-size="13" font-weight="900" fill="#D9740F">문화·여가</text>
-            <text x="150" y="76" text-anchor="middle" font-size="10.5" fill="#8B9088">만족 최저 · 영향 상위</text>
-            <circle cx="430" cy="38" r="9" fill="#2F6B4F"/>
-            <text x="430" y="22" text-anchor="middle" font-size="12" font-weight="700" fill="#2F6B4F">일자리</text>
-            <circle cx="360" cy="105" r="9" fill="#3E7FA6"/>
-            <text x="360" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="#3E7FA6">주거</text>
-          </svg>
-        </div>
-      </div>
-
-      <div class="brief">
-        <h3>④ 오게 하는 것과, 머물게 하는 것</h3>
-        <p>관계나 커뮤니티 같은 요인은 '들어올지 말지'를 정하는 시점의 조사에서는 통계에 잡히지 않았습니다. 연구자들은 이 요인이 정착한 뒤의 삶에서 작동한다고 단서를 달았습니다. 애착을 분해한 연구도 이를 뒷받침합니다. '고향이라서'와 '여기서 만든 관계와 앞으로의 계획이 있어서'는 별개의 애착이었고, 행복을 높이는 쪽은 후자였습니다. 고향 출신이라는 사실만으로 정주가 유지되지는 않고, 관계는 살면서 따로 만들어져야 합니다.</p>
-        <p>이동의 경로도 한 방향이 아닙니다. 몇 년 배우고 돌아올 계획으로 떠나는 청년들이 면접 연구에서 확인됐습니다. 제주 U턴 9.9%의 앞에도 이런 계획된 이동이 있을 수 있습니다.</p>
+        <h3>오게 하는 것과, 머물게 하는 것</h3>
+        <p>청년의 상황이 서로 다르다는 것(대상의 특성), 지원의 영역이 다양하다는 것(사업의 특성) — 이 두 차원을 교차해 생각할 때 함께 고민할 점이 있습니다. 청년의 삶의 단계에 따라, 필요한 영역에 <b>'시차'</b>가 존재한다는 점입니다.</p>
+        <p>관계나 커뮤니티 같은 요인은 '들어올지 말지'를 정하는 시점의 조사에서는 통계에 잡히지 않았습니다. 연구자들은 이 요인이 정착한 뒤의 삶에서 작동한다고 단서를 달았습니다. 정주 청년의 지역 애착을 분석한 연구도 이를 뒷받침합니다. '고향이라서'라는 이유와 '여기서 만든 관계와 앞으로의 계획이 있어서'라는 이유는 같은 애착이라도 다른 내용을 가진 것이었고, 청년의 행복을 높이는 쪽은 후자였습니다. 고향 출신이라는 사실만으로 정주가 유지되지는 않고, 관계와 미래에 대한 전망은 살면서 따로 만들어져야 합니다.</p>
+        <p>이동의 경로도 한 방향이 아닙니다. 몇 년 배우고 돌아올 계획으로 떠나는 청년들이 면접 연구에서 확인됐습니다. 제주 U턴 9.9%의 앞에도 이런 계획된 이동이 있을 수 있습니다. 지역을 떠나더라도 언제든 다시 돌아올 수 있다는, 그리고 다시 돌아오고 싶다는 애착을 가진 채 떠나는 것과 그렇지 않은 것은 큰 차이를 만들 수 있습니다.</p>
         <div class="viz">
           <svg viewBox="0 0 640 190" xmlns="http://www.w3.org/2000/svg">
             <rect x="60" y="76" width="130" height="44" rx="12" fill="#E4EFE7" stroke="#2F6B4F" stroke-width="1.8"/>
@@ -608,7 +587,7 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
             <path d="M192 98 L251 98" stroke="#8B9088" stroke-width="2.5" marker-end="url(#ar2)"/>
             <path d="M387 98 L446 98" stroke="#8B9088" stroke-width="2.5" marker-end="url(#ar2)"/>
             <path d="M510 74 Q320 6 132 72" fill="none" stroke="#F08A24" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#ar3)"/>
-            <text x="320" y="30" text-anchor="middle" font-size="12" font-weight="900" fill="#D9740F">나갔다 돌아오는 회로 (U턴)</text>
+            <text x="320" y="30" text-anchor="middle" font-size="12" font-weight="900" fill="#D9740F">돌아오는 경로 (U턴)</text>
             <defs>
               <marker id="ar2" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#8B9088"/></marker>
               <marker id="ar3" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#F08A24"/></marker>
@@ -622,8 +601,8 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
       </div>
 
       <div class="brief">
-        <h3>제주도의 틀에서도, 같은 빈칸이 보입니다</h3>
-        <p>제주도는 『제주형 청년보장제』라는 정책 틀을 운영하고 있습니다. 4개 보장영역(도전·기회·자립·참여)과 생애주기 3+1단계(탐색기·사회진입기·안정기 + 전주기)를 교차한 구조입니다. 이 표 위에 실제 사업들을 놓아 보면, 두 개의 빈자리가 눈에 들어옵니다.</p>
+        <h3>제주 청년의 정착 지원은 어떤 관점으로 제공되어야 할까요</h3>
+        <p>제주도는 『제주형 청년보장제』라는 정책 틀을 운영하고 있습니다. 4개 보장영역(도전·기회·자립·참여)과 생애주기 3+1단계(탐색기·사회진입기·안정기 + 전주기)를 교차한 구조로, 각 영역별로 어떤 지원이 배치되어 있는지 보여주는 표입니다.</p>
         <div class="matrix-wrap">
           <table class="smx">
             <tr><th></th><th>탐색기</th><th>사회진입기</th><th>안정기</th><th>전주기</th><th class="gh">지원 '방식'은?</th></tr>
@@ -635,17 +614,18 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
             <tr><th class="rowh ghc">정서는?</th><td><div class="cell ghost"></div></td><td><div class="cell ghost"></div></td><td><div class="cell ghost"></div></td><td><div class="cell ghost"></div></td><td></td></tr>
           </table>
         </div>
-        <p style="margin-top:14px;">하나는 지원의 <b>'방식'</b>이라는 축입니다. 그 사업이 지원금인지, 교육인지, 커뮤니티인지 — 청년이 사업을 탐색할 때 가장 먼저 가늠하는 정보인데, 틀에는 이 축이 없습니다. 다른 하나는 <b>관계·정서</b>라는 분야입니다. 앞서 본 조사 항목의 빈칸이 정책 틀에서도 같은 자리에 있습니다.</p>
+        <p style="margin-top:14px;">도전, 기회, 자립이라는 영역의 세부 사업은 사실 잘 구분되지 않는 모습입니다. 기회를 위한 일자리, 자립을 위한 일자리, 도전을 위한 창업 등 <b>대부분 일자리와 창업 사업 중심</b>이라는 것도 눈에 띕니다.</p>
+        <p>청년들의 입장에서는 어떨까요. 이러한 구분과 정보가, 수용하는 입장에서 편안할까요? 다음 설문을 통해 여러분의 의견을 듣고 싶습니다.</p>
         <div class="src">출처: 제주 청년정책 기본계획 2023~2027 (제주형 청년보장제)</div>
       </div>
 
       <div class="guide">
         <div class="dol"><svg viewBox="0 0 34 66"><use href="#dolh"/></svg></div>
-        <div class="bubble">여기까지가 읽는 자료입니다. 이제 이 두 빈자리를 채우는 질문으로 넘어갑니다. <b>파트 3</b>은 '방식'의 축을 만드는 조사 항목을, <b>파트 4</b>는 관계와 정서를 포함한 <b>다섯 분야 열 차원의 틀</b>을 다룹니다.</div>
+        <div class="bubble">여기까지가 읽는 자료입니다. 이제 여쭙는 파트로 넘어갑니다. <b>파트 3</b>에서는 조사 항목을, <b>파트 4</b>에서는 정착 지원 분야의 틀을 살펴봐 주세요.</div>
       </div>
 
       <details class="more"><summary>이 파트의 출처</summary>
-        <div class="inner">김화연·이대웅(2022) · 최선·이정은(2022) · 최용석(2024) · 김주진·나주몽(2021) · 안성수·정세영(2025) · 송유진(2025) · 노혜진 외(2024) · 2025 제주청년통계조사</div>
+        <div class="inner">제주연구원(2025) · 김주진·나주몽(2021) · 노혜진 외(2024) · 김재원 외(2024) · 송유진(2025) · 2025 제주청년통계조사</div>
       </details>
 
       <div class="navrow">
@@ -949,16 +929,6 @@ document.addEventListener('change', e=>{
   if(el.dataset.key && el.tagName==='SELECT'){ S.a[el.dataset.key]=el.value; markDirty(); }
 });
 
-/* ══════════ 렌더: 픽토그램 (7·1·2) ══════════ */
-function renderPicto(){
-  const colors=['#2F6B4F','#2F6B4F','#2F6B4F','#2F6B4F','#2F6B4F','#2F6B4F','#2F6B4F','#F08A24','#3E7FA6','#3E7FA6'];
-  $('#pg').innerHTML = colors.map((c,i)=>
-    `<use href="#person" fill="${c}" transform="translate(${40+i*58} 26)"/>`).join('')+
-    `<text x="243" y="16" text-anchor="middle" font-size="11" fill="#8B9088">계속거주 7</text>
-     <text x="455" y="16" text-anchor="middle" font-size="11" fill="#8B9088">U턴 1</text>
-     <text x="542" y="16" text-anchor="middle" font-size="11" fill="#8B9088">이주 2</text>`;
-}
-
 /* ══════════ 렌더: 파트 3 항목 (열람용) ══════════ */
 function renderItems(){
   $('#itemList').innerHTML = ITEMS.map(it=>`
@@ -1135,7 +1105,7 @@ $('#pwIn').addEventListener('input',e=>{ e.target.value=e.target.value.replace(/
 if(DEMO){ $('#uidIn').value='DEMO'; $('#pwIn').value='0000'; }
 
 /* 초기 렌더 */
-renderItems(); renderDims(); renderPicto(); renderSteps();
+renderItems(); renderDims(); renderSteps();
 </script>
 </body>
 </html>
