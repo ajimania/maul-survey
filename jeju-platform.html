@@ -442,6 +442,15 @@ details.more .inner{margin-top:9px;line-height:1.8;background:rgba(47,107,79,.05
       <p class="h-sub" style="font-size:13.5px;color:var(--muted);margin-top:14px;">설문의 결과는 본 연구에만 사용됩니다. 기관명은 본 설문의 응답 확인에만 사용되고, 익명성이 보장됩니다.<br>설문에 대한 문의가 있으시면 <a href="mailto:operator@commonsworks.kr" style="color:var(--green-deep);font-weight:700;">operator@commonsworks.kr</a>로 언제든 연락 바랍니다.</p>
 
       <div class="ask">
+        <div class="q">본 설문 진행을 위한 정보 제공 및 설문 참여에 동의합니다 <b style="color:var(--tangerine-deep)">*</b></div>
+        <div class="chips" data-key="consent">
+          <button class="chip" data-val="예">예, 동의합니다</button>
+          <button class="chip" data-val="아니오">아니오</button>
+        </div>
+        <div id="consentMsg" style="display:none;margin-top:12px;font-size:13px;font-weight:700;color:var(--tangerine-deep);">동의하지 않으시면 설문을 진행할 수 없습니다. 궁금한 점은 operator@commonsworks.kr 로 문의해 주세요.</div>
+      </div>
+
+      <div class="ask">
         <div class="q">먼저, 응답자 정보를 알려주세요</div>
         <div class="tt-label">소속 기관명 <b style="color:var(--tangerine-deep)">*</b></div>
         <input type="text" data-key="org" placeholder="예) 제주소통협력센터">
@@ -852,6 +861,7 @@ document.addEventListener('click', e=>{
       S.a[key]=val;
       g.querySelectorAll('.chip').forEach(c=>c.classList.toggle('sel', c===chip));
     }
+    if(key==='consent') paintConsent();
     markDirty();
   }
 });
@@ -918,7 +928,14 @@ function positionClimber(){
 
 /* ══════════ 내비게이션 ══════════ */
 function go(i){
-  if(i===1 && !(S.a.org||'').trim()){ $('input[data-key="org"]').focus(); return; }
+  if(i===1){
+    if(S.a.consent!=='예'){
+      const m=$('#consentMsg');
+      if(m){ m.style.display='block'; m.scrollIntoView({block:'center',behavior:'smooth'}); }
+      return;
+    }
+    if(!(S.a.org||'').trim()){ $('input[data-key="org"]').focus(); return; }
+  }
   S.step=i;
   if(i>S.maxStep) S.maxStep=i;
   $$('.screen').forEach(s=>s.classList.remove('active'));
@@ -937,6 +954,11 @@ $('#submitBtn').onclick=async()=>{
   window.scrollTo({top:0,behavior:'smooth'});
 };
 
+function paintConsent(){
+  const m=$('#consentMsg');
+  if(m) m.style.display = S.a.consent==='아니오' ? 'block' : 'none';
+}
+
 /* ══════════ 상태 복원 ══════════ */
 function restore(){
   $$('[data-key]').forEach(el=>{
@@ -949,6 +971,7 @@ function restore(){
       el.querySelectorAll('.chip').forEach(c=>c.classList.toggle('sel',vals.includes(c.dataset.val)));
     }
   });
+  paintConsent();
 }
 
 /* ══════════ 로그인 ══════════ */
