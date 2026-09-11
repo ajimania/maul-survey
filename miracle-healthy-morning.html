@@ -307,23 +307,32 @@
   .fl:hover::after{color:var(--green);}
 
   /* ---------- gallery ---------- */
-  .gal-round{margin-bottom:26px;}
-  .gal-head{
-    display:flex;align-items:baseline;justify-content:space-between;
-    gap:10px;margin-bottom:10px;flex-wrap:wrap;
+  .gal-sum .gal-cnt{
+    font-size:.85rem;font-weight:500;color:var(--ink-soft);
+    margin-left:auto;padding-right:12px;
   }
-  .gal-head h3{font-size:1.05rem;font-weight:600;color:var(--green-deep);}
-  .gal-head .cnt{font-size:.85rem;color:var(--ink-soft);}
-  .gal-head a{font-size:.85rem;color:var(--green);text-decoration:none;font-weight:600;}
-  .gal-head a:hover{text-decoration:underline;}
-  .gal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
-  @media (min-width:520px){ .gal-grid{grid-template-columns:repeat(6,1fr);} }
+  .gal-sum::after{margin-left:0;}
+  .gal-body{padding:0 4px 22px;}
+  /* 10장이 5×2로 딱 떨어지도록 항상 5칸 */
+  .gal-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
   .gal-grid button{
     padding:0;border:0;background:var(--line);cursor:zoom-in;
     aspect-ratio:1;border-radius:8px;overflow:hidden;display:block;
   }
   .gal-grid img{width:100%;height:100%;object-fit:cover;display:block;}
   .gal-grid button:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
+  .gal-actions{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:12px;margin-top:12px;flex-wrap:wrap;
+  }
+  .gal-shuffle{
+    border:1px solid var(--line);background:#fff;border-radius:999px;
+    padding:8px 15px;font-size:.88rem;font-weight:600;color:var(--ink);
+    cursor:pointer;transition:border-color .15s,color .15s;
+  }
+  .gal-shuffle:hover{border-color:var(--green);color:var(--green-deep);}
+  .gal-actions a{font-size:.85rem;color:var(--green);text-decoration:none;font-weight:600;}
+  .gal-actions a:hover{text-decoration:underline;}
 
   /* ---------- lightbox ---------- */
   .lightbox{
@@ -688,7 +697,7 @@
 <section id="gallery">
   <div class="wrap">
     <h2>현장 사진</h2>
-    <p>회차마다 찍은 사진을 모았습니다. 눌러서 크게 볼 수 있어요.</p>
+    <p>회차를 펼치면 그날 사진 열 장을 무작위로 보여드립니다.</p>
     <div id="galleryBody"></div>
   </div>
 </section>
@@ -953,42 +962,66 @@ const GALLERY = [
   }
 ];
 
-const thumbUrl = (id,w) => "https://drive.google.com/thumbnail?id=" + id + "&sz=w" + w;
-let LB = [], lbIdx = 0;
+/* 리다이렉트 없는 구글 이미지 CDN — drive.google.com/thumbnail 보다 약 2배 빠릅니다 */
+const thumbUrl = (id,w) => "https://lh3.googleusercontent.com/d/" + id + "=w" + w;
+const SHOW_COUNT = 10;          /* 한 번에 보여줄 장수 */
+const SHOWN = [];               /* 회차별로 지금 화면에 뿌린 사진 */
+let lbG = 0, lbIdx = 0;
+
+function shuffle(arr){
+  const r = arr.slice();
+  for(let i = r.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [r[i], r[j]] = [r[j], r[i]];
+  }
+  return r;
+}
 
 function renderGallery(){
   const box = document.getElementById("galleryBody");
   if(!box) return;
-  LB = [];
-  box.innerHTML = GALLERY.map(g => {
-    const start = LB.length;
-    g.ids.forEach(id => LB.push(id));
-    const cells = g.ids.map((id,i) =>
-      '<button type="button" data-i="' + (start+i) + '" aria-label="' + g.round + ' 사진 ' + (i+1) + '번 크게 보기">' +
-      '<img loading="lazy" decoding="async" src="' + thumbUrl(id,320) + '" alt="' + g.round + ' 현장 사진 ' + (i+1) + '">' +
-      '</button>').join("");
-    return '<div class="gal-round">' +
-      '<div class="gal-head">' +
-        '<h3>' + g.round + ' · ' + g.title + '</h3>' +
-        '<span class="cnt">' + g.date + ' · ' + g.ids.length + '장</span>' +
+  box.innerHTML = GALLERY.map((g, gi) =>
+    '<details class="gal-round">' +
+      '<summary class="gal-sum">' + g.round + ' · ' + g.title +
+        '<span class="gal-cnt">' + g.date + ' · ' + g.ids.length + '장</span></summary>' +
+      '<div class="gal-body">' +
+        '<div class="gal-grid" id="galGrid' + gi + '"></div>' +
+        '<div class="gal-actions">' +
+          '<button type="button" class="gal-shuffle" data-g="' + gi + '">다른 사진 보기</button>' +
+          '<a href="' + g.folder + '" target="_blank" rel="noopener">폴더에서 전체 보기 →</a>' +
+        '</div>' +
       '</div>' +
-      '<div class="gal-grid">' + cells + '</div>' +
-      '<div class="gal-head" style="margin-top:8px">' +
-        '<a href="' + g.folder + '" target="_blank" rel="noopener">드라이브 폴더에서 원본 보기 →</a>' +
-      '</div>' +
-    '</div>';
-  }).join("");
+    '</details>').join("");
 
-  box.querySelectorAll(".gal-grid button").forEach(b => {
-    b.addEventListener("click", () => openLb(Number(b.dataset.i)));
+  /* 펼치기 전에는 아무것도 내려받지 않습니다 */
+  box.querySelectorAll("details").forEach((d, gi) => {
+    d.addEventListener("toggle", () => { if(d.open && !SHOWN[gi]) fillGrid(gi); });
   });
+  box.querySelectorAll(".gal-shuffle").forEach(b =>
+    b.addEventListener("click", () => fillGrid(Number(b.dataset.g))));
+}
+
+function fillGrid(gi){
+  const g = GALLERY[gi];
+  const grid = document.getElementById("galGrid" + gi);
+  if(!grid) return;
+  const pick = shuffle(g.ids).slice(0, SHOW_COUNT);
+  SHOWN[gi] = pick;
+  grid.innerHTML = pick.map((id, i) =>
+    '<button type="button" data-g="' + gi + '" data-i="' + i + '" aria-label="' + g.round + ' 사진 크게 보기">' +
+    '<img decoding="async" src="' + thumbUrl(id, 320) + '" alt="' + g.round + ' 현장 사진">' +
+    '</button>').join("");
+  grid.querySelectorAll("button").forEach(b =>
+    b.addEventListener("click", () => openLb(Number(b.dataset.g), Number(b.dataset.i))));
 }
 
 const lbEl = document.getElementById("lightbox");
-function openLb(i){
-  lbIdx = i;
-  document.getElementById("lbImg").src = thumbUrl(LB[i], 1600);
-  document.getElementById("lbCount").textContent = (i+1) + " / " + LB.length;
+function openLb(gi, i){
+  lbG = gi; lbIdx = i;
+  const list = SHOWN[gi] || [];
+  if(!list.length) return;
+  document.getElementById("lbImg").src = thumbUrl(list[i], 1600);
+  document.getElementById("lbCount").textContent = (i + 1) + " / " + list.length;
   lbEl.classList.add("open");
   document.body.style.overflow = "hidden";
 }
@@ -997,7 +1030,11 @@ function closeLb(){
   document.getElementById("lbImg").src = "";
   document.body.style.overflow = "";
 }
-function stepLb(d){ openLb((lbIdx + d + LB.length) % LB.length); }
+function stepLb(d){
+  const list = SHOWN[lbG] || [];
+  if(!list.length) return;
+  openLb(lbG, (lbIdx + d + list.length) % list.length);
+}
 
 document.getElementById("lbClose").addEventListener("click", closeLb);
 document.getElementById("lbPrev").addEventListener("click", e => { e.stopPropagation(); stepLb(-1); });
