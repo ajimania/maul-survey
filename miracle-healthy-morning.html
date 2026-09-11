@@ -290,6 +290,61 @@
   }
   .team-sub .roles{font-size:.95rem;margin:0;}
 
+  /* ---------- folder list ---------- */
+  .folder-list{margin-top:18px;}
+  .folder-list .fl-label{
+    font-size:.8rem;font-weight:700;letter-spacing:.06em;
+    color:var(--ink-soft);margin-bottom:8px;
+  }
+  .fl{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:13px 16px;border:1px solid var(--line);border-radius:10px;
+    text-decoration:none;color:var(--ink);font-weight:600;font-size:.98rem;
+    margin-bottom:7px;background:#fff;transition:border-color .15s,color .15s;
+  }
+  .fl:hover,.fl:focus-visible{border-color:var(--green);color:var(--green-deep);}
+  .fl::after{content:"→";color:var(--ink-soft);font-weight:400;}
+  .fl:hover::after{color:var(--green);}
+
+  /* ---------- gallery ---------- */
+  .gal-round{margin-bottom:26px;}
+  .gal-head{
+    display:flex;align-items:baseline;justify-content:space-between;
+    gap:10px;margin-bottom:10px;flex-wrap:wrap;
+  }
+  .gal-head h3{font-size:1.05rem;font-weight:600;color:var(--green-deep);}
+  .gal-head .cnt{font-size:.85rem;color:var(--ink-soft);}
+  .gal-head a{font-size:.85rem;color:var(--green);text-decoration:none;font-weight:600;}
+  .gal-head a:hover{text-decoration:underline;}
+  .gal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+  @media (min-width:520px){ .gal-grid{grid-template-columns:repeat(6,1fr);} }
+  .gal-grid button{
+    padding:0;border:0;background:var(--line);cursor:zoom-in;
+    aspect-ratio:1;border-radius:8px;overflow:hidden;display:block;
+  }
+  .gal-grid img{width:100%;height:100%;object-fit:cover;display:block;}
+  .gal-grid button:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
+
+  /* ---------- lightbox ---------- */
+  .lightbox{
+    position:fixed;inset:0;z-index:80;display:none;
+    background:rgba(14,22,17,.95);align-items:center;justify-content:center;padding:24px 16px;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:100%;max-height:84vh;border-radius:8px;}
+  .lb-btn{
+    position:absolute;background:rgba(255,255,255,.14);color:#fff;border:0;
+    width:44px;height:44px;border-radius:50%;font-size:1.25rem;cursor:pointer;line-height:1;
+  }
+  .lb-btn:hover{background:rgba(255,255,255,.26);}
+  .lb-prev{left:12px;top:50%;transform:translateY(-50%);}
+  .lb-next{right:12px;top:50%;transform:translateY(-50%);}
+  .lb-close{top:14px;right:14px;width:40px;height:40px;font-size:1.4rem;}
+  .lb-count{
+    position:absolute;bottom:18px;left:0;right:0;text-align:center;
+    color:#C9D6C4;font-size:.85rem;
+  }
+
   /* ---------- profile page ---------- */
   .profile-page{
     position:fixed;
@@ -630,6 +685,14 @@
   </div>
 </section>
 
+<section id="gallery">
+  <div class="wrap">
+    <h2>현장 사진</h2>
+    <p>회차마다 찍은 사진을 모았습니다. 눌러서 크게 볼 수 있어요.</p>
+    <div id="galleryBody"></div>
+  </div>
+</section>
+
 <section id="drive">
   <div class="wrap">
     <h2>함께 쓰는 공유 폴더</h2>
@@ -637,6 +700,12 @@
       <div class="name">청년정책참여단 워크숍 공유 폴더</div>
       <div class="addr">워크숍 자료와 팀별 과제, 결과물을 이곳에 모읍니다.</div>
       <a class="btn" href="https://drive.google.com/drive/folders/1Cw7rIyCOvyjchWWieNVIp3uQbVdPfqM1?usp=drive_link" target="_blank" rel="noopener">공유 폴더 열기</a>
+      <div class="folder-list">
+        <div class="fl-label">팀별 폴더</div>
+        <a class="fl" href="https://drive.google.com/drive/folders/1urPROR3QEkGQ2sQjnQNm1EmtgDIDBXqk" target="_blank" rel="noopener">삐뽀삐뽀 청도</a>
+        <a class="fl" href="https://drive.google.com/drive/folders/1Postiyl3ygkP3mvh_RHMJ2GnNg2e9CTG" target="_blank" rel="noopener">Rock &amp; Lock</a>
+        <a class="fl" href="https://drive.google.com/drive/folders/1DPRoAepZv0yR6Ra5npB_4vPIPlHVx49c" target="_blank" rel="noopener">텅</a>
+      </div>
     </div>
     <p style="margin-top:18px;font-size:.95rem;color:var(--ink-soft);">
       문의 · 청도혁신센터 054-996-9952<br>
@@ -659,6 +728,14 @@
   <p class="serif">청도의 건강한 아침을, 청년의 손으로</p>
   <p>2026 미라클헬씨모닝 · 청도혁신센터 × 커먼즈웍스</p>
 </footer>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="사진 크게 보기">
+  <button class="lb-btn lb-close" id="lbClose" aria-label="닫기">✕</button>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="이전 사진">‹</button>
+  <img id="lbImg" alt="">
+  <button class="lb-btn lb-next" id="lbNext" aria-label="다음 사진">›</button>
+  <p class="lb-count" id="lbCount"></p>
+</div>
 
 <div class="profile-page" id="profilePage" role="dialog" aria-modal="true" aria-labelledby="pName">
   <div class="profile-head">
@@ -843,6 +920,97 @@ document.getElementById("saveIntro").addEventListener("click", async () => {
   const ok = await saveMember(current.name);
   msg.textContent = ok ? "저장되었어요 ☀️" : "저장에 실패했어요. 다시 시도해주세요.";
 });
+
+/* ══════════ 현장 사진 갤러리 ══════════ */
+/* 회차가 끝날 때마다 아래 배열에 한 덩어리씩 추가하면 됩니다.
+   ids 는 구글 드라이브 파일 ID (공유 폴더의 사진 파일). */
+const GALLERY = [
+  {
+    round:"1회차",
+    title:"문제 발견과 팀 세우기",
+    date:"2026. 9. 10",
+    folder:"https://drive.google.com/drive/folders/15gt1RWi3DKy-ul1J2W3F4l1ofjiqVs-E",
+    ids:[
+  "1Y7pcLCQ8_tIQn7dk3cTYAMUeGk7YfrF3","1zkShAOf3ieKJROtXK5Y8zE6ZSzUx5YT8","1baGMJpAenGgfQSe3UHM6KytfrJtMeeKK",
+  "145085buDxLXFZx0KIqo4zyaG_7Dsc1rW","1tsv9xgQ5H6IoKs6XTYsLJFeXIYqYD1hz","1rILTq9jtkGnmSa7ygfSQbmK-FXImK0_E",
+  "1PCyDA2nHd5Tw_YdRP-L1yRwEBOUmNVt0","1ZR7Z91y6wSpSakDX8Slexy3Y-Mclb5bq","1hYMEDO5PaQdwn-wBMLOrKkDuR-Pa4fFX",
+  "1E0WOzl0sqXp89w7bNwFPy-_whIFvWOau","1MXjoBR01hTzQQ5horiW9Q6cwB7FCrNJi","19POv67gvZquSRaeyzlIBRtqsjArkWCCD",
+  "1jGWd9sK9joNlIQEIToWacKfwuGI6nm8r","1JFX0J6eVuX5TolzHbwFQ84i0xlwdt9kX","176dD1AoMvj1oTKJb3q-T27tN6oDUU2Ib",
+  "12VCr6NdQlKlu0XbECjQKuPVO3ifl1qSe","1ZAsR9BeYImHiCZcedg5u5sStkqZJ69HF","1gnMqf_mYiiXulCRZtgdS8Huj32waKWXn",
+  "1qnlXHuUSA1734Rs5VsfRcfnven2R4HhT","1Yc_nmOOvaZD7PvDoM-FkXF40vOBsDMoh",
+  "1wK4Dpee1OI5w_v1cE3BB2j6I3tGhBuqA","1jGrBDwMDnvMegHx5_J7kdNLZXOGaod17","1dqrkSAXInCuDk81oiRDyodboId_R0VIV",
+  "1fCHuy6f2fsNYFFH56b_mXFEhqqVECYHv","1PH2wcQ7dwB5he60MxpmRl6QVV2oRnAPQ","1YDYN-TgQ8ZNdry0hCTwocucXVh4ENaFG",
+  "1A5vxt0-mufFJ6lR2DG-vMefARHtAcD0M","1qhDVP90mXkoHzD5PJ0m-07h1fkAzOd4K","1cwuK2unjzqfJ4mTV_VzwDlMxZrkZeZn6",
+  "1vX1_RiyXcT23o8PyTU-aQDq3zO-IKNrp","1XnTIXQbNdXW0YCPUsdHVXRvCl_6JnTqN","1VQ632dstV060HL9T_8MAM9jQR_0BgfYL",
+  "16B86g5TvZXsoiFdzqoyNZCwwoMvAuV8u","1fjBBKuWnKCyAKrBc_Ro7s9vHbjJ2Oqo2","18lD-WJMn-5p47oPjFkErO5VQllY-5P4P",
+  "1W6G9U8IZ2jPTLiUZMZbLidY96TyAuE8U","1thoGLyxROJs8itJ9prPacBnVZD_IUwfz","1smMP-mj49iiVPk27WQEjw6VSoz0cYxZe",
+  "198PBvZS0Ny2vj40nniFg6gMZo-foOPBZ","11iyFzniY9Ctu7ON3h-3YlM7BZRCVDGsu","1wHfig5J6E5kaocFQkI5qd7-Cr5QHdidZ",
+  "1_nfE5EqwgwzLf0siXYQp4v5Z_R_MRts9","1cbNbLfxHl8tnYO-P08p6xi4voosBmRYb",
+  "1r4jO21ffJaqY_XtgYPyZjQ9-LYetO3lK","1hCkQJpc5MKXkzGwqzBQlqMbxU7qW1v6D","1RlfPxRcZT0_x0HvACTdGvN8Lb0nEOMLI",
+  "1v0B8UKKDzeYxefA8irgz6tLfWK2Oyy7Y","1oiLQ3OvZjBkdQQoIl-a4nk3BXGFnDZ00","1pGBQQ1RDGvCZ6ytbMI3kK8Dh7N8QxcY5",
+  "15b1zNf46Soe8YINkVGQfX75X3N6o9Pt-","1eddxZ66UOak0iCa7chTD31f_bqimQ-g1"
+    ]
+  }
+];
+
+const thumbUrl = (id,w) => "https://drive.google.com/thumbnail?id=" + id + "&sz=w" + w;
+let LB = [], lbIdx = 0;
+
+function renderGallery(){
+  const box = document.getElementById("galleryBody");
+  if(!box) return;
+  LB = [];
+  box.innerHTML = GALLERY.map(g => {
+    const start = LB.length;
+    g.ids.forEach(id => LB.push(id));
+    const cells = g.ids.map((id,i) =>
+      '<button type="button" data-i="' + (start+i) + '" aria-label="' + g.round + ' 사진 ' + (i+1) + '번 크게 보기">' +
+      '<img loading="lazy" decoding="async" src="' + thumbUrl(id,320) + '" alt="' + g.round + ' 현장 사진 ' + (i+1) + '">' +
+      '</button>').join("");
+    return '<div class="gal-round">' +
+      '<div class="gal-head">' +
+        '<h3>' + g.round + ' · ' + g.title + '</h3>' +
+        '<span class="cnt">' + g.date + ' · ' + g.ids.length + '장</span>' +
+      '</div>' +
+      '<div class="gal-grid">' + cells + '</div>' +
+      '<div class="gal-head" style="margin-top:8px">' +
+        '<a href="' + g.folder + '" target="_blank" rel="noopener">드라이브 폴더에서 원본 보기 →</a>' +
+      '</div>' +
+    '</div>';
+  }).join("");
+
+  box.querySelectorAll(".gal-grid button").forEach(b => {
+    b.addEventListener("click", () => openLb(Number(b.dataset.i)));
+  });
+}
+
+const lbEl = document.getElementById("lightbox");
+function openLb(i){
+  lbIdx = i;
+  document.getElementById("lbImg").src = thumbUrl(LB[i], 1600);
+  document.getElementById("lbCount").textContent = (i+1) + " / " + LB.length;
+  lbEl.classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeLb(){
+  lbEl.classList.remove("open");
+  document.getElementById("lbImg").src = "";
+  document.body.style.overflow = "";
+}
+function stepLb(d){ openLb((lbIdx + d + LB.length) % LB.length); }
+
+document.getElementById("lbClose").addEventListener("click", closeLb);
+document.getElementById("lbPrev").addEventListener("click", e => { e.stopPropagation(); stepLb(-1); });
+document.getElementById("lbNext").addEventListener("click", e => { e.stopPropagation(); stepLb(1); });
+lbEl.addEventListener("click", e => { if(e.target === lbEl || e.target.id === "lbImg") closeLb(); });
+document.addEventListener("keydown", e => {
+  if(!lbEl.classList.contains("open")) return;
+  if(e.key === "Escape") closeLb();
+  if(e.key === "ArrowLeft") stepLb(-1);
+  if(e.key === "ArrowRight") stepLb(1);
+});
+
+renderGallery();
 
 renderGrid();
 loadAll();
