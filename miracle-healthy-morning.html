@@ -983,7 +983,7 @@ function renderGallery(){
   box.innerHTML = GALLERY.map((g, gi) =>
     '<details class="gal-round">' +
       '<summary class="gal-sum">' + g.round + ' · ' + g.title +
-        '<span class="gal-cnt">' + g.date + ' · ' + g.ids.length + '장</span></summary>' +
+        '<span class="gal-cnt">' + g.date + '</span></summary>' +
       '<div class="gal-body">' +
         '<div class="gal-grid" id="galGrid' + gi + '"></div>' +
         '<div class="gal-actions">' +
