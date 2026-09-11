@@ -246,6 +246,50 @@
     .member-grid{grid-template-columns:1fr;}
   }
 
+  /* ---------- teams ---------- */
+  .team{
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:#fff;
+    padding:24px 20px 22px;
+    margin-bottom:16px;
+  }
+  .team h3{
+    font-family:Hahmlet,"Nanum Myeongjo",serif;
+    font-size:1.3rem;
+    font-weight:700;
+    color:var(--green-deep);
+    line-height:1.35;
+  }
+  .team .gloss{font-size:.9rem;color:var(--ink-soft);margin:2px 0 0;}
+  .team .problem{
+    margin:16px 0 0;
+    padding:18px;
+    background:var(--paper);
+    border-left:3px solid var(--sun);
+    border-radius:0 10px 10px 0;
+    font-size:1.04rem;
+    line-height:1.9;
+  }
+  .team .problem b{
+    font-weight:700;
+    color:var(--green-deep);
+    box-shadow:inset 0 -.48em 0 var(--sun-soft);
+  }
+  .team .note{font-size:.88rem;color:var(--ink-soft);margin:10px 0 0;}
+  .team-sub{margin-top:18px;}
+  .team-sub h4{
+    font-size:.8rem;font-weight:700;letter-spacing:.06em;
+    color:var(--ink-soft);margin-bottom:7px;
+  }
+  .team-sub ul{list-style:none;margin-bottom:14px;}
+  .team-sub li{font-size:.95rem;line-height:1.65;padding-left:14px;position:relative;margin-bottom:5px;}
+  .team-sub li::before{
+    content:"";position:absolute;left:0;top:.66em;
+    width:5px;height:5px;border-radius:50%;background:var(--sun);
+  }
+  .team-sub .roles{font-size:.95rem;margin:0;}
+
   /* ---------- profile page ---------- */
   .profile-page{
     position:fixed;
@@ -506,6 +550,75 @@
         </ul>
       </div>
     </details>
+  </div>
+</section>
+
+<section id="teams">
+  <div class="wrap">
+    <h2>세 팀 소개</h2>
+    <p>1회차에서 세 팀이 이름과 약속을 정하고, 청도에서 붙잡을 문제를 한 문장으로 세웠습니다.</p>
+
+    <article class="team">
+      <h3>삐뽀삐뽀 청도</h3>
+      <blockquote class="problem">
+        우리는 우리가 사랑하는 청도에서<br>
+        <b>의료 공백(의료 사막화)</b> 때문에<br>
+        <b>치료의 골든타임을 놓치는</b> 어려움을<br>
+        겪는 사람들이 있다고 생각합니다.
+      </blockquote>
+      <p class="note">치료를 미루게 되고, 끝내 포기하는 사람들.</p>
+      <div class="team-sub">
+        <h4>우리의 약속</h4>
+        <ul>
+          <li>빅 &amp; 스몰 마우스 금지 — 혼자 말하거나, 아예 말하지 않거나 하지 않기</li>
+          <li>출석 잘하고, 잠수 금지</li>
+          <li>경청하고, 긍정의 리액션</li>
+        </ul>
+        <h4>역할</h4>
+        <p class="roles">팀장 배정란 · 회계 임미나 · 응원단장 정광훈</p>
+      </div>
+    </article>
+
+    <article class="team">
+      <h3>Rock &amp; Lock</h3>
+      <p class="gloss">즐거움을 묶는다</p>
+      <blockquote class="problem">
+        우리는 우리가 사랑하는 청도에서<br>
+        <b>커뮤니티 · 놀Fun · 소통</b>이 부재하기 때문에<br>
+        <b>외로움</b>을 겪는 사람들이<br>
+        있다고 생각합니다.
+      </blockquote>
+      <div class="team-sub">
+        <h4>우리의 약속</h4>
+        <ul>
+          <li>반드시 실행한다 — 예산 확보</li>
+          <li>한번 맺은 인연은 끝까지 간다</li>
+          <li>결석하지 않는다</li>
+        </ul>
+        <h4>역할</h4>
+        <p class="roles">팀장 이상권</p>
+      </div>
+    </article>
+
+    <article class="team">
+      <h3>텅</h3>
+      <blockquote class="problem">
+        우리는 우리가 사랑하는 청도에서<br>
+        <b>혼자 살아가기</b> 때문에<br>
+        <b>생각하지 못한</b> 어려움을 겪는 사람들이<br>
+        있다고 생각합니다.
+      </blockquote>
+      <div class="team-sub">
+        <h4>우리의 약속</h4>
+        <ul>
+          <li>유머를 잃지 않기</li>
+          <li>막~ 말하자</li>
+          <li>선호응, 후비판</li>
+        </ul>
+        <h4>역할</h4>
+        <p class="roles">팀장 박지연(몽실이) · 응원단장 최형규 · 회계 지예슬 · 기록 최주원</p>
+      </div>
+    </article>
   </div>
 </section>
 
