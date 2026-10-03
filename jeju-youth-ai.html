@@ -433,6 +433,15 @@ body.printing .print-hide{display:none !important;}
   </div>
 </section>
 
+<!-- 이용 횟수 제한 -->
+<section class="screen" id="s-limit">
+  <div class="error-box">
+    <h2>사용자가 많아 접속이 제한되고 있습니다</h2>
+    <p>다음에 다시 이용해 주세요.</p>
+    <div class="row"><button class="btn secondary" data-go="intro">처음으로</button></div>
+  </div>
+</section>
+
 <!-- 오류 -->
 <section class="screen" id="s-error">
   <div class="error-box">
@@ -539,7 +548,10 @@ document.querySelectorAll('.progress').forEach(p => {
 /* ---------- 시작 ---------- */
 $('#c-ai').addEventListener('change', e => $('#btn-start').disabled = !e.target.checked);
 $('#c-research').addEventListener('change', e => { $('#c-text').disabled = !e.target.checked; if (!e.target.checked) $('#c-text').checked = false; });
-$('#btn-start').addEventListener('click', () => { S.research = $('#c-research').checked; S.textOk = $('#c-text').checked; go('core'); });
+$('#btn-start').addEventListener('click', () => {
+  if (overLimit()) { go('limit'); return; }
+  S.research = $('#c-research').checked; S.textOk = $('#c-text').checked; go('core');
+});
 
 /* ---------- 기본 정보 ---------- */
 document.querySelector('[data-group="stages"]').innerHTML = STAGES.map(([v, t]) => `<button class="chip" data-v="${esc(v)}">${esc(t)}</button>`).join('');
@@ -611,6 +623,7 @@ function requestBody(allowFollowup){
 async function analyze(allowFollowup){
   // 기본 정보가 비어 있으면(새로고침 등) 분석하지 않고 기본 정보 화면으로 돌려보낸다
   if (!S.age || !S.region || !S.rel || !S.stages.length) { go('core'); return; }
+  if (overLimit()) { go('limit'); return; }
   go('loading');
   try {
     const res = MOCK ? await mockAnalyze(requestBody(allowFollowup)) : await callApi(requestBody(allowFollowup));
@@ -622,12 +635,24 @@ async function analyze(allowFollowup){
       return;
     }
     S.result = res; S.mode = MOCK ? 'mock' : 'ai';
+    if (!MOCK) countUse();
     showResult();
   } catch (err) {
+    if (err.status === 429) { go('limit'); return; }
     $('#error-msg').textContent = err.message || '잠시 뒤에 다시 시도해 주세요.';
     go('error');
   }
 }
+// 한 브라우저에서 하루에 AI 결과를 받을 수 있는 횟수. 되묻기는 세지 않고, 결과를 받았을 때만 센다.
+const DAILY_LIMIT = 4, USE_KEY = 'jy-ai-uses';
+const today = () => new Date().toLocaleDateString('sv-SE', {timeZone: 'Asia/Seoul'});
+function usesToday(){
+  try { const u = JSON.parse(localStorage.getItem(USE_KEY) || 'null'); return u && u.day === today() ? u.n : 0; } catch (e) { return 0; }
+}
+function countUse(){
+  try { localStorage.setItem(USE_KEY, JSON.stringify({day: today(), n: usesToday() + 1})); } catch (e) {}
+}
+const overLimit = () => !MOCK && usesToday() >= DAILY_LIMIT;
 async function callApi(body){
   let r;
   try {
@@ -635,7 +660,7 @@ async function callApi(body){
   } catch (e) { throw new Error('인터넷 연결을 확인해 주세요.'); }
   let data = null;
   try { data = await r.json(); } catch (e) {}
-  if (!r.ok) throw new Error((data && data.message) || `서버 오류(${r.status})가 났어요.`);
+  if (!r.ok) { const e = new Error((data && data.message) || `서버 오류(${r.status})가 났어요.`); e.status = r.status; throw e; }
   return data;
 }
 $('#follow-send').addEventListener('click', () => { S.followup = {q: S.pendingFollow, a: $('#follow-a').value.trim()}; analyze(false); });

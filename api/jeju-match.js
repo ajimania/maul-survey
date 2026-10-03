@@ -12,7 +12,8 @@ const client = process.env.ANTHROPIC_API_KEY
   : null;
 
 // 같은 주소에서 짧은 시간에 반복 호출하는 것을 막는다(인스턴스마다 따로 세는 간이 제한).
-const WINDOW_MS = 10 * 60 * 1000, MAX_CALLS = 8;
+// 사람별 하루 4번 제한은 화면(브라우저)에서 한다. 여기는 와이파이를 함께 쓰는 워크숍도 견딜 만큼 넉넉하게.
+const WINDOW_MS = 10 * 60 * 1000, MAX_CALLS = 20;
 const hits = new Map();
 function limited(ip) {
   const now = Date.now();
@@ -27,7 +28,7 @@ export default async function handler(req, res) {
   if (!client) return res.status(503).json({error: 'no_key', message: 'AI 연결이 아직 설정되지 않았어요.'});
 
   const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
-  if (limited(ip)) return res.status(429).json({error: 'busy', message: '잠시 뒤에 다시 시도해 주세요.'});
+  if (limited(ip)) return res.status(429).json({error: 'busy', message: '사용자가 많아 접속이 제한되고 있습니다. 다음에 다시 이용해 주세요.'});
 
   let input;
   try {
@@ -67,7 +68,7 @@ export default async function handler(req, res) {
       return res.status(502).json({error: 'parse', message: '분석 결과를 읽지 못했어요. 다시 시도해 주세요.'});
     }
     if (error instanceof Anthropic.RateLimitError) {
-      return res.status(429).json({error: 'busy', message: '지금 이용자가 많아요. 잠시 뒤에 다시 시도해 주세요.'});
+      return res.status(429).json({error: 'busy', message: '사용자가 많아 접속이 제한되고 있습니다. 다음에 다시 이용해 주세요.'});
     }
     if (error instanceof Anthropic.AuthenticationError || error instanceof Anthropic.PermissionDeniedError) {
       console.error('jeju-match auth', error.status, error.message);
