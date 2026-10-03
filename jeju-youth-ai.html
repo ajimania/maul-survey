@@ -59,6 +59,8 @@ button{font:inherit;color:inherit;}
 .nav-row.sticky .right{flex:1;margin-left:0;}
 .nav-row.sticky .right .btn{width:100%;}
 .nav-row.sticky .text-link{flex:none;}
+/* 글 쓰는 화면에서는 버튼이 따라다니면 쓰다가 잘못 누르기 쉬워 붙이지 않는다 */
+.nav-row.sticky.no-stick{position:static;margin:32px 0 0;padding:0;background:none;}
 @media(min-width:640px){
   .nav-row.sticky{position:static;margin:36px 0 0;padding:0;background:none;}
   .nav-row.sticky .right{flex:none;margin-left:auto;}
@@ -358,7 +360,7 @@ body.printing .print-hide{display:none !important;}
   </div>
   <div class="blocks" id="write-blocks"></div>
   <p class="hint" id="write-hint"></p>
-  <div class="nav-row sticky">
+  <div class="nav-row sticky no-stick">
     <button class="text-link" data-go="diag">← 이전</button>
     <div class="right"><button class="btn" id="btn-analyze">AI에게 보여주기</button></div>
   </div>
@@ -381,7 +383,7 @@ body.printing .print-hide{display:none !important;}
     <p class="q-note">답하면 추천이 더 잘 맞아요. 건너뛰어도 됩니다.</p>
   </div>
   <textarea id="follow-a" maxlength="600"></textarea>
-  <div class="nav-row sticky">
+  <div class="nav-row sticky no-stick">
     <button class="text-link" id="follow-skip">건너뛰고 결과 보기</button>
     <div class="right"><button class="btn" id="follow-send">답하고 결과 보기</button></div>
   </div>
