@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>제주 청년 정책 길찾기</title>
+<meta name="description" content="생계·관계·정서·공간·문화 다섯 영역의 질문에 답하면, 지금 나에게 필요한 영역과 제주 청년 지원사업, 2026년 모집 달력을 받을 수 있습니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAF3E1; --paper-deep:#F3E9CF; --card:#FFFDF4;
+  --ink:#1E6E48; --ink-dark:#174F35;
+  --yellow:#F5CF3C; --yellow-soft:#F9E48A;
+  --orange:#EE8A3F; --coral:#E76F5A; --mustard:#C9A227; --blue:#2F6DB5;
+  --text:#2B3B2F; --muted:#6c7a6e; --faint:#98a394;
+  --f-생계:#1E6E48; --f-관계:#EE8A3F; --f-정서:#E76F5A; --f-공간:#C9A227; --f-문화:#2F6DB5;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Gowun Dodum',sans-serif;color:var(--text);
+  background-color:var(--paper);
+  background-image:radial-gradient(circle, rgba(30,110,72,.10) 1px, transparent 1.5px);
+  background-size:14px 14px;min-height:100vh;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.jua{font-family:'Jua',sans-serif;font-weight:400;}
+button{font:inherit;color:inherit;}
+.wrap{max-width:760px;margin:0 auto;padding:24px 16px 90px;position:relative;}
+.riso-title{color:var(--ink-dark);text-shadow:3px 3px 0 var(--yellow);letter-spacing:-.01em;}
+
+.screen{display:none;animation:pop .4s ease both;}
+.screen.active{display:block;}
+@keyframes pop{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+
+/* buttons */
+.btn{
+  display:inline-block;font-family:'Jua';font-size:19px;color:var(--paper);
+  background:var(--ink);border:3px solid var(--ink-dark);border-radius:16px;
+  padding:14px 36px;cursor:pointer;box-shadow:5px 5px 0 var(--yellow);
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--yellow);}
+.btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--yellow);}
+.btn.secondary{background:var(--card);color:var(--ink-dark);box-shadow:5px 5px 0 rgba(238,138,63,.75);}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:5px 5px 0 var(--yellow);}
+.btn.small{font-size:16px;padding:10px 20px;border-width:2.5px;box-shadow:3px 3px 0 var(--yellow);}
+.text-link{background:none;border:none;font-family:'Jua';font-size:16px;color:var(--muted);cursor:pointer;padding:10px 6px;text-decoration:underline;text-underline-offset:3px;}
+.text-link:hover{color:var(--ink);}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:34px;gap:12px;flex-wrap:wrap;}
+.nav-row .right{display:flex;gap:10px;align-items:center;margin-left:auto;}
+
+/* intro */
+.intro{text-align:center;padding-top:20px;}
+.intro .art{margin:0 auto 6px;max-width:320px;}
+.intro h1{font-size:clamp(34px,7vw,50px);line-height:1.2;margin:8px 0 14px;}
+.intro .sub{font-size:17px;line-height:1.8;color:#4a5a4e;max-width:520px;margin:0 auto;}
+.badge-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:20px 0 6px;}
+.dim-badge{font-family:'Jua';font-size:16px;padding:7px 15px;border-radius:999px;border:2px solid var(--ink-dark);background:var(--card);box-shadow:3px 3px 0 rgba(245,207,60,.9);}
+.intro .meta{margin:14px 0 20px;font-size:14px;color:var(--muted);}
+.consent{
+  text-align:left;max-width:520px;margin:0 auto 26px;background:var(--card);
+  border:2.5px solid var(--ink-dark);border-radius:16px;padding:18px 20px;
+  box-shadow:5px 5px 0 rgba(245,207,60,.6);font-size:14.5px;line-height:1.7;color:#4a5a4e;
+}
+.consent label{display:flex;gap:10px;align-items:center;margin-top:12px;font-family:'Jua';font-size:16.5px;color:var(--ink-dark);cursor:pointer;}
+.consent input{width:22px;height:22px;accent-color:var(--ink);}
+.intro .skip-save{display:block;margin:10px auto 0;font-size:14px;}
+
+/* progress */
+.progress{display:flex;align-items:center;gap:8px;margin:4px 0 26px;}
+.progress .label{font-family:'Jua';font-size:15px;color:var(--ink-dark);white-space:nowrap;}
+.progress .bar{flex:1;height:3px;background:repeating-linear-gradient(90deg,var(--ink-dark) 0 6px,transparent 6px 12px);opacity:.35;}
+.progress .dot{width:13px;height:13px;border-radius:50%;border:2px solid var(--ink-dark);}
+.progress .dot.done{background:var(--yellow-soft);background-image:radial-gradient(circle,var(--ink) 40%,transparent 44%);background-size:5px 5px;}
+.progress .dot.now{background:var(--orange);transform:scale(1.3);}
+
+/* question */
+.q-head{margin-bottom:22px;}
+.q-cat{display:inline-flex;align-items:center;gap:8px;font-family:'Jua';font-size:15px;color:var(--paper);
+  background:var(--orange);border:2px solid var(--ink-dark);padding:5px 14px;border-radius:999px;margin-bottom:14px;box-shadow:2px 2px 0 var(--ink-dark);}
+.q-cat .dot{width:8px;height:8px;border-radius:50%;background:var(--paper);}
+.q-title{font-size:clamp(24px,5vw,32px);line-height:1.35;color:var(--ink-dark);}
+.q-note{margin-top:10px;font-size:14.5px;color:var(--muted);line-height:1.65;}
+
+.opts{display:flex;flex-direction:column;gap:12px;}
+.opt{
+  text-align:left;font-family:'Gowun Dodum';font-size:16.5px;color:var(--text);
+  background:var(--card);border:2.5px solid var(--ink-dark);border-radius:14px;
+  padding:16px 18px 16px 54px;cursor:pointer;position:relative;transition:all .15s ease;line-height:1.5;
+}
+.opt::before{content:'';position:absolute;left:17px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;border:2.5px solid var(--ink-dark);background:var(--paper);transition:all .15s;}
+.opt:hover{transform:translateX(4px);box-shadow:-4px 4px 0 rgba(245,207,60,.8);}
+.opt.selected{background-color:var(--yellow-soft);background-image:radial-gradient(circle,rgba(30,110,72,.16) 30%,transparent 33%);background-size:8px 8px;box-shadow:-4px 4px 0 var(--orange);transform:translateX(4px);}
+.opt.selected::before{background:var(--ink);background-image:radial-gradient(circle,var(--yellow) 25%,transparent 30%);background-size:5px 5px;}
+.opt small{display:block;color:#75836f;font-size:13.5px;margin-top:3px;}
+.opt.none-opt{border-style:dashed;}
+
+/* form blocks */
+.blocks{display:flex;flex-direction:column;gap:28px;}
+.blk-label{font-family:'Jua';font-size:19px;color:var(--ink-dark);margin-bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.blk-label .opt-tag{font-family:'Gowun Dodum';font-size:13.5px;color:var(--muted);}
+.blk-label .n{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--paper);font-size:14px;box-shadow:2px 2px 0 var(--yellow);flex:none;}
+.chip-row{display:flex;flex-wrap:wrap;gap:9px;}
+.chip-col{display:flex;flex-direction:column;align-items:flex-start;gap:9px;}
+.chip{font-size:15.5px;padding:10px 16px;border-radius:999px;border:2.5px solid var(--ink-dark);background:var(--card);cursor:pointer;transition:all .15s;line-height:1.35;text-align:left;}
+.chip:hover{transform:translateY(-2px);box-shadow:0 3px 0 rgba(245,207,60,.9);}
+.chip.selected{background-color:var(--ink);color:var(--paper);background-image:radial-gradient(circle,rgba(249,228,138,.35) 25%,transparent 30%);background-size:6px 6px;box-shadow:0 3px 0 var(--orange);}
+.age-row{display:flex;align-items:center;gap:12px;}
+input[type=number]{font-family:'Jua';font-size:26px;color:var(--ink-dark);text-align:center;width:110px;padding:10px;border:2.5px solid var(--ink-dark);border-radius:14px;background:var(--card);outline:none;box-shadow:3px 3px 0 rgba(245,207,60,.9);}
+.age-row .unit{font-family:'Jua';font-size:18px;color:var(--ink-dark);}
+textarea,input[type=text]{
+  width:100%;font-family:'Gowun Dodum';font-size:16px;line-height:1.6;color:var(--text);
+  background:var(--card);border:2.5px solid var(--ink-dark);border-radius:14px;padding:13px 15px;outline:none;resize:vertical;
+  box-shadow:3px 3px 0 rgba(245,207,60,.9);
+}
+textarea{min-height:84px;}
+textarea:focus,input[type=text]:focus,input[type=number]:focus{box-shadow:3px 3px 0 var(--orange);}
+.hint{font-size:13.5px;color:var(--muted);margin-top:8px;}
+.is-hidden{display:none !important;}
+
+/* result */
+.result-head{text-align:center;margin-bottom:28px;}
+.result-head h2{font-size:clamp(27px,5.6vw,37px);line-height:1.35;}
+.result-head .sub{margin-top:10px;font-size:15.5px;color:#57685b;line-height:1.7;}
+.panel{border:2.5px solid var(--ink-dark);border-radius:18px;background:var(--card);padding:20px 20px 22px;margin-bottom:30px;box-shadow:6px 6px 0 rgba(245,207,60,.6);}
+.panel h3{font-size:21px;color:var(--ink-dark);margin-bottom:6px;}
+.panel .lead{font-size:14.5px;color:var(--muted);margin-bottom:16px;line-height:1.65;}
+
+.dim-bars{display:grid;grid-template-columns:1fr 1fr;gap:12px 22px;}
+@media(max-width:560px){.dim-bars{grid-template-columns:1fr;}}
+.dim-bar{display:flex;align-items:center;gap:10px;}
+.dim-bar .nm{font-family:'Jua';font-size:15px;width:54px;flex:none;white-space:nowrap;color:var(--ink-dark);}
+.dim-bar .track{flex:1;height:16px;border:2px solid var(--ink-dark);border-radius:999px;background:var(--paper);overflow:hidden;}
+.dim-bar .fill{height:100%;border-radius:999px;transition:width .8s ease;background-size:6px 6px;}
+.dim-bar .val{font-size:12.5px;color:var(--muted);width:58px;flex:none;}
+.need-list{margin-top:18px;display:flex;flex-direction:column;gap:10px;}
+.need{border-radius:12px;background:var(--paper-deep);padding:10px 14px;font-size:14.5px;line-height:1.6;border-left:6px solid var(--ink);}
+.need b{font-family:'Jua';font-weight:400;color:var(--ink-dark);margin-right:6px;}
+.need span{color:#4a5a4e;}
+.profile-tags{margin-top:14px;display:flex;flex-wrap:wrap;gap:7px;}
+.ptag{font-size:13px;padding:4px 12px;border-radius:999px;border:1.5px solid var(--ink);color:var(--ink-dark);background:var(--yellow-soft);}
+.ok-note{margin-top:14px;font-size:14px;color:var(--muted);}
+
+.mapgrid{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:stretch;}
+.mapgrid .fld{font-family:'Jua';font-size:14px;color:#fff;border-radius:10px;padding:6px 8px;display:flex;align-items:center;justify-content:center;min-width:46px;}
+.mcell{position:relative;border:2px solid var(--ink-dark);border-radius:12px;padding:10px 11px 11px;background:var(--paper);min-height:74px;}
+.mcell .nm{font-size:13.5px;line-height:1.45;color:var(--text);display:block;padding-right:52px;}
+.mcell .mine{position:absolute;top:7px;right:7px;font-family:'Jua';font-size:11.5px;color:#fff;background:var(--coral);border-radius:999px;padding:1px 7px;border:1.5px solid var(--ink-dark);}
+.mcell.is-need{border-color:var(--coral);border-width:3px;}
+.mcell .cnt{display:flex;align-items:baseline;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.mcell .cnt b{font-family:'Jua';font-size:24px;color:var(--ink-dark);}
+.mcell .cnt span{font-size:12.5px;color:var(--muted);}
+.mcell .barline{height:9px;border:1.5px solid var(--ink-dark);border-radius:999px;background:var(--card);overflow:hidden;margin-top:6px;}
+.mcell .barline i{display:block;height:100%;background-color:var(--ink);background-image:radial-gradient(circle,rgba(249,228,138,.55) 25%,transparent 30%);background-size:5px 5px;}
+.mcell.few .barline i{background-color:var(--coral);}
+.mcell.few .cnt b{color:#B4432F;}
+@media(max-width:560px){
+  .panel{padding:16px 13px 18px;}
+  .mapgrid{grid-template-columns:28px 1fr 1fr;gap:6px;}
+  .mapgrid .fld{writing-mode:vertical-rl;min-width:0;padding:6px 0;font-size:13px;letter-spacing:.1em;}
+  .mcell{padding:8px 8px 9px;min-height:60px;}
+  .mcell .nm{font-size:12.5px;padding-right:0;}
+  .mcell .mine{position:static;display:inline-block;margin-bottom:4px;}
+  .mcell .cnt b{font-size:21px;}
+}
+.footnote{font-size:12.5px;color:var(--faint);margin-top:12px;line-height:1.7;}
+.callout{margin-top:16px;border:2px dashed var(--coral);border-radius:14px;padding:13px 15px;background:rgba(251,230,225,.55);font-size:15px;line-height:1.7;color:#5a3a33;}
+
+.cellsec{margin:34px 0 10px;}
+.cellsec-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:6px;}
+.cellsec-head .field{font-family:'Jua';font-size:13px;color:#fff;padding:3px 11px;border-radius:999px;}
+.cellsec-head h3{font-size:clamp(21px,4.4vw,26px);color:var(--ink-dark);line-height:1.35;}
+.cellsec .lead{font-size:14px;color:var(--muted);margin-bottom:14px;line-height:1.6;}
+.gapbox{border:2.5px dashed var(--coral);border-radius:16px;padding:16px 18px;background:rgba(251,230,225,.5);margin-bottom:16px;}
+.gapbox p{font-size:15.5px;line-height:1.7;margin-bottom:10px;}
+.gapbox p b{font-family:'Jua';font-weight:400;color:#B4432F;font-size:17px;}
+.empty{border:2px dashed var(--ink);border-radius:14px;padding:18px;text-align:center;color:#57685b;font-size:15px;line-height:1.7;background:rgba(255,253,244,.7);}
+
+.pcards{display:flex;flex-direction:column;gap:14px;}
+.pcard{background:var(--card);border:2.5px solid var(--ink-dark);border-radius:16px;padding:17px 18px 15px;box-shadow:4px 4px 0 rgba(30,110,72,.2);}
+.pcard.off{opacity:.55;}
+.pcard .org{font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;}
+.pcard .side{font-size:12px;padding:2px 9px;border-radius:999px;border:1.5px dashed var(--muted);color:var(--muted);}
+.pcard h4{font-size:19px;color:var(--ink-dark);line-height:1.4;margin:2px 0 8px;}
+.pcard .desc{font-size:14.5px;line-height:1.65;color:#3c4c40;white-space:pre-line;}
+.pcard .desc.clamp{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.pcard .more-desc{background:none;border:none;color:var(--ink);font-size:13.5px;cursor:pointer;padding:2px 0;text-decoration:underline;}
+.pcard dl{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;margin:12px 0 10px;font-size:14px;line-height:1.55;background:var(--paper-deep);border-radius:12px;padding:10px 13px;}
+.pcard dt{font-family:'Jua';color:var(--ink-dark);white-space:nowrap;}
+.pcard dd{white-space:pre-line;color:#4a5a4e;}
+.forms{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+.forms span{font-size:12.5px;padding:3px 10px;border-radius:999px;border:1.5px solid var(--ink);color:var(--ink-dark);background:rgba(249,228,138,.45);}
+.aware{display:flex;flex-wrap:wrap;align-items:center;gap:7px;padding-top:11px;border-top:1.5px dashed rgba(23,79,53,.3);}
+.aware .q{font-size:13.5px;color:var(--muted);margin-right:3px;}
+.aware button{font-size:13.5px;padding:5px 11px;border-radius:999px;border:2px solid var(--ink-dark);background:var(--card);cursor:pointer;}
+.aware button.on{background:var(--ink-dark);color:var(--paper);}
+.pfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;}
+.link-btn{font-family:'Jua';font-size:14.5px;color:var(--paper);text-decoration:none;background:var(--orange);border:2px solid var(--ink-dark);border-radius:10px;padding:7px 16px;box-shadow:3px 3px 0 rgba(23,79,53,.55);display:inline-block;}
+.link-btn:hover{transform:translate(-1px,-1px);}
+.cal-toggle{font-size:13px;background:none;border:none;color:var(--muted);cursor:pointer;text-decoration:underline;}
+.more-list{text-align:center;margin-top:14px;}
+.check-note{font-size:13px;color:var(--faint);margin-top:10px;}
+
+/* calendar */
+.cal-row{margin-bottom:14px;}
+.cal-row h4{font-size:16px;color:var(--ink-dark);margin-bottom:7px;}
+.cal-names{display:flex;flex-wrap:wrap;gap:6px;}
+.cal-names span{font-size:13px;line-height:1.4;padding:4px 9px;border-radius:8px;background:var(--paper);border:1.5px solid var(--ink-dark);border-left-width:5px;}
+.cal-months{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:6px 0 16px;}
+@media(max-width:600px){.cal-months{grid-template-columns:repeat(2,1fr);}}
+.cal-m{border:2px solid var(--ink-dark);border-radius:12px;background:var(--paper);padding:8px 9px 9px;min-height:70px;}
+.cal-m h5{font-family:'Jua';font-weight:400;font-size:16px;color:var(--ink-dark);margin-bottom:5px;}
+.cal-m ul{list-style:none;display:flex;flex-direction:column;gap:4px;}
+.cal-m li{font-size:12.5px;line-height:1.35;padding-left:8px;border-left:4px solid var(--ink);}
+.cal-m.empty-m{opacity:.55;}
+.cal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+#cal-sheet{background:var(--card);padding:6px 2px;}
+
+/* more */
+.more-cta{text-align:center;border:2.5px solid var(--ink-dark);border-radius:18px;padding:24px 18px;background:var(--yellow-soft);
+  background-image:radial-gradient(circle,rgba(201,162,39,.25) 30%,transparent 33%);background-size:9px 9px;box-shadow:6px 6px 0 var(--ink-dark);margin-top:40px;}
+.more-cta h3{font-size:22px;color:var(--ink-dark);margin-bottom:8px;}
+.more-cta p{font-size:15px;color:#4a5a4e;margin-bottom:18px;line-height:1.65;}
+.more-cta .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.rank-chip{position:relative;}
+.rank-chip .n{display:none;position:absolute;top:-9px;left:-7px;width:22px;height:22px;border-radius:50%;background:var(--orange);color:#fff;font-family:'Jua';font-size:13px;line-height:20px;text-align:center;border:2px solid var(--ink-dark);}
+.rank-chip.selected .n{display:block;}
+.scale{display:flex;gap:5px;flex-wrap:wrap;}
+.scale button{width:40px;height:40px;border-radius:10px;border:2px solid var(--ink-dark);background:var(--card);font-family:'Jua';font-size:16px;cursor:pointer;}
+.scale button.on{background:var(--ink);color:var(--paper);}
+.scale-ends{display:flex;justify-content:space-between;max-width:490px;font-size:12.5px;color:var(--muted);margin-top:5px;}
+.sentence{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:'Jua';font-size:18px;color:var(--ink-dark);}
+.sentence input{flex:1;min-width:220px;}
+
+.done{text-align:center;padding-top:40px;}
+.done h2{font-size:clamp(28px,6vw,38px);margin-bottom:12px;}
+.done p{font-size:16px;line-height:1.8;color:#4a5a4e;margin-bottom:26px;}
+.done .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.foot{margin-top:46px;text-align:center;font-size:12.5px;color:var(--faint);line-height:1.8;}
+
+.float-shape{position:fixed;z-index:-1;opacity:.5;pointer-events:none;}
+.fs1{top:-60px;left:-60px;width:220px;} .fs2{bottom:-70px;right:-50px;width:250px;}
+@media(max-width:700px){.fs1{width:140px;}.fs2{width:160px;}}
+
+body.printing .print-hide{display:none !important;}
+@media print{
+  body{background:#fff;}
+  .float-shape,.print-hide,.cal-actions,.more-cta,.foot{display:none !important;}
+  .panel{box-shadow:none;break-inside:avoid;}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="pG" width="7.5" height="7.5" patternUnits="userSpaceOnUse"><circle cx="3.75" cy="3.75" r="2.5" fill="#1E6E48"/></pattern>
+    <pattern id="pGs" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r="2.2" fill="#1E6E48"/></pattern>
+    <pattern id="pY" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="4.5" cy="4.5" r="3.2" fill="#F5CF3C"/></pattern>
+    <pattern id="pO" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="2.6" fill="#EE8A3F"/></pattern>
+  </defs>
+</svg>
+<svg class="float-shape fs1" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="95" fill="url(#pY)"/></svg>
+<svg class="float-shape fs2" viewBox="0 0 200 200" aria-hidden="true"><path d="M100 15 C150 15 185 55 185 100 C185 160 140 185 100 185 C45 185 15 145 15 100 C15 50 55 15 100 15Z" fill="url(#pGs)" opacity=".8"/></svg>
+
+<div class="wrap">
+
+<!-- 시작 -->
+<section class="screen active" id="s-intro">
+  <div class="intro">
+    <div class="art">
+      <svg viewBox="0 0 340 220" aria-hidden="true">
+        <circle cx="255" cy="70" r="50" fill="url(#pY)"/>
+        <circle cx="248" cy="64" r="50" fill="url(#pO)" opacity=".45"/>
+        <path d="M0 220 C60 125 150 125 210 220Z" fill="url(#pG)"/>
+        <path d="M120 220 C190 148 280 148 340 220Z" fill="url(#pGs)" opacity=".85"/>
+        <g transform="translate(60 56) rotate(-14)">
+          <path d="M0 60 C0 15 30 -8 62 0 C66 38 40 66 4 64Z" fill="url(#pG)"/>
+          <path d="M6 58 C22 38 38 22 54 10" stroke="#FAF3E1" stroke-width="5" fill="none" stroke-linecap="round"/>
+        </g>
+      </svg>
+    </div>
+    <h1 class="riso-title">제주 청년 정책 길찾기</h1>
+    <p class="sub">다섯 영역의 질문에 답하면, 지금 나에게 필요한 영역과 제주 청년 지원사업, 2026년 모집 달력을 받을 수 있습니다.</p>
+    <div class="badge-row">
+      <span class="dim-badge">🌾 생계</span><span class="dim-badge">🧡 관계</span><span class="dim-badge">🌤️ 정서</span><span class="dim-badge">🏠 공간</span><span class="dim-badge">🎨 문화</span>
+    </div>
+    <p class="meta">약 5분 · 이름이나 연락처는 묻지 않습니다</p>
+    <div class="consent">
+      응답은 「청년의 제주지역 정착을 위한 생태계 구축」 연구(2026 제주지역문제해결플랫폼, 제주소통협력센터·커먼즈웍스)에 쓰입니다. 개인을 알아볼 수 있는 정보는 저장하지 않습니다.
+      <label><input type="checkbox" id="consent"> 연구 활용에 동의합니다</label>
+    </div>
+    <button class="btn" id="btn-start" disabled>시작하기</button>
+    <button class="text-link skip-save" id="btn-nosave">저장하지 않고 둘러보기</button>
+  </div>
+</section>
+
+<!-- 필수 질문 -->
+<section class="screen" id="s-core">
+  <div class="progress" data-step="0"></div>
+  <div class="q-head">
+    <span class="q-cat"><span class="dot"></span>필수 질문</span>
+    <h2 class="q-title">먼저, 지금의 나를 알려주세요</h2>
+    <p class="q-note">나이·사는 곳·지금 상황에 따라 맞는 사업이 달라져요.</p>
+  </div>
+  <div class="blocks">
+    <div>
+      <div class="blk-label"><span class="n">1</span>나이 <span class="opt-tag">만 나이</span></div>
+      <div class="age-row"><input type="number" id="age" min="13" max="49" placeholder="27" inputmode="numeric"><span class="unit">세</span></div>
+    </div>
+    <div>
+      <div class="blk-label"><span class="n">2</span>사는 곳</div>
+      <div class="chip-row" data-group="region">
+        <button class="chip" data-v="jejusi-dong">제주시 동 지역</button>
+        <button class="chip" data-v="jejusi-eup">제주시 읍·면</button>
+        <button class="chip" data-v="sgp-dong">서귀포시 동 지역</button>
+        <button class="chip" data-v="sgp-eup">서귀포시 읍·면</button>
+        <button class="chip" data-v="outside">제주 밖</button>
+      </div>
+    </div>
+    <div>
+      <div class="blk-label"><span class="n">3</span>제주와 나는</div>
+      <div class="chip-col" data-group="rel">
+        <button class="chip" data-v="native">제주에서 나고 자랐어요</button>
+        <button class="chip" data-v="uturn">제주를 떠났다가 돌아왔어요</button>
+        <button class="chip" data-v="migrant">다른 지역에서 제주로 왔어요</button>
+        <button class="chip" data-v="considering">제주로 올지 고민하고 있어요</button>
+      </div>
+      <div id="blk-years" class="is-hidden" style="margin-top:14px">
+        <p class="hint" style="margin:0 0 9px">제주에 산 지</p>
+        <div class="chip-row" data-group="years">
+          <button class="chip" data-v="lt1">1년 미만</button>
+          <button class="chip" data-v="1-3">1~3년</button>
+          <button class="chip" data-v="3-5">3~5년</button>
+          <button class="chip" data-v="5-10">5~10년</button>
+          <button class="chip" data-v="10+">10년 이상</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="blk-label"><span class="n">4</span>요즘 나는 <span class="opt-tag">여러 개 고를 수 있어요</span></div>
+      <div class="chip-col" data-group="stages" data-multi="1"></div>
+    </div>
+    <div>
+      <div class="blk-label"><span class="n">5</span>지원사업을 받아본 적이</div>
+      <div class="chip-row" data-group="exp">
+        <button class="chip" data-v="got">받아본 적 있어요</button>
+        <button class="chip" data-v="rejected">신청했는데 안 됐어요</button>
+        <button class="chip" data-v="never">신청해본 적 없어요</button>
+      </div>
+    </div>
+  </div>
+  <div class="nav-row">
+    <button class="text-link" data-go="intro">← 처음으로</button>
+    <div class="right"><button class="btn" id="next-core" disabled>다음</button></div>
+  </div>
+</section>
+
+<!-- 영역 질문 5개는 스크립트가 만든다 -->
+<div id="dim-screens"></div>
+
+<!-- 결과 -->
+<section class="screen" id="s-result">
+  <div class="result-head">
+    <h2 class="riso-title" id="result-title">지금 나의 상태</h2>
+    <p class="sub" id="result-sub"></p>
+  </div>
+
+  <div class="panel" id="panel-mine">
+    <h3>🔎 영역별 진단</h3>
+    <p class="lead">영역마다 고른 고민의 수만큼 막대가 차요. 막대가 길수록 그 영역이 지금 나에게 더 필요해요.</p>
+    <div class="dim-bars" id="dim-bars"></div>
+    <div class="need-list" id="need-list"></div>
+    <div class="profile-tags" id="profile-tags"></div>
+  </div>
+
+  <div class="panel print-hide" id="panel-jeju">
+    <h3>제주의 지원 지도</h3>
+    <p class="lead">칸마다 제주에 있는 청년 지원사업 수예요. 지원이 적은 칸은 숫자를 빨갛게, 내가 고민을 고른 칸은 테두리를 빨갛게 표시했어요.</p>
+    <div class="mapgrid" id="map-jeju"></div>
+    <div id="jeju-callout"></div>
+    <p class="footnote" id="jeju-foot"></p>
+  </div>
+
+  <div id="recs" class="print-hide"></div>
+  <p class="check-note print-hide">지원 조건과 신청 방법은 기관 공고에서 확인하세요. 사업 정보는 <span class="data-date-txt"></span> 기준이에요.</p>
+
+  <div class="panel" id="panel-cal" style="margin-top:34px">
+    <h3>2026년 모집 달력</h3>
+    <p class="lead">위에 나온 사업이 2026년에 모집한 시기예요. 2027년 일정은 기관 공고에서 다시 확인하세요.</p>
+    <div id="cal-sheet"></div>
+    <div class="cal-actions">
+      <button class="btn small" id="cal-png">이미지로 저장</button>
+      <button class="btn small secondary" id="cal-print">인쇄하기</button>
+    </div>
+  </div>
+
+  <div class="more-cta print-hide" id="more-cta">
+    <h3>연구에 보탤 질문이 몇 개 더 있어요</h3>
+    <p>2분이면 끝나요. 답은 제주 청년 지원사업을 고치는 데 쓰여요.</p>
+    <div class="row">
+      <button class="btn" data-go="more">보태기</button>
+      <button class="btn secondary" id="btn-finish">여기서 마치기</button>
+    </div>
+  </div>
+
+  <div class="nav-row print-hide">
+    <button class="text-link" data-go="생계">← 답 고치기</button>
+    <button class="text-link" id="btn-restart-1">처음부터 다시 하기</button>
+  </div>
+</section>
+
+<!-- 한 걸음 더 -->
+<section class="screen" id="s-more">
+  <div class="q-head">
+    <span class="q-cat"><span class="dot"></span>한 걸음 더</span>
+    <h2 class="q-title">연구에 보탤 질문</h2>
+    <p class="q-note">모두 답하지 않아도 됩니다.</p>
+  </div>
+  <div class="blocks">
+    <div>
+      <div class="blk-label"><span class="n">1</span>나를 제주에 계속 살게 만드는 것</div>
+      <textarea id="m-keep" maxlength="400" placeholder="예: 퇴근하고 걷던 바닷길"></textarea>
+    </div>
+    <div>
+      <div class="blk-label"><span class="n">2</span>여기서 계속 살 수 있을까 싶게 만드는 것</div>
+      <textarea id="m-shake" maxlength="400" placeholder="예: 병원 예약이 한 달 밀렸던 날"></textarea>
+      <p class="hint">단어보다 실제로 겪은 장면이면 좋아요.</p>
+    </div>
+    <div>
+      <div class="blk-label"><span class="n">3</span>관심 가는 지원사업 공고를 방금 발견했다면, 가장 먼저 찾는 정보는?</div>
+      <p class="hint" style="margin:-6px 0 12px">누르는 순서대로 1·2·3순위가 돼요.</p>
+      <div class="chip-col" id="rank-info"></div>
+    </div>
+    <div>
+      <div class="blk-label"><span class="n">4</span>공고에서 찾기 어려웠거나 없어서 답답했던 정보</div>
+      <textarea id="m-hard" maxlength="400"></textarea>
+    </div>
+    <div>
+      <div class="blk-label"><span class="n">5</span>지원사업 소식은 주로 어디서 보나요? <span class="opt-tag">여러 개</span></div>
+      <div class="chip-row" data-group="channels" data-multi="1"></div>
+    </div>
+    <div>
+      <div class="blk-label"><span class="n">6</span>필요한 지원이 있는 걸 알면서도 신청하지 않은 적이 있나요?</div>
+      <div class="chip-row" data-group="skip">
+        <button class="chip" data-v="yes">있어요</button>
+        <button class="chip" data-v="no">없어요</button>
+      </div>
+      <div id="blk-why" class="is-hidden" style="margin-top:16px">
+        <div class="blk-label" style="font-size:17px">무엇이 걸렸나요? <span class="opt-tag">여러 개</span></div>
+        <div class="chip-col" data-group="why" data-multi="1"></div>
+        <input type="text" id="m-why-etc" class="is-hidden" maxlength="200" placeholder="기타 내용" style="margin-top:10px">
+      </div>
+    </div>
+    <div>
+      <div class="blk-label"><span class="n">7</span>0에서 10 사이 숫자로</div>
+      <div id="scales"></div>
+    </div>
+    <div>
+      <div class="blk-label"><span class="n">8</span>빈칸을 채워주세요</div>
+      <div class="sentence">제주에서 청년으로 산다는 건 <input type="text" id="m-line" maxlength="120"></div>
+    </div>
+  </div>
+  <div class="nav-row">
+    <button class="text-link" data-go="result">← 결과로</button>
+    <div class="right"><button class="btn" id="btn-submit-more">보내기</button></div>
+  </div>
+</section>
+
+<!-- 끝 -->
+<section class="screen" id="s-done">
+  <div class="done">
+    <h2 class="riso-title">고마워요</h2>
+    <p id="done-msg"></p>
+    <div class="row">
+      <button class="btn secondary" data-go="result">결과·달력 다시 보기</button>
+      <button class="btn" id="btn-restart-2">처음부터 다시 하기</button>
+    </div>
+  </div>
+</section>
+
+<p class="foot">제주 청년 정책 길찾기 · 「청년의 제주지역 정착을 위한 생태계 구축」 2026 제주지역문제해결플랫폼<br>제주소통협력센터 · 커먼즈웍스 · 사업 정보 기준 <span id="data-date">2026년 10월 3일</span></p>
+
+</div>
+
+<script>
+const DATA = /*DATA_START*/[{"id":1,"org":"(사)서귀포YWCA","name":"청년 취업지원 컨설팅","main":"생계_자아실현","cells":["생계_생존","생계_자아실현"],"desc":"이력서, 면접 컨설팅, 모의화상면접 등","target":"만 19~39세 청년","scale":"","when":"매월 2회 (3~6월)","tk":"monthly","tm":[],"form":["상담·컨설팅","교육·체험"],"stages":["진로·취업 준비"],"link":"http://www.sgpoywca.or.kr/sub.asp?maincode=514&sub_sequence=520&sub_sub_sequence=&mskin=&exec=view&strBoardID=kui_520&intPage=1&intCategory=0&strSearchCategory=|s_name|s_subject|&strSearchWord=&intSeq=7019","amin":19,"amax":39,"reg":"all"},{"id":2,"org":"(사)제주사회적경제네트워크","name":"청년-제주 관광 브릿지 인턴십","main":"생계_생존","cells":["생계_자아실현","생계_생존"],"desc":"- 제주도 소재 관광 분야 기업과 연계한 인턴십 프로그램 운영(3개월)\n※2026년 최저임금 이상 급여 지급","target":"제주관광산업에 관심이 있는 전국의 미취업 청년(만 19~39세)누구나","scale":"20인 내외","when":"(2026년 기준)\n(1차) 4월\n(2차) 6월","tk":"months","tm":[4,6],"form":["인턴십"],"stages":["진로·취업 준비"],"link":"https://www.jejusen.org/board/1/90633?searchType=&keyword=%EC%B2%AD%EB%85%84&page=1&rowsPerPage=10&noticeType=&sortBy=createdDate&sortType=desc","amin":19,"amax":39,"reg":"all"},{"id":3,"org":"(사)제주사회적경제네트워크","name":"지역산업맞춤형 일자리창출 지원사업(로컬크리에이터) 모집","main":"생계_생존","cells":["생계_자아실현","생계_생존"],"desc":"- 최대 1,000만원의 성장지원금\n- 관광콘텐츠 개발, 전문가 멘토링 및 사업화 컨설팅 지원\n- 성과공유 및 네트워킹 프로그램 운영","target":"제주를 주 사업장으로 하는 청년(만 39세 이하)이 대표인 2인 이상으로 구성된 팀\n※제주 지역자원을 활용한 관광콘텐츠 및 서비스 개발 추진팀","scale":"10개 팀","when":"(2025년 기준)\n7월\n(2026년 기준)\n3월","tk":"months","tm":[3],"form":["지원금","상담·컨설팅"],"stages":["창업 준비","창업·사업 운영"],"link":"https://www.jejusen.org/board/1/90579?searchType=&keyword=%EB%A1%9C%EC%BB%AC&page=1&rowsPerPage=10&noticeType=&sortBy=createdDate&sortType=desc","amin":null,"amax":39,"reg":"all"},{"id":4,"org":"(사)제주사회적경제네트워크","name":"LEAP 런케이션","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 제주의 지역 자원 탐색을 바탕으로 한 제주 관광 프리미엄화 기획·실행 프로젝트\n- 워크숍, 해커톤 등","target":"만 19~39세 청년 누구나","scale":"50명","when":"7월","tk":"months","tm":[7],"form":["교육·체험"],"stages":["창업 준비","진로·취업 준비"],"link":"https://www.jejusen.org/board/1/90638","amin":19,"amax":39,"reg":"all"},{"id":5,"org":"교육부, 보건복지부","name":"시간제 보육 지원","main":"생계_생존","cells":["정서_자아건강","생계_생존"],"desc":"- 가정양육 시 지정된 제공기관(어린이집, 육아종합지원센터 등)을 시간(또는 시간대) 단위로 이용하고 이용한 시간만큼 보육료를 지불하는 보육서비스\n- 독립반 : 6~36개월 미만 영아 /  통합반 : 6개월~2세반 영아\n- 시간제보육료 5,000원 중 정부지원 3,000원, 부모 자부담 2,000원 (월 60시간 한도)","target":"어린이집, 유치원을 이용하지 않고 부모급여(현금)·양육수당 수급 중인 영아","scale":"-","when":"상시","tk":"always","tm":[],"form":["서비스"],"stages":["결혼,출산기"],"link":"https://www.jejubokji.net/data/welfare-service/2073?c%5B0%5D=3&page=4","amin":null,"amax":null,"reg":"all"},{"id":6,"org":"국민건강보험공단","name":"임신·출산 진료비 지원","main":"정서_자아건강","cells":["정서_자아건강","생계_생존"],"desc":"- 임산부·2세 미만 영유아의 모든 의료비 및 약제비 지원\n- 임신 1회당 100만원(다태아 200만원) 한도 바우처 제공","target":"임신·출산이 확인된 건강보험 가입자·피부양자","scale":"-","when":"연중","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=36","amin":null,"amax":null,"reg":"all"},{"id":7,"org":"농협제주본부","name":"제주 청년농업인 아카데미","main":"생계_자아실현","cells":["생계_자아실현","관계_청년커뮤니티"],"desc":"- 100시간 농업인 교육 과정\n- 스마트팜 기초, 마늘 기계화 수확, 농기계 운전 실습 등 농작업 생력화 교육  \n- 농업정책, 농업경영, 재배기술 등 청년농업인 기본 역량 교육\n- 실습 및 현장견학\n- 정부인정 교육시간 반영, 사업지원 가점 부여, NH오늘농사 소모임 구성 등 혜택 제공","target":"만 45세 이하 청년농업인","scale":"30명 내외 (소속 지역농협 조합장 추천을 통한 신청)","when":"3월 모집","tk":"months","tm":[3],"form":["교육·체험","커뮤니티"],"stages":["창업·사업 운영"],"link":"https://www.jigeumjeju.com/news/articleView.html?idxno=104237","amin":null,"amax":45,"reg":"all"},{"id":8,"org":"보건복지부","name":"정신건강 심리상담 바우처사업","main":"정서_자아건강","cells":["정서_자아건강"],"desc":"우울·불안 등 정서적 어려움에 대한 전문 심리상담 바우처 8회(회당 50분 이상) 제공. 바우처 생성일로부터 120일 사용","target":"우울·불안 등 정서적 어려움이 있는 국민 누구나","scale":"-","when":"상시","tk":"always","tm":[],"form":["상담·컨설팅"],"stages":["모든 청년"],"link":"https://www.mohw.go.kr/menu.es?mid=a10706040800","amin":null,"amax":null,"reg":"all"},{"id":9,"org":"보건복지부","name":"자립준비청년(보호종료아동) 자립수당","main":"생계_생존","cells":["생계_생존"],"desc":"아동양육시설·공동생활가정·가정위탁에서 보호받던 청소년(자립준비청년)에게 월 50만원의 자립수당을 보호종료일로부터 60개월간 지급","target":"보호종료 전 2년 이상 연속 보호받은 자립준비청년","scale":"-","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["자립준비청년"],"link":"https://www.mohw.go.kr/menu.es?mid=a10711041000","amin":null,"amax":null,"reg":"all"},{"id":10,"org":"보건복지부","name":"자립준비청년 자립정착금","main":"생계_생존","cells":["생계_생존"],"desc":"자립정착금 1,500만원을 2회 분할 지급(첫해 1,000만원, 차년도 500만원)","target":"아동양육시설·공동생활가정을 퇴소한 보호종료아동(2년 이상 연속 보호)","scale":"-","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["자립준비청년"],"link":"https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00001756&wlfareInfoReldBztpCd=02","amin":null,"amax":null,"reg":"all"},{"id":11,"org":"사단법인 다음맞이","name":"신술목학교","main":"관계_지역참여","cells":["관계_지역참여","관계_청년커뮤니티"],"desc":"- 전환기 청년들이 함께 배우는 공동체 기반 상호학습 프로그램\n- 제주정착토크, 제주이해 인문학 수업 등 지역탐색 활동 및 커뮤니티 운영","target":"- 제주로의 정착을 준비하고 있는 육지 청년  \n- 나홀로 정착에 고군분투 중인 제주 거주 3년 미만 청년","scale":"5명 내외","when":"비정기","tk":"unknown","tm":[],"form":["공간","교육·체험","커뮤니티"],"stages":["이주·정착"],"link":"https://lowly-profit-4ee.notion.site/2026-0c39549a7624410eb83bbf3e6caef8b9","amin":null,"amax":null,"reg":"all"},{"id":12,"org":"사단법인 씨즈","name":"제주두더집(고립·은둔 청년 지원)","main":"정서_자아건강","cells":["정서_자아건강","관계_청년커뮤니티","문화_누리기"],"desc":"- 해결중심상담, 제주패스파인더 연계 프로그램(글짓기, 다도 등), 텃밭 및 집밥모임 등 치유 프로그램 운영 \n- 농업 활동 및 농촌 커뮤니티 연계 활동\n- 월 - 토 08:00 ~ 20:00 쓸모있는 인생교실 (인문사회학 학습 및 지역 공동체 교류형 일경험)\n- 목 10:00 ~ 12:00 제주지역 공동체 기여 탐방 및 진로 코칭 / 13:00 ~ 17:00 제주 은둔고립 청년 자조모임","target":"제주 지역 고립·은둔 청년","scale":"-","when":"문의 필요","tk":"always","tm":[],"form":["교육·체험","커뮤니티","상담·컨설팅","공간"],"stages":["고립, 은둔 청년"],"link":"https://dudug.kr/187","amin":null,"amax":null,"reg":"all"},{"id":13,"org":"사단법인 씨즈","name":"제주 은둔 고립 청년 & 가족 상담","main":"정서_자아건강","cells":["정서_자아건강"],"desc":"- 초기상담 1회: 비대면/대면 중 선택하여 상담 진행 \n- 지원연계: 전문심리상담/두더집 공간 활동 등 필요한 지원으로 연계","target":"은둔형 외톨이 • 사회적 고립 상태에서 벗어나기를 원하는 청년, 가족, 또는 지인","scale":"-","when":"문의 필요","tk":"always","tm":[],"form":["상담·컨설팅"],"stages":["고립, 은둔 청년"],"link":"https://dudug.kr/179","amin":null,"amax":null,"reg":"all"},{"id":14,"org":"사회적협동조합 제주내일","name":"제주 청년도전지원사업","main":"생계_생존","cells":["생계_생존","생계_자아실현"],"desc":"- 참여수당제공(50-250만원) 및 이수, 구직활동, 취업에 따른 인센티브 제공\n- 1:1상담, 진로탐색, 취업역량강화 교육\n- 요리, 문화생활 등 일상회복을 위한 프로그램","target":"- 신청일 기준, 6개월 이상 취업,교육,직업 훈련에 참여이력이 없는 청년(만 18~34세 이하)\n- 자립준비청년, 청소년복지시설 입퇴소청년, 북한이탈청년, 지역특화청년(만 35~39세 청년, 아르바이트 주 30시간 미만 청년)","scale":"상시운영","when":"상시","tk":"always","tm":[],"form":["교육·체험","지원금"],"stages":["진로·취업 준비"],"link":"http://jejutomorrow.net/gnuboard4/bbs/board.php?bo_table=sub0401&wr_id=77","amin":18,"amax":39,"reg":"all"},{"id":15,"org":"사회적협동조합 제주내일","name":"국민 취업지원제도","main":"생계_생존","cells":["생계_생존","생계_자아실현"],"desc":"- 1유형(구직촉진수당 중심): 저소득 구직자 대상 / 취업지원서비스, 구직촉진수당 월 60만원(부양가족에 따라 월 최대 100만원) × 최대 6개월\n- 2유형(취업활동비용 중심): 15~34세 청년은 소득·재산·취업경험과 관계없이 참여 가능 / 취업지원서비스, 취업활동비용 지원\n- 공통 지원: 심층상담, 직업훈련, 일자리 정보 제공 등 개인별 취업지원서비스 제공\n- 추가 지원: 일정 요건 충족 시 취업성공수당 최대 150만원 지급","target":"- 만 15~69세 중 소득과 재산 요건에 맞는 누구나\n※ 청년 유형 별도 존재","scale":"상시 운영","when":"상시","tk":"always","tm":[],"form":["지원금","상담·컨설팅","교육·체험"],"stages":["진로·취업 준비"],"link":"https://jejuyouthdream.com/policy/detail/22","amin":15,"amax":69,"reg":"all"},{"id":16,"org":"서귀포시","name":"청년 희망이음 일자리(청년인턴)사업","main":"생계_생존","cells":["생계_생존","생계_자아실현"],"desc":"- 공공부문 인턴 일자리로 직무경험 제공. 주 40시간 이내, 생활임금(시급 12,110원) 적용, 4대보험 가입\n- 기관별 별도 채용공고 게시","target":"서귀포시 거주 만 19~39세 미취업 청년","scale":"채용공고별 상이","when":"비정기","tk":"unknown","tm":[],"form":["인턴십"],"stages":["진로·취업 준비"],"link":"https://www.seogwipo.go.kr/info/news/job/job.htm","amin":19,"amax":39,"reg":"seogwipo"},{"id":17,"org":"서귀포시 경제일자리과","name":"1965올레시장54번가(정책매장) 청년점포 운영","main":"공간_일터","cells":["공간_일터","생계_자아실현","생계_생존"],"desc":"- 서귀포매일올레시장 정책매장 공간 활용 청년점포 운영\n- 시세에 따라 임대료 추후 결정","target":"서귀포 거주 만19세~39세 이하 사업자 등록 예정자","scale":"공고별 상이","when":"비정기","tk":"unknown","tm":[],"form":["공간"],"stages":["창업 준비"],"link":"https://www.seogwipo.go.kr/info/news/notice.htm?qType=title&q=%EC%B2%AD%EB%85%84&page=2&act=view&seq=152272819","amin":19,"amax":39,"reg":"seogwipo"},{"id":18,"org":"서귀포시 기획예산과","name":"서귀포시 취업준비 청년 자격증 등 응시료 지원사업","main":"생계_생존","cells":["생계_생존"],"desc":"- 자격증 등 응시료 실비 지원(연 최대 10만원 한도)","target":"서귀포시 거주 만 19~39세 미취업 청년","scale":"예산 소진 시까지","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["진로·취업 준비"],"link":"https://seogwipo.go.kr/group/selfgoverning/planning/application/intro.htm","amin":19,"amax":39,"reg":"seogwipo"},{"id":19,"org":"서귀포시 기획예산과","name":"서귀포시 대학생·청년 아르바이트","main":"생계_생존","cells":["생계_생존"],"desc":"동·하계 방학 중 시정 행정업무 지원 아르바이트 제공","target":"본인 또는 부모가 서귀포시 주민등록된 재(휴)학 대학생·청년(만 19~39세)","scale":"동계·하계 각 1회 모집, 시기별 100명 내외","when":"특정 시기","tk":"unknown","tm":[],"form":["인턴십"],"stages":["진로·취업 준비"],"link":"https://jejuyouthdream.com/policy/detail/5","amin":19,"amax":39,"reg":"all"},{"id":20,"org":"서귀포시 기획예산과","name":"서귀포시 청년 커뮤니티 활동 지원사업","main":"관계_청년커뮤니티","cells":["관계_지역참여","관계_청년커뮤니티"],"desc":"재능기부형·시책발굴형·공동체형 등 유형별로 청년 커뮤니티 활동비를 차등 지원 (150~300만원 이내, 보조율 90%)","target":"구성원 70% 이상이 서귀포시에 주소를 둔 5인 이상 만 19~39세 청년 공동체","scale":"7팀 내외","when":"비정기","tk":"unknown","tm":[],"form":["지원금","커뮤니티"],"stages":["모든 청년"],"link":"https://www.seogwipo.go.kr/info/news/notice.htm?qType=title&q=%EC%B2%AD%EB%85%84&page=2&act=view&seq=153154222","amin":19,"amax":39,"reg":"seogwipo"},{"id":21,"org":"서귀포시 기획예산과","name":"서귀포시 청년정책협의체 운영","main":"관계_지역참여","cells":["관계_지역참여","관계_청년커뮤니티"],"desc":"청년 의견 수렴, 청년정책 제안, 타 시·도 청년커뮤니티 및 청년참여기구와의 협업 추진","target":"주소지·등록기준지 또는 직장이 서귀포시인 만 19~39세 청년","scale":"24명 내외","when":"(2026년 기준) 전년도 12월","tk":"months","tm":[12],"form":["커뮤니티","교육·체험","정보"],"stages":["모든 청년"],"link":"https://www.seogwipo.go.kr/info/news/notice.htm?qType=title&q=%EC%B2%AD%EB%85%84%EC%A0%95%EC%B1%85&act=view&seq=152128723","amin":19,"amax":39,"reg":"seogwipo"},{"id":22,"org":"서귀포시 기획예산과","name":"찾아가는 청년교육 프로그램","main":"문화_누리기","cells":["관계_청년커뮤니티","정서_지역애착","문화_누리기"],"desc":"- 청년이 원하는 교육 내용을 원하는 날짜·장소로 찾아가 운영하는 수요자 중심 맞춤형 교육\n- 프로그램 운영을 위한 강사수당 지원","target":"교육참가자의 50% 이상이 서귀포시에 주소를 둔 청년(만19세~39세)으로 구성된 교육 수요자 그룹(5인 이상)","scale":"신청 팀별 운영","when":"(2026년 기준) 2~3월","tk":"months","tm":[2,3],"form":["교육·체험","커뮤니티"],"stages":["모든 청년"],"link":"https://www.seogwipo.go.kr/info/news/notice.htm?qType=title&q=%EC%B2%AD%EB%85%84&page=2&act=view&seq=152942581","amin":19,"amax":39,"reg":"seogwipo"},{"id":23,"org":"서귀포시 기획예산과","name":"서귀포시 청년 부자학교","main":"생계_생존","cells":["생계_자아실현","생계_생존"],"desc":"- 금융교육(7회차) : 금융거래와 세금, 투자 등 현명한 금융생활 관련 주제\n- 1:1 금융상담(2회차): 교육 프로그램 종료 후 10인 대상 개별 진행","target":"서귀포시 만 19~39세 청년","scale":"20명 내외","when":"(2026년 기준) 5월","tk":"months","tm":[5],"form":["교육·체험","상담·컨설팅"],"stages":["모든 청년"],"link":"https://www.seogwipo.go.kr/info/news/notice.htm?qType=title&q=%EC%B2%AD%EB%85%84&page=2&act=view&seq=153914281","amin":19,"amax":39,"reg":"seogwipo"},{"id":24,"org":"서귀포시 문화예술과","name":"한땀 프로젝트","main":"문화_생산하기","cells":["관계_지역참여","문화_생산하기"],"desc":"헌 옷을 활용한 손바느질·의류 리폼 등 지속가능한 의생활 문화 프로그램","target":"서귀포시 만 19~39세 청년","scale":"선착순","when":"(2026년 기준) 상, 하반기 2회 운영","tk":"unknown","tm":[],"form":["교육·체험","커뮤니티"],"stages":["모든 청년"],"link":"https://jejuyouthdream.com/policy/detail/33","amin":19,"amax":39,"reg":"seogwipo"},{"id":25,"org":"서귀포시 스타트업베이","name":"실전 창업아카데미","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- AI활용 사업계획서 작성고도화\n- IR피칭\n- 세무회계 1:1 전문가 멘토링 지원\n- 스타트업 해외진출 전략 및 투자유치 전략 교육","target":"지역 내 예비 및 초기 창업자","scale":"25명 내외","when":"(2026년 기준)\n6월","tk":"months","tm":[6],"form":["교육·체험","상담·컨설팅"],"stages":["창업 준비"],"link":"https://startupbay.or.kr/acc/?bmode=view&idx=171595378&back_url=&t=board&page=1","amin":null,"amax":null,"reg":"all"},{"id":26,"org":"서귀포시 스타트업베이","name":"서귀포시 스타트업타운 입주기업 모집","main":"공간_일터","cells":["공간_일터","생계_자아실현"],"desc":"- 액셀러레이팅 프로그램\n- IR 투자 연계 및 프로그램 지원\n- 국내외 시장 진출 지원\n- 창업공간 지원(사무공간 및 공용사무기기 무상지원)","target":"- 창업 3년 초과 7년 이내의 서귀포시 소재 혹은 서귀포시에 사업 확장을 희망하는 도약기 스타트업\n※1개 기업 청년스타트업 의무배정","scale":"여석 발생 시","when":"비정기","tk":"unknown","tm":[],"form":["공간","교육·체험","상담·컨설팅"],"stages":["창업·사업 운영"],"link":"https://startupbay.or.kr/notice/?q=YToyOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjtzOjQ6InBhZ2UiO2k6MTt9&bmode=view&idx=169817130&t=board","amin":null,"amax":null,"reg":"seogwipo"},{"id":27,"org":"서귀포시 정방동","name":"정방동 청년 문화·예술학교","main":"문화_누리기","cells":["문화_누리기","정서_지역애착"],"desc":"- 정방청년밴드, 스마트폰으로 사진작가 되기 등 취미 프로그램 운영\n- 플로리스트 전문가 1급 취득과정 등 자격증 프로그램 운영","target":"서귀포시 관내 청년층(만 19세 ~ 만39세)","scale":"24명 내외","when":"비정기","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["모든 청년"],"link":"https://www.seogwipo.go.kr/info/news/notice.htm?qType=title&q=%EC%B2%AD%EB%85%84&page=2&act=view&seq=153309694","amin":19,"amax":39,"reg":"seogwipo"},{"id":28,"org":"서귀포시 청년지원센터","name":"서귀포시 청년지원센터","main":"공간_일터","cells":["공간_일터","관계_지역참여","관계_청년커뮤니티"],"desc":"- 오픈라운지·회의실·연습실 무료 이용 가능 (일부 공간 대관 필요)\n- 평일: 10:00~20:00 / 토요일: 10:00~17:00 ※ 일요일 및 공휴일 휴관","target":"제주 거주·활동 만 19~39세 청년","scale":"상시 운영","when":"상시","tk":"always","tm":[],"form":["공간"],"stages":["모든 청년"],"link":"https://jejuyouth.com/pages.php?p=7_1_5_1","amin":19,"amax":39,"reg":"all"},{"id":29,"org":"서귀포시 친환경농정과","name":"서귀포시 청년농업인 영농정착지원","main":"생계_생존","cells":["생계_생존","생계_자아실현"],"desc":"- 영농정착지원금: 1~3년간 월 90~110만원 지급\n- 융자지원: 최대 5억원, 이율 1.5%, 5년 거치 20년 상환\n- 농지 임차 및 매입 지원","target":"서귀포시 거주 18~39세, 영농 종사 경력이 없거나 3년 이하 청년농업인","scale":"농식품부 선발 규모에 따름","when":"(1차) 12월경\n(2차)\n6월경","tk":"months","tm":[6,12],"form":["지원금"],"stages":["창업 준비","창업·사업 운영"],"link":"https://www.nongupez.go.kr/nsm/main","amin":18,"amax":39,"reg":"seogwipo"},{"id":30,"org":"씨패스(C-PATH)","name":"국민취업지원제도 취업지원 서비스 제공","main":"생계_생존","cells":["생계_생존","생계_자아실현"],"desc":"종합적 취업지원서비스 및 저소득 구직자 대상 소득 지원","target":"15세부터 69세까지의 구직자 중 소득/재산 기준에 따라 1유형과 2유형으로 나누어 지원","scale":"상시 운영","when":"상시","tk":"always","tm":[],"form":["상담·컨설팅","교육·체험"],"stages":["진로·취업 준비"],"link":"https://c-path.co.kr/service/1","amin":null,"amax":null,"reg":"all"},{"id":31,"org":"씨패스(C-PATH)","name":"구직자 취업역량강화 프로그램","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 취업 특강 및 집단상담","target":"도내 일반구직자 및 청년","scale":"회차별 모집","when":"(2026년 기준)\n7~8월","tk":"months","tm":[7,8],"form":["상담·컨설팅","교육·체험"],"stages":["진로·취업 준비"],"link":"https://c-path.co.kr/announcements","amin":null,"amax":null,"reg":"all"},{"id":32,"org":"인구보건복지협회 제주지회","name":"임산부 모유수유 교육홍보사업","main":"정서_자아건강","cells":["정서_자아건강"],"desc":"- 예비 임산부·임산부·육아맘 대상 성인지, 신생아 관리, 모유수유, 발달놀이 등 교육","target":"예비 임산부·임산부·육아맘·부부","scale":"-","when":"월별 모집·선착순 마감","tk":"monthly","tm":[],"form":["교육·체험"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=32","amin":null,"amax":null,"reg":"all"},{"id":33,"org":"제주가족친화지원센터","name":"수눌음돌봄공동체 운영","main":"관계_청년커뮤니티","cells":["관계_청년커뮤니티","정서_자아건강"],"desc":"- 돌봄 손/자녀 가구 3가구 이상으로 구성된 자조모임의 공동육아 활동 지원 \n- 공동체별 최대 200만원 이내 (아동 1명당 월 25천원, 장애아동 1명단 월 35천원 기준)","target":"돌봄 자녀를 둔 3가구 이상 자조모임 (임신부~중학생 이하 자녀, 장애아동은 연령제한 없음)","scale":"-","when":"상반기(2~3월)","tk":"months","tm":[2,3],"form":["지원금","커뮤니티"],"stages":["결혼,출산기"],"link":"https://jffsc.kr/pages.php?p=3_1_1_1","amin":null,"amax":null,"reg":"all"},{"id":34,"org":"제주가족친화지원센터","name":"수놀음육아나눔터 운영","main":"공간_일터","cells":["관계_청년커뮤니티","관계_지역참여","공간_일터"],"desc":"- 지역사회와 함께하는 돌봄문화 확산, 자발적 돌봄나눔 지원 기반 조성을 위한 공간\n- 마을회관, 아파트 커뮤니티센터, 마을도서관 등 33㎡(10평)이상의 지역사회 유휴공간에 조성\n- 제주특별자치도 공모, 제주가족친화지원센터의 운영 컨설팅를 통해 운영\n- 수눌음육아나눔터에는 상주하는 관리자가 없으며, 나눔터별로 운영시간, 이용방법 등이 다름으로, \n이용하기 전 정보 확인 필요","target":"제주전역 30개 내외 공간","scale":"-","when":"상시","tk":"always","tm":[],"form":["커뮤니티","공간","교육·체험"],"stages":["결혼,출산기"],"link":"https://jffsc.kr/bbs/board.php?bo_table=3_6_1_1","amin":null,"amax":null,"reg":"all"},{"id":35,"org":"제주고용복지플러스센터(고용노동부)","name":"단기취업특강","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 구직기술 향상 및 교양강좌","target":"도내 일반구직자 및 취업 취약계층","scale":"회당 80명","when":"월별 모집","tk":"monthly","tm":[],"form":["교육·체험"],"stages":["진로·취업 준비"],"link":"https://www.work.go.kr/jeju/newsPlace/notice/noticeDetail.do?articleSeqno=151122&articleClSeqno=2020000001&mainCode=&subCode=&searchType=&searchKey=&searchWord=&subNaviMenuCd=20200","amin":null,"amax":null,"reg":"all"},{"id":36,"org":"제주고용복지플러스센터(고용노동부)","name":"고용보험 미적용자 출산급여 지원사업","main":"생계_생존","cells":["생계_생존"],"desc":"- 고용보험 미적용 출산여성에게 출산급여 지급 (월 50만원×3개월분, 150만원 일괄)","target":"고용보험 미적용 소득활동 출산여성 (유산·사산 포함)","scale":"-","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기","재직","창업·사업 운영"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=5","amin":null,"amax":null,"reg":"all"},{"id":37,"org":"제주고용복지플러스센터(고용노동부)","name":"육아지원 3법 확대 일·가정 양립 활성화","main":"생계_생존","cells":["생계_생존"],"desc":"- 임신기/출산시/육아기 근로시간 단축, 휴가급여 등 일·가정 양립 제도 급여 지원\n- 임신기: 임신기 시간단축, 난임휴가 급여\n- 출산시: 근로자출산전후 휴가 급여, 예술인 및 노무제공자 출산전후 급여, 배우자 출산휴가급여\n- 육아기: 육아기 근로시간 단축급여, 육아휴직 급여","target":"임신(준비)·출산·육아기 휴가·휴직 근로자","scale":"-","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=29","amin":null,"amax":null,"reg":"all"},{"id":38,"org":"제주고용복지플러스센터(고용노동부)","name":"출산육아기 고용안정장려금 지원사업","main":"생계_생존","cells":["생계_생존"],"desc":"- 육아휴직 등 모성보호제도를 부여한 사업주에게 육아휴직지원금·대체인력지원금 등 지급","target":"모성보호제도를 부여한 우선지원대상기업 사업주","scale":"-","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기","창업·사업 운영"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=46","amin":null,"amax":null,"reg":"all"},{"id":39,"org":"제주관광공사","name":"제주 런케이션 - 청춘정거장 in 제주","main":"정서_지역애착","cells":["정서_지역애착","문화_누리기"],"desc":"- 한주살이(7일 이상) 및 한달살이(14일 이상 체류) 지원\n- 체류비 및 자율문화체험비 지원 (한주살이 최대 19만원, 한달살이 최대 45만원)\n- 지원조건: 읍면 지역 체류, SNS 게시물 업로드, 설문조사 참여, 오프라인 OT (1회) 참여","target":"만 19~39세 도외 거주 청년","scale":"공고별 상이","when":"봄, 여름, 가을 3개 시즌 운영","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["이주·정착","일·생활 전환"],"link":"https://jeju.go.kr/move/intro/list.htm?act=view&seq=1153232","amin":19,"amax":39,"reg":"all"},{"id":40,"org":"제주관광공사","name":"제주관광공사 청년인턴(체험형)","main":"생계_자아실현","cells":["생계_자아실현","생계_생존"],"desc":"제주관광공사 운영지원 청년 체험형 인턴 채용 (연 2회)","target":"만 19~34세 도내 청년","scale":"공고별 상이","when":"1차, 2차 (연 2회)","tk":"unknown","tm":[],"form":["인턴십"],"stages":["진로·취업 준비"],"link":"https://www.jejutp.or.kr/board/other/detail/18234","amin":19,"amax":34,"reg":"all"},{"id":41,"org":"제주관광대학교 RISE 사업단 (창업교육지원센터)","name":"제주관광대학교 창업동아리","main":"생계_자아실현","cells":["생계_자아실현","생계_생존"],"desc":"- 시제품 제작비(용역)\n- 학내 창업공간\n- 경진대회 및 프로그램 참가비 등 지원","target":"재학생 3인, 제주관광대학교 지도교수 1인 포함된 동아리","scale":"-","when":"(2026년 기준)\n3월","tk":"months","tm":[3],"form":["지원금","공간"],"stages":["창업 준비"],"link":"https://jtu.ac.kr/pages/sub.htm?mode=view&mv_data=aWR4PTMyMTY2JnN0YXJ0UGFnZT0mbGlzdE5vPSZ0YWJsZT1jc19iYnNfZGF0YSZuYXZfY29kZT1qdHUxNzI4ODgyMDYyJmNvZGU9bm90aWNlMDAxJnNlYXJjaF9pdGVtPSZzZWFyY2hfb3JkZXI9Jm9yZGVyX2xpc3Q9Jmxpc3Rfc2NhbGU9JnZpZXdfbGV2ZWw9JnZpZXdfY2F0ZT0mdmlld19jYXRlMj0=%7C%7C","amin":null,"amax":null,"reg":"all"},{"id":42,"org":"제주관광대학교 RISE 사업단 (창업교육지원센터)","name":"창업보육센터 입주기업 모집","main":"공간_일터","cells":["공간_일터","생계_자아실현"],"desc":"- 기술개발, 홍보 및 판로 지원\n- 기업 및 지원 기관 실무자와의 네트워크 구축\n- 박람회(전시회) 참가비 지원\n- 세미나실, 교육실 등 공간지원","target":"창업 3년 이내의 중소(벤처)기업","scale":"-","when":"(2026년 기준)\n4월","tk":"months","tm":[4],"form":["공간","상담·컨설팅","지원금"],"stages":["창업·사업 운영","창업 준비"],"link":"https://www.bizinfo.go.kr/biz/bizb/selectBIZB200Detail.do?mvnEntrprsRcritPblancId=MVNP_000000000000242","amin":null,"amax":null,"reg":"all"},{"id":43,"org":"제주대학교","name":"지역특화 청년 무역전문가 양성사업(GTEP)","main":"생계_자아실현","cells":["생계_자아실현","생계_생존"],"desc":"무역실무 기본·전문교육, 무역 자격증 및 외국어 인증 취득을 위한 교재비 및 응시료 지원, 산학협력기업과의 무역현장실습 등","target":"3학년 이상의 제주대학교 재학생 (전공무관)","scale":"35명 내외","when":"매년 11~12월","tk":"months","tm":[11,12],"form":["교육·체험","인턴십","지원금"],"stages":["진로·취업 준비"],"link":"https://jejuyouthdream.com/policy/detail/40","amin":null,"amax":null,"reg":"all"},{"id":44,"org":"제주대학교 공학교육혁신센터","name":"학생 포트폴리오 경진대회","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 이력서, 교과목 과제 등 포트폴리오에 대한 상장 및 상금 시상\n- 경진대회 입상자는 전국 학생 포트폴리오 경진대회 참여 자격 부여(참가비용, 여비, 숙박비, 항공요금 전액 지원)","target":"제주대 공학계열 재학생","scale":"7명 내외","when":"3월","tk":"months","tm":[3],"form":["지원금"],"stages":["진로·취업 준비"],"link":"https://abeek.jejunu.ac.kr/abeek/news/notice.htm?page=1&act=view&seq=272165","amin":null,"amax":null,"reg":"all"},{"id":45,"org":"제주대학교 공학교육혁신센터","name":"창의융합 캡스톤디자인","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 자율 주제, 미래형 모빌리티 주제에 대한 전공 지식 기반의 창의융합적 아이디어 제시\n- 재료비, 회의비, 자문료 등 운영비 지원\n- 대학 부설공장 장비 활용 지원","target":"제주대 재학생 2~4학년","scale":"12팀 내외","when":"2~3월","tk":"months","tm":[2,3],"form":["지원금","물품","공간"],"stages":["진로·취업 준비","창업 준비"],"link":"https://abeek.jejunu.ac.kr/abeek/news/notice.htm?act=view&seq=270803","amin":null,"amax":null,"reg":"all"},{"id":46,"org":"제주대학교 공학교육혁신센터","name":"미래모빌리티 설계 교육 아카데미","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 솔리드웍스 3d 프로그램을 활용한 미래 모빌리티 설계 교육","target":"제주대 이공학계열 또는 디자인 계열 재학생","scale":"25명 내외","when":"비정기","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["진로·취업 준비","창업 준비"],"link":"https://abeek.jejunu.ac.kr/abeek/news/notice.htm?page=1&act=view&seq=275917","amin":null,"amax":null,"reg":"all"},{"id":47,"org":"제주대학교 대학일자리플러스센터","name":"대학일자리플러스센터(졸업생특화프로그램 포함) 운영","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 재학생, 졸업생 및 타대생, 지역청년 대상 진로 취업 상담 제공\n- 외국어, 스피치 등 취업역량 강화 교육 운영\n- 지역인재 공무원, 일경험 등 채용 및 대외활동 정보 제공","target":"제주대 재학생·졸업생 및 지역 청년","scale":"상시 운영","when":"프로그램별 상이","tk":"always","tm":[],"form":["교육·체험","상담·컨설팅"],"stages":["진로·취업 준비"],"link":"https://clip.jejunu.ac.kr/clip/community/notice.htm","amin":null,"amax":null,"reg":"all"},{"id":48,"org":"제주대학교 RISE 사업단","name":"창업동아리","main":"생계_자아실현","cells":["생계_자아실현","관계_청년커뮤니티","생계_생존"],"desc":"- 동아리 활동비 지원 (100~1000만원)\n- 창업 활동 멘토링 및 컨설팅 지원, 창업실습 학점 인정 등","target":"창업아이디어를 보유하고, 제주대학교 재학생 3인 이상으로 구성된 팀","scale":"-","when":"(2026년 기준)\n3월","tk":"months","tm":[3],"form":["지원금","교육·체험","상담·컨설팅"],"stages":["창업 준비"],"link":"https://jejunu.jejurise.kr/news/notice.htm?qtype=title&query=%EC%B0%BD%EC%97%85%EB%8F%99%EC%95%84%EB%A6%AC&depart=184&act=view&seq=2163","amin":null,"amax":null,"reg":"all"},{"id":49,"org":"제주대학교 RISE 사업단","name":"창업준비지원 프로그램 - 제대로 스타트업 트랙","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 발명상담, BM설계, 컨설팅 등 창업준비 지원","target":"보유기술, 아이디어의 사업화를 실현하고자 하는 제주대학교 교원 및 대학(원)생 예비 창업자","scale":"-","when":"(2026년 기준)\n5~6월","tk":"months","tm":[5,6],"form":["상담·컨설팅"],"stages":["창업 준비"],"link":"https://jejunu.jejurise.kr/news/notice.htm?qtype=title&query=%EC%B0%BD%EC%97%85&depart=184&act=view&seq=2377","amin":null,"amax":null,"reg":"all"},{"id":50,"org":"제주대학교 RISE 사업단","name":"창업기업 초기성장 프로그램 'startup builder'","main":"생계_자아실현","cells":["생계_자아실현","생계_생존"],"desc":"- 시제품 제작 지원(기업별 건당 최대 500만원, 최대 2건)\n- 마케팅, 판로개척 지원(기업별 건당 최대 500만원, 최대 2건)","target":"제주대학교 대학(원)생 및 교원 창업기업","scale":"-","when":"(2026년 기준)\n5~6월","tk":"months","tm":[5,6],"form":["지원금"],"stages":["창업·사업 운영"],"link":"https://jejunu.jejurise.kr/news/notice.htm?qtype=title&query=%EC%B0%BD%EC%97%85&depart=184&act=view&seq=2378","amin":null,"amax":null,"reg":"all"},{"id":51,"org":"제주대학교 RISE 사업단","name":"제주대학교 RISE 창업활동지원금(창업장학금)","main":"생계_자아실현","cells":["생계_생존","생계_자아실현"],"desc":"- 창업 프로그램 참여 고득점순 선발\n- 최대 200만원 지급","target":"창업활동 관련 일정 기준에 부합하는 재학생","scale":"15명 내외","when":"(2026년 기준)\n1월","tk":"months","tm":[1],"form":["지원금"],"stages":["창업 준비","창업·사업 운영"],"link":"https://jedaero.jejunu.ac.kr/Platform/prm/main.do?currentUrl=/Platform/prm/list/total.do&prmId=PRM_000000000761&prmNm=%EC%B0%BD%EC%97%85%ED%99%9C%EB%8F%99%EC%A7%80%EC%9B%90%EA%B8%88%20%EC%8B%A0%EC%B2%AD&prmModel=PRMTY02","amin":null,"amax":null,"reg":"all"},{"id":52,"org":"제주더큰내일센터","name":"탐나는 인재","main":"생계_자아실현","cells":["생계_자아실현","생계_생존","관계_청년커뮤니티","관계_지역참여"],"desc":"- 생활지원금 월 최대 150만원 지원(최대 18개월)\n- 취창업 교육훈련(최소 11~15개월)\n- 창업실행 지원\n- 직무, 직군, 산업별 혁신 네트워크 및 커뮤니티 형성","target":"15세 이상 ~ 34세 이하의 도내·외 청년","scale":"40명 내외","when":"(2026년 기준)\n(1차) 12~1월\n(2차) 6~7월","tk":"months","tm":[1,6,7,12],"form":["지원금","교육·체험","커뮤니티"],"stages":["진로·취업 준비","창업 준비"],"link":"https://www.jdnc.or.kr/program/desire.htm","amin":15,"amax":34,"reg":"all"},{"id":53,"org":"제주더큰내일센터","name":"빛나는 인재 - 아카데미","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 3일(20시간) 내외 진행\n- 참여자 직무 역량강화 및 전문성 강화 교육\n- 직무 컨설팅, 도내 기업 탐방, CEO특강","target":"제주도내 만 19~34세 청년","scale":"회차별 모집","when":"비정기","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["진로·취업 준비","창업 준비"],"link":"https://www.jdnc.or.kr/program/shining.htm","amin":19,"amax":34,"reg":"all"},{"id":54,"org":"제주더큰내일센터","name":"빛나는 인재 - 창업캠프","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 3일(20시간) 내외 진행\n- 창업 과정 이해 및 수익구조 형상화에 기반한 MVP프로젝트 실행","target":"제주도내 만 19~34세 청년","scale":"회차별 모집","when":"비정기","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["창업 준비"],"link":"https://www.jigeumjeju.com/news/articleView.html?idxno=110227","amin":19,"amax":34,"reg":"all"},{"id":55,"org":"제주도청 수산정책과","name":"청년어촌정착지원사업","main":"생계_생존","cells":["생계_자아실현","생계_생존"],"desc":"- 창업 초기 청년 수산업 경영인의 안정적 어촌 정착을 위한 정착지원금 지급\n- 1년차 월 110만원, 2년차 월 100만원, 3년차 월 90만원","target":"만 18세 이상~40세 미만 수산업경영 3년 이하의 청년어업인 (예정자 포함)","scale":"-","when":"(2026년 기준)\n전년도 12월","tk":"months","tm":[12],"form":["지원금"],"stages":["창업·사업 운영","창업 준비"],"link":"https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000116621","amin":18,"amax":39,"reg":"all"},{"id":56,"org":"제주도청 친환경농업정책과","name":"청년농업인 창업 인큐베이팅 지원사업","main":"생계_생존","cells":["생계_생존","생계_자아실현"],"desc":"시제품 제작, 기계·장비 임차료, 컨설팅 비용, 교육비 등 초기 영농창업비 지원 (농가당 최대 756만원)","target":"3년 이상 제주에 거주하는, 영농경력 5년 이하 만 19~45세 청년농업인","scale":"10명 내외","when":"3월경","tk":"months","tm":[3],"form":["지원금"],"stages":["창업·사업 운영"],"link":"https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000118872","amin":19,"amax":45,"reg":"all"},{"id":57,"org":"제주도청 친환경농업정책과","name":"소규모 농가 경영안정 지원사업","main":"생계_생존","cells":["생계_자아실현","생계_생존"],"desc":"- 농가당 농기자재 구입비 최대 150천원 지원\n- 비료, 농약, 종자, 농업용 보조(안전용품), 500천원 이하 소모성 농기구 지원","target":"19세 이상 45세 이하 청년농업인 또는 도내 경지면적이 0.5ha 이하 소규모 농업경영체 농가의 경영주","scale":"-","when":"1~2월","tk":"months","tm":[1,2],"form":["지원금"],"stages":["창업·사업 운영"],"link":"https://www.jejudomin.co.kr/news/articleView.html?idxno=316963","amin":19,"amax":45,"reg":"all"},{"id":58,"org":"제주문화예술재단","name":"청년 예술활동 지원사업","main":"문화_생산하기","cells":["문화_생산하기","생계_생존","생계_자아실현"],"desc":"순수예술 분야 청년 창작자의 원천 콘텐츠 개발을 통한 창작활동 지원 (1인 900만원)","target":"제주 거주 39세 이하 청년예술인 또는 청년기획자","scale":"공모 선정","when":"전년도 12월","tk":"months","tm":[12],"form":["지원금"],"stages":["창업·사업 운영"],"link":"https://www.jfac.kr/notification/notice/19649?keyword=%EC%B2%AD%EB%85%84&searchType=titlecontent","amin":null,"amax":39,"reg":"all"},{"id":59,"org":"제주문화예술재단","name":"청년 문화예술 처음발표 지원","main":"문화_생산하기","cells":["문화_생산하기","생계_생존","생계_자아실현"],"desc":"예술 활동(공연, 전시, 발간물 등 여러 형태)에 소요되는 직접 경비 (1인 500만원)","target":"제주 거주 34세 이하, 예술활동을 대중적으로 발표하지 않은 청년","scale":"공모 선정","when":"전년도 12월","tk":"months","tm":[12],"form":["지원금"],"stages":["창업·사업 운영"],"link":"https://www.jfac.kr/notification/notice/19649?keyword=%EC%B2%AD%EB%85%84&searchType=titlecontent","amin":null,"amax":34,"reg":"all"},{"id":60,"org":"제주문화예술재단","name":"예술공간 이아","main":"공간_일터","cells":["관계_지역참여","공간_일터"],"desc":"- 옛 제주대학교 병원을 리모델링하여 탄생한 복합예술공간\n- 10~20명 세미나실, 6명 단위 소규모 회의 공간 대관 \n- 운영시간: 평일 및 주말 09:30~18:00 ※ 매주 월요일, 법정공휴일, 노동절(5월 1일) 휴관","target":"제주도민 및 누구나","scale":"-","when":"상시","tk":"always","tm":[],"form":["공간"],"stages":["모든 청년"],"link":"https://www.jfac.kr/operatingSpace/artSpaceIAa/iAaFacility","amin":null,"amax":null,"reg":"all"},{"id":61,"org":"제주문화예술재단","name":"산지천 갤러리","main":"공간_일터","cells":["관계_지역참여","공간_일터"],"desc":"- 옛 여관건물 두 동을 연결해 조성된 전문 전시공간\n- 코워킹스페이스 이용 및 전시실 대관 가능\n- 운영시간: 평일, 주말 10:00 ~ 18:00 ※ 매주 월요일, 법정공휴일, 노동절(5월 1일) 휴관","target":"제주도민 및 누구나","scale":"","when":"상시","tk":"always","tm":[],"form":["공간"],"stages":["모든 청년"],"link":"https://www.jfac.kr/operatingSpace/sjcGallery/sjcFacility","amin":null,"amax":null,"reg":"all"},{"id":62,"org":"제주문화예술재단","name":"예술곶 산양","main":"공간_일터","cells":["관계_지역참여","공간_일터"],"desc":"- 폐교된 산양초등학교를 리모델링하여 조성된 복합창작공간\n- 전시실 및 세미나 공간 대관 가능, 커뮤니티동 이용 가능\n- 운영시간: 평일, 주말 10:00 ~ 18:00 ※ 매주 월요일, 법정공휴일, 노동절(5월 1일) 휴관","target":"제주도민 및 누구나","scale":"","when":"상시","tk":"always","tm":[],"form":["공간"],"stages":["모든 청년"],"link":"https://www.jfac.kr/operatingSpace/sanYang/sanYangFacility","amin":null,"amax":null,"reg":"all"},{"id":63,"org":"제주문화예술재단","name":"제주아트플랫폼","main":"공간_일터","cells":["관계_지역참여","공간_일터"],"desc":"- 원도심 내 극장식 건축물 옛 제주아카데미극장의 문화 재생을 통해 조성된 복합문화공간\n- 아르코공연연습센터@제주: 연습실 대관 가능 (운영시간: 화요일~일요일 10:00~23:00)\n- 아트플랫폼 다목적홀: 공연연습, 강좌, 세미나, 소규모 발표 등의 문화예술 행사를 진행할 수 있는 공간 대관 가능 (운영시간: 화요일~일요일 10:00~21:00)","target":"제주도민 및 누구나","scale":"","when":"상시","tk":"always","tm":[],"form":["공간"],"stages":["모든 청년"],"link":"https://www.jfac.kr/operatingSpace/jejuArt/jejuArtFacility","amin":null,"amax":null,"reg":"all"},{"id":64,"org":"제주문화예술재단","name":"저지문화지구 생활문화센터","main":"공간_일터","cells":["관계_지역참여","공간_일터"],"desc":"- 각종 생활문화 활동이 가능한 전시공간, 마루공간, 방음공간, 학습공간, 다목적공간을 무료 대관 및 제공\n- 운영시간: 화 ~일 10:00~17:00 (정기휴관(매주 월요일), 4·3 희생자 추념일(4월3일), 근로자의 날(5월1일), 법정공휴일)","target":"제주도민 및 누구나","scale":"","when":"상시","tk":"always","tm":[],"form":["공간"],"stages":["모든 청년"],"link":"https://www.jfac.kr/operatingSpace/lifeCultureCenter/lifeCultureCenterFacility","amin":null,"amax":null,"reg":"all"},{"id":65,"org":"제주문화예술재단","name":"서귀포 꿈꾸는 예술터","main":"공간_일터","cells":["관계_지역참여","공간_일터"],"desc":"- 아이디어랩 (30명 규모 행사공간), 아트랩 (7명 규모 세미나 공간), 퍼포먼스랩(30명 규모 공연 연습 및 교육 공간) 등 대관\n- 운영시간: 평일·주말 10:00 ~ 18:00 (휴관일: 매주 월요일, 법정 공휴일, 근로자의 날(5월 1일))","target":"제주도민 및 누구나","scale":"","when":"상시","tk":"always","tm":[],"form":["공간"],"stages":["모든 청년"],"link":"https://www.jfac.kr/operatingSpace/seogwipo/seogwipoFacility","amin":null,"amax":null,"reg":"all"},{"id":66,"org":"제주문화예술재단","name":"소섬문화공간 담수리","main":"공간_일터","cells":["관계_지역참여","공간_일터"],"desc":"- 현재는 사용하지 않게 된 우도 담수화 시설의 기억을 품은 복합문화 공간\n- 다목적홀, 세미나실 등 대관 운영\n-  운영시간: 화요일~일요일 10:00~17:00(3월~10월) / 화요일~일요일: 10:00~16:00(11월~2월) (휴관일: 매주 월요일 / 법정공휴일 / 노동절 / 4.3희생자 추념일 및 그 밖의 기상 악화에 따른 임시 휴관 등)","target":"제주도민 및 누구나","scale":"","when":"상시","tk":"always","tm":[],"form":["공간"],"stages":["모든 청년"],"link":"https://www.jfac.kr/operatingSpace/damsuri/damsuriFacility","amin":null,"amax":null,"reg":"all"},{"id":67,"org":"제주문화예술재단, 제주특별자치도","name":"K-Art청년창작자지원사업@제주","main":"문화_생산하기","cells":["문화_생산하기","생계_생존","생계_자아실현"],"desc":"청년 예술창작자의 안정적인 창작 환경 조성을 위한 2개년 지원사업 (연간 창작활동 사례비 900만원)","target":"39세 이하 순수에술 창작자 개인","scale":"공모 선정","when":"(2026년 기준)\n3월","tk":"months","tm":[3],"form":["지원금"],"stages":["창업·사업 운영"],"link":"https://www.jfac.kr/notification/notice/19787?keyword=%EC%B2%AD%EB%85%84&searchType=titlecontent","amin":null,"amax":39,"reg":"all"},{"id":68,"org":"제주사회적경제지원센터","name":"사회연대경제 청년 일경험 시범사업","main":"생계_생존","cells":["생계_자아실현","생계_생존"],"desc":"- 직무교육, 멘토링 프로그램 제공\n- 제주도내 마을기업, 협동조합, 사회연대경제 관련 비영리 법인 등 인턴경험 제공(최대 5개월)\n※ 제주도 생활임금(시금 12,110원) 적용","target":"만 19~39세 미만의 미취업 청년","scale":"10개사 내외, 기업별 최대 4명 배정","when":"(2026년 기준)\n6월","tk":"months","tm":[6],"form":["인턴십"],"stages":["진로·취업 준비"],"link":"https://www.jejuhub.org/user/news/support/detail?id=550","amin":19,"amax":38,"reg":"all"},{"id":69,"org":"제주상공회의소","name":"청년 일경험 지원사업(인턴형)","main":"생계_생존","cells":["생계_자아실현","생계_생존"],"desc":"- 일경험 제공(주 25시간, 8주)\n- 지원금(300만원, 8주)제공\n- 타지역 청년의 경우, 체류비 지원(8주 40만원)","target":"15~34세 이하 미취업 청년","scale":"예산소진시","when":"기업별 접수 기간 상이","tk":"unknown","tm":[],"form":["인턴십"],"stages":["진로·취업 준비"],"link":"https://jejucci.korcham.net/front/board/boardContentsView.do","amin":15,"amax":34,"reg":"all"},{"id":70,"org":"제주상공회의소","name":"제주 정착지원 사업","main":"공간_주거","cells":["생계_생존","공간_주거"],"desc":"- 임대료 기준 최대 월 40만원 이내 실비 지원\n- 도외에서 제주의 관광산업(카지노, 호텔, 면세점, 공항 지상조업사, 리조트 등) 취업한 근로자의 경제적 부담 완화","target":"만 18세 이상 59세 이하 정규직\n(주민등록 5년 이내)","scale":"예산소진시","when":"(2026년 기준)\n4월\n(2025년 기준)\n9월","tk":"months","tm":[4],"form":["지원금"],"stages":["이주·정착"],"link":"https://jejucci.korcham.net/front/board/boardContentsView.do?boardId=10088&contId=128769&menuId=379","amin":18,"amax":59,"reg":"all"},{"id":71,"org":"제주상공회의소","name":"직무역량 강화 교육 및 행사","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- AI 실무 활용 등 교육 \n- 회원사 문화 체험 등","target":"재직자, 제주상공회의소 회원사 임직원 등","scale":"-","when":"비정기","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["재직"],"link":"https://jejucci.korcham.net/front/event/eventList.do?menuId=382","amin":null,"amax":null,"reg":"all"},{"id":72,"org":"제주소상공인경영지원센터","name":"1인 여성 소상공인 출산 대체인력비 지원","main":"생계_생존","cells":["생계_생존"],"desc":"- 출산으로 대체인력 고용 시 인건비의 70% 지원 (월 최대 200만원×3개월, 총 600만원 이내)","target":"출산(예정) 도내 1인 여성 소상공인\n(출산일 기준 6개월 이상 사업 운영, 전년도 매출액 1,200만원 이상 또는 최근 3개월 월 매출액 100만원 이상)","scale":"-","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기","창업·사업 운영"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=3","amin":null,"amax":null,"reg":"all"},{"id":73,"org":"제주소통협력센터","name":"제주소통협력센터","main":"공간_일터","cells":["관계_지역참여","공간_일터"],"desc":"- 대관공간: 제작공간, 전시실, 개방형 사무실, 회의실, 세미나실, 공유주방, 다목적홀, 옥상정원\n- 입주공간: 구획형 사무실 '모두의 실험실' (10개 내외, 공모)\n- 질문도서관 오픈라운지, 어린이 놀이공간 소소소 개방 이용 가능\n- 운영시간: 평일(월~금) 09:00~21:00, 토요일 09:00~18:00 (일요일 및 법정 공휴일 휴관)","target":"제주도민 및 누구나","scale":"","when":"상시","tk":"always","tm":[],"form":["공간"],"stages":["모든 청년"],"link":"https://www.jejusotong.kr/pages.php?p=1_2_1_1&floor=1","amin":null,"amax":null,"reg":"all"},{"id":74,"org":"제주시 경제소상공인과, 서귀포시 경제일자리과","name":"1인 소상공인 출산급여 지원","main":"생계_생존","cells":["생계_생존"],"desc":"- 출산 전후 90일 동안 소득에 준하는 출산 급여 제공\n- 월 30만원 한도 내 3개월간 지급, 총 90만원 한도","target":"제주에 사업장 주소를 두고 있으며, 당해연도 출산한 1인 여성 소상공인\n(출산일 기준 6개월 이상 사업 운영,최근 3개월 내 매출발생, 고용보험 적용자 제외)","scale":"-","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기","창업·사업 운영"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?category2=004&word2=&act=view&seq=2","amin":null,"amax":null,"reg":"all"},{"id":75,"org":"제주시 기획예산과","name":"제주시 취업준비 청년 자격증 등 응시료 지원사업","main":"생계_생존","cells":["생계_생존"],"desc":"- 자격증·어학시험 등 응시료를 1인 연 최대 10만원 한도 내에서 실비 지원","target":"제주시 거주 만 19~39세 미취업 청년","scale":"예산 소진 시까지","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["진로·취업 준비"],"link":"https://www.jejusi.go.kr/participation/examfeeApply/receipt.do","amin":19,"amax":39,"reg":"jejusi"},{"id":76,"org":"제주시 기획예산과","name":"제주시 청년 글로벌기업 취업멘토링 콘서트","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"국내외 기업 현직자 멘토링, 글로벌·대기업 취업분석 특강, 취업 토크쇼 Q&A, 관심분야별 소그룹 멘토링(3회)","target":"제주시 거주 만 19~39세 미취업 청년","scale":"도내 청년 및 대학생 약 100명","when":"비정기","tk":"unknown","tm":[],"form":["상담·컨설팅","교육·체험"],"stages":["진로·취업 준비","일·생활 전환"],"link":"https://blog.naver.com/wowjejusi/224270557558","amin":19,"amax":39,"reg":"jejusi"},{"id":77,"org":"제주시 일자리에너지과","name":"청년 공공일자리사업","main":"생계_생존","cells":["생계_생존"],"desc":"시정 행정업무 지원 일자리 제공. 주 40시간 내외, 제주 생활임금(시급 12,110원) 적용","target":"제주특별자치도에 주민등록을 둔 19~39세 취업취약계층 청년(저소득·장기실업 우선)","scale":"상·하반기 각 1회 모집, 시기별 20명 내외","when":"(상반기)매년 1월 초, (하반기) 6월초","tk":"months","tm":[1,6],"form":["인턴십"],"stages":["진로·취업 준비"],"link":"https://www.jejusi.go.kr/information/intro/recruit.do?mode=detail&ancmnt_pbanc_mng_no=106502&currentPageNo=1&search_keyword=%ea%b3%b5%ea%b3%b5%ec%9d%bc%ec%9e%90%eb%a6%ac","amin":19,"amax":39,"reg":"all"},{"id":78,"org":"제주시 총무과","name":"제주시 대학생·청년 아르바이트","main":"생계_생존","cells":["생계_생존"],"desc":"동·하계 방학 중 시정 행정업무 지원 아르바이트 제공","target":"본인 또는 부모가 제주시에 주민등록된 도내·외 재(휴)학 대학생 또는 청년 (만 19세 이상 ~ 만 39세 이하)","scale":"동계·하계 각 1회 모집, 시기별 180명 내외","when":"특정 시기","tk":"unknown","tm":[],"form":["인턴십"],"stages":["진로·취업 준비"],"link":"https://www.jejusi.go.kr/participation/arbeit/receipt2026_2.do","amin":19,"amax":39,"reg":"all"},{"id":79,"org":"제주시 친환경농정과","name":"제주시 청년농업인 영농정착지원","main":"생계_생존","cells":["생계_생존","공간_일터","생계_자아실현"],"desc":"- 영농정착지원금: 1~3년간 월 90~110만원 지급\n- 융자지원: 최대 5억원, 이율 1.5%, 5년 거치 20년 상환\n*이자 1.5% 중 0.5%p를 추가 지원(부담금리 1.0%로 인하)하는 '청년농업인 정책자금 이차보전' 연계 가능 — 연 최대 250만원, 최대 3년\n- 농지 임차 및 매입 지원","target":"제주시 거주 18~39세, 영농 종사 경력이 없거나 3년 이하 청년농업인","scale":"농식품부 선발 규모에 따름","when":"(1차) 12월경\n(2차)\n6월경","tk":"months","tm":[6,12],"form":["지원금","공간"],"stages":["창업 준비","창업·사업 운영"],"link":"https://www.jejusi.go.kr/information/intro/notice.do?mode=detail&ancmnt_pbanc_mng_no=106358&currentPageNo=1","amin":18,"amax":39,"reg":"jejusi"},{"id":80,"org":"제주시 친환경농정과","name":"청년농업인 농지 임대료 지원","main":"생계_생존","cells":["생계_생존","생계_자아실현","공간_일터"],"desc":"- 한국농어촌공사 농지은행을 통한 농지 임대차 계약 시 임대료의 50% 지원\n- 지원한도 농가당 연 최대 1백만원, 최대 3년간 지원(매년 신청자에 한함)","target":"제주시에 주소를 두고 거주하면서, 농업경영체를 등록한 만 19~45세 청년농업인","scale":"100명 내외","when":"상, 하반기로 나누어 추진","tk":"unknown","tm":[],"form":["지원금"],"stages":["창업·사업 운영"],"link":"https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?target=PR&pblancId=PBLN_000000000121256","amin":19,"amax":45,"reg":"jejusi"},{"id":81,"org":"제주시, 서귀포시 여성가족과","name":"청소년쉼터 퇴소 청소년 자립지원수당","main":"생계_생존","cells":["생계_생존"],"desc":"매월 50만원을 본인 명의 계좌로 현금 지급(퇴소일로부터 최대 60개월)\n※ 보호종료아동 자립수당과 중복수령 불가","target":"만 18세 이후 청소년쉼터를 퇴소했거나 자립지원관 사례가 종료된 지 5년 이내인 청소년","scale":"-","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["자립준비청년"],"link":"https://jejuyouthdream.com/policy/detail/98","amin":null,"amax":null,"reg":"all"},{"id":82,"org":"제주시·서귀포시 보건소","name":"임산부 등록관리","main":"정서_자아건강","cells":["정서_자아건강"],"desc":"- 예비부부·임산부 건강검진, 임산부 영양제(엽산제·철분제) 지급, 건강증진 프로그램 운영","target":"도내 예비부부·임산부","scale":"-","when":"연중","tk":"always","tm":[],"form":["지원금","상담·컨설팅","서비스"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=31","amin":null,"amax":null,"reg":"all"},{"id":83,"org":"제주시보건소, 서귀포시 보건소","name":"고위험 임산부 의료비 지원","main":"생계_생존","cells":["생계_생존"],"desc":"진찰료 등 치료비 중 전액본인부담금 및 비급여의 90% 지원(최대 300만원)","target":"고위험 임신질환으로 진단받고 입원치료 받은 임산부","scale":"-","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=6","amin":null,"amax":null,"reg":"all"},{"id":84,"org":"제주신용보증재단","name":"창업두드림 특별 보증","main":"생계_생존","cells":["생계_생존"],"desc":"- 창업 초기 자금난 해소와 창업 활성화를 위해 담보력이 부족한 초기 창업기업에게 저금리 신용보증 지원\n- 일반 창업기업 3000만 원 이내, 창업 교육을 10시간 이상 이수한 우대 창업기업은 5000만 원 이내 보증\n- 청년 창업 기업의 경우, 최초 1회(2년) 보증료 0.5% 전액 지원. 금리 우대로 최대 4년간 0.5~1.5% 수준 금리의 자금 이용 가능","target":"창업 후 1년 이내 기업, 청년 창업기업은 3년 이내 기업까지 포함","scale":"예산 소진 시까지","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["창업·사업 운영"],"link":"https://blog.naver.com/jejudo_official/224188271564","amin":null,"amax":null,"reg":"all"},{"id":85,"org":"제주신용보증재단","name":"브릿지보증(실패보장제)","main":"생계_생존","cells":["생계_생존"],"desc":"- 만기가 도래하는 폐업 소상공인의 사업자 보증을 개인보증으로 전환해 상환이 가능하도록 연결\n- 전액 일시상환 부담을 완화하고 재기 기회 제공","target":"폐업한 보증 이용 자영업자","scale":"상시","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["창업·사업 운영"],"link":"https://www.jcgf.or.kr/index2.php","amin":null,"amax":null,"reg":"all"},{"id":86,"org":"제주여성가족연구원","name":"제주 관광 밸류링크 일생활균형 기반 고용유지 지원사업","main":"생계_생존","cells":["생계_자아실현","생계_생존"],"desc":"- 제주 관광산업 분야 기업 근로자의 일·생활 균형과 가족친화 조직문화 확산을 기반으로 기업의 안정적인 지역 정착과 근로자의 장기근속 유도\n- 기업 현황 진단 전문가 컨설팅 및 컨설팅 결과 기반 맞춤형 운영 지원\n- 기업별 1,500만원 이내 지원","target":"관광산업 업종으로, 가족친화인증의 신규 취득 또는 재인증을 희망하는 기업\n※ 대표자를 포함한 근로자 수가 2인 이상인 기업에 한함","scale":"20개사 내외","when":"2026년 기준 6월","tk":"months","tm":[6],"form":["지원금","상담·컨설팅"],"stages":["창업·사업 운영","재직"],"link":"https://www.jewfri.kr/index.php/contents/notice/jewnotice/notice?act=view&seq=7537&bd_bcid=notice&page=1&q_wops=like&q_wcols=bd_subject&q_wvals1=%C1%F6%BF%F8%BB%E7%BE%F7","amin":null,"amax":null,"reg":"all"},{"id":87,"org":"제주여성인력개발센터","name":"미래내일경험 인턴형","main":"생계_생존","cells":["생계_생존","생계_자아실현"],"desc":"- 인턴십 수당(300만원, 8주)\n- 일경험 제공(주 25시간, 8주)\n- 직무교육 제공","target":"15~34세 이하 미취업 청년","scale":"예산소진시","when":"(2026년 기준)\n3월~8월","tk":"months","tm":[3,4,5,6,7,8],"form":["인턴십"],"stages":["진로·취업 준비"],"link":"https://www.jejuwoman.kr/SJobSupport/JobIntern.aspx","amin":15,"amax":34,"reg":"all"},{"id":88,"org":"제주창조경제혁신센터","name":"THE 제주크리에이터","main":"생계_자아실현","cells":["생계_생존","생계_자아실현"],"desc":"- 역량강화 프로그램\n- BM고도화 및 스케일업을 위한 사업화자금(최대 1억원)","target":"- 지역의 유무형 자원을 바탕으로 혁신적인 아이디어를 통해 사업적 가치를 창출하는 소기업 또는 소상공인\n※로컬크리에이터는 지역 고유의 특성과 자원을 기반으로 혁신적인 아이디어를 접목하여\n지역경제 활성화에 기역하는 '지역가치 창업가'로 7대 유형의 비지니스모델로 분류\n( ①지역가치 ②로컬푸드 ③지역기반제조 ④지역특화관광 ⑤거점브랜드 ⑥디지털문화체험 ⑦자연친화활동)","scale":"-","when":"(2026년 기준)\n3월","tk":"months","tm":[3],"form":["지원금","교육·체험","커뮤니티","상담·컨설팅"],"stages":["창업·사업 운영"],"link":"https://www.jejucreator.kr/info/notice/detail?id=59&searchType=&keyword=&page=2&rowsPerPage=10&sortBy=id&sortType=desc","amin":null,"amax":null,"reg":"all"},{"id":89,"org":"제주창조경제혁신센터","name":"로컬페스타","main":"생계_자아실현","cells":["생계_자아실현","관계_지역참여"],"desc":"- 로컬크리에이터 네트워킹 강화를 위한 전국 단위 행사 개최","target":"도내외 로컬 크리에이터·창업가","scale":"00팀","when":"특정 시기","tk":"unknown","tm":[],"form":["커뮤니티"],"stages":["창업·사업 운영"],"link":"https://www.belocal.kr/news/articleView.html?idxno=2244246","amin":null,"amax":null,"reg":"all"},{"id":90,"org":"제주청년센터","name":"청년의 품격","main":"생계_생존","cells":["생계_생존"],"desc":"- 취업 면접정장 무료대여","target":"제주지역에 거주하는 면접준비 청년(19-39세)","scale":"상시 운영","when":"상시","tk":"always","tm":[],"form":["물품"],"stages":["진로·취업 준비"],"link":"https://jejuyouth.com/pages.php?p=4_2_4_0","amin":null,"amax":null,"reg":"all"},{"id":91,"org":"제주청년센터","name":"Easy한 공유 생활","main":"문화_누리기","cells":["정서_지역애착","문화_누리기"],"desc":"- 캠핑 및 취미·생활용품 무료 대여","target":"제주지역에서 거주·활동하고 있는 청년(19~39세)","scale":"상시 운영","when":"상시","tk":"always","tm":[],"form":["물품"],"stages":["모든 청년"],"link":"https://jejuyouth.com/bbs/board.php?bo_table=4_1_1_1&wr_id=95","amin":19,"amax":39,"reg":"all"},{"id":92,"org":"제주청년센터","name":"청년끼리","main":"관계_청년커뮤니티","cells":["관계_청년커뮤니티"],"desc":"- 활동지원금(팀당 200만원)\n- 참여자 간 네트워크 교류 및 연계 지원","target":"동아리 활동에 관심이 있는 제주거주 및 활동중인 청년(19~39세)","scale":"총 7개 동아리, 동아리당 15명","when":"(2026년 기준)\n3월","tk":"months","tm":[3],"form":["지원금","커뮤니티"],"stages":["모든 청년"],"link":"https://jejuyouth.com/bbs/board.php?bo_table=4_1_1_1&wr_id=98","amin":19,"amax":39,"reg":"all"},{"id":93,"org":"제주청년센터","name":"청년학교","main":"문화_누리기","cells":["문화_누리기"],"desc":"- 금융, 목공예, 커피 등 역량개발 및 삶의 질 향상을 위한 다양한 분야의 교육 및 체험활동 제공\n- 1인 최대 2개 클래스 수강 가능","target":"제주지역에 활동 또는 거주하는 청년(19~39세)","scale":"클래스별 상이","when":"특정 시기","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["모든 청년"],"link":"https://jejuyouth.com/bbs/board.php?bo_table=1_2_1_1&wr_id=551","amin":19,"amax":39,"reg":"all"},{"id":94,"org":"제주청년센터","name":"청년인생책방","main":"생계_자아실현","cells":["생계_자아실현","정서_지역애착"],"desc":"- 직무 역량 강화 및 진로 설계 지원을 위한 제주도내 활동 중인 전문가와의 소규모 대화 프로그램","target":"제주지역에 거주하는 청년(19~39세)","scale":"상시 운영","when":"상시","tk":"always","tm":[],"form":["상담·컨설팅","교육·체험"],"stages":["모든 청년"],"link":"https://jejuyouth.com/bbs/board.php?bo_table=4_2_9_1","amin":19,"amax":39,"reg":"all"},{"id":95,"org":"제주청년센터","name":"청년이어드림 정책상담 및 플랫폼","main":"관계_지역참여","cells":["생계_자아실현","관계_지역참여"],"desc":"- 제주형 청년 맞춤형 정책 전달체계\n- 맞춤형 1:1 청년정책 상담\n- 지원금 지급(단계별 상이 최대 60만원)","target":"제주지역에 거주하는 청년(19~39세)","scale":"예산소진시","when":"상시","tk":"always","tm":[],"form":["상담·컨설팅","정보","지원금"],"stages":["모든 청년"],"link":"https://jejuyouthdream.com/consulting/intro","amin":19,"amax":39,"reg":"all"},{"id":96,"org":"제주청년센터","name":"제주청년 금융JUMP","main":"생계_생존","cells":["생계_생존"],"desc":"- 금융 전문가 금융교육 제공\n- 실생활에 활용 가능한 금융 및 자산관리 지식 습득","target":"제주청년이어드림 참여자 및 제주지역에서 활동 또는 거주하는 청년(19-39세)","scale":"기수별 15명","when":"(2026년 기준)\n4월, 6월","tk":"months","tm":[4,6],"form":["교육·체험"],"stages":["모든 청년"],"link":"https://jejuyouth.com/bbs/board.php?bo_table=1_2_1_1&wr_id=544","amin":null,"amax":null,"reg":"all"},{"id":97,"org":"제주청년센터","name":"청년 스터디랩","main":"생계_자아실현","cells":["관계_청년커뮤니티","생계_자아실현"],"desc":"- 관심사 기반 학습 프로젝트를 스스로 기획·실행하는 청년 소모임 지원\n(진로개발·창업·어학·직무·인문·문화예술·자기계발 7개 분야)\n- 팀별 활동지원금 최대 150만원 지원\n- 제주청년센터 회의실 및 스터디룸 등 공간지원\n- 전문가 자원(청년인생책방) 전문가 자원 연계 지원","target":"제주 거주·활동 만 19~39세 청년 3~6인 팀","scale":"3개 팀","when":"(2026년 기준)\n5월","tk":"months","tm":[5],"form":["지원금","공간","커뮤니티"],"stages":["모든 청년"],"link":"https://jejuyouth.com/bbs/board.php?bo_table=1_2_1_1&wr_id=548","amin":19,"amax":39,"reg":"all"},{"id":98,"org":"제주청년센터","name":"청년 DB","main":"관계_지역참여","cells":["관계_지역참여"],"desc":"- 제주 청년에게 필요한 정책·사업·프로그램 정보를 문자메세지로 안내하는 서비스\n- 관심 분야별 청년정보를 정기적으로 받아볼 수 있음(일자리, 주거, 교육, 문화, 복지, 청년활동, 정책 참여 등)","target":"19~39세 제주 청년","scale":"상시 운영","when":"상시","tk":"always","tm":[],"form":["정보"],"stages":["모든 청년"],"link":"https://jejuyouth.com/pages.php?p=2_8_1_1","amin":19,"amax":39,"reg":"all"},{"id":99,"org":"제주청년센터","name":"서귀포청년 로컬엑션","main":"생계_자아실현","cells":["생계_자아실현","관계_지역참여","정서_지역애착"],"desc":"-서귀포 지역 문제 및 자원 기반 마을 비즈니스 발굴\n- 팀별 자율 학습 및 프로젝트 활동 수행\n-팀별 활동지원금 최대 200만 원 지원\n- 서귀포시 청년지원센터 공간 지원","target":"서귀포지역 거주 또는 활동 중인 19세~39세 청년으로 구성된 10인 이상 모임(팀)","scale":"2개 팀","when":"(2026년 기준)\n7월","tk":"months","tm":[7],"form":["지원금","공간"],"stages":["창업 준비","모든 청년"],"link":"https://jejuyouth.com/m/bbs/board.php?bo_table=1_2_1_1&wr_id=563&page=&sca=&sfl=wr_subject%7C%7Cwr_content&stx=%EB%A1%9C%EC%BB%AC+%EC%95%A1%EC%85%98&sst=wr_datetime+desc&sod=&sop=and","amin":19,"amax":39,"reg":"seogwipo"},{"id":100,"org":"제주청년센터","name":"청년 트랙업","main":"생계_자아실현","cells":["생계_생존","생계_자아실현"],"desc":"- 지역 특화 로컬 창업 특화 프로그램 (후계농, 카페, 숙박업)\n- 사업계획서 피드백, 현장 견학 및 실습","target":"서귀포 지역 거주 또는 활동 중인 19세 ~ 39세 창업을 희망하는 예비창업가","scale":"15명 내외","when":"(2026년 기준)\n6월","tk":"months","tm":[6],"form":["교육·체험","상담·컨설팅"],"stages":["창업 준비"],"link":"https://jejuyouth.com/m/bbs/board.php?bo_table=4_2_1_1&wr_id=955&sca=%EC%B2%AD%EB%85%84%ED%8A%B8%EB%9E%99%EC%97%85","amin":19,"amax":39,"reg":"seogwipo"},{"id":101,"org":"제주청년센터","name":"쉬어감, Stay","main":"정서_자아건강","cells":["정서_자아건강","정서_지역애착"],"desc":"- 생활리듬 회복 프로그램\n- 관계회복 및 소통 프로그램\n- 지역이해 및 로컬 리서치 활동(1박 2일 로컬캠프)","target":"고립, 은둔 청년 또는 쉼이 필요한 제주 청년 누구나 (19세~39세)","scale":"10명","when":"(2026년 기준)\n6월","tk":"months","tm":[6],"form":["지원금","교육·체험"],"stages":["고립, 은둔 청년","모든 청년"],"link":"https://jejuyouthdream.com/youth-information/news/100","amin":19,"amax":39,"reg":"all"},{"id":102,"org":"제주청년센터","name":"청년다락","main":"공간_일터","cells":["공간_일터","관계_지역참여","관계_청년커뮤니티"],"desc":"- 회의실·오픈공간을 무료로 제공하는 청년 커뮤니티 공간 (회의실 대관 필요)\n- 평일: 12:00 ~ 20:00 / 토요일: 12:00 ~ 18:00 ※ 일요일, 공휴일 휴무\n- 총 4개소 운영 (제주시점, 대정점, 구좌점, 노형점)","target":"제주 거주·활동 만 19~39세 청년","scale":"상시 운영","when":"상시","tk":"always","tm":[],"form":["공간"],"stages":["모든 청년"],"link":"https://jejuyouth.com/pages.php?p=7_1_3_1","amin":19,"amax":39,"reg":"all"},{"id":103,"org":"제주청년센터","name":"제주청년센터","main":"공간_일터","cells":["공간_일터","관계_지역참여","관계_청년커뮤니티"],"desc":"- 회의실·세미나실·오픈라운지·연습실·스튜디오 무료 이용 가능 (일부 공간 대관 필요)\n- 평일: 10:00~22:00 / 토요일: 10:00~17:00 ※ 일요일 및 공휴일 휴관","target":"제주 거주·활동 만 19~39세 청년","scale":"상시 운영","when":"상시","tk":"always","tm":[],"form":["공간"],"stages":["모든 청년"],"link":"https://jejuyouth.com/pages.php?p=7_1_1_1","amin":19,"amax":39,"reg":"all"},{"id":104,"org":"제주콘텐츠진흥원","name":"제주 콘텐츠 청년일자리 빌드업 지원","main":"생계_생존","cells":["생계_생존","생계_자아실현"],"desc":"- 도내 콘텐츠 기업이 신규 정규직 청년을 채용하면 인건비 월 최대 180만원 지원\n- 읍·면 소재 기업 취업 청년에게 교통비 월 10만원\n- 참여 청년 대상 콘텐츠 직무역량 강화 교육 운영","target":"제주특별자치도 소재 사업자등록 기업, 사업자등록증 상 콘텐츠 관련 업종 명시 콘텐츠 기업 (대표자 제외 상시근로자 1명 이상 보유)","scale":"신규 정규직 10명 내외 (기업별 1명)","when":"(2026년 기준)\n2월","tk":"months","tm":[2],"form":["지원금","교육·체험"],"stages":["진로·취업 준비"],"link":"https://ofjeju.kr/communication/notifications.htm?qType=title&q=%EC%B2%AD%EB%85%84&page=1&act=view&seq=2073498","amin":null,"amax":null,"reg":"all"},{"id":105,"org":"제주테크노파크","name":"청년창업 스케일업 지원사업","main":"생계_자아실현","cells":["생계_생존","생계_자아실현"],"desc":"사업모델 고도화, 경영·기술 컨설팅, 멘토링, 마케팅, IR 교육 등 투자유치 역량 종합 지원. IR 상위 2개사는 VC 연계투자","target":"제주 사업장을 둔 창업 7년 이내 청년기업\n(대표자 연령 39세 이하 또는 임직원 평균 연령 39세 이하)","scale":"12개사 내외","when":"(2026년 기준)\n4월","tk":"months","tm":[4],"form":["교육·체험","상담·컨설팅","지원금"],"stages":["창업·사업 운영"],"link":"https://jeis.or.kr/suppbis/suppbisdtl.ac?annoId=af7e699240b740ab94e7592cdfa7e4e3","amin":null,"amax":39,"reg":"all"},{"id":106,"org":"제주테크노파크","name":"상장기업 육성 지원사업","main":"생계_자아실현","cells":["생계_자아실현","생계_생존"],"desc":"- 상장 희망 기업 대상 맞춤형 상장지원금 지급 등","target":"스케일업분야, ipo 분야별 조건 충족 기업","scale":"20개사 내외","when":"(2026년 기준)\n2월","tk":"months","tm":[2],"form":["지원금","교육·체험"],"stages":["창업·사업 운영"],"link":"https://jeis.or.kr/suppbis/suppbisdtl.ac?currentPageNo=&annoId=7e91e46cd90343c7bbcfde430a79092f&annoName=&state=&businessDiv=&","amin":null,"amax":null,"reg":"all"},{"id":107,"org":"제주테크노파크","name":"상장기업 육성 지원사업 스케일업&IPO 클래스","main":"생계_자아실현","cells":["생계_자아실현","생계_생존"],"desc":"- 상장 희망 기업 대상 기업공개 개념 관련 교육 및 네트워킹","target":"제주특별자치도에 본사 위치 또는 제주로 본사 이전 예정인 중소기업","scale":"10개사 내외","when":"(2026년 기준)\n4월","tk":"months","tm":[4],"form":["교육·체험","커뮤니티"],"stages":["창업·사업 운영"],"link":"https://www.jeis.or.kr/suppbis/suppbisdtl.ac?currentPageNo=&annoId=d7e7440ce81f4871a057422e60f3cb04&annoName=&state=&businessDiv=&indDiv=&receiptSDate=&receiptEDate=","amin":null,"amax":null,"reg":"all"},{"id":108,"org":"제주테크노파크","name":"제주 ICT 전문인력 양성센터 운영사업","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"AI 활용 과정, 드론 전문가 과정 등 도내 ICT 기업 수요조사를 반영한 실무 중심 교육 4개 과정 운영","target":"공공데이터 활용, 생성형 AI, 데이터분석에 관심 있는 도민 누구나","scale":"과정별 20명 내외","when":"(2025년) 12월\n(2026년) 5월","tk":"months","tm":[5,12],"form":["교육·체험"],"stages":["진로·취업 준비","모든 청년"],"link":"https://jejuyouthdream.com/youth-information/news/59","amin":null,"amax":null,"reg":"all"},{"id":109,"org":"제주특별자치도","name":"제주청년의 날 및 청년주간 운영","main":"관계_지역참여","cells":["관계_지역참여","관계_청년커뮤니티"],"desc":"법정기념일 '청년의 날' 기념식, 청년이 기획·참여하는 이벤트 및 청년주간 프로그램 운영","target":"도내 만 19~39세 청년","scale":"연 1회(청년의 날 + 1주간)","when":"특정 시기","tk":"unknown","tm":[],"form":["커뮤니티","교육·체험"],"stages":["모든 청년"],"link":"https://www.jeju.go.kr/","amin":19,"amax":39,"reg":"all"},{"id":110,"org":"제주특별자치도 건강위생과","name":"난임부부 시술비 지원","main":"정서_자아건강","cells":["정서_자아건강","생계_생존"],"desc":"- 출산당 총 25회 범위 내 난임 치료비 지원 (신선배아 최대 110만원, 동결배아 최대 50만원, 인공수정 최대 30만원)\n- 공난포, 난자채취 실패 등 불가피한 시술 실패·중단시 횟수 차감없이 시술비 지원","target":"난임진단 부부 (사실혼 포함)","scale":"-","when":"연중","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=7","amin":null,"amax":null,"reg":"all"},{"id":111,"org":"제주특별자치도 건강위생과","name":"미숙아 및 선천성이상아 의료비 지원","main":"정서_자아건강","cells":["정서_자아건강","생계_생존"],"desc":"- 미숙아·선천성이상아 입원·수술 진료비의 전액본인부담금·비급여 진료비 지원","target":"신생아중환자실 입원 미숙아, 출생 2년 이내 선천성이상아","scale":"-","when":"최종 퇴원일로부터 6개월 이내","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=12","amin":null,"amax":null,"reg":"all"},{"id":112,"org":"제주특별자치도 건강위생과","name":"산모·신생아 건강관리 지원사업","main":"정서_자아건강","cells":["생계_생존","정서_자아건강"],"desc":"- 산모·신생아 건강관리사 파견비용(바우처) 지원\n - 태아유형·출산순위·소득·이용기간에 따라 지원금액 상이","target":"기초생활보장수급자, 차상위계층, \n중위소득 150% 이하 출산가정 \n(분만취약지 산모, 둘째아 이상 출산 가정 등 예외지원대상 폭넓게 인정)","scale":"-","when":"출산예정 40일 전~출산 후 60일","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=14","amin":null,"amax":null,"reg":"all"},{"id":113,"org":"제주특별자치도 건강위생과","name":"산모·신생아 건강관리서비스 본인부담금 지원","main":"정서_자아건강","cells":["생계_생존","정서_자아건강"],"desc":"- 「산모·신생아 건강관리 지원사업」 본인부담금 최대 50% 지원 (가정당 최대 40만원)","target":"산모·신생아 건강관리서비스 이용자 중 도내 거주 가정","scale":"-","when":"서비스 종료 후 60일 이내","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=15","amin":null,"amax":null,"reg":"all"},{"id":114,"org":"제주특별자치도 건강위생과","name":"생애초기 건강관리(시범사업)","main":"정서_자아건강","cells":["정서_자아건강"],"desc":"- 영유아 건강간호사, 전담 사회복지사 등 전담인력이 가정을 방문해 건강상담·영아발달상담·양육교육·정서적 지지 등 서비스 제공","target":"사업 지역(제주시 19개동, 서귀포시 대정읍·안덕면) 내 임산부·2세 미만 영유아 가정","scale":"-","when":"연중","tk":"always","tm":[],"form":["상담·컨설팅"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=16","amin":null,"amax":null,"reg":"all"},{"id":115,"org":"제주특별자치도 건강위생과","name":"선천성대사이상 검사 및 환아관리","main":"정서_자아건강","cells":["생계_생존","정서_자아건강"],"desc":"- (검사비) 신생아 선천성대사이상 선별검사(최대 2회)·확진검사(최대 7만원) 검사비 본인부담금 지원\n - (환아관리) 환아 특수식이(특수조제분유 등)· 선천성 갑상선기능저하증 환아 의료비 등 지원","target":"선천성대사이상 검사 영아, 확진 환아(환아관리는 19세 미만 환아까지 해당)","scale":"-","when":"연중","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=17","amin":null,"amax":18,"reg":"all"},{"id":116,"org":"제주특별자치도 건강위생과","name":"선천성 난청검사 및 보청기 지원","main":"정서_자아건강","cells":["생계_생존","정서_자아건강"],"desc":"- 신생아 난청 선별(최대 2회)·확진(최대 7만원) 검사비 본인부담금 지원\n - 난청 확진 영유아 양측 보청기 지원 (개당 135만원 한도)","target":"난청검사 신생아, 난청 확진 만 12세 미만 영유아","scale":"-","when":"연중","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=18","amin":null,"amax":null,"reg":"all"},{"id":117,"org":"제주특별자치도 건강위생과","name":"영구 불임 예상 난자·정자 냉동 지원","main":"정서_자아건강","cells":["생계_생존","정서_자아건강"],"desc":"- 의학적 사유로 영구불임 예상 시 검사, 생식세포 채취·동결·보관비 일부 지원\n- 생애 1회, 본인부담금의 50% 지원 (여성 최대 200만원, 남성 최대 30만원)","target":"의학적 사유로 영구불임이 예상되는 사람","scale":"-","when":"채취일로부터 6개월 이내","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=26","amin":null,"amax":null,"reg":"all"},{"id":118,"org":"제주특별자치도 건강위생과","name":"영유아 발달장애 정밀검사비 지원","main":"정서_자아건강","cells":["생계_생존","정서_자아건강"],"desc":"- 영유아 건강검진 결과 심화평가 권고 판정 시 발달 정밀검사·진찰료 지원 (최대 20만~40만원)","target":"발달평가 결과 심화평가 권고 판정 영유아","scale":"-","when":"검사 다음 연도 상반기까지 신청","tk":"unknown","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=27","amin":null,"amax":null,"reg":"all"},{"id":119,"org":"제주특별자치도 건강위생과","name":"임산부 및 영유아 영양플러스 사업","main":"정서_자아건강","cells":["정서_자아건강"],"desc":"- 빈혈, 저체중, 성장부진, 영양섭취상태 불량 등 영양위험요인 보유 임산부·영유아에게 영양교육·상담과 보충식품 제공","target":"중위소득 80% 이하 영양위험 임신부·출산수유부·6세 미만 영유아","scale":"-","when":"연중","tk":"always","tm":[],"form":["상담·컨설팅","서비스"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=33","amin":null,"amax":null,"reg":"all"},{"id":120,"org":"제주특별자치도 건강위생과","name":"임신 사전건강관리 지원","main":"정서_자아건강","cells":["정서_자아건강","생계_생존"],"desc":"- 가임력 검사비 실비 지원 \n- 여성 13만원·남성 5만원 한도 (난소기능검사·초음파 / 정액검사)","target":"가임력 검사 희망 20~49세 남녀 (소득·결혼·자녀 여부 불문)","scale":"-","when":"연중","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=35","amin":20,"amax":49,"reg":"all"},{"id":121,"org":"제주특별자치도 건강위생과","name":"저소득층 기저귀·조제분유 지원","main":"정서_자아건강","cells":["정서_자아건강","생계_생존"],"desc":"- 저소득층 영아 가정에 기저귀 월 9만원, 조제분유 월 11만원 정액 지원","target":"기초생활보장수급자·차상위·한부모 등 저소득층 영아(0~24개월) 가정","scale":"-","when":"연중","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=37","amin":null,"amax":null,"reg":"all"},{"id":122,"org":"제주특별자치도 건강위생과","name":"제주특별자치도 산후조리비 지원","main":"정서_자아건강","cells":["정서_자아건강","생계_생존"],"desc":"- 도내 산후조리원 이용비 최대 40만원 지원","target":"출생 12개월 이내 영아를 양육하는 도내 가정","scale":"-","when":"이용 종료 후 60일 이내","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=39","amin":null,"amax":null,"reg":"all"},{"id":123,"org":"제주특별자치도 건강위생과","name":"청소년 산모 임신출산 의료비 지원","main":"정서_자아건강","cells":["정서_자아건강","생계_생존"],"desc":"- 만 19세 이하 산모에게 임신 1회당 120만원 의료비 바우처 지급","target":"임신확인일 기준 만 19세 이하 산모","scale":"-","when":"연중","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=41","amin":null,"amax":19,"reg":"all"},{"id":124,"org":"제주특별자치도 경제정책과","name":"빛나는 제주 청년희망 대출 이차보전","main":"생계_생존","cells":["생계_생존"],"desc":"NH농협은행 제주본부 협약 저금리 대출(신규 1,000만원·대환 3,500만원)과 이자차액 보전(신용등급별 3.5~4.5%)","target":"연소득 5,000만원 이하, 재직 1개월 이상인 도내 근로소득 청년(만 19~39세)","scale":"예산 범위 내","when":"(2026년 기준)\n8~12월","tk":"months","tm":[8,9,10,11,12],"form":["지원금"],"stages":["재직"],"link":"https://jejuyouthdream.com/policy/detail/47","amin":19,"amax":39,"reg":"all"},{"id":125,"org":"제주특별자치도 경제통상진흥원","name":"예비창업인(in) 프로젝트 지원사업","main":"생계_자아실현","cells":["생계_자아실현","생계_생존"],"desc":"- 창업역량강화교육\n- 창업지원금(최소 1천만원~1.3천만원)\n- 창업 페스티벌 참가","target":"- 참신하고 구체적인 창업아이템을 갖춘 도내 주소지를 둔 창업예정인 예비창업자","scale":"교육 - 10명\n창업지원금 - 5명(교육수료자 중 선발)","when":"4월","tk":"months","tm":[4],"form":["상담·컨설팅","교육·체험","지원금"],"stages":["창업 준비"],"link":"https://www.jba.or.kr/m/bbs/board.php?bo_table=2_1_1_1&wr_id=737#boardarea","amin":null,"amax":null,"reg":"all"},{"id":126,"org":"제주특별자치도 경제통상진흥원","name":"도외 직업훈련 참가 지원사업","main":"생계_생존","cells":["생계_생존","생계_자아실현"],"desc":"- 제주에 개설되지 않은 도외 직업훈련 참여 시 숙박비(1일 최대 10만원·월 최대 65만원), 교통비(편도 최대 10만원), 자격증 취득비 실비 지원\n- 최대 연 200만원 범위 내","target":"도외 직업훈련에 참여하는 만 15세 이상 미취업 제주도민","scale":"예산 범위 내","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["진로·취업 준비"],"link":"https://www.jba.or.kr/bbs/board.php?bo_table=2_1_1_1&wr_id=707&sca=&sfl=wr_subject%7C%7Cwr_content&stx=%EB%8F%84%EC%99%B8&sst=&sod=desc&sop=and","amin":15,"amax":null,"reg":"all"},{"id":127,"org":"제주특별자치도 경제통상진흥원","name":"단시간 노동자 일자리 지원사업","main":"생계_생존","cells":["생계_생존"],"desc":"- 주 30시간 이하 단시간 노동자 인건비 일부 지원 (최대 월 50만원)\n- 우선순위에 따라 참여자를 선정하여 해당 노동자를 고용한 기업에 지원\n(1순위) 10세 이하 자녀를 둔 노동자\n(2순위) 첫 일자리 노동자\n(3순위) 2년 이내 제주 정착한 노동자","target":"제주특별자치도에 사업자 등록을 하고 주 30시간 이하 노동자를 채용한 중소기업","scale":"제주도 내 주소를 두고 있는 18~49세 노동자 40명 이내","when":"특정 시기","tk":"unknown","tm":[],"form":["지원금"],"stages":["진로·취업 준비","결혼,출산기","이주·정착"],"link":"https://www.jba.or.kr/bbs/board.php?bo_table=2_1_1_1&wr_id=802&sca=&sfl=wr_subject%7C%7Cwr_content&stx=%EB%8B%A8%EC%8B%9C%EA%B0%84&sst=&sod=desc&sop=and","amin":null,"amax":null,"reg":"all"},{"id":128,"org":"제주특별자치도 경제통상진흥원","name":"청년창업기업 경영안정자금 금리 확대 지원","main":"생계_생존","cells":["생계_생존"],"desc":"일반 이차보전율에 1회차 +1.75%, 2회차 +0.75%를 더해 금리 우대(청년창업기업 2회, 각 2년)","target":"대표자가 만 39세 이하이고 사업자등록 후 3년 이내인 도내 창업기업","scale":"상시","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["창업·사업 운영"],"link":"https://www.jba.or.kr/pages.php?p=1_3_1_1","amin":null,"amax":39,"reg":"all"},{"id":129,"org":"제주특별자치도 경제통상진흥원","name":"제주청년 희망사다리 재형저축 사업","main":"생계_생존","cells":["생계_생존"],"desc":"청년 월 10만원 + 중소기업 월 15만원 + 제주도 월 25만원을 5년간 납입해 3,000만원 + 이자의 목돈 마련","target":"도내 거주, 당해 중소기업 6개월 이상 재직 중인 만 15~39세 정규직 노동자","scale":"공고별 상이 (30~60명)","when":"매년 2월","tk":"months","tm":[2],"form":["지원금"],"stages":["재직"],"link":"https://jbawith.or.kr/bbs/board.php?bo_table=7_1_1_1&wr_id=56","amin":15,"amax":39,"reg":"all"},{"id":130,"org":"제주특별자치도 노동일자리과","name":"일하는 청년 보금자리 지원 사업","main":"공간_주거","cells":["공간_주거","생계_생존"],"desc":"중소기업이 청년 노동자에게 숙소 또는 임차료를 지원하면 월 최대30만원/1년간 지원  ※ 도 상장기업 육성 지원사업 참여기업의 경우 월 최대 40만원 지원","target":"도내 중소기업 재직 만 15~39세 청년 및 해당 기업","scale":"예산 범위 내","when":"매월 1~10일 신청","tk":"monthly","tm":[],"form":["지원금"],"stages":["재직","이주·정착"],"link":"https://www.jeju.go.kr/jejusupport/project/house/info.htm","amin":15,"amax":39,"reg":"all"},{"id":131,"org":"제주특별자치도 농업기술원","name":"청년농업인CEO양성과정","main":"생계_자아실현","cells":["생계_자아실현","관계_청년커뮤니티"],"desc":"- 사업계획서 작성 및 재무관리, 홍보ㆍ마케팅ㆍ유통ㆍ가공, 제조업 등 다양한 교육으로 농업을 비즈니스 인식하는 경영 CEO 마인드 함양","target":"3년 이상 제주특별자치도에 거주하며 신규 또는 승계 영농 중인 만 19~45세 청년농업인","scale":"20명 내외","when":"(2026년 기준)\n6월","tk":"months","tm":[6],"form":["교육·체험","커뮤니티"],"stages":["창업·사업 운영"],"link":"https://agri.jeju.go.kr/agri/farminginfo/education/agri.htm?title=%EC%B2%AD%EB%85%84&act=view&seq=794","amin":19,"amax":45,"reg":"all"},{"id":132,"org":"제주특별자치도 농업기술원","name":"청년농업인학교","main":"생계_자아실현","cells":["생계_자아실현","관계_청년커뮤니티"],"desc":"- 농업, 작물 기초 및 역량강화 교육\n- 농정시책 교육, 현장견학 및 사례 발표 등","target":"3년이상 제주특별자치도에 주소를 두고 거주하면서 신규 또는 부모님의농업을 숭계하여 농업에 종사하는 19세 이상 45세 이하인 농업인 또는 예비 농업인","scale":"30명 내외","when":"(2026년 기준)\n4월","tk":"months","tm":[4],"form":["교육·체험","커뮤니티"],"stages":["창업 준비","창업·사업 운영"],"link":"https://agri.jeju.go.kr/agri/farminginfo/education/agri.htm?title=%EC%B2%AD%EB%85%84&act=view&seq=771","amin":19,"amax":45,"reg":"all"},{"id":133,"org":"제주특별자치도 농업기술원","name":"청년농업인 영농문제 해결 스터디 그룹","main":"생계_자아실현","cells":["생계_자아실현","관계_청년커뮤니티"],"desc":"- 청년농업인이 스스로 영농 현장의 문제를 발굴하고 해결방안을 모색하는 자율 학습 공동체 \n- 분야별 스터디 그룹 운영 및 그룹별 수요맞춤형 활동 지원 (선진지 현장교육, 박람회 참가 등)","target":"제주도 내 청년농업인 및 4-H회원, 후계농업경영인 스터디그룹","scale":"5팀 내외\n(도 기술원 1팀, 센터별 1팀)","when":"(2025년 기준)\n상반기 내 수시모집","tk":"unknown","tm":[],"form":["커뮤니티"],"stages":["창업·사업 운영"],"link":"https://agri.jeju.go.kr/agri/notice/notice.htm?act=view&seq=57897","amin":null,"amax":null,"reg":"all"},{"id":134,"org":"제주특별자치도 농업기술원 동부농업기술센터","name":"신규농업인 기초영농기술교육","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 5회차 교육\n- 농업정보교육: 농업인 관련 제도, 정책, 지원사업, 트랜드 변화 및 농촌융복합사업(체험관련) 소개\n- 재배기초교육: 동부지역 대표 작물별 기초 재배기술 및 토양관리 기초등","target":"관내 신규농업인 및 청년농업인","scale":"50명","when":"3월 모집, 4~5월 운영","tk":"months","tm":[3,4,5],"form":["교육·체험"],"stages":["창업·사업 운영"],"link":"https://agri.jeju.go.kr/agri/farminginfo/education/dongbu.htm?act=view&seq=759","amin":null,"amax":null,"reg":"all"},{"id":135,"org":"제주특별자치도 농업기술원 서부농업기술센터","name":"신규농업인 기초영농기술교육 및 현장실습교육","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 영농기초, 재배이론 교육\n- 농작업기계화, 귀농귀촌 우수사례 교육 등\n- 감귤분야, 원예분야 등 현장실습과정 운영","target":"서부지역으로 이주한 귀농인, 신규농업인 등","scale":"30명","when":"3월 모집, (교육) 3~6월 운영 (실습) 5~10월","tk":"months","tm":[3,4,5,6,7,8,9,10],"form":["교육·체험","인턴십"],"stages":["창업·사업 운영"],"link":"https://agri.jeju.go.kr/agri/farminginfo/education/seobu.htm?page=1&act=view&seq=755","amin":null,"amax":null,"reg":"all"},{"id":136,"org":"제주특별자치도 농업기술원 제주농업기술센터","name":"신규농업인 기초영농기술교육","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 6회차 교육, 관내 주산 작목 중심 영농기술 기초 이론\n- 농약사용 기초, 토양환경과 양분관리 등 신규농업인 맞춤형 기초교육","target":"관내 신규농업인 및 청년농업인","scale":"40명","when":"3월 모집, 4~6월 운영","tk":"months","tm":[3,4,5,6],"form":["교육·체험"],"stages":["창업·사업 운영"],"link":"https://agri.jeju.go.kr/agri/farminginfo/education/jeju.htm?act=view&seq=765","amin":null,"amax":null,"reg":"all"},{"id":137,"org":"제주특별자치도 문화예술진흥원","name":"제주청년작가전","main":"문화_생산하기","cells":["생계_자아실현","생계_생존","문화_생산하기"],"desc":"1994년부터 이어온 청년작가 발굴 사업. 선정 작가에게 1인당 1,000만원 지원금, 전문가 멘토 프로그램 및 평론 제공, 제주 문예회관 전시 개최","target":"제주 1년 이상 거주 또는 거주 합산 3년 이상인 만 39세 이하 청년 예술인","scale":"3인 이내","when":"3~4월","tk":"months","tm":[3,4],"form":["지원금","상담·컨설팅"],"stages":["창업·사업 운영"],"link":"https://www.jeju.go.kr/jejuculture/news/notice.htm?page=1&act=view&seq=2015612","amin":null,"amax":39,"reg":"all"},{"id":138,"org":"제주특별자치도 복지가족과","name":"청년내일저축계좌","main":"생계_생존","cells":["생계_생존"],"desc":"참여자가 월 10만원 이상 저축하면 정부가 월 30만원을 매칭 적립해 3년 만기 시 목돈 마련(자립역량교육 등 이행 조건)","target":"만 15~39세, 근로·사업소득이 있고 기준 중위소득 50% 이하인 청년","scale":"300명 내외","when":"연 1회 집중 모집","tk":"unknown","tm":[],"form":["지원금"],"stages":["재직","창업·사업 운영"],"link":"https://jejuyouthdream.com/policy/detail/93","amin":15,"amax":39,"reg":"all"},{"id":139,"org":"제주특별자치도 복지정책과","name":"다자녀우대카드 <New 제주 아이사랑 행복카드>","main":"생계_생존","cells":["생계_생존","문화_누리기"],"desc":"주유, 전기차충전, 쇼핑, 통신 할인 등 카드 제공혜택 및 협력가맹점 제공 혜택, 도내 문화시설 할인 등","target":"제주도에 주민등록을 둔 2자녀 이상, 막내가 만 19세 미만인 모든 가정(둘째아 임산부 포함)","scale":"-","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=9","amin":null,"amax":18,"reg":"all"},{"id":140,"org":"제주특별자치도 복지정책과","name":"아이돌봄서비스","main":"생계_생존","cells":["생계_생존","정서_자아건강"],"desc":"- 양육공백 가정에 등하원보조, 임시보육 등 돌봄서비스 제공 아이돌보미 파견 \n- 시간제 돌봄(생후 3개월 이상 ~12세 이하 아동/연 960시간)·종일제(생후 3개월 이상~36개월 이하 영아/월 200시간) 돌봄","target":"3개월~12세 아동 양육 가정 (중위소득 250% 이하)","scale":"-","when":"연중","tk":"always","tm":[],"form":["서비스"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=23","amin":null,"amax":null,"reg":"all"},{"id":141,"org":"제주특별자치도 복지정책과","name":"위기임산부 지역상담기관 운영","main":"정서_자아건강","cells":["정서_자아건강"],"desc":"- 위기임산부 24시간 상담, 정부지원 정보제공, 서비스 연계, 사례관리","target":"위기임산부, 보호출산 산모·아동 및 아동의 생부","scale":"-","when":"연중 24시간","tk":"always","tm":[],"form":["상담·컨설팅","정보","서비스"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=28","amin":null,"amax":null,"reg":"all"},{"id":142,"org":"제주특별자치도 복지정책과","name":"첫만남 이용권","main":"생계_생존","cells":["정서_자아건강","생계_생존"],"desc":"- 출생아당 첫만남이용권 지급 (첫째 200만원, 둘째 이상 300만원)","target":"출생신고로 주민등록번호를 부여받은 출생아","scale":"-","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=40","amin":null,"amax":null,"reg":"all"},{"id":143,"org":"제주특별자치도 복지정책과","name":"청소년부모 아동양육비 지원","main":"생계_생존","cells":["정서_자아건강","생계_생존"],"desc":"- 청소년부모 가구에 자녀 1인당 월 25만원 아동양육비 지원","target":"중위소득 65% 이하 만 24세 이하 청소년부모 가구","scale":"-","when":"연중","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=42","amin":null,"amax":24,"reg":"all"},{"id":144,"org":"제주특별자치도 복지정책과","name":"출산여성 한약 지원","main":"정서_자아건강","cells":["정서_자아건강","생계_생존"],"desc":"- 산후조리용 한약제 15만원 할인 지원 (도 10만원·한의사회 5만원)","target":"임신 30주 이상 또는 출산 여성 (도민)","scale":"-","when":"임신 30주~출산 후 4개월","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=45","amin":null,"amax":null,"reg":"all"},{"id":145,"org":"제주특별자치도 복지정책과","name":"해피아이 육아지원금","main":"생계_생존","cells":["정서_자아건강","생계_생존"],"desc":"- 첫째아 1인 500만원(5년 분할), 둘째아 이상 1인 1,000만원(9년 분할) 육아지원금 지급","target":"도내 6~12개월 이상 주민등록을 둔 부모의 출생(입양) 자녀","scale":"-","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=49","amin":null,"amax":null,"reg":"all"},{"id":146,"org":"제주특별자치도 복지정책과, 인구보건복지협회 제주지회 출산·육아용품 대여점","name":"출산·육아용품 대여 지원","main":"정서_자아건강","cells":["정서_자아건강","생계_생존"],"desc":"- 출산·육아용품 대여 \n- 대여점 방문 신청, 대여료 품목별 자부담","target":"출산·육아용품 대여를 원하는 가정","scale":"-","when":"연중","tk":"always","tm":[],"form":["물품"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=47","amin":null,"amax":null,"reg":"all"},{"id":147,"org":"제주특별자치도 수산정책과","name":"어업활동지원","main":"생계_생존","cells":["생계_생존"],"desc":"- 임신·사고·질병·교육 등으로 영어활동이 곤란한 어업인에게 대체인력 인건비 지원 (1일 최대 12만원, 연간 30일 이내)\n- 가사일이나 어업외 활동, 장청소·어구 정리 등 단순한 일 처리를 위한 대체인력은 지원 불가","target":"임신·사고·질병 등으로 어업활동 곤란 어업인","scale":"-","when":"상반기(3월) 공고","tk":"months","tm":[3],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?pblancId=PBLN_000000000119881","amin":null,"amax":null,"reg":"all"},{"id":148,"org":"제주특별자치도 아동보육청소년과","name":"아동건강체험활동비 지원","main":"문화_누리기","cells":["생계_생존","문화_누리기"],"desc":"- 아동 체육·문화 활동비 월 5만원을 지역화폐(탐나는전)로 지급","target":"중위소득 120% 이하 9~12세 아동","scale":"-","when":"연중 접수","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=22","amin":null,"amax":null,"reg":"all"},{"id":149,"org":"제주특별자치도 아동보육청소년과","name":"어린이집 입학준비금 지원","main":"생계_생존","cells":["생계_생존"],"desc":"- 생애 최초 어린이집 입학 시 원복·가방 등 구입비용 입학준비금 지원 (75,000원 이내)","target":"생애 최초 어린이집 입학 영유아","scale":"-","when":"입학 시 수시 신청","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=24","amin":null,"amax":null,"reg":"all"},{"id":150,"org":"제주특별자치도 아동보육청소년과, 제주시 여성가족과, 서귀포시 여성가족과","name":"가정양육수당지원사업","main":"생계_생존","cells":["생계_생존"],"desc":"-  어린이집, 유치원, 종일형 아이돌봄을 미이용하는 24개월 이상~86개월 미만의 아동\n에 대한 양육수당 지급 (비장애아동 기준 월 10만원)\n-","target":"가정에서 돌봄을 받는 24개월 이상~86개월 미만의 아동","scale":"-","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=4","amin":null,"amax":null,"reg":"all"},{"id":151,"org":"제주특별자치도 아동보육청소년과, 제주시 여성가족과, 서귀포시 여성가족과","name":"부모급여(영아수당) 지급","main":"생계_생존","cells":["생계_생존"],"desc":"- 0세 월 100만원, 1세 월 50만원(매월 25일)의 영아수당 지급","target":"2세 미만(0~23개월)의 아동","scale":"-","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?category2=004&word2=&page=1&act=view&seq=13","amin":null,"amax":null,"reg":"all"},{"id":152,"org":"제주특별자치도 일자리기업과","name":"청년 취업지원 희망프로젝트 사업","main":"생계_생존","cells":["생계_생존"],"desc":"- 생애 첫 일자리: 고용보험 가입이력 12개월 미만 청년을 정규직으로 채용, 당해연도 최저임금 이상 월 급여 지급 기업(월 50만원*1년)\n- 추가고용:  2025년도 연평균피보험자 수 기준 대비 청년을 정규직으로 추가고용(채용), 당해연도 최저임금 이상 월 급여 지급 기업(월 70만원*1년)\n- 더 나은 일자리: 월 급여를 제주 생활임금 이상으로 하여 청년을 정규직 채용(월 60만원*최대2년)","target":"만 15~39세 청년을 정규직으로 채용한 도내 5인 미만 중소기업","scale":"예산 범위 내(연중)","when":"1월, 4월, 7월, 10월","tk":"months","tm":[1,4,7,10],"form":["지원금"],"stages":["진로·취업 준비"],"link":"https://www.jeju.go.kr/news/news/law/jeju2.htm#A_64342","amin":15,"amax":39,"reg":"all"},{"id":153,"org":"제주특별자치도 일자리기업과","name":"청년동행 일자리 우수기업 지원사업","main":"생계_생존","cells":["생계_생존"],"desc":"- 임금·고용안정·복지·일생활균형 우수기업을 선정\n- 재직 청년: 주택임차금·정착지원금·교통비·자녀돌봄지원금 중 3종 선택 지원, 육아휴직 지원금, 장기근속 축하금·건강검진비, 결혼/출산/입양/육아휴직복귀축하금, 직무교육훈련비 등 추가\n- 기업 지원: 청년 신규 채용 장려금, 업무처리 담당자 인센티브 등 지원금 지급","target":"도내 일자리 우수기업에 재직 중인 만 18~39세 청년 / 공고일 기준 제주특별자치도에 소재지를 두고 2년 이상 사업을 실제 운영하고 있는 상시근로자 5인 이상 중소기업","scale":"70명","when":"(2026년 기준)\n3~4월","tk":"months","tm":[3,4],"form":["지원금"],"stages":["재직","결혼,출산기"],"link":"https://www.jeju.go.kr/news/news/law/jeju2.htm#A_65447","amin":18,"amax":39,"reg":"all"},{"id":154,"org":"제주특별자치도 장애인복지과","name":"제주영유아발달지원센터 운영","main":"정서_자아건강","cells":["정서_자아건강","생계_생존"],"desc":"- 발달지연·장애위험 영유아 조기발견 및 발달지원 서비스 제공\n- 발달지연 영유아 조기발굴을 위한 초기상담, 발달 평가, 사후관리 등 지원","target":"도내 5세 이하 영유아","scale":"-","when":"상시","tk":"always","tm":[],"form":["상담·컨설팅","서비스"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=38","amin":null,"amax":null,"reg":"all"},{"id":155,"org":"제주특별자치도 주택토지과","name":"청년월세 지원","main":"공간_주거","cells":["공간_주거","생계_생존"],"desc":"부모와 별도 거주하는 무주택 청년 세대주에게 임차료 월 최대 20만원 지원(최대 12개월·240만원)","target":"만 19~34세 무주택 청년 세대주, 기준 중위소득 60% 이하","scale":"예산 범위 내","when":"2026년 기준 3~5월","tk":"months","tm":[3,4,5],"form":["지원금"],"stages":["이주·정착","모든 청년"],"link":"https://www.jeju.go.kr/city/welfare/monthlyrent.htm","amin":19,"amax":34,"reg":"all"},{"id":156,"org":"제주특별자치도 주택토지과","name":"제주 청년 희망충전 월세 지원","main":"공간_주거","cells":["공간_주거","생계_생존"],"desc":"국토부 청년월세(19~34세) 대상에서 제외되는 35~39세 청년에게 임차료 월 최대 20만원 지원(최대 12개월·240만원)","target":"만 35~39세 무주택 청년 세대주, 기준 중위소득 60% 이하","scale":"예산 범위 내","when":"연중 상시 신청","tk":"always","tm":[],"form":["지원금"],"stages":["이주·정착","모든 청년"],"link":"https://www.jeju.go.kr/city/welfare/monthlyrent.htm","amin":35,"amax":39,"reg":"all"},{"id":157,"org":"제주특별자치도 주택토지과","name":"청년 이사비 지원사업","main":"공간_주거","cells":["공간_주거","생계_생존"],"desc":"제주 전입 또는 도내 이사 후 이사비/입주청소비를 최대 40만원 한도로 실비 지원(2년 1회, 최대 3회)","target":"2026년 이후 전입·이사한 만 19~39세 무주택 청년가구(중위소득 180% 이하)","scale":"500가구","when":"상/하반기 별도 모집","tk":"unknown","tm":[],"form":["지원금"],"stages":["이주·정착","모든 청년"],"link":"https://www.jeju.go.kr/city/welfare/movingexpenses.htm","amin":19,"amax":39,"reg":"all"},{"id":158,"org":"제주특별자치도 주택토지과","name":"청년 및 주거취약계층 주택 중개수수료 지원사업","main":"공간_주거","cells":["공간_주거","생계_생존"],"desc":"3억원 이하의 주택 매매, 전월세 계약에 대한 주택 중개수수료 최대 30만원 지원(계약일로부터 1년 이내 신청, 2년 1회·최대 3회)","target":"만 19~39세 무주택 청년 또는 신혼부부 / 기초생활수급자·차상위, 한부모가족","scale":"예산 범위 내","when":"연중 상시 신청","tk":"always","tm":[],"form":["지원금"],"stages":["이주·정착","모든 청년","결혼,출산기"],"link":"https://www.jeju.go.kr/city/welfare/commission.htm","amin":19,"amax":39,"reg":"all"},{"id":159,"org":"제주특별자치도 주택토지과","name":"전세보증금반환보증 보증료 지원","main":"공간_주거","cells":["공간_주거","생계_생존"],"desc":"전세보증금반환보증(HUG, HF, SGI) 가입 시 납부한 보증료를 최대 40만원까지 지원","target":"임차보증금 3억원 이하, 연소득 5,000만원 이하 무주택 청년 임차인 / 부부합산 연소득 7,500만원 이하 무주택 신혼부부","scale":"예산 범위 내","when":"연중 상시 신청","tk":"always","tm":[],"form":["지원금"],"stages":["이주·정착","모든 청년","결혼,출산기"],"link":"https://www.jeju.go.kr/city/welfare/depositrent.htm","amin":null,"amax":null,"reg":"all"},{"id":160,"org":"제주특별자치도 주택토지과","name":"공공임대주택 임대차보증금 지원사업","main":"공간_주거","cells":["공간_주거","생계_생존"],"desc":"기본 임대차보증금의 50% 내외 지원","target":"공공임대주택 입주예정자","scale":"예산 범위 내","when":"제주특별자치도 주택토지과 문의","tk":"always","tm":[],"form":["지원금"],"stages":["이주·정착","모든 청년"],"link":"https://www.jeju.go.kr/city/welfare/leasedeposit.htm","amin":null,"amax":null,"reg":"all"},{"id":161,"org":"제주특별자치도 주택토지과","name":"통합공공임대주택(행복주택 등)","main":"공간_주거","cells":["공간_주거","생계_생존"],"desc":"- 시세 35~95%수준으로 사회취약계층 등 주거안정을 목적으로 공급하는 주택\n- 유형별 입주 자격\n(일반공급) 기준 중위소득 100%이하 / (우선공급) 기준 중위소득 150%이하","target":"청년, 신혼부부(예비 포함)·한부모가족, 고령자 등","scale":"공고별 모집","when":"공고별 상이","tk":"unknown","tm":[],"form":["공간"],"stages":["이주·정착","결혼,출산기","모든 청년"],"link":"https://www.jejuhwc.co.kr/housing/housing/integration.htm","amin":null,"amax":null,"reg":"all"},{"id":162,"org":"제주특별자치도 주택토지과","name":"3만원 주택","main":"공간_주거","cells":["공간_주거","생계_생존"],"desc":"공공임대주택 월 임대료 중 본인부담 3만원을 제외한 전액 지원\n*단, 소득 기준 및 선정 우선순위에 따라 선정","target":"제주도 소재 공공임대주택에 입주(예정)한 신혼부부·자녀출산 가구","scale":"예산 범위 내","when":"(2026년 기준)\n5~6월","tk":"months","tm":[5,6],"form":["지원금"],"stages":["결혼,출산기","이주·정착"],"link":"https://www.jeju.go.kr/city/welfare/15.htm","amin":null,"amax":null,"reg":"all"},{"id":163,"org":"제주특별자치도 주택토지과","name":"하영드림 주택마련 지원사업","main":"공간_주거","cells":["공간_주거","생계_생존"],"desc":"주택 구입자금 대출이자를 최대 1.5%(3억원 이내) 지원","target":"주택 구입자금 대출 받아 1주택을 소유하고 있는 신혼부부(7년 이내)·자녀출산(7년 이내) 가구","scale":"646가구 내외","when":"(2026년 기준)\n5~6월","tk":"months","tm":[5,6],"form":["지원금"],"stages":["결혼,출산기","이주·정착"],"link":"https://www.jeju.go.kr/city/welfare/16.htm","amin":null,"amax":null,"reg":"all"},{"id":164,"org":"제주특별자치도 주택토지과","name":"신혼부부 및 자녀출산 가구 주택전세자금 대출이자 지원","main":"공간_주거","cells":["공간_주거","생계_생존"],"desc":"신청일 기준 주택전세자금 대출잔액의 1.5%(최대 150만원) 지원","target":"무주택 신혼부부 및 자녀출산 가구(7년 이내)","scale":"예산 범위 내","when":"연내 3회 이상 모집","tk":"unknown","tm":[],"form":["지원금"],"stages":["결혼,출산기","이주·정착"],"link":"https://www.jeju.go.kr/city/welfare/rentfunds.htm","amin":null,"amax":null,"reg":"all"},{"id":165,"org":"제주특별자치도 주택토지과","name":"사회초년생 주택 연·월세 대출이자 지원","main":"공간_주거","cells":["공간_주거","생계_생존"],"desc":"- 연·월세 대출금리 3.5%(4년간) 지원\n- 보증금 3천만원 이하로 연세 720만원 또는 월세 60만원 이하의 부동산\n임대차계약(연단위)에 적용","target":"무주택 신혼부부 및 자녀출산 가구(7년 이내) 및 무주택 사회초년생(만 19세 ~ 39세 이하로 취업 후 5년 이내)","scale":"예산 범위 내","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기","재직","이주·정착"],"link":"https://www.jeju.go.kr/city/welfare/rentfunds.htm","amin":19,"amax":39,"reg":"all"},{"id":166,"org":"제주특별자치도 청년정책담당관","name":"청년 전입 축하장려금 (탐라청년출발패키지)","main":"생계_생존","cells":["생계_생존","정서_지역애착"],"desc":"- 제주도민으로서의 출발을 응원하며 전입 축하장려금(탐나는전)지급","target":"도외에서 전입하는 19~39세 청년","scale":"예산소진시","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["이주·정착"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=108#section_04","amin":19,"amax":39,"reg":"all"},{"id":167,"org":"제주특별자치도 청년정책담당관","name":"학자금 대출 신용회복 지원사업","main":"생계_생존","cells":["생계_생존"],"desc":"- 한국장학재단과의 분할상환약정 체결에 필요한 초입금 지원 (채무금액의 10% 범위 내, 최대 100만원 한도)","target":"도내에 주민등록이 되어 있는 19세 이상 39세 이하의 청년, 도내에 주민등록이 되어 있는 19세 이상 39세 이하의 청년","scale":"지원 예산 소진 시까지","when":"(2026년 기준)\n2~11월","tk":"monthly","tm":[],"form":["지원금"],"stages":["모든 청년"],"link":"https://www.jeju.go.kr/news/news/law/jeju2.htm#A_65040","amin":19,"amax":39,"reg":"all"},{"id":168,"org":"제주특별자치도 청년정책담당관","name":"학자금 대출 이자지원사업","main":"생계_생존","cells":["생계_생존"],"desc":"- 2010년부터 한국장학재단을 통해 대출받은 취업 후 상환 학자금, 일반 상환 학자금 및 생활비 대출에 따라 발생한 이자 전액 지원(직전 상반기 또는 하반기 발생분)","target":"- 도내 고등학교를 졸업했거나, 공고일 6개월 이전부터 제주도에 주민등록이 되어 있는자\n-공고일 기준 국내 대학(원) 재학 중이거나 휴학 중인 자\n  - 공고일 기준 국내 대학(원) 졸업자로서 졸업한 날로부터 10년 이내의 미취업자","scale":"지원 예산 소진 시까지","when":"(상반기) 1~4월\n(하반기) 7~9월","tk":"months","tm":[1,2,3,4,7,8,9],"form":["지원금"],"stages":["진로·취업 준비"],"link":"https://www.jeju.go.kr/news/news/law/jeju2.htm#A_67002","amin":null,"amax":null,"reg":"all"},{"id":169,"org":"제주특별자치도 청년정책담당관","name":"청년반상회 운영","main":"관계_지역참여","cells":["관계_지역참여","관계_청년커뮤니티"],"desc":"원하는 시간에, 원하는 장소로 청년이 있는 현장으로 찾아가 정책 아이디어 이야기를 나누는 청년 소통 프로그램","target":"도내 청년 5인 이상 모임 (커뮤니티, 동아리 등)","scale":"상시 운영","when":"(2026년 기준) 2월~12월","tk":"always","tm":[],"form":["커뮤니티","정보"],"stages":["모든 청년"],"link":"https://blog.naver.com/jejudo_official/224263729520?trackingCode=external","amin":null,"amax":null,"reg":"all"},{"id":170,"org":"제주특별자치도 청년정책담당관","name":"제주청년원탁회의 운영","main":"관계_지역참여","cells":["관계_지역참여","관계_청년커뮤니티"],"desc":"- 관광, 문화, 교육 등 9개 정책 분과별 주제를 바탕으로 청년 문제 논의, 청년정책 발굴·제안\n- 정책 역량강화 교육, 전문가 아이디어 컨설팅 등 제공\n- 정책현장방문 등 정책연구활동, 네트워킹 및 사회공헌활동 운영\n- 활동증명서 발급, 회의참석수당 지급\n※ 청년주권회의는 청년원탁회의 내 분과장 회의 (제주 청년참여기구 운영진 역할, 운영사항 심의·의결, 행정사항 협의 등)\n※","target":"제주도 내 거주하거나 활동 중인 만 19~39세 청년","scale":"100명","when":"(2026년 기준) 전년도 11월","tk":"months","tm":[11],"form":["커뮤니티","정보","교육·체험","상담·컨설팅"],"stages":["모든 청년"],"link":"https://jejuyouth.com/m/bbs/board.php?bo_table=4_2_1_1&wr_id=866&sca=%EA%B8%B0%ED%83%80","amin":19,"amax":39,"reg":"all"},{"id":171,"org":"제주특별자치도 청년정책담당관","name":"제주청년대상","main":"관계_지역참여","cells":["관계_지역참여","관계_청년커뮤니티","정서_지역애착","정서_자아건강"],"desc":"혁신역량, 도전정신, 사회기여, 특별공로 4개 부문 각 1명 선정","target":"제주도에 3년 이상 주소를 두고 있거나, \n도내 중고등학교를 졸업한\n만 19~39세 청년","scale":"4명","when":"(2026년 기준) 5~6월","tk":"months","tm":[5,6],"form":["기타"],"stages":["모든 청년"],"link":"https://blog.naver.com/jejudo_official/224251667140","amin":19,"amax":39,"reg":"all"},{"id":172,"org":"제주특별자치도 청년정책담당관","name":"제주청년 갭이어 프로그램","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"20여 일간 진로 컨설팅과 진로 탐색과제를 수행하며 숙박·교통·프로그램 진행비 지원(도내 청년은 도외에서, 도외 청년은 도내에서)","target":"만 19~39세 도내·외 청년","scale":"40명(도내 20명, 도외 20명)","when":"특정 시기","tk":"unknown","tm":[],"form":["상담·컨설팅","지원금","교육·체험"],"stages":["진로·취업 준비","일·생활 전환"],"link":"https://www.picjeju.com/pages/board-view?id=2535","amin":19,"amax":39,"reg":"all"},{"id":173,"org":"제주특별자치도 친환경농업정책과","name":"임산부 친환경농산물 꾸러미 지원","main":"정서_자아건강","cells":["정서_자아건강","생계_생존"],"desc":"- 임산부·출산 가정에 친환경농산물 꾸러미 지원 (연 48만원 이내, 자부담 96,000원)\n- 공급업체 온라인몰에서 친환경 농산물, 유기 가공식품 등 꾸러미 제품을 선택하고, 주문 금액의 20%(자부담)를 결제","target":"임신부 및 전년도 출산 산모 (전년도 미수혜자)","scale":"-","when":"상반기(3월) 공고","tk":"months","tm":[3],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=34","amin":null,"amax":null,"reg":"all"},{"id":174,"org":"제주특별자치도 친환경농업정책과","name":"출산 농가 도우미 지원(행정시 사업)","main":"생계_생존","cells":["생계_생존"],"desc":"- 출산(예정) 여성농업인에게 영농도우미 비용 지원 (최대 70일, 1일 82,560원)","target":"농업경영정보 등록 출산(예정) 도내 여성농업인","scale":"-","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["결혼,출산기"],"link":"https://www.jeju.go.kr/lifecycle/policy/list.htm?act=view&seq=43","amin":null,"amax":null,"reg":"all"},{"id":175,"org":"제주특별자치도, 농림수산식품부","name":"대학생 천원의 아침밥 지원","main":"생계_생존","cells":["정서_자아건강","생계_생존"],"desc":"도내 대학 구내식당에서 아침 식사를 1,000원에 이용할 수 있도록 학교에 비용 지원","target":"제주대학교·제주한라대학교·제주관광대학교 재학생","scale":"-","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["진로·취업 준비"],"link":"https://www.hani.co.kr/arti/area/jeju/1106881.html","amin":null,"amax":null,"reg":"all"},{"id":176,"org":"제주특별자치도, 문화체육관광부","name":"청년문화예술패스","main":"문화_누리기","cells":["문화_누리기"],"desc":"공연·전시·영화 예매비를 1인 연 20만원 지원(NOL티켓·YES티켓·티켓링크·멜론티켓·메가박스·롯데시네마·CGV)","target":"제주 거주 만 19~20세 청년","scale":"예산 소진시까지","when":"(2026년 기준) 2~6월","tk":"months","tm":[2,3,4,5,6],"form":["지원금"],"stages":["모든 청년"],"link":"https://jejuyouthdream.com/policy/detail/50","amin":19,"amax":20,"reg":"all"},{"id":177,"org":"제주특별자치도·CIFAL 제주·유엔훈련연구기구","name":"제주청년 글로벌스탠다드 역량강화 지원사업","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 글로벌 리더십 기초 교육 (7회차), 역량 심화 워크숍 (제주포럼 현장 참여 3일), 해외 국제기구 탐방 등","target":"제주 거주 만 19~39세 청년","scale":"50명 (교육 단계별 선발자 수 상이)","when":"(2026년 기준) 3월","tk":"months","tm":[3],"form":["교육·체험"],"stages":["진로·취업 준비"],"link":"https://kr.cifaljeju.org/Notice/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=170411293&t=board","amin":19,"amax":39,"reg":"all"},{"id":178,"org":"제주특별자치도광역정신건강복지센터","name":"청년층 자살시도자 치료비 지원사업","main":"정서_자아건강","cells":["정서_자아건강"],"desc":"- 자해·자살 시도로 응급의료기관에 내원한 청년의 신체손상 및 정신건강의학과 입원·치료비 지원 \n- 1인당 연간 100만원 한도, 응급실 내원 6개월 이내 신청","target":"만 15~34세 자살시도자 중 사례관리 서비스에 동의한 자","scale":"예산 소진시 까지","when":"상시","tk":"always","tm":[],"form":["지원금"],"stages":["모든 청년"],"link":"https://jejuyouth.com/m/bbs/board.php?bo_table=1_2_2_1&wr_id=1154&page=","amin":15,"amax":34,"reg":"all"},{"id":179,"org":"제주특별자치도광역정신건강복지센터(제주청년마인드링크)","name":"청년 마음건강 지원(청년마인드링크)","main":"정서_자아건강","cells":["정서_자아건강"],"desc":"- 정신건강에 어려움을 겪는 청년을 발굴해 1:1 전문 심리상담을 제공하고, 조기중재와 치료·관리 연계로 회복 지원\n- 무료 상담 및 서비스 제공","target":"정신건강 서비스가 필요한 제주거주 만 19세~만 34세 청년,\n정신건강의학과 진료 경험이 없거나 정신건강의학과에서 최초 진단을 받은 지 5년 이내의 청년","scale":"-","when":"상시","tk":"always","tm":[],"form":["상담·컨설팅"],"stages":["모든 청년"],"link":"http://www.jejumind.or.kr/youth/contents/guide.php","amin":19,"amax":34,"reg":"all"},{"id":180,"org":"제주특별자치도광역정신건강복지센터(제주청년마인드링크)","name":"청년마음건강콘서트","main":"정서_자아건강","cells":["정서_자아건강"],"desc":"- 콘서트 및 정신건강전문의와 함께하는 상담 프로그램","target":"만 19세 ~ 39세 제주 청년 누구나","scale":"-","when":"6월","tk":"months","tm":[6],"form":["교육·체험"],"stages":["모든 청년"],"link":"http://www.jejumind.or.kr/include/bbs/board.php?bo_table=youth_notice&wr_id=13","amin":19,"amax":39,"reg":"all"},{"id":181,"org":"제주특별자치도광역정신건강복지센터(제주청년마인드링크)","name":"청년마인드링크 서포터즈","main":"정서_자아건강","cells":["정서_자아건강"],"desc":"- 정신건강 인식개선 캠페인 운영, SNS 운영\n- 정신건강교육 참여","target":"만 19세 ~ 34세 제주 청년","scale":"8명 내외","when":"2~3월","tk":"months","tm":[2,3],"form":["교육·체험","인턴십"],"stages":["모든 청년"],"link":"http://www.jejumind.or.kr/include/bbs/board.php?bo_table=youth_notice&wr_id=11","amin":19,"amax":34,"reg":"all"},{"id":182,"org":"제주패스파인더","name":"오늘만 워크맨","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 청년들이 도내 다양한 업종의 현장에서 하루동안 실무를 경험해볼 수 있도록 지원하는 '1일 일경험 프로그램'","target":"도내 기업 및 직무 경험을 쌓고 싶은 2030 청년","scale":"회차별 모집","when":"(2026년 기준)\n4~11월","tk":"monthly","tm":[],"form":["인턴십"],"stages":["진로·취업 준비","창업 준비"],"link":"https://www.picjeju.com/workman","amin":null,"amax":null,"reg":"all"},{"id":183,"org":"제주패스파인더","name":"플랜비","main":"생계_자아실현","cells":["생계_자아실현","생계_생존"],"desc":"- 상권조사, 메뉴개발, 원가산정 등 컨설팅\n- 팝업행사 운영 지원금 및 운영기회","target":"창업에 관심이 있는 15세~39세 청년 누구나","scale":"30명 내외","when":"시즌 6 2025. 8.\n시즌 7 2025. 11.\n시즌 8 2026.6.\n시즌 9 2026.8.","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["창업 준비"],"link":"https://newkidsinvestment.notion.site/PLAN_Be-8-35dd0fdbd26d8098b3b9c44bb9e9405d","amin":15,"amax":39,"reg":"all"},{"id":184,"org":"제주패스파인더","name":"패파스쿨","main":"문화_누리기","cells":["관계_청년커뮤니티","문화_누리기"],"desc":"- 오름트레킹, 패스상담소, 티클래스, 그림책 테라피 등 청년들의 몸과 마음에 쉼이 될 수 있는 다양한 프로그램 운영","target":"제주도내 학생 및 청년 누구나(만 15~39세)\n※ 선착순 마감이 아닌 경우, 미취(창)업 청년을 우선으로 선발","scale":"회차별 모집","when":"매월 초","tk":"monthly","tm":[],"form":["교육·체험"],"stages":["모든 청년"],"link":"https://www.jejupathfinder.org/Program3/?idx=188","amin":15,"amax":39,"reg":"all"},{"id":185,"org":"제주패스파인더","name":"패스파이오니어","main":"생계_자아실현","cells":["생계_자아실현","생계_생존"],"desc":"- 아이디어 구체화를 위한 교육 프로그램, 담임 멘토링 지원\n- 예비창업가 네트워킹 프로그램 \n- MVP 실행지원금","target":"나만의 창업을 꿈꾸는 청년 누구나(만 15~39세)","scale":"20명 내외","when":"1기 2월\n2기 6월\n3기 9월","tk":"months","tm":[2,6,9],"form":["교육·체험","지원금"],"stages":["창업 준비"],"link":"https://www.jejupathfinder.org/shop_view/?idx=179","amin":15,"amax":39,"reg":"all"},{"id":186,"org":"제주패스파인더","name":"식품 대기업영업 신입사원 직무부트캠프","main":"생계_자아실현","cells":["생계_생존","생계_자아실현"],"desc":"- 취업설명회, 현장방문 및 실습, 실전모의면접 등 교육운영(6회차)\n - 최종 면접선발자 대상 면접진행\n - 취업 멘토링 등 사후관리 프로그램","target":"- 4년제 대학 졸업 청년 및 취업 준비생\n- 식품회사 대기업 영업직군 희망자","scale":"20명(최종 면접기회 5명)","when":"(2026년 기준)\n4월","tk":"months","tm":[4],"form":["교육·체험"],"stages":["진로·취업 준비"],"link":"https://www.jejupathfinder.org/shop_view/?idx=158","amin":null,"amax":null,"reg":"all"},{"id":187,"org":"제주패스파인더","name":"패스온","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 관광 서비스 직무, 공기업 등 분야별 특화 취업전략 특강\n- 자기소개서 첨삭, 모의면접\n- 현직자 특강 \n- 고용정책 안내 등","target":"졸업 예정자 및 취업 준비 중인 제주 청년, 학생","scale":"15명 내외","when":"매월 초","tk":"monthly","tm":[],"form":["교육·체험"],"stages":["진로·취업 준비"],"link":"https://www.jejupathfinder.org/Program3/?idx=218","amin":null,"amax":null,"reg":"all"},{"id":188,"org":"제주패스파인더","name":"로컬루프","main":"정서_지역애착","cells":["정서_지역애착","관계_청년커뮤니티"],"desc":"- 제주 마을 기업 연계, 하루 한 개의 마을을 탐방하는 로컬 경험 프로그램","target":"만 19~39세 청년","scale":"최대 20명","when":"매월 초","tk":"monthly","tm":[],"form":["교육·체험"],"stages":["모든 청년"],"link":"https://www.jejupathfinder.org/Program5/?idx=208","amin":19,"amax":39,"reg":"all"},{"id":189,"org":"제주패스파인더","name":"먼슬리 크리에이터","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"-ai 툴 활용 디자인 교육","target":"도내 만 19~39세 청년 (미취업 청년 우선선발)","scale":"20명","when":"매월 초","tk":"monthly","tm":[],"form":["교육·체험"],"stages":["모든 청년","진로·취업 준비"],"link":"https://www.jejupathfinder.org/Program5/?idx=217","amin":19,"amax":39,"reg":"all"},{"id":190,"org":"제주패스파인더","name":"패스커넥타임","main":"관계_청년커뮤니티","cells":["관계_청년커뮤니티"],"desc":"- 패스파인더 참여자를 위한 네트워킹, 커뮤니티 프로그램","target":"패스온, 패스파이오니어 이수자, 제주패스파인더 서포터즈 등","scale":"-","when":"(2026년 기준)\n6월, 8월","tk":"months","tm":[6,8],"form":["커뮤니티"],"stages":["모든 청년"],"link":"https://www.instagram.com/p/Db14crMj81q/?igsi=MWFsdTVnZHhsdmw0eQ==","amin":null,"amax":null,"reg":"all"},{"id":191,"org":"제주패스파인더","name":"1:1 진로상담소","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 제주도 내 진로직업 컨설턴트와의 전문 상담 (대학일자리 플러스센터와의 협업)\n- 진로, 취창업, 이직에 대한 1:1 진로 상담","target":"만 15~39세 제주 청년","scale":"-","when":"상시","tk":"always","tm":[],"form":["상담·컨설팅"],"stages":["진로·취업 준비","일·생활 전환","창업 준비"],"link":"https://www.instagram.com/p/DahggndvH22/?igsi=NDRrODlzZnVsb2cy","amin":15,"amax":39,"reg":"all"},{"id":192,"org":"제주패스파인더","name":"외국어 배우기 취업역량 UP","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 영어, 일본어, 중국어, 스페인어 등 무료 기초 외국어 교육","target":"제주도 내 학생 및 청년 (만 15세~39세)","scale":"20명","when":"특정 시기","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["진로·취업 준비","모든 청년"],"link":"https://www.instagram.com/p/Dag3uOUD0E4/?igsi=MXdhdWdpM3ZyOXUxdg==","amin":15,"amax":39,"reg":"all"},{"id":193,"org":"제주패스파인더","name":"패파베이커리","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 카페 창업, 관련 직무 희망 청년 대상의 레시피 교육 등","target":"만 15~39세 제주 청년","scale":"20명 내외","when":"비정기","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["모든 청년","진로·취업 준비"],"link":"https://www.instagram.com/p/DYTYFMkD5oQ/?igsi=aDBraDM3aDN3a2dp","amin":15,"amax":39,"reg":"all"},{"id":194,"org":"제주패스파인더","name":"마이크루","main":"관계_청년커뮤니티","cells":["관계_청년커뮤니티"],"desc":"- 자기계발 커뮤니티 지원 프로그램\n- 강사비, 공간 임차료, 공간, 재료비 등 지원\n- 5인 이상으로 구성된 자기계발, 역량강화 목적의 커뮤니티 지원\n(자격증, 언어스터디, 디자인, 마케팅 등)","target":"만 15~39세 제주 청년","scale":"10개팀 내외","when":"(2026년 기준)\n4월","tk":"months","tm":[4],"form":["커뮤니티","공간"],"stages":["모든 청년","진로·취업 준비"],"link":"https://www.instagram.com/p/DXf76FuDxtR/?igsi=MWQyMGQ2ZG00ZTkycw==","amin":15,"amax":39,"reg":"all"},{"id":195,"org":"제주패스파인더","name":"제주 고립·은둔 청년 자조모임 서로돌봄서클","main":"정서_자아건강","cells":["정서_자아건강"],"desc":"- 주 1회 진행되는 자조모임 (치유워크숍, 자전거여행, 네트워킹 운동, 예술 활동 등)\n- 고립은둔 이해교육, 예약제 개별 상담 등 제공","target":"6개월 이상 고립·은둔을 경험한 청년","scale":"-","when":"상시","tk":"always","tm":[],"form":["커뮤니티","교육·체험"],"stages":["고립, 은둔 청년"],"link":"https://www.jejupathfinder.org/shop_view/?idx=156","amin":null,"amax":null,"reg":"all"},{"id":196,"org":"제주패스파인더","name":"나만의 향기레시피(조향클래스)","main":"문화_누리기","cells":["문화_누리기"],"desc":"- 조향을 배우고 나만의 향을 만드는 취미 클래스 (기수당 3회, 매주 월요일 오후)\n - 2026년 3·5·9월 기수제 운영","target":"도내 만 15~39세 청년 (미취업 청년 우선 선발)","scale":"기수당 10명","when":"기수별 모집 (2026년 3·5·9월 운영)","tk":"months","tm":[9],"form":["교육·체험"],"stages":["모든 청년","진로·취업 준비"],"link":"https://www.jejupathfinder.org/Program3/?idx=225","amin":15,"amax":39,"reg":"all"},{"id":197,"org":"제주패스파인더","name":"다정한 질문, 그림책테라피","main":"정서_자아건강","cells":["문화_누리기","정서_자아건강"],"desc":"- 그림책을 함께 읽고 질문을 나누며 마음을 돌보는 독서 치유 프로그램 (총 4회, 주말 진행)","target":"도내 만 15~39세 청년","scale":"10명","when":"프로그램별 공고","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["모든 청년"],"link":"https://www.jejupathfinder.org/Program5/?idx=219","amin":15,"amax":39,"reg":"all"},{"id":198,"org":"제주패스파인더","name":"마음-오름 정신건강 프로그램","main":"정서_자아건강","cells":["정서_자아건강"],"desc":"- 단계별 활동을 통해 일상적 마음 관리 방법을 배우는 정신건강 프로그램 (총 6회, 매주 화요일)","target":"도내 만 15~39세 청년","scale":"15명","when":"프로그램별 공고","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["모든 청년"],"link":"https://www.jejupathfinder.org/Program5/?idx=216","amin":15,"amax":39,"reg":"all"},{"id":199,"org":"제주패스파인더","name":"수어 입문 클래스","main":"문화_누리기","cells":["문화_누리기"],"desc":"- 수어 기초를 배우는 입문 교양 클래스 (기수당 6회, 매주 화·목 저녁)","target":"도내 만 15~39세 청년","scale":"기수당 15명","when":"기수별 모집 (2026년 3기수)","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["모든 청년"],"link":"https://www.jejupathfinder.org/Program5/?idx=211","amin":15,"amax":39,"reg":"all"},{"id":200,"org":"제주패스파인더","name":"사진 촬영 정규 클래스","main":"문화_생산하기","cells":["문화_생산하기"],"desc":"- 카메라 활용부터 구도와 표현, 보정 등 사진 촬영을 배우는 정규 클래스 (총 4회, 회당 4시간)","target":"도내 만 15~39세 청년","scale":"20명 (랜덤 추첨)","when":"프로그램별 공고","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["모든 청년"],"link":"https://www.jejupathfinder.org/Program5/?idx=203","amin":15,"amax":39,"reg":"all"},{"id":201,"org":"제주패스파인더","name":"스마트폰 활용 영상제작 클래스","main":"문화_생산하기","cells":["문화_생산하기"],"desc":"- 콘텐츠 기획부터 영상 촬영·편집을 배우는 제작 클래스 (총 4회, 회당 4시간)","target":"도내 만 15~39세 청년","scale":"25명","when":"프로그램별 공고","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["모든 청년"],"link":"https://www.jejupathfinder.org/Program5/?idx=191","amin":15,"amax":39,"reg":"all"},{"id":202,"org":"제주패스파인더","name":"하이핏 캠프(Hi-Fit Camp)","main":"문화_누리기","cells":["문화_누리기"],"desc":"- 근력 운동, 매트 필라테스 등 다양한 운동으로 기초체력을 기르는 운동 프로그램 (총 4회, 매주 화요일 오전)","target":"도내 만 15~39세 청년 (미취업 청년 우선 선발)","scale":"20명 (랜덤 추첨)","when":"프로그램별 공고","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["모든 청년","진로·취업 준비"],"link":"https://www.jejupathfinder.org/Program5/?idx=197","amin":15,"amax":39,"reg":"all"},{"id":203,"org":"제주패스파인더","name":"독립출판 학기제(여름·겨울학기)","main":"문화_생산하기","cells":["문화_생산하기"],"desc":"- 글쓰기부터 책 제작과 유통까지 배우는 독립출판 강좌 (학기당 8회, 매주 금요일)\n- 개인별 도서 제작 지원","target":"도내 만 15~39세 청년 (미취업 청년 우선 선발)","scale":"학기당 20명","when":"학기별 모집 (여름·겨울)","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["모든 청년","진로·취업 준비"],"link":"https://www.jejupathfinder.org/Program5/?idx=196","amin":15,"amax":39,"reg":"all"},{"id":204,"org":"제주패스파인더","name":"상·하반기 성장공유회","main":"관계_청년커뮤니티","cells":["생계_자아실현","관계_청년커뮤니티"],"desc":"- 프로그램 참여 청년들이 성장 경험을 나누는 네트워킹 행사 (2026 상반기 <Hi,path: 점프-업!>)\n- 참여 청년 기획 프로그램, 인기 원데이 프로그램, 우수사례 발표 등 \n- 상·하반기 연 2회 운영","target":"도내 만 15~39세 청년","scale":"프로그램별 상이","when":"상·하반기 각 1회","tk":"unknown","tm":[],"form":["교육·체험","커뮤니티"],"stages":["모든 청년","진로·취업 준비"],"link":"https://www.jejupathfinder.org/Program5/?idx=194","amin":15,"amax":39,"reg":"all"},{"id":205,"org":"제주패스파인더","name":"바리스타 자격증 과정(핸드드립·2급)","main":"문화_누리기","cells":["생계_자아실현","문화_누리기"],"desc":"- 핸드드립·바리스타 2급 자격 취득 과정 (약 1개월, 과정별 일정 및 진행 장소 상이)","target":"도내 만 15~39세 청년","scale":"과정당 15명","when":"과정(기수)별 모집","tk":"unknown","tm":[],"form":["커뮤니티"],"stages":["모든 청년","진로·취업 준비"],"link":"https://www.jejupathfinder.org/Program5/?idx=187","amin":15,"amax":39,"reg":"all"},{"id":206,"org":"제주패스파인더","name":"퍼스널 이미지 메이킹 '파인뷰(FIND VIEW)'","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 퍼스널 컬러, 체형 진단을 중심으로 취업, 대인관계에 있어서의 자기 이미지를 찾고 표현하는 이미지 메이킹 과정 (총 4회, 매주 월·화 오후)","target":"도내 만 15~39세 청년","scale":"기수당 25명","when":"기수별 모집 (2026년 3기수)","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["모든 청년","진로·취업 준비"],"link":"https://www.jejupathfinder.org/Program5/?idx=184","amin":15,"amax":39,"reg":"all"},{"id":207,"org":"제주패스파인더","name":"플로리스트 직무 체험형 프로그램(핸드타이드 과정)","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 기초 원예 이론, 꽃다발 제작 및 포장 실습, 플리마켓 판매 경험 등 제공\n- 핸드타이드 등 플로리스트 직무를 체험하는 과정 (총 4회, 회차별 요일·시간 상이)","target":"도내 플로리스트 분야 취창업 및 직무 경험을 희망하는 만 15~39세 청년","scale":"기수당 10명","when":"기수별 모집 (2026년 3기수)","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["진로·취업 준비","창업 준비"],"link":"https://www.jejupathfinder.org/Program5/?idx=182","amin":15,"amax":39,"reg":"all"},{"id":208,"org":"제주패스파인더","name":"문학치료 「나를 위한 작은 문장들」","main":"정서_자아건강","cells":["정서_자아건강","문화_누리기"],"desc":"- 문학 작품과 글쓰기로 마음을 돌보는 문학치료 프로그램 (총 4회, 매주 수요일 저녁)","target":"도내 만 15~39세 청년","scale":"15명","when":"프로그램별 공고","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["모든 청년"],"link":"https://www.jejupathfinder.org/Program5/?idx=170","amin":15,"amax":39,"reg":"all"},{"id":209,"org":"제주패스파인더","name":"이러닝: 쉽게 배우는 러닝 클래스","main":"문화_누리기","cells":["문화_누리기"],"desc":"- 달리기 기초를 배우는 러닝 클래스 (기수당 6회, 기초/중급반 운영)","target":"도내 만 15~39세 청년","scale":"반별 25명 (랜덤 추첨)","when":"기수별 모집 (2026년 2기수)","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["모든 청년"],"link":"https://www.jejupathfinder.org/Program5/?idx=169","amin":15,"amax":39,"reg":"all"},{"id":210,"org":"제주패스파인더","name":"청년 예비 부모 교육 '부모는 처음이라'","main":"정서_자아건강","cells":["정서_자아건강"],"desc":"- 생애주기별 자녀 발달 특성과 양육 방법 교육\n- 청년 예비 부모를 위한 출산·육아 준비 교육 (총 4회, 주말 진행)","target":"도내 만 15~39세 청년 (예비 부모)","scale":"20명","when":"프로그램별 공고","tk":"unknown","tm":[],"form":["교육·체험","커뮤니티"],"stages":["결혼,출산기"],"link":"https://www.jejupathfinder.org/Program5/?idx=168","amin":15,"amax":39,"reg":"all"},{"id":211,"org":"제주패스파인더","name":"바른 자세, 요가","main":"문화_누리기","cells":["문화_누리기"],"desc":"- 바른 자세를 익히는 요가 클래스 (총 6회, 매주 일요일 아침)","target":"도내 만 15~39세 청년","scale":"20명 (랜덤 추첨)","when":"프로그램별 공고","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["모든 청년"],"link":"https://www.jejupathfinder.org/Program5/?idx=164","amin":15,"amax":39,"reg":"all"},{"id":212,"org":"제주패스파인더","name":"PATHMADE : 도예","main":"문화_누리기","cells":["문화_누리기"],"desc":"- 도예를 배워 일상에서 쓰는 그릇을 직접 만들어 보는 공예 클래스 (총 8회, 매주 화·목 오후)","target":"도내 만 15~39세 청년","scale":"10명 (랜덤 추첨)","when":"프로그램별 공고","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["모든 청년"],"link":"https://www.jejupathfinder.org/Program5/?idx=147","amin":15,"amax":39,"reg":"all"},{"id":213,"org":"제주패스파인더","name":"마음을 듣는 첫걸음(입문형)","main":"정서_자아건강","cells":["정서_자아건강"],"desc":"- 마음을 들여다보고, 타인과 소통하는 법을 배우는 마음건강 입문 프로그램 (총 4회, 매주 목요일 저녁)","target":"도내 만 15~39세 청년","scale":"25명","when":"프로그램별 공고","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["모든 청년"],"link":"https://www.jejupathfinder.org/Program5/?idx=126","amin":15,"amax":39,"reg":"all"},{"id":214,"org":"제주패스파인더","name":"2026 청년창업 정부지원사업 통합 설명회","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 정부 청년창업 지원사업을 한자리에서 안내하는 통합 설명회 \n- 지원사업 1:1 컨설팅 제공","target":"도내 만 15~39세 청년","scale":"30명","when":"1월 말~2월 초 모집","tk":"months","tm":[1,2],"form":["교육·체험","상담·컨설팅"],"stages":["창업 준비"],"link":"https://www.jejupathfinder.org/Program5/?idx=127","amin":15,"amax":39,"reg":"all"},{"id":215,"org":"제주패스파인더","name":"2026 청년창업 정부지원사업 사업계획서 한번에 뿌시기","main":"생계_자아실현","cells":["생계_자아실현"],"desc":"- 정부지원사업 사업계획서 작성 실전 특강","target":"도내 만 15~39세 청년","scale":"40명","when":"1월 말~2월 초 모집","tk":"months","tm":[1,2],"form":["교육·체험"],"stages":["창업 준비"],"link":"https://www.jejupathfinder.org/Program5/?idx=128","amin":15,"amax":39,"reg":"all"},{"id":216,"org":"제주패스파인더","name":"비자숲 리트릿","main":"정서_자아건강","cells":["정서_자아건강","문화_누리기"],"desc":"- 검사, 체험, 테라피, 산책 등 다양한 방식으로 비자림에서 쉼과 회복의 시간을 보내는 1박 2일 숲 리트릿","target":"도내 만 15~39세 청년","scale":"기수당 20명 (랜덤 추첨)","when":"기수별 모집 (2026년 2기수)","tk":"unknown","tm":[],"form":["교육·체험"],"stages":["모든 청년"],"link":"https://www.jejupathfinder.org/Program5/?idx=163","amin":15,"amax":39,"reg":"all"},{"id":217,"org":"제주평생교육장학진흥원","name":"평생교육이용권 지원사업","main":"생계_자아실현","cells":["생계_자아실현","문화_누리기"],"desc":"평생교육 강좌 수강료 및 해당 광자 수강에 필요한 교재비로 사용할 수 있는 이용권 지원 (1인당 최대 35만원)","target":"제주 주소지를 둔 만 19~39세 도민","scale":"289명 내외","when":"(2026년 기준) 4월","tk":"months","tm":[4],"form":["지원금","교육·체험"],"stages":["모든 청년"],"link":"https://www.lllcard.kr/reg/jeju","amin":19,"amax":39,"reg":"all"},{"id":218,"org":"제주한라대학교 취창업지원센터","name":"면접 정장 대여 프로그램","main":"생계_생존","cells":["생계_생존"],"desc":"- 면접 정장 지원","target":"제주한라대학교 재학생 및 졸업생","scale":"상시 운영","when":"상시","tk":"always","tm":[],"form":["물품"],"stages":["진로·취업 준비"],"link":"https://jobs.chu.ac.kr/sub05/sub01.php","amin":null,"amax":null,"reg":"all"},{"id":219,"org":"중소벤처기업진흥공단 제주지역본부 (운영사 : 와이앤아처)","name":"청년창업사관학교 - 기본과정","main":"생계_자아실현","cells":["생계_자아실현","생계_생존"],"desc":"- 사업화자금(평균 0.7억 내외, 최대 1억원)\n- 창업프로그램(창업공간, 교육 및 코칭, 기술지원 등)\n- 정책 후속연계(수출, 마케팅, 기술지원 등)","target":"만 39세 이하, 창업 후 3년 이내 청년창업자(대표자 기준)","scale":"제주 투자형 22명 - 전국(소재지 무관)\n전남(나주) 지역특화형 32명 - 광주,전남,전북,제주","when":"1월","tk":"months","tm":[1],"form":["지원금","교육·체험","상담·컨설팅"],"stages":["창업·사업 운영"],"link":"https://www.k-startup.go.kr/web/contents/bizpbanc-deadline.do?schM=view&pbancSn=176107&pbancEndYn=Y","amin":null,"amax":39,"reg":"all"},{"id":220,"org":"창업진흥원","name":"예비창업패키지","main":"생계_자아실현","cells":["생계_생존","생계_자아실현"],"desc":"- 사업화자금(평균 0.4억)\n- 창업프로그램(BM수립, 아이템 구현, 투자유치 등)","target":"- 혁신적인 기술과 사업모델을 보유한 예비창업자","scale":"총 300명 내외","when":"3월","tk":"months","tm":[3],"form":["지원금","교육·체험","상담·컨설팅"],"stages":["창업 준비"],"link":"https://www.k-startup.go.kr/web/contents/bizpbanc-deadline.do?schM=view&pbancSn=176458","amin":null,"amax":null,"reg":"all"},{"id":221,"org":"창업진흥원","name":"초기창업패키지","main":"생계_자아실현","cells":["생계_자아실현","생계_생존"],"desc":"- 사업화자금(평균 0.5억 내외, 최대 1억원)\n- 창업프로그램(시장진입을 위한 네트워킹, 투자교육 및 유치, 멘토링 등 맞춤형 프로그램 운영)","target":"창업 후 3년 이내 초기창업기업","scale":"19개사 내외","when":"비정기","tk":"unknown","tm":[],"form":["교육·체험","상담·컨설팅","지원금"],"stages":["창업·사업 운영"],"link":"https://changup.jejunu.ac.kr/changup/community/notice.htm?page=5&act=view&seq=269241","amin":null,"amax":null,"reg":"all"},{"id":222,"org":"창업진흥원","name":"모두의 창업 (구. 신사업창업사관학교)","main":"생계_자아실현","cells":["생계_자아실현","생계_생존"],"desc":"- 창업활동지원금 200만원\n- 창업 초기 멘토링 등 창업역량강화 프로그램","target":"*일반/기술(4,000명)\n- 예비창업자\n- 창업 7년 이내이면서 이종창업(한국표준산업분류 세세분류 코드 기준)을 희망하는 자\n\n*로컬(4,000명)\n- 예비창업자","scale":"1기(5,000명)선발\n※ 제주지역 - 135명선발","when":"(2026년 기준)\n1차: 3월~5월\n2차: 8~9월","tk":"months","tm":[3,4,5,8,9],"form":["지원금","교육·체험","상담·컨설팅"],"stages":["창업 준비"],"link":"https://www.modoo.or.kr/","amin":null,"amax":null,"reg":"all"},{"id":223,"org":"탐라미술인협회","name":"청년사삼(4.3)정감","main":"관계_지역참여","cells":["관계_지역참여","문화_누리기"],"desc":"-4·3 관련 조사-순례-워크숍-전시로 이어지는 평화 주제 청년 문화·예술·학술 활동\n- 프로젝트/창작 실현 및 발표 지원, 전시 공간 및 관련 기자재 사용, 4.3미술제 공식 프로그램 워크숍 참여 지원 등","target":"제주도 출신 또는 제주에서 활동하는 35세 이하 청년 예술가 및 연구자","scale":"9명 내외","when":"(2026년 기준)\n1월","tk":"months","tm":[1],"form":["교육·체험","커뮤니티"],"stages":["모든 청년"],"link":"https://www.jejusori.net/news/articleView.html?idxno=443094","amin":null,"amax":35,"reg":"all"},{"id":224,"org":"팹랩제주","name":"탐나는 디지털 창작소(팹랩제주)","main":"공간_일터","cells":["생계_자아실현","공간_일터"],"desc":"창작공간 제공, 3D프린터 등 디지털 장비 교육, 시제품 제작 사업화 지원","target":"메이커문화/diy에 관심있는 누구나","scale":"프로그램별 상이","when":"비정기","tk":"unknown","tm":[],"form":["교육·체험","공간","커뮤니티"],"stages":["모든 청년"],"link":"https://fablabjeju.org/","amin":null,"amax":null,"reg":"all"},{"id":225,"org":"팹랩제주","name":"메이커얼라이언스","main":"관계_청년커뮤니티","cells":["생계_자아실현","관계_청년커뮤니티"],"desc":"매월 제주에 거주하는 메이커들이 모여, 메이커 커뮤니티의 활성화를 위한 방안을 모색하고 실천","target":"메이커문화/diy에 관심있는 누구나","scale":"00명","when":"월별","tk":"monthly","tm":[],"form":["공간","커뮤니티"],"stages":["모든 청년"],"link":"https://www.instagram.com/p/Db400X0EdJU/","amin":null,"amax":null,"reg":"all"},{"id":226,"org":"LH한국토지주택공사, 제주특별자치도개발공사, 제주국제자유도시개발센터","name":"청년형 매입임대 주택","main":"공간_주거","cells":["공간_주거","생계_생존"],"desc":"- 시중 임대료의 30~50% 수준으로 저렴한 임대조건의 주택을 공급 ※단, 입주자격 우선순위에 따라 선정\n- 대학가 주변 등 교통이 편리한 지역의 사용승인 15년 이내의 원룸, 오피스텔 등 주택을 매입하여 공급","target":"무주택자 미혼 청년(19세 이상 39세 이하)","scale":"공고별 모집","when":"공고별 상이","tk":"unknown","tm":[],"form":["공간"],"stages":["이주·정착","모든 청년"],"link":"https://www.jejuhwc.co.kr/housing/housing/youth.htm","amin":19,"amax":39,"reg":"all"},{"id":227,"org":"LH한국토지주택공사, 제주특별자치도개발공사, 제주국제자유도시개발센터","name":"신혼부부형 매입임대 주택","main":"공간_주거","cells":["공간_주거","생계_생존"],"desc":"- 시중 임대료보다 20~50% 저렴한 임대조건의 주택을 공급 ※단, 입주자격 우선순위에 따라 선정\n- (예비)신혼부부에 방2개 이상의 다가구주택, 다세대주택, 연립주택, 아파트 등 주택을 매입하여 공급","target":"무주택세대구성원으로서 해당 세대의 월평균 소득이 전년도 도시근로자 가구당 월평균 소득의 70~100%(배우자가 소득이 있는 경우에는 90~120%) 이하인 신혼부부, 예비 신혼부부 및 한부모가족(6세 이하 자녀로 한정)","scale":"공고별 모집","when":"공고별 상이","tk":"unknown","tm":[],"form":["공간"],"stages":["결혼,출산기","이주·정착"],"link":"https://www.jejuhwc.co.kr/housing/housing/newlyweds.htm","amin":null,"amax":null,"reg":"all"}]/*DATA_END*/;
+
+const SB_URL = 'https://hncuvjrghniwihhfpata.supabase.co';
+const SB_KEY = 'sb_publishable_JcCV2PIrJV59VK9ihPCmXg_J0RmJ9AB';
+const params = new URLSearchParams(location.search);
+const DEMO = params.get('demo') === '1';
+
+/* 10개 세부 영역 (FGI 카드 문구) */
+const CELLS = [
+  {k:'생계_생존',         f:'생계', t:'먹고사는 문제가 풀리는 것'},
+  {k:'생계_자아실현',     f:'생계', t:'하고 싶은 일을 하며 크는 것'},
+  {k:'관계_청년커뮤니티', f:'관계', t:'기댈 또래가 있는 것'},
+  {k:'관계_지역참여',     f:'관계', t:'동네 일에 끼어 목소리를 낼 통로가 있는 것'},
+  {k:'정서_자아건강',     f:'정서', t:'마음이 버티는 힘'},
+  {k:'정서_지역애착',     f:'정서', t:'이 동네에 마음이 붙고 정드는 것'},
+  {k:'공간_주거',         f:'공간', t:'살 곳과 병원·안전'},
+  {k:'공간_일터',         f:'공간', t:'일하고 활동할 자리'},
+  {k:'문화_누리기',       f:'문화', t:'놀고 누리는 삶'},
+  {k:'문화_생산하기',     f:'문화', t:'만들고 발표하는 활동'},
+];
+const CELL = Object.fromEntries(CELLS.map(c => [c.k, c]));
+const FIELDS = {생계:'var(--f-생계)', 관계:'var(--f-관계)', 정서:'var(--f-정서)', 공간:'var(--f-공간)', 문화:'var(--f-문화)'};
+
+/* 영역 질문. 선택지마다 세부 영역(c)이 있고, st가 있으면 추천 순위에 그 상황을 반영한다 */
+const DIMS = [
+  {key:'생계', emoji:'🌾', title:"요즘 '먹고사는 일'에서\n나와 가까운 이야기는?", opts:[
+    {id:'g1', c:'생계_생존',     t:'당장 생활비가 빠듯해요', s:'수당·지원금이 필요해요'},
+    {id:'g2', c:'생계_생존',     t:'일자리를 찾고 있는데 잘 안 돼요', s:'취업 준비, 인턴, 일 경험', st:'진로·취업 준비'},
+    {id:'g3', c:'생계_자아실현', t:'하고 싶은 일을 배우고 키우고 싶어요', s:'교육, 역량 쌓기, 도전'},
+    {id:'g4', c:'생계_자아실현', t:'창업하거나 내 일을 시작하고 싶어요', s:'아이디어 단계부터 운영 중까지', st:'창업 준비'},
+    {id:'g5', c:'생계_자아실현', t:'일은 있지만 더 크고 싶어요', s:'커리어, 직무 성장', st:'재직'},
+  ], none:'먹고사는 일은 지금 괜찮아요'},
+  {key:'관계', emoji:'🧡', title:'사람과의 연결,\n지금 나에게 필요한 건?', opts:[
+    {id:'r1', c:'관계_청년커뮤니티', t:'고민을 나눌 또래가 가까이 없어요', s:'기댈 수 있는 사람들'},
+    {id:'r2', c:'관계_청년커뮤니티', t:'취미나 관심사로 어울릴 모임을 찾고 싶어요', s:'동아리, 소모임'},
+    {id:'r3', c:'관계_지역참여',     t:'동네나 지역 일에 내 의견을 낼 곳이 없어요', s:'청년 정책 참여, 위원회'},
+    {id:'r4', c:'관계_지역참여',     t:'이 지역에서 주민으로 인정받는 느낌이 들지 않아요', s:'지역에서 내 자리'},
+  ], none:'사람과의 연결은 지금 충분해요'},
+  {key:'정서', emoji:'🌤️', title:'요즘 마음의 날씨는\n어때요?', opts:[
+    {id:'e1', c:'정서_자아건강', t:'지치고 번아웃이 온 것 같아요', s:'쉼과 회복이 먼저예요'},
+    {id:'e2', c:'정서_자아건강', t:'마음이 힘들 때 이야기할 곳이 필요해요', s:'상담, 마음건강'},
+    {id:'e3', c:'정서_자아건강', t:'앞으로 뭘 해야 할지 막막해요', s:'진로 고민, 방향 찾기'},
+    {id:'e4', c:'정서_지역애착', t:'제주에 정이 잘 붙지 않아요', s:'동네에 스며들고 싶어요'},
+    {id:'e5', c:'정서_지역애착', t:'제주에 온 지 얼마 안 돼 아직 낯설어요', s:'정착 안내, 지역 알기', st:'이주·정착'},
+  ], none:'마음은 지금 괜찮아요'},
+  {key:'공간', emoji:'🏠', title:"나에게 필요한 '자리'는\n어떤 곳인가요?", opts:[
+    {id:'p1', c:'공간_주거', t:'집 구하기나 월세가 부담돼요', s:'주거비, 임대주택, 이사'},
+    {id:'p2', c:'공간_주거', t:'병원이나 생활 편의시설이 아쉬워요', s:'아플 때 갈 곳, 안전'},
+    {id:'p3', c:'공간_일터', t:'일하거나 작업할 공간이 필요해요', s:'공유오피스, 창업 공간'},
+    {id:'p4', c:'공간_일터', t:'모임이나 활동을 할 장소가 마땅치 않아요', s:'회의실, 활동 공간'},
+  ], none:'공간은 지금 충분해요'},
+  {key:'문화', emoji:'🎨', title:'놀고, 즐기고, 만드는 일은\n어때요?', opts:[
+    {id:'c1', c:'문화_누리기',   t:'제주에서 즐길 문화·여가가 부족해요', s:'공연, 전시, 취미'},
+    {id:'c2', c:'문화_누리기',   t:'문화생활에 쓸 돈이 부담돼요', s:'문화비 지원'},
+    {id:'c3', c:'문화_생산하기', t:'내가 만든 것을 발표하거나 펼칠 기회가 없어요', s:'발표, 전시, 공연 기회'},
+    {id:'c4', c:'문화_생산하기', t:'창작 활동을 이어갈 지원이 필요해요', s:'창작 지원금, 제작'},
+  ], none:'놀고 만드는 일은 지금 괜찮아요'},
+];
+const OPT = Object.fromEntries(DIMS.flatMap(d => d.opts.map(o => [o.id, {...o, dim: d.key}])));
+
+const STAGES = [
+  ['진로·취업 준비', '진로나 취업을 준비하고 있어요'],
+  ['재직', '회사나 기관에서 일하고 있어요'],
+  ['창업 준비', '창업을 준비하고 있어요'],
+  ['창업·사업 운영', '내 사업을 운영하고 있어요'],
+  ['결혼,출산기', '결혼이나 출산·육아를 앞두고 있거나 하고 있어요'],
+  ['일·생활 전환', '일이나 생활에 큰 변화를 겪는 중이에요'],
+  ['이주·정착', '제주에 와서 자리를 잡는 중이에요'],
+  ['자립준비청년', '시설 보호가 끝나 혼자 서는 중이에요'],
+  ['고립, 은둔 청년', '한동안 바깥 활동 없이 지내고 있어요'],
+];
+const STAGE_LABEL = Object.fromEntries(STAGES);
+const REGION_LABEL = {'jejusi-dong':'제주시 동 지역', 'jejusi-eup':'제주시 읍·면', 'sgp-dong':'서귀포시 동 지역', 'sgp-eup':'서귀포시 읍·면', outside:'제주 밖'};
+const MARRY = '결혼,출산기';
+const SPECIAL = [MARRY, '자립준비청년', '고립, 은둔 청년'];
+const INFO = ['내가 받을 수 있는 건지','뭘, 얼마나 주는지','언제까지 신청하는지','어떻게 신청하는지','어떻게 뽑는지',
+  '언제 알려주는지','받은 다음에 해야 하는 일','궁금할 때 물어볼 곳','다른 지원과 같이 받을 수 있는지','먼저 받아본 사람들의 이야기'];
+const CHANNELS = ['인스타그램','잇지제주','청년센터 문자·알림톡','기관 홈페이지','뉴스','게시판·전단','친구나 지인','찾아본 적 없어요','기타'];
+const WHY = ['내가 받을 수 있는지 알 수 없었어요','알았을 때는 이미 마감이었어요','준비할 서류나 절차가 많았어요',
+  '안내문이 무슨 말인지 어려웠어요','받는 것에 비해 수고가 컸어요','뽑힐 것 같지 않았어요','기타'];
+const SCALES = [
+  ['a', '제주의 공공기관(도청, 청년센터 같은 곳)에 대한 나의 관심', '전혀 없음', '매우 많음'],
+  ['b', '지원이 필요할 때 공공기관이 먼저 떠오르는 정도', '전혀 안 떠오름', '가장 먼저 떠오름'],
+  ['c', '청년정책이 지금 내 삶에 도움이 되는 정도', '전혀 안 됨', '매우 도움 됨'],
+];
+const FEW = 10;   // 사업이 이보다 적은 칸은 '적은 칸'
+const PAGE = 3;   // 칸마다 처음 보여줄 사업 수
+
+/* ---------- 상태 ---------- */
+let S;
+function fresh(){
+  return {
+    sid: crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16); }),
+    src: (params.get('src') || '').slice(0, 60),
+    consent: false,
+    age: null, region: null, rel: null, years: null, stages: [], exp: null,
+    ans: Object.fromEntries(DIMS.map(d => [d.key, []])), none: {},
+    aware: {}, gap: {}, calOff: [], shown: {}, page: {},
+    more: {keep: '', shake: '', rank: [], hard: '', ch: [], skip: null, why: [], whyEtc: '', sc: {}, line: ''},
+    stage: null, saveErr: false, t: {start: new Date().toISOString()},
+  };
+}
+S = fresh();
+
+/* ---------- 유틸 ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function josa(word, withB, noB){
+  const c = word.charCodeAt(word.length - 1);
+  if (c < 0xAC00 || c > 0xD7A3) return withB;
+  return ((c - 0xAC00) % 28) ? withB : noB;
+}
+function ageBand(a){ return a == null ? null : a < 19 ? '~18' : a < 25 ? '19-24' : a < 30 ? '25-29' : a < 35 ? '30-34' : a < 40 ? '35-39' : '40~'; }
+function toggleIn(arr, v){ const i = arr.indexOf(v); i < 0 ? arr.push(v) : arr.splice(i, 1); }
+
+/* ---------- 영역 화면 만들기 ---------- */
+const ORDER = ['core', ...DIMS.map(d => d.key)];
+$('#dim-screens').innerHTML = DIMS.map((d, i) => `
+  <section class="screen" id="s-${d.key}">
+    <div class="progress" data-step="${i + 1}"></div>
+    <div class="q-head">
+      <span class="q-cat" style="background:${FIELDS[d.key]}"><span class="dot"></span>${d.emoji} ${d.key}</span>
+      <h2 class="q-title">${esc(d.title).replace(/\n/g, '<br>')}</h2>
+      <p class="q-note">해당하는 것을 모두 골라주세요.</p>
+    </div>
+    <div class="opts" data-dim="${d.key}">
+      ${d.opts.map(o => `<button class="opt" data-id="${o.id}">${esc(o.t)}<small>${esc(o.s)}</small></button>`).join('')}
+      <button class="opt none-opt" data-id="none">${esc(d.none)}</button>
+    </div>
+    <div class="nav-row">
+      <button class="text-link" data-go="${ORDER[i]}">← 이전</button>
+      <div class="right"><button class="btn" id="next-${d.key}" disabled data-go="${i < DIMS.length - 1 ? DIMS[i + 1].key : 'result'}">${i < DIMS.length - 1 ? '다음' : '결과 보기'}</button></div>
+    </div>
+  </section>`).join('');
+
+const STEPS = ORDER.length;
+document.querySelectorAll('.progress').forEach(p => {
+  const now = +p.dataset.step;
+  let h = `<span class="label">${now + 1} / ${STEPS}</span><span class="bar"></span>`;
+  for (let i = 0; i < STEPS; i++) h += `<span class="dot ${i < now ? 'done' : i === now ? 'now' : ''}"></span>`;
+  p.innerHTML = h;
+});
+
+$('#dim-screens').addEventListener('click', e => {
+  const b = e.target.closest('.opt'); if (!b) return;
+  const box = b.parentElement, dim = box.dataset.dim, id = b.dataset.id;
+  if (id === 'none') {
+    const on = !S.none[dim];
+    S.none[dim] = on; S.ans[dim] = [];
+    box.querySelectorAll('.opt').forEach(o => o.classList.toggle('selected', on && o === b));
+  } else {
+    S.none[dim] = false;
+    box.querySelector('[data-id="none"]').classList.remove('selected');
+    toggleIn(S.ans[dim], id);
+    b.classList.toggle('selected', S.ans[dim].includes(id));
+  }
+  $('#next-' + dim).disabled = !(S.none[dim] || S.ans[dim].length);
+});
+
+/* ---------- 화면 이동 ---------- */
+function go(id){
+  if (id === 'result') { S.t.result = S.t.result || new Date().toISOString(); renderResult(); save('result'); }
+  if (id === 'more') paintRank();
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  $('#s-' + id).classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+document.addEventListener('click', e => {
+  const g = e.target.closest('[data-go]');
+  if (g && !g.disabled) go(g.dataset.go);
+});
+
+/* ---------- 시작 ---------- */
+$('#consent').addEventListener('change', e => { $('#btn-start').disabled = !e.target.checked; });
+$('#btn-start').addEventListener('click', () => { S.consent = true; go('core'); });
+$('#btn-nosave').addEventListener('click', () => { S.consent = false; go('core'); });
+
+/* ---------- 칩 ---------- */
+function fillChips(group, items){
+  document.querySelector(`[data-group="${group}"]`).innerHTML = items.map(([v, t]) => `<button class="chip" data-v="${esc(v)}">${esc(t)}</button>`).join('');
+}
+fillChips('stages', STAGES);
+fillChips('channels', CHANNELS.map(c => [c, c]));
+fillChips('why', WHY.map(c => [c, c]));
+function chipValue(group, v){
+  if (group === 'rel') { S.rel = v; const y = v === 'uturn' || v === 'migrant'; $('#blk-years').classList.toggle('is-hidden', !y); if (!y) S.years = null; }
+  else if (group === 'years') S.years = v;
+  else if (group === 'region') S.region = v;
+  else if (group === 'exp') S.exp = v;
+  else if (group === 'stages') toggleIn(S.stages, v);
+  else if (group === 'channels') toggleIn(S.more.ch, v);
+  else if (group === 'why') { toggleIn(S.more.why, v); $('#m-why-etc').classList.toggle('is-hidden', !S.more.why.includes('기타')); }
+  else if (group === 'skip') { S.more.skip = v; $('#blk-why').classList.toggle('is-hidden', v !== 'yes'); }
+}
+document.querySelectorAll('[data-group]').forEach(box => {
+  box.addEventListener('click', e => {
+    const b = e.target.closest('.chip'); if (!b) return;
+    if (box.dataset.multi === '1') b.classList.toggle('selected');
+    else { box.querySelectorAll('.chip').forEach(c => c.classList.remove('selected')); b.classList.add('selected'); }
+    chipValue(box.dataset.group, b.dataset.v);
+    checkCore();
+  });
+});
+$('#age').addEventListener('input', e => { const n = parseInt(e.target.value, 10); S.age = isNaN(n) ? null : n; checkCore(); });
+function checkCore(){
+  const yearsOk = !(S.rel === 'uturn' || S.rel === 'migrant') || S.years;
+  $('#next-core').disabled = !(S.age >= 13 && S.age <= 49 && S.region && S.rel && yearsOk && S.stages.length && S.exp);
+}
+$('#next-core').addEventListener('click', () => go(DIMS[0].key));
+
+/* ---------- 진단 ---------- */
+function needs(){
+  const m = {};
+  DIMS.forEach(d => S.ans[d.key].forEach(id => { const c = OPT[id].c; m[c] = (m[c] || 0) + 1; }));
+  return m;   // 세부 영역별 고른 고민 수
+}
+function needOrder(){
+  const m = needs();
+  return CELLS.map(c => c.k).filter(k => m[k]).sort((a, b) => m[b] - m[a]);
+}
+function effStages(){
+  const s = new Set(S.stages);
+  DIMS.forEach(d => S.ans[d.key].forEach(id => OPT[id].st && s.add(OPT[id].st)));
+  return s;
+}
+
+/* ---------- 추천 ---------- */
+function eligible(p){
+  if (S.age != null) {
+    if (p.amin && S.age < p.amin) return false;
+    if (p.amax && S.age > p.amax) return false;
+  }
+  const inJejusi = S.region && S.region.startsWith('jejusi');
+  const inSgp = S.region && S.region.startsWith('sgp');
+  if (inJejusi && p.reg === 'seogwipo') return false;
+  if (inSgp && p.reg === 'jejusi') return false;
+  const own = p.stages.filter(s => s !== '모든 청년');
+  const matched = own.some(s => S.stages.includes(s));
+  if (p.stages.includes(MARRY)) return matched;
+  if (p.stages.length && p.stages.every(s => SPECIAL.includes(s))) return matched;
+  return true;
+}
+function score(p, k, st){
+  let s = p.main === k ? 3 : 1;
+  const own = p.stages.filter(x => x !== '모든 청년' && x !== MARRY);
+  // 결혼·출산기 사업은 해당 상황을 고른 사람에게만 보이고, 청년 본인 대상 사업보다 앞서지 않게 둔다
+  if (own.some(x => st.has(x)) && !p.stages.includes(MARRY)) s += 2;
+  else if (p.stages.includes('모든 청년')) s += 0.5;
+  else if (p.stages.includes(MARRY) && st.has(MARRY)) s += 0.3;
+  if (p.tk === 'always') s += 0.2;
+  return s;
+}
+function recsFor(k){
+  const st = effStages();
+  return DATA.filter(p => p.cells.includes(k) && eligible(p))
+    .map(p => ({p, s: score(p, k, st)}))
+    .sort((a, b) => b.s - a.s || a.p.id - b.p.id)
+    .map(x => x.p);
+}
+function jejuCount(k){
+  const main = DATA.filter(p => p.main === k);
+  return {base: main.filter(p => !p.stages.includes(MARRY)).length, marry: main.filter(p => p.stages.includes(MARRY)).length};
+}
+const MAXCOUNT = Math.max(1, ...CELLS.map(c => jejuCount(c.k).base));
+
+/* ---------- 결과 ---------- */
+function renderResult(){
+  const m = needs(), order = needOrder();
+
+  $('#result-title').textContent = order.length ? '지금 나에게 필요한 영역' : '지금 나의 상태';
+  $('#result-sub').innerHTML = order.length
+    ? '고른 고민을 다섯 영역으로 나눠 보았어요.<br>고민이 많은 영역부터 제주의 지원사업을 모았어요.'
+    : '다섯 영역 모두 괜찮다고 답했어요.<br>아래에서 제주의 지원 지도를 둘러볼 수 있어요.';
+
+  $('#dim-bars').innerHTML = DIMS.map(d => {
+    const n = S.ans[d.key].length, total = d.opts.length;
+    return `<div class="dim-bar"><span class="nm">${d.emoji}${d.key}</span>
+      <div class="track"><div class="fill" style="width:0;background-color:${FIELDS[d.key]};background-image:radial-gradient(circle,rgba(255,253,244,.5) 25%,transparent 30%)" data-w="${Math.round(n / total * 100)}"></div></div>
+      <span class="val">${n ? `고민 ${n}개` : '괜찮아요'}</span></div>`;
+  }).join('');
+  setTimeout(() => document.querySelectorAll('#dim-bars .fill').forEach(f => f.style.width = f.dataset.w + '%'), 150);
+
+  $('#need-list').innerHTML = order.map(k => {
+    const c = CELL[k];
+    const said = DIMS.flatMap(d => S.ans[d.key]).filter(id => OPT[id].c === k).map(id => OPT[id].t);
+    return `<div class="need" style="border-left-color:${FIELDS[c.f]}"><b>${esc(c.t)}</b><span>${said.map(esc).join(' · ')}</span></div>`;
+  }).join('') || '<p class="ok-note">고른 고민이 없어요.</p>';
+
+  $('#profile-tags').innerHTML = [`만 ${S.age}세`, REGION_LABEL[S.region], ...S.stages.map(s => STAGE_LABEL[s])]
+    .filter(Boolean).map(t => `<span class="ptag">${esc(t)}</span>`).join('');
+
+  const showMarry = S.stages.includes(MARRY);
+  $('#map-jeju').innerHTML = ['생계', '관계', '정서', '공간', '문화'].map(f =>
+    `<div class="fld" style="background:${FIELDS[f]}">${f}</div>` + CELLS.filter(c => c.f === f).map(c => {
+      const n = jejuCount(c.k), few = n.base < FEW, mine = m[c.k];
+      const extra = showMarry && n.marry ? `<span>+ 결혼·출산·육아 ${n.marry}</span>` : '';
+      return `<div class="mcell ${few ? 'few' : ''} ${mine ? 'is-need' : ''}">${mine ? '<span class="mine">내 고민</span>' : ''}
+        <span class="nm">${esc(c.t)}</span>
+        <div class="cnt"><b>${n.base}</b><span>개</span>${extra}</div>
+        <div class="barline"><i style="width:${Math.max(4, n.base / MAXCOUNT * 100)}%"></i></div></div>`;
+    }).join('')).join('');
+
+  const overlap = order.filter(k => jejuCount(k).base < FEW);
+  $('#jeju-callout').innerHTML = overlap.length ? `<div class="callout">${overlap.map(k => {
+    const t = CELL[k].t;
+    return `내가 고민을 고른 '${esc(t)}'${josa(t, '은', '는')} 제주에 지원사업이 ${jejuCount(k).base}개뿐인 칸이에요.`;
+  }).join('<br>')}</div>` : '';
+  const marryTotal = DATA.filter(p => p.stages.includes(MARRY)).length;
+  $('#jeju-foot').textContent = `사업마다 주된 칸 하나로 셌어요. 결혼·출산·육아 지원 ${marryTotal}개는 따로 셌고, ‘요즘 나는’에서 결혼이나 출산·육아를 고르면 함께 보여요.`;
+
+  renderRecs();
+  renderCal();
+  document.querySelectorAll('.data-date-txt').forEach(el => el.textContent = $('#data-date').textContent);
+}
+
+function whenLabel(p){
+  if (p.tk === 'always') return '연중 상시';
+  if (p.tk === 'monthly') return '매월 모집';
+  const raw = (p.when || '').replace(/\(?20\d\d년\s*기준\)?/g, ' ').replace(/\s+/g, ' ').trim();
+  if (p.tk === 'months') {
+    const ms = p.tm.map(m => m + '월').join(', ');
+    const extra = raw.replace(/[\d~\-,.·()\s월]/g, '');
+    return extra && raw.length <= 60 ? `${ms}\n${raw}` : ms;
+  }
+  return raw || '공고 확인';
+}
+function pcard(p, k){
+  const aw = S.aware[p.name];
+  const off = S.calOff.includes(p.name);
+  const long = p.desc.length > 120;
+  const side = p.main !== k ? `<span class="side">주된 목적: ${esc(CELL[p.main].t)}</span>` : '';
+  return `<article class="pcard ${off ? 'off' : ''}" data-name="${esc(p.name)}">
+    <div class="org">${esc(p.org)}${side}</div>
+    <h4>${esc(p.name)}</h4>
+    <p class="desc ${long ? 'clamp' : ''}">${esc(p.desc)}</p>
+    ${long ? '<button class="more-desc">펼쳐 보기</button>' : ''}
+    <dl>
+      <dt>누가</dt><dd>${esc(p.target || '공고 확인')}</dd>
+      <dt>2026년 모집</dt><dd>${esc(whenLabel(p))}</dd>
+      ${p.scale && p.scale !== '-' ? `<dt>규모</dt><dd>${esc(p.scale)}</dd>` : ''}
+    </dl>
+    ${p.form.length ? `<div class="forms">${p.form.map(f => `<span>${esc(f)}</span>`).join('')}</div>` : ''}
+    <div class="aware"><span class="q">이 사업, 알고 있었어요?</span>
+      <button data-aw="new" class="${aw === 'new' ? 'on' : ''}">처음 봐요</button>
+      <button data-aw="knew" class="${aw === 'knew' ? 'on' : ''}">알고 있었어요</button>
+      <button data-aw="used" class="${aw === 'used' ? 'on' : ''}">받아봤어요</button>
+    </div>
+    <div class="pfoot">
+      ${p.link ? `<a class="link-btn" href="${esc(p.link)}" target="_blank" rel="noopener">공고 보기 →</a>` : '<span class="check-note">공고 링크 없음</span>'}
+      <button class="cal-toggle">${off ? '달력에 다시 넣기' : '달력에서 빼기'}</button>
+    </div>
+  </article>`;
+}
+function renderRecs(){
+  S.shown = {};
+  $('#recs').innerHTML = needOrder().map(k => {
+    const c = CELL[k];
+    const list = recsFor(k);
+    const n = jejuCount(k).base;
+    const shownN = Math.min(list.length, S.page[k] || PAGE);
+    S.shown[k] = list.slice(0, shownN).map(p => p.name);
+    const mainN = list.filter(p => p.main === k).length;
+    const lead = list.length ? `나이와 사는 곳에 맞는 사업 ${list.length}개` + (list.length - mainN
+      ? ` · 이 칸이 주된 목적인 사업 ${mainN}개, 이 칸도 함께 다루는 사업 ${list.length - mainN}개` : '') : '';
+    const gap = n < FEW ? `<div class="gapbox"><p><b>'${esc(c.t)}'${josa(c.t, '을', '를')} 위한 지원사업은 제주에 ${n}개예요.</b></p>
+        <p>이 칸에 어떤 지원이 있으면 좋겠어요?</p>
+        <textarea data-gap="${k}" maxlength="400">${esc(S.gap[k] || '')}</textarea></div>` : '';
+    const body = list.length
+      ? `<div class="pcards">${list.slice(0, shownN).map(p => pcard(p, k)).join('')}</div>
+         ${list.length > shownN ? `<div class="more-list"><button class="btn small secondary" data-more="${k}">더 보기 (${list.length - shownN}개 남음)</button></div>` : ''}`
+      : `<div class="empty">나이와 사는 곳에 맞는 사업을 찾지 못했어요.</div>`;
+    return `<section class="cellsec" data-cell="${k}">
+      <div class="cellsec-head"><span class="field" style="background:${FIELDS[c.f]}">${c.f}</span><h3>${esc(c.t)}</h3></div>
+      ${lead ? `<p class="lead">${lead}</p>` : ''}
+      ${gap}${body}</section>`;
+  }).join('');
+}
+$('#recs').addEventListener('click', e => {
+  const more = e.target.closest('[data-more]');
+  if (more) { const k = more.dataset.more; S.page[k] = (S.page[k] || PAGE) + 5; renderRecs(); renderCal(); saveSoon(); return; }
+  const card = e.target.closest('.pcard'); if (!card) return;
+  const name = card.dataset.name;
+  if (e.target.classList.contains('more-desc')) {
+    const d = card.querySelector('.desc'); d.classList.toggle('clamp');
+    e.target.textContent = d.classList.contains('clamp') ? '펼쳐 보기' : '접기'; return;
+  }
+  const aw = e.target.closest('[data-aw]');
+  if (aw) {
+    if (S.aware[name] === aw.dataset.aw) delete S.aware[name]; else S.aware[name] = aw.dataset.aw;
+    document.querySelectorAll(`.pcard[data-name="${CSS.escape(name)}"] [data-aw]`).forEach(b => b.classList.toggle('on', b.dataset.aw === S.aware[name]));
+    saveSoon(); return;
+  }
+  if (e.target.classList.contains('cal-toggle')) {
+    toggleIn(S.calOff, name);
+    const off = S.calOff.includes(name);
+    document.querySelectorAll(`.pcard[data-name="${CSS.escape(name)}"]`).forEach(c => {
+      c.classList.toggle('off', off); c.querySelector('.cal-toggle').textContent = off ? '달력에 다시 넣기' : '달력에서 빼기';
+    });
+    renderCal(); saveSoon();
+  }
+});
+$('#recs').addEventListener('input', e => {
+  const k = e.target.dataset.gap; if (!k) return;
+  S.gap[k] = e.target.value.trim(); if (!S.gap[k]) delete S.gap[k];
+  saveSoon();
+});
+
+/* ---------- 달력 ---------- */
+function renderCal(){
+  const seen = new Set(), items = [];
+  needOrder().forEach(k => (S.shown[k] || []).forEach(n => {
+    if (seen.has(n) || S.calOff.includes(n)) return;
+    const p = DATA.find(x => x.name === n); if (!p) return;
+    seen.add(n); items.push(p);
+  }));
+  if (!items.length) { $('#cal-sheet').innerHTML = '<div class="empty">달력에 넣은 사업이 없어요.</div>'; return; }
+  const color = p => FIELDS[CELL[p.main].f];
+  const chip = p => `<span style="border-left-color:${color(p)}">${esc(p.name)}</span>`;
+  const li = p => `<li style="border-left-color:${color(p)}">${esc(p.name)}</li>`;
+  const group = tk => items.filter(p => p.tk === tk);
+  let h = '';
+  if (group('always').length) h += `<div class="cal-row"><h4>연중 상시</h4><div class="cal-names">${group('always').map(chip).join('')}</div></div>`;
+  if (group('monthly').length) h += `<div class="cal-row"><h4>매월 모집</h4><div class="cal-names">${group('monthly').map(chip).join('')}</div></div>`;
+  h += '<div class="cal-months">';
+  for (let m = 1; m <= 12; m++) {
+    const ps = items.filter(p => p.tk === 'months' && p.tm.includes(m));
+    h += `<div class="cal-m ${ps.length ? '' : 'empty-m'}"><h5>${m}월</h5><ul>${ps.map(li).join('')}</ul></div>`;
+  }
+  h += '</div>';
+  if (group('unknown').length) h += `<div class="cal-row"><h4>시기 미정 · 공고 확인</h4><div class="cal-names">${group('unknown').map(chip).join('')}</div></div>`;
+  $('#cal-sheet').innerHTML = h;
+}
+$('#cal-print').addEventListener('click', () => {
+  document.body.classList.add('printing');
+  setTimeout(() => { window.print(); document.body.classList.remove('printing'); }, 50);
+});
+$('#cal-png').addEventListener('click', async () => {
+  const btn = $('#cal-png'); btn.disabled = true; btn.textContent = '만드는 중…';
+  try {
+    if (!window.html2canvas) await new Promise((ok, no) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+      s.onload = ok; s.onerror = no; document.head.appendChild(s);
+    });
+    const canvas = await html2canvas($('#panel-cal'), {backgroundColor: '#FFFDF4', scale: 2,
+      ignoreElements: el => el.classList && el.classList.contains('cal-actions')});
+    const a = document.createElement('a');
+    a.href = canvas.toDataURL('image/png'); a.download = '제주청년_2026년_모집달력.png'; a.click();
+  } catch (err) { alert('이미지를 만들지 못했어요. 인쇄하기에서 PDF로 저장할 수 있어요.'); }
+  btn.disabled = false; btn.textContent = '이미지로 저장';
+});
+
+/* ---------- 한 걸음 더 ---------- */
+$('#rank-info').innerHTML = INFO.map(t => `<button class="chip rank-chip" data-v="${esc(t)}"><span class="n"></span>${esc(t)}</button>`).join('');
+$('#rank-info').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if (!b) return;
+  const v = b.dataset.v, r = S.more.rank;
+  if (r.includes(v)) r.splice(r.indexOf(v), 1); else if (r.length < 3) r.push(v);
+  paintRank();
+});
+function paintRank(){
+  $('#rank-info').querySelectorAll('.chip').forEach(b => {
+    const i = S.more.rank.indexOf(b.dataset.v);
+    b.classList.toggle('selected', i >= 0); b.querySelector('.n').textContent = i >= 0 ? i + 1 : '';
+  });
+}
+$('#scales').innerHTML = SCALES.map(([k, t, lo, hi]) => `
+  <div style="margin-bottom:18px"><p style="font-size:15.5px;margin-bottom:8px">${esc(t)}</p>
+  <div class="scale" data-sc="${k}">${Array.from({length: 11}, (_, i) => `<button data-n="${i}">${i}</button>`).join('')}</div>
+  <div class="scale-ends"><span>0 ${esc(lo)}</span><span>${esc(hi)} 10</span></div></div>`).join('');
+$('#scales').addEventListener('click', e => {
+  const b = e.target.closest('[data-n]'); if (!b) return;
+  const k = b.parentElement.dataset.sc, n = +b.dataset.n;
+  if (S.more.sc[k] === n) delete S.more.sc[k]; else S.more.sc[k] = n;
+  b.parentElement.querySelectorAll('button').forEach(x => x.classList.toggle('on', +x.dataset.n === S.more.sc[k]));
+});
+[['#m-keep', 'keep'], ['#m-shake', 'shake'], ['#m-hard', 'hard'], ['#m-why-etc', 'whyEtc'], ['#m-line', 'line']].forEach(([sel, key]) =>
+  $(sel).addEventListener('input', e => S.more[key] = e.target.value.trim()));
+$('#btn-submit-more').addEventListener('click', async () => {
+  S.t.more = new Date().toISOString(); S.stage = 'more';
+  await save('more');
+  $('#more-cta').classList.add('is-hidden');
+  doneMsg(); go('done');
+});
+$('#btn-finish').addEventListener('click', async () => { await flushSave(); doneMsg(); go('done'); });
+function doneMsg(){
+  const tail = '<br>연구 결과는 제주소통협력센터를 통해 공개됩니다.';
+  $('#done-msg').innerHTML = !S.consent || DEMO ? '응답은 저장하지 않았어요.' + tail
+    : S.saveErr ? '응답을 저장하지 못했어요. 인터넷 연결을 확인한 뒤 다시 시도해 주세요.' + tail
+    : '응답이 저장됐어요.' + tail;
+}
+
+/* ---------- 다시 하기 ---------- */
+function restart(){
+  S = fresh();
+  document.querySelectorAll('.chip.selected, .opt.selected').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('textarea, input[type=text], input[type=number]').forEach(i => i.value = '');
+  $('#consent').checked = false; $('#btn-start').disabled = true;
+  ['#blk-years', '#blk-why', '#m-why-etc'].forEach(s => $(s).classList.add('is-hidden'));
+  $('#more-cta').classList.remove('is-hidden');
+  document.querySelectorAll('.scale button.on').forEach(b => b.classList.remove('on'));
+  DIMS.forEach(d => $('#next-' + d.key).disabled = true);
+  checkCore(); go('intro');
+}
+$('#btn-restart-1').addEventListener('click', restart);
+$('#btn-restart-2').addEventListener('click', restart);
+
+/* ---------- 저장 ---------- */
+function payload(){
+  return {
+    v: 2, data_date: $('#data-date').textContent,
+    age: S.age, age_band: ageBand(S.age), region: S.region, rel: S.rel, years: S.years, stages: S.stages, exp: S.exp,
+    ans: S.ans, none: S.none, need: needs(),
+    shown: S.shown, aware: S.aware, gap: S.gap, cal_off: S.calOff,
+    more: S.stage === 'more' ? S.more : null, t: S.t,
+  };
+}
+let pending = null, saving = Promise.resolve();
+function save(stage){
+  if (!S.consent || DEMO) return Promise.resolve();
+  if (S.stage !== 'more') S.stage = stage;
+  const body = JSON.stringify({p_sid: S.sid, p_payload: payload(), p_stage: S.stage, p_src: S.src || null});
+  saving = saving.then(async () => {
+    try {
+      const r = await fetch(SB_URL + '/rest/v1/rpc/jy_save', {
+        method: 'POST', keepalive: true,
+        headers: {apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY, 'Content-Type': 'application/json'},
+        body,
+      });
+      S.saveErr = !r.ok;
+      if (!r.ok) console.warn('저장 실패', r.status, await r.text());
+    } catch (err) { S.saveErr = true; console.warn('저장 실패', err); }
+  });
+  return saving;
+}
+function saveSoon(){
+  if (!S.consent || DEMO || !S.stage) return;
+  clearTimeout(pending);
+  pending = setTimeout(() => { pending = null; save(S.stage); }, 1200);
+}
+async function flushSave(){
+  if (pending) { clearTimeout(pending); pending = null; save(S.stage); }
+  await saving;
+}
+window.addEventListener('pagehide', () => { if (pending) { clearTimeout(pending); pending = null; save(S.stage); } });
+</script>
+</body>
+</html>
