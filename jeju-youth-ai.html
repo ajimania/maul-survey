@@ -87,8 +87,6 @@ button{font:inherit;color:inherit;}
 .consent label:first-of-type{margin-top:16px;padding-top:16px;border-top:1.5px dashed rgba(23,79,53,.3);}
 .consent label b{font-family:'Jua';font-weight:400;}
 .consent input{width:26px;height:26px;accent-color:var(--ink);flex:none;margin-top:0;}
-.consent .sub-check{margin-left:38px;margin-top:0;font-size:16px;}
-.consent .sub-check:has(input:disabled){opacity:.5;}
 .intro #btn-start{width:100%;max-width:540px;}
 
 /* 진행 표시 */
@@ -275,11 +273,9 @@ body.printing .print-hide{display:none !important;}
     <h1 class="riso-title">제주 청년 지원사업<br>길 찾기</h1>
     <p class="sub">내게 지금 필요한 지원사업은 무엇일까?<br>상황에 맞는 지원사업을 추천받아요.</p>
     <div class="consent">
-      <p>쓴 글과 답은 추천을 만들기 위해 AI(Anthropic의 Claude)로 보내져 처리됩니다. 이름, 연락처, 주민등록번호처럼 나를 알아볼 수 있는 내용은 쓰지 마세요.</p>
+      <p>쓴 글과 답은 추천을 만들기 위해 AI(Anthropic의 Claude)로 보내져 처리됩니다. 이름, 연락처처럼 나를 알아볼 수 있는 내용은 쓰지 마세요.</p>
       <p>AI가 고른 결과라 틀릴 수 있어요. 지원 조건은 각 기관 공고에서 확인해야 합니다.</p>
-      <label><input type="checkbox" id="c-ai"> <span><b>[필수]</b> 위 내용을 확인했어요</span></label>
-      <label><input type="checkbox" id="c-research"> <span><b>[선택]</b> 답을 「청년의 제주지역 정착을 위한 생태계 구축」 연구(제주소통협력센터·커먼즈웍스)에 쓰는 데 동의해요</span></label>
-      <label class="sub-check"><input type="checkbox" id="c-text" disabled> <span><b>[선택]</b> 내가 쓴 글도 함께 사용하는 데 동의해요</span></label>
+      <label><input type="checkbox" id="c-ai"> <span>위 내용을 확인했고, 제공한 답을 '청년의 제주지역 정착을 위한 생태계 구축' 연구 내용에 쓰는 데 동의합니다.</span></label>
     </div>
     <button class="btn" id="btn-start" disabled>시작하기</button>
   </div>
@@ -549,10 +545,9 @@ document.querySelectorAll('.progress').forEach(p => {
 
 /* ---------- 시작 ---------- */
 $('#c-ai').addEventListener('change', e => $('#btn-start').disabled = !e.target.checked);
-$('#c-research').addEventListener('change', e => { $('#c-text').disabled = !e.target.checked; if (!e.target.checked) $('#c-text').checked = false; });
 $('#btn-start').addEventListener('click', () => {
   if (overLimit()) { go('limit'); return; }
-  S.research = $('#c-research').checked; S.textOk = $('#c-text').checked; go('core');
+  S.research = true; S.textOk = true; go('core'); // 동의 문장이 하나뿐이라 연구 활용·쓴 글 활용을 함께 동의한 것으로 본다
 });
 
 /* ---------- 기본 정보 ---------- */
@@ -821,8 +816,7 @@ $('#btn-restart').addEventListener('click', () => {
   document.querySelectorAll('.chip.selected').forEach(c => c.classList.remove('selected'));
   document.querySelectorAll('textarea, input[type=number]').forEach(i => i.value = '');
   document.querySelectorAll('.count').forEach(c => c.textContent = '0 / 600');
-  ['#c-ai', '#c-research', '#c-text'].forEach(s => $(s).checked = false);
-  $('#c-text').disabled = true; $('#btn-start').disabled = true;
+  $('#c-ai').checked = false; $('#btn-start').disabled = true;
   $('#blk-years').classList.add('is-hidden');
   $('#next-core').disabled = true; $('#next-diag').disabled = true;
   writeHint(); go('intro');
