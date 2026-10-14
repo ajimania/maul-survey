@@ -229,8 +229,8 @@ window.switchTab = function(id, btn) {
 // ── 지도 ─────────────────────────────────────
 const map = L.map('main-map', { zoomControl: false }).setView([36.5, 127.5], 7);
 L.control.zoom({ position: 'bottomright' }).addTo(map);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', maxZoom: 19
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap © CARTO', maxZoom: 19
 }).addTo(map);
 
 function addMarker(p) {
