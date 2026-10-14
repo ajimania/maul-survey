@@ -229,9 +229,8 @@ window.switchTab = function(id, btn) {
 // ── 지도 ─────────────────────────────────────
 const map = L.map('main-map', { zoomControl: false }).setView([36.5, 127.5], 7);
 L.control.zoom({ position: 'bottomright' }).addTo(map);
-L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
-  attribution: '© <a href="https://stadiamaps.com/">Stadia Maps</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  maxZoom: 20
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+  attribution: '© Esri', maxZoom: 16
 }).addTo(map);
 
 function addMarker(p) {
