@@ -12,8 +12,8 @@ export const CELLS = {
   '관계_지역참여':     ['동네 일에 끼어 목소리를 낼 통로가 있는 것', '지역의 결정에 청년의 자리가 있는 일'],
   '정서_자아건강':     ['마음이 버티는 힘', '지치고 흔들릴 때 회복할 수 있는 일'],
   '정서_지역애착':     ['이 동네에 마음이 붙고 정드는 것', '주민들과 정이 들고 지역에 스며드는 일'],
-  '공간_주거':         ['살 곳과 병원·안전', '살 집이 있고, 아플 때 갈 곳이 있는 일'],
-  '공간_일터':         ['일하고 활동할 자리', '일하고 만들고 모일 물리적 공간이 있는 일'],
+  '인프라_서비스':     ['병원·건강·돌봄', '임신·출산·육아를 포함해 의료·보건·돌봄 서비스를 받을 수 있는 일'],
+  '인프라_공간':       ['살 곳과 일할 공간', '살 집과 일하고 모일 물리적 공간이 있는 일'],
   '문화_누리기':       ['놀고 누리는 삶', '문화와 여가를 가까이에서 즐기는 일'],
   '문화_생산하기':     ['만들고 발표하는 활동', '내가 만든 것을 세상에 내놓는 일'],
 };
@@ -29,12 +29,12 @@ export const OPTS = {
   e1: ['정서_자아건강', '지치고 번아웃이 온 것 같아요'], e2: ['정서_자아건강', '마음이 힘들 때 이야기할 곳이 필요해요'],
   e3: ['정서_자아건강', '앞으로 뭘 해야 할지 막막해요'],
   e4: ['정서_지역애착', '제주에 정이 잘 붙지 않아요'], e5: ['정서_지역애착', '제주에 온 지 얼마 안 돼 아직 낯설어요'],
-  p1: ['공간_주거', '집 구하기나 월세가 부담돼요'], p2: ['공간_주거', '병원이나 생활 편의시설이 아쉬워요'],
-  p3: ['공간_일터', '일하거나 작업할 공간이 필요해요'], p4: ['공간_일터', '모임이나 활동을 할 장소가 마땅치 않아요'],
+  p1: ['인프라_공간', '집 구하기나 월세가 부담돼요'], p2: ['인프라_서비스', '아플 때 갈 병원이나 건강·돌봄 서비스가 아쉬워요'],
+  p3: ['인프라_공간', '일하거나 작업할 공간이 필요해요'], p4: ['인프라_공간', '모임이나 활동을 할 장소가 마땅치 않아요'],
   c1: ['문화_누리기', '제주에서 즐길 문화·여가가 부족해요'], c2: ['문화_누리기', '문화생활에 쓸 돈이 부담돼요'],
   c3: ['문화_생산하기', '내가 만든 것을 발표하거나 펼칠 기회가 없어요'], c4: ['문화_생산하기', '창작 활동을 이어갈 지원이 필요해요'],
 };
-export const DIMS = ['생계', '관계', '정서', '공간', '문화'];
+export const DIMS = ['생계', '관계', '정서', '인프라', '문화'];
 export const QUESTIONS = [
   '요즘 제주에서 지내면서 가장 마음에 걸리는 일은 뭐예요?',
   '앞으로 1~2년, 제주에서 해보고 싶은 일이나 바뀌었으면 하는 게 있나요?',
@@ -58,8 +58,11 @@ const str = (v, max) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
 /* ---------- 입력 검증 ---------- */
 export function validateInput(body) {
   if (!body || typeof body !== 'object') throw new InputError('본문이 없어요.');
-  const age = Number.parseInt(body.age, 10);
-  if (!(age >= 13 && age <= 49)) throw new InputError('나이를 확인해 주세요.');
+  // 출생연도로 받는다. 만 나이는 생일에 따라 (올해 − 출생연도) 또는 그보다 1 적다.
+  const nowYear = Number(new Date().toLocaleDateString('sv-SE', {timeZone: 'Asia/Seoul'}).slice(0, 4));
+  const birth = Number.parseInt(body.birthYear, 10);
+  if (!(birth >= nowYear - 49 && birth <= nowYear - 13)) throw new InputError('출생연도를 확인해 주세요.');
+  const age = nowYear - birth;
   if (!REGIONS[body.region]) throw new InputError('사는 곳을 확인해 주세요.');
   if (!RELS[body.rel]) throw new InputError('제주와의 관계를 확인해 주세요.');
   const years = YEARS[body.years] ? body.years : null;
@@ -80,14 +83,14 @@ export function validateInput(body) {
   const total = texts.join('').length + (followup?.a.length || 0);
   if (total > LIMIT.total) throw new InputError('글이 너무 길어요.');
 
-  return {age, region: body.region, rel: body.rel, years, stages, exp, ans, none, texts, followup,
+  return {birth, age, ageLow: age - 1, region: body.region, rel: body.rel, years, stages, exp, ans, none, texts, followup,
     allowFollowup: body.allowFollowup === true && !followup};
 }
 
 /* ---------- 후보 거르기 (나이·사는 곳·상황) — jeju-youth.html 의 eligible()과 같은 규칙 ---------- */
 export function eligible(p, u) {
   if (p.amin && u.age < p.amin) return false;
-  if (p.amax && u.age > p.amax) return false;
+  if (p.amax && u.ageLow > p.amax) return false;
   if (u.region.startsWith('jejusi') && p.reg === 'seogwipo') return false;
   if (u.region.startsWith('sgp') && p.reg === 'jejusi') return false;
   const matched = p.stages.filter(s => s !== '모든 청년').some(s => u.stages.includes(s));
@@ -139,7 +142,7 @@ export function userMessage(u, candidates) {
   }).join('\n');
   const texts = QUESTIONS.map((q, i) => `질문 ${i + 1}. ${q}\n답: ${u.texts[i] || '(답하지 않음)'}`).join('\n\n');
   return `기본 정보
-- 만 ${u.age}세, ${REGIONS[u.region]}
+- ${u.birth}년생(만 ${u.ageLow}~${u.age}세), ${REGIONS[u.region]}
 - ${RELS[u.rel]}${u.years ? `, 제주에 산 지 ${YEARS[u.years]}` : ''}
 - 요즘 상황: ${u.stages.join(', ')}${u.exp ? `\n- ${EXPS[u.exp]}` : ''}
 
