@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>우리 정책 한 장 — 정책 인포그래픽 만들기</title>
+<meta name="description" content="우리 조의 정책 아이디어를 칸에 채우면 AI가 인포그래픽 한 장으로 그려 줍니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{
+    --ink:#20261F; --ink-soft:#5A6355; --muted:#8A9384;
+    --green:#1C5741; --green-deep:#123A2C; --green-pale:#E7F0EA;
+    --sun:#F6B73C; --sun-soft:#FBE3AE; --sun-pale:#FFF6E2;
+    --red:#B4432F; --red-pale:#FBEAE5;
+    --paper:#FBFBF7; --card:#FFFFFF; --line:#DDE2D8;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--ink);background:var(--paper);line-height:1.6;word-break:keep-all;}
+  .wrap{max-width:760px;margin:0 auto;padding:0 16px;}
+  h1,h2,.serif{font-family:Hahmlet,"Nanum Myeongjo",serif;}
+  button{font:inherit;cursor:pointer;}
+  input,textarea{font:inherit;color:inherit;}
+  [hidden]{display:none!important;}
+
+  .btn{border:0;border-radius:12px;padding:13px 20px;font-weight:600;font-size:1rem;}
+  .btn-primary{background:var(--green);color:#fff;}
+  .btn-primary:hover{background:var(--green-deep);}
+  .btn-sun{background:var(--sun);color:var(--green-deep);}
+  .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--ink-soft);}
+  .btn-ghost:hover{border-color:var(--ink-soft);}
+  .btn:disabled{opacity:.5;cursor:default;}
+  .field-label{display:block;font-weight:600;font-size:.95rem;margin-bottom:6px;}
+  .hint{display:block;font-weight:400;font-size:.85rem;color:var(--ink-soft);margin:-2px 0 6px;}
+  .text-input{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;background:#fff;}
+  .text-input:focus{outline:2px solid var(--sun);border-color:var(--sun);}
+  .text-input::placeholder{color:#B5BCAF;}
+  .note{font-size:.85rem;color:var(--muted);}
+  .error{color:var(--red);font-size:.9rem;margin-top:8px;}
+
+  /* ---------- 머리 + 탭 ---------- */
+  header.hero{background:linear-gradient(180deg,var(--green-deep),var(--green));color:#F3F6EE;padding:36px 0 28px;}
+  .hero .kicker{color:var(--sun-soft);font-size:.9rem;letter-spacing:.04em;margin-bottom:6px;}
+  .hero h1{font-size:clamp(1.8rem,6vw,2.4rem);line-height:1.25;margin-bottom:8px;}
+  .hero p{color:#DCE5D4;max-width:32em;}
+  .tabs{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line);}
+  .tabs .wrap{display:flex;gap:4px;}
+  .tab{flex:1;background:none;border:0;border-bottom:3px solid transparent;padding:14px 4px 11px;color:var(--muted);font-weight:600;font-size:.98rem;}
+  .tab b{display:inline-flex;width:22px;height:22px;border-radius:50%;background:#EEF0EA;color:var(--muted);font-size:.8rem;align-items:center;justify-content:center;margin-right:6px;}
+  .tab[aria-selected="true"]{color:var(--green);border-bottom-color:var(--green);}
+  .tab[aria-selected="true"] b{background:var(--green);color:#fff;}
+
+  .view{padding-top:24px;padding-bottom:56px;}
+  .view-head{margin-bottom:18px;}
+  .view-head h2{font-size:1.35rem;margin-bottom:4px;}
+
+  /* ---------- 예시 ---------- */
+  .example{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:24px;align-items:start;}
+  .example img{width:100%;display:block;border-radius:12px;border:1px solid var(--line);background:#fff;}
+  .ex-list{display:grid;gap:14px;}
+  .ex-item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;}
+  .ex-item .k{font-size:.8rem;color:var(--green);font-weight:700;margin-bottom:2px;}
+  .ex-item .q{font-size:.82rem;color:var(--muted);}
+  .ex-item ol{list-style:none;display:grid;gap:4px;margin-top:4px;}
+  .ex-item li{display:flex;gap:8px;align-items:baseline;}
+  .ex-item li .num{flex-shrink:0;}
+  .ex-item li small{color:var(--muted);font-size:.8rem;}
+  @media (max-width:640px){ .example{grid-template-columns:1fr;} .example .pic{max-width:340px;margin:0 auto;} }
+
+  /* ---------- 구성안 ---------- */
+  .plan{display:grid;gap:20px;}
+  .section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:16px;}
+  .section h3{font-size:1.02rem;color:var(--green);}
+  .section h3 .note{font-weight:400;}
+  .count{font-size:.78rem;color:var(--muted);float:right;font-weight:400;}
+  .count.over{color:var(--red);font-weight:600;}
+  .num{width:24px;height:24px;border-radius:50%;background:var(--sun-soft);color:var(--green-deep);font-size:.8rem;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .scene{display:grid;grid-template-columns:24px minmax(0,1fr) 32px;gap:4px 10px;align-items:center;}
+  .scene .q{grid-column:2;grid-row:1;font-size:.88rem;font-weight:600;color:var(--ink-soft);}
+  .scene .num{grid-row:2;}
+  .scene .text-input{grid-column:2;grid-row:2;}
+  .scene .del{grid-column:3;grid-row:2;background:none;border:0;color:var(--muted);font-size:1.3rem;}
+  .scene .count{grid-column:2;grid-row:1;justify-self:end;}
+  .scenes{display:grid;gap:14px;}
+  .list-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+  .list-row .text-input{flex:1;}
+  .list-row .del{background:none;border:0;color:var(--muted);font-size:1.3rem;width:32px;}
+  .add{background:none;border:1px dashed var(--line);border-radius:10px;padding:9px;color:var(--ink-soft);width:100%;}
+  .styles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+  .style-opt{border:1.5px solid var(--line);border-radius:12px;padding:12px;background:#fff;text-align:left;}
+  .style-opt b{display:block;font-size:.95rem;}
+  .style-opt span{font-size:.8rem;color:var(--muted);}
+  .style-opt[aria-pressed="true"]{border-color:var(--green);background:var(--green-pale);}
+  .sketch-box{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+  .sketch-box img{width:84px;height:84px;object-fit:cover;border-radius:10px;border:1px solid var(--line);}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .linkish{background:none;border:0;color:var(--muted);font-size:.85rem;text-decoration:underline;}
+
+  /* ---------- 그리기 ---------- */
+  .result{display:grid;gap:20px;}
+  .canvas{background:#fff;border:1px solid var(--line);border-radius:16px;min-height:320px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  .canvas img{width:100%;display:block;}
+  .drawing{text-align:center;padding:60px 20px;color:var(--ink-soft);}
+  .drawing .sun{width:72px;height:36px;margin:0 auto 18px;border-radius:72px 72px 0 0;background:var(--sun);animation:rise 2.4s ease-in-out infinite alternate;}
+  @keyframes rise{from{transform:translateY(10px);opacity:.6}to{transform:translateY(-4px);opacity:1}}
+  @media (prefers-reduced-motion: reduce){ .drawing .sun{animation:none;} }
+  .versions{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;}
+  .versions button{border:2px solid transparent;border-radius:8px;padding:0;background:none;flex-shrink:0;}
+  .versions button[aria-current="true"]{border-color:var(--green);}
+  .versions img{width:54px;height:72px;object-fit:cover;border-radius:6px;display:block;}
+  .summary{font-size:.92rem;color:var(--ink-soft);white-space:pre-wrap;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;}
+  footer{font-size:.8rem;color:var(--muted);text-align:center;padding:8px 0 32px;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">정책 인포그래픽 만들기</p>
+    <h1>우리 정책 한 장</h1>
+    <p>우리 조의 정책 아이디어를 칸에 채우면, AI가 서비스의 핵심과 이용 장면을 인포그래픽 한 장으로 그려 줍니다.</p>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="단계">
+  <div class="wrap" role="tablist">
+    <button class="tab" role="tab" data-tab="example" aria-selected="true"><b>1</b>예시</button>
+    <button class="tab" role="tab" data-tab="plan" aria-selected="false"><b>2</b>구성안</button>
+    <button class="tab" role="tab" data-tab="result" aria-selected="false"><b>3</b>그리기</button>
+  </div>
+</nav>
+
+<!-- ============ 1 예시 ============ -->
+<section class="wrap view" id="v-example" role="tabpanel">
+  <div class="view-head">
+    <h2>이런 인포그래픽을 만들어요</h2>
+    <p class="note">'우리 마을 응급 호출벨'이라는 서비스 아이디어를 예로 들었어요. 그림과 함께 보이는 내용을 구성안 칸에 채우면 이런 그림이 나와요.</p>
+  </div>
+  <div class="example">
+    <div class="pic"><img src="policy-infographic-data/sample.jpg" alt="예시 인포그래픽: 우리 마을 응급 호출벨"></div>
+    <div class="ex-list" id="ex-list"></div>
+  </div>
+  <div class="actions" style="margin-top:24px">
+    <button class="btn btn-primary" type="button" data-tab-go="plan">우리 조 구성안 쓰러 가기 →</button>
+  </div>
+</section>
+
+<!-- ============ 2 구성안 ============ -->
+<section class="wrap view" id="v-plan" role="tabpanel" hidden>
+  <div class="view-head">
+    <h2>우리 조 구성안</h2>
+    <p class="note">칸을 채우면 그대로 인포그래픽에 들어가요. 흐린 글씨는 예시예요. 짧게 쓸수록 그림 속 글씨가 또렷하게 나와요.</p>
+  </div>
+  <div class="plan">
+    <div class="section">
+      <h3>① 어떤 서비스인가요</h3>
+      <label><span class="field-label">서비스 이름 <span class="count" data-for="f-title"></span></span><span class="hint">아직 정하지 못했다면 떠오르는 대로 적고 나중에 바꿔도 돼요.</span><input class="text-input" id="f-title" data-limit="12" maxlength="40"></label>
+      <label><span class="field-label">한 줄 설명 <span class="count" data-for="f-oneLiner"></span></span><span class="hint">누구의 어떤 어려움을 어떻게 돕나요?</span><input class="text-input" id="f-oneLiner" data-limit="30" maxlength="80"></label>
+    </div>
+
+    <div class="section">
+      <h3>② 누가, 어떤 어려움을 겪나요</h3>
+      <label><span class="field-label">주인공 <span class="count" data-for="f-persona"></span></span><span class="hint">이 서비스가 꼭 필요한 한 사람을 떠올려 보세요.</span><input class="text-input" id="f-persona" data-limit="20" maxlength="60"></label>
+      <label><span class="field-label">지금 겪는 어려움 <span class="count" data-for="f-now"></span></span><span class="hint">서비스가 없는 지금, 주인공이 가장 곤란한 순간은 언제인가요?</span><textarea class="text-input" id="f-now" data-limit="40" maxlength="100" rows="2"></textarea></label>
+    </div>
+
+    <div class="section">
+      <h3>③ 서비스를 이렇게 써요 <span class="note">장면마다 짧게, 칸은 빼거나 더할 수 있어요</span></h3>
+      <div class="scenes" id="scenes"></div>
+      <button class="add" type="button" id="add-scene">+ 장면 추가</button>
+    </div>
+
+    <div class="section">
+      <h3>④ 무엇이 좋아지나요 <span class="note">주인공에게, 그리고 마을에</span></h3>
+      <div id="benefits"></div>
+      <button class="add" type="button" id="add-benefit">+ 좋아지는 점 추가</button>
+    </div>
+
+    <div class="section">
+      <h3>⑤ 더 적을 것 <span class="note">(선택)</span></h3>
+      <label><span class="field-label">누가 운영하나요 <span class="count" data-for="f-operators"></span></span><input class="text-input" id="f-operators" data-limit="20" maxlength="60"></label>
+      <label><span class="field-label">어느 지역 이야기인가요</span><span class="hint">그림 배경에 지역 분위기를 담아요.</span><input class="text-input" id="f-region" maxlength="30"></label>
+    </div>
+
+    <div class="section">
+      <h3>그림 분위기</h3>
+      <div class="styles" id="styles">
+        <button type="button" class="style-opt" data-style="warm"><b>따뜻한 손그림</b><span>색연필·수채화 느낌</span></button>
+        <button type="button" class="style-opt" data-style="public"><b>깔끔한 안내물</b><span>공공기관 안내문처럼</span></button>
+        <button type="button" class="style-opt" data-style="cartoon"><b>귀여운 만화</b><span>둥근 캐릭터, 밝은 색</span></button>
+        <button type="button" class="style-opt" data-style="icon"><b>단순한 아이콘</b><span>도표처럼 명료하게</span></button>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>손 스케치 사진 <span class="note">(선택)</span></h3>
+      <p class="note">조원들이 그린 스케치를 찍어 올리면 배치와 구도를 참고해 그려요.</p>
+      <div class="sketch-box">
+        <img id="sketch-preview" alt="올린 스케치" hidden>
+        <label class="btn btn-ghost" style="display:inline-block">사진 올리기<input type="file" id="sketch-file" accept="image/*" hidden></label>
+        <button type="button" class="btn btn-ghost" id="sketch-remove" hidden>사진 빼기</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="actions">
+        <button class="btn btn-primary" type="button" id="draw">이대로 그리기</button>
+        <button class="linkish" type="button" id="clear">모두 지우고 새로 쓰기</button>
+      </div>
+      <p class="note quota" style="margin-top:8px"></p>
+      <p class="error" id="plan-error" hidden></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3 그리기 ============ -->
+<section class="wrap view" id="v-result" role="tabpanel" hidden>
+  <div class="result">
+    <div class="canvas" id="canvas"></div>
+    <div class="versions" id="versions" aria-label="그린 그림들"></div>
+    <div class="actions" id="result-actions">
+      <button class="btn btn-sun" type="button" id="download">그림 내려받기</button>
+      <button class="btn btn-ghost" type="button" data-tab-go="plan">구성안 고치기</button>
+    </div>
+    <div class="section" id="edit-box">
+      <h3>말로 고쳐 그리기</h3>
+      <textarea class="text-input" id="edit-input" rows="2" maxlength="300" placeholder="제목 글씨를 더 크게, 할머니를 더 크게 그려 줘"></textarea>
+      <div class="actions">
+        <button class="btn btn-primary" type="button" id="edit-draw">고쳐 그리기</button>
+        <span class="note quota"></span>
+      </div>
+      <p class="error" id="result-error" hidden></p>
+    </div>
+    <div id="summary-box">
+      <p class="field-label">인포그래픽에 들어간 글</p>
+      <div class="summary" id="summary"></div>
+      <p class="note" style="margin-top:6px">그림 속 글자가 틀렸다면 발표 때 이 글을 함께 보여 주세요.</p>
+    </div>
+  </div>
+</section>
+
+<footer>커먼즈웍스 · AI가 그린 그림은 내용을 꼭 한 번 더 확인해 주세요.</footer>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const params = new URLSearchParams(location.search);
+  const LOCAL = ['localhost', '127.0.0.1'].includes(location.hostname);
+  // 로컬에서는 기본이 가짜 응답(비용 0). ?ai=1 일 때만 실제 AI를 부른다. 배포 주소는 ?mock=1 일 때만 가짜.
+  const MOCK = params.has('mock') || (LOCAL && !params.has('ai'));
+  const DAILY_DRAWS = 10;
+  const KEY = 'policy-infographic-v2';
+
+  // 예시 탭과 구성안 칸의 흐린 예시 글씨가 같은 내용을 쓴다. 예시 그림(sample.jpg)의 문구와 맞춘다.
+  const EXAMPLE = {
+    title: '우리 마을 응급 호출벨',
+    oneLiner: '119가 마을까지 바로 오도록, 위치를 미리 알려 두는 서비스',
+    persona: '운문면 70대 주민',
+    now: "119가 '어디까지 나와라'고 해서 이장님 차를 기다려요",
+    scenes: ['집 위치 미리 등록', '밤에 가슴 통증', '호출벨 한 번', '집 앞까지 출동', '골든타임 안에 병원'],
+    benefits: ['도착 시간 단축', '이장님 부담 덜기'],
+    operators: '군 보건소 · 소방서 · 마을 이장',
+    region: '청도군',
+  };
+  // 시나리오를 한 번에 묻지 않고, 장면마다 작은 질문을 붙인다.
+  const SCENE_QUESTIONS = ['어떻게 시작하나요?', '언제 필요해지나요?', '무엇을 하나요?', '어떤 도움을 받나요?', '그 뒤에는 어떻게 되나요?'];
+  const BENEFIT_EXAMPLES = [...EXAMPLE.benefits, '마을이 더 안심돼요'];
+  const LIMITS = {scene: 12, benefit: 15};
+  const SINGLE = ['title', 'oneLiner', 'persona', 'now', 'operators', 'region'];
+
+  const blank = () => ({title: '', oneLiner: '', persona: '', now: '', scenes: ['', '', '', '', ''], benefits: ['', ''], operators: '', region: '', style: 'warm'});
+  let form = blank();
+  let sketch = null;   // 스케치 사진(data URL). 크기 때문에 저장하지 않는다.
+  let versions = [];   // 그린 그림들 {src, fields}
+  let current = -1;
+  let busy = false;
+
+  /* ---------- 저장 (브라우저에만, 실패해도 동작) ---------- */
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(form)); } catch {} }
+  function load() { try { return JSON.parse(localStorage.getItem(KEY) || 'null'); } catch { return null; } }
+  const today = () => new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10); // 한국 시간 기준 날짜
+  function drawsLeft() {
+    try {
+      const d = JSON.parse(localStorage.getItem(KEY + '-draws') || 'null');
+      return DAILY_DRAWS - (d && d.day === today() ? d.n : 0);
+    } catch { return DAILY_DRAWS; }
+  }
+  function useDraw() {
+    try { localStorage.setItem(KEY + '-draws', JSON.stringify({day: today(), n: DAILY_DRAWS - drawsLeft() + 1})); } catch {}
+  }
+
+  /* ---------- 탭 ---------- */
+  function showTab(name) {
+    document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.tab === name)));
+    for (const v of ['example', 'plan', 'result']) $('v-' + v).hidden = v !== name;
+    if (name === 'result') renderResult();
+    updateQuota();
+    const top = document.querySelector('.tabs').offsetTop;
+    if (window.scrollY > top) window.scrollTo(0, top);
+  }
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-tab], [data-tab-go]');
+    if (t) showTab(t.dataset.tab || t.dataset.tabGo);
+  });
+
+  /* ---------- 예시 탭 ---------- */
+  function exItem(k, q, body) {
+    const d = document.createElement('div');
+    d.className = 'ex-item';
+    d.innerHTML = `<div class="k"></div><div class="q"></div>`;
+    d.querySelector('.k').textContent = k;
+    d.querySelector('.q').textContent = q;
+    d.append(body);
+    return d;
+  }
+  const textEl = t => { const p = document.createElement('div'); p.textContent = t; return p; };
+  function numbered(items, notes) {
+    const ol = document.createElement('ol');
+    items.forEach((s, i) => {
+      const li = document.createElement('li');
+      li.innerHTML = `<span class="num">${i + 1}</span><span><small></small> <b style="font-weight:500"></b></span>`;
+      li.querySelector('small').textContent = notes ? notes[i] : '';
+      li.querySelector('b').textContent = s;
+      ol.append(li);
+    });
+    return ol;
+  }
+  $('ex-list').append(
+    exItem('① 서비스 이름 · 한 줄 설명', '어떤 서비스인가요?', textEl(`${EXAMPLE.title}\n${EXAMPLE.oneLiner}`)),
+    exItem('② 주인공 · 지금 겪는 어려움', '누가, 어떤 어려움을 겪나요?', textEl(`${EXAMPLE.persona}\n${EXAMPLE.now}`)),
+    exItem('③ 서비스를 이렇게 써요', '장면마다 작은 질문에 답해요', numbered(EXAMPLE.scenes, SCENE_QUESTIONS)),
+    exItem('④ 무엇이 좋아지나요', '주인공에게, 그리고 마을에', textEl(EXAMPLE.benefits.join(' · '))),
+    exItem('⑤ 누가 운영하나요', '(선택)', textEl(EXAMPLE.operators)),
+  );
+  $('ex-list').querySelectorAll('.ex-item > div:last-child:not(.q)').forEach(d => { d.style.whiteSpace = 'pre-line'; d.style.marginTop = '4px'; });
+
+  /* ---------- 구성안 탭 ---------- */
+  function counter(el, countEl) {
+    const c = countEl || document.querySelector(`.count[data-for="${el.id}"]`);
+    if (!c || !el.dataset.limit) return;
+    const n = el.value.trim().length, max = Number(el.dataset.limit);
+    c.textContent = n ? `${n}/${max}자` : '';
+    c.classList.toggle('over', n > max);
+  }
+  function sceneRow(value) {
+    const row = document.createElement('div');
+    row.className = 'scene';
+    row.innerHTML = `<span class="q"></span><span class="count"></span><span class="num"></span><input class="text-input" data-limit="${LIMITS.scene}" maxlength="40"><button type="button" class="del" aria-label="이 장면 지우기">×</button>`;
+    const inp = row.querySelector('input');
+    inp.value = value;
+    inp.addEventListener('input', () => { counter(inp, row.querySelector('.count')); collect(); });
+    row.querySelector('.del').onclick = () => { row.remove(); renumberScenes(); collect(); };
+    $('scenes').append(row);
+    counter(inp, row.querySelector('.count'));
+    renumberScenes();
+    return inp;
+  }
+  function renumberScenes() {
+    [...$('scenes').children].forEach((r, i) => {
+      r.querySelector('.num').textContent = i + 1;
+      r.querySelector('.q').textContent = SCENE_QUESTIONS[i] || '그다음에는요?';
+      r.querySelector('input').placeholder = EXAMPLE.scenes[i] ? `예: ${EXAMPLE.scenes[i]}` : '';
+    });
+  }
+  function benefitRow(value) {
+    const row = document.createElement('div');
+    row.className = 'list-row';
+    row.innerHTML = `<input class="text-input" data-limit="${LIMITS.benefit}" maxlength="40"><button type="button" class="del" aria-label="지우기">×</button>`;
+    const inp = row.querySelector('input');
+    inp.value = value;
+    inp.addEventListener('input', collect);
+    row.querySelector('.del').onclick = () => { row.remove(); renumberBenefits(); collect(); };
+    $('benefits').append(row);
+    renumberBenefits();
+    return inp;
+  }
+  function renumberBenefits() {
+    [...$('benefits').children].forEach((r, i) => { r.querySelector('input').placeholder = BENEFIT_EXAMPLES[i] ? `예: ${BENEFIT_EXAMPLES[i]}` : ''; });
+  }
+  function fillForm() {
+    for (const k of SINGLE) {
+      const el = $('f-' + k);
+      el.value = form[k] || '';
+      el.placeholder = `예: ${EXAMPLE[k]}`;
+      counter(el);
+    }
+    $('scenes').innerHTML = ''; $('benefits').innerHTML = '';
+    (form.scenes.length ? form.scenes : ['', '']).forEach(sceneRow);
+    (form.benefits.length ? form.benefits : ['']).forEach(benefitRow);
+    document.querySelectorAll('.style-opt').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.style === form.style)));
+  }
+  function collect() {
+    for (const k of SINGLE) form[k] = $('f-' + k).value;
+    form.scenes = [...$('scenes').querySelectorAll('input')].map(i => i.value);
+    form.benefits = [...$('benefits').querySelectorAll('input')].map(i => i.value);
+    save();
+  }
+  // 그림에 보낼 값: 빈칸은 뺀다.
+  function fields() {
+    const t = s => (s || '').trim();
+    return {
+      title: t(form.title), oneLiner: t(form.oneLiner), persona: t(form.persona), now: t(form.now),
+      scenes: form.scenes.map(t).filter(Boolean), benefits: form.benefits.map(t).filter(Boolean), operators: t(form.operators),
+    };
+  }
+  for (const k of SINGLE) $('f-' + k).addEventListener('input', e => { counter(e.target); collect(); });
+  $('add-scene').onclick = () => { if ($('scenes').children.length < 6) { sceneRow('').focus(); collect(); } };
+  $('add-benefit').onclick = () => { if ($('benefits').children.length < 4) { benefitRow('').focus(); collect(); } };
+  $('styles').addEventListener('click', e => {
+    const b = e.target.closest('.style-opt');
+    if (!b) return;
+    form.style = b.dataset.style;
+    document.querySelectorAll('.style-opt').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    save();
+  });
+  $('clear').onclick = () => {
+    if (!confirm('적은 내용을 모두 지우고 새로 쓸까요?')) return;
+    form = blank(); save(); fillForm();
+  };
+
+  // 사진은 긴 변 기준으로 줄여 JPEG로 보낸다(서버 한도와 와이파이 속도 때문).
+  function shrinkImage(src, maxSide, quality) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+        const c = document.createElement('canvas');
+        c.width = Math.round(img.width * scale); c.height = Math.round(img.height * scale);
+        const ctx = c.getContext('2d');
+        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height);
+        ctx.drawImage(img, 0, 0, c.width, c.height);
+        resolve(c.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = () => reject(new Error('사진을 읽지 못했어요. 다른 사진으로 해 주세요.'));
+      img.src = src;
+    });
+  }
+  $('sketch-file').addEventListener('change', async e => {
+    const file = e.target.files[0];
+    e.target.value = '';
+    if (!file) return;
+    try {
+      const url = URL.createObjectURL(file);
+      sketch = await shrinkImage(url, 1280, 0.82);
+      URL.revokeObjectURL(url);
+      $('sketch-preview').src = sketch; $('sketch-preview').hidden = false; $('sketch-remove').hidden = false;
+    } catch (err) { showError('plan-error', err.message); }
+  });
+  $('sketch-remove').onclick = () => { sketch = null; $('sketch-preview').hidden = true; $('sketch-remove').hidden = true; };
+
+  function showError(id, msg) { $(id).textContent = msg; $(id).hidden = !msg; }
+  function updateQuota() {
+    const left = drawsLeft();
+    const msg = left > 0 ? `오늘 이 기기에서 ${left}장 더 그릴 수 있어요.` : '오늘 이 기기에서 그릴 수 있는 횟수를 다 썼어요.';
+    document.querySelectorAll('.quota').forEach(q => { q.textContent = msg; });
+  }
+
+  /* ---------- 그리기 ---------- */
+  async function post(url, body) {
+    const r = await fetch(url, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({...body, mock: MOCK})});
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(data.message || '연결에 문제가 생겼어요. 다시 눌러 주세요.');
+    return data;
+  }
+  let timerId = null;
+  function drawingView(isEdit) {
+    const started = Date.now();
+    $('canvas').innerHTML = `<div class="drawing"><div class="sun"></div><p><b>${isEdit ? '고쳐 그리는 중이에요' : 'AI가 인포그래픽을 그리는 중이에요'}</b></p><p class="note">40초~1분쯤 걸려요. 화면을 닫지 말고 기다려 주세요. <span id="elapsed"></span></p></div>`;
+    clearInterval(timerId);
+    timerId = setInterval(() => { const el = $('elapsed'); if (el) el.textContent = `(${Math.round((Date.now() - started) / 1000)}초)`; }, 1000);
+  }
+  function setBusy(on) {
+    busy = on;
+    $('draw').disabled = on; $('edit-draw').disabled = on;
+    $('result-actions').hidden = on; $('edit-box').hidden = on || !versions.length; $('summary-box').hidden = on;
+  }
+  async function draw(edit) {
+    if (busy) return;
+    const errId = edit ? 'result-error' : 'plan-error';
+    if (drawsLeft() <= 0) return showError(errId, '오늘 이 기기에서 그릴 수 있는 횟수를 다 썼어요. 다른 조원의 휴대폰으로 이어서 할 수 있어요.');
+    collect();
+    const f = fields();
+    if (!edit) {
+      if (!f.title) return showError(errId, '서비스 이름을 적어 주세요.');
+      if (f.scenes.length < 2) return showError(errId, '③ 서비스를 이렇게 써요에 장면을 두 개 이상 적어 주세요.');
+    }
+    showError(errId, '');
+    setBusy(true);
+    if (!edit) showTab('result');
+    drawingView(Boolean(edit));
+    try {
+      const body = {fields: f, region: form.region.trim(), style: form.style};
+      if (edit) body.edit = {request: edit, image: await shrinkImage(versions[current].src, 1600, 0.85)};
+      else if (sketch) body.sketch = sketch;
+      const res = await post('api/infographic-draw', body);
+      if (!MOCK) useDraw();
+      versions.push({src: res.image || res.mockUrl, fields: f});
+      current = versions.length - 1;
+      if (edit) $('edit-input').value = '';
+    } catch (err) {
+      clearInterval(timerId);
+      setBusy(false);
+      if (!edit && !versions.length) { showTab('plan'); showError('plan-error', err.message); return; }
+      showError('result-error', err.message);
+    }
+    clearInterval(timerId);
+    setBusy(false);
+    renderResult();
+    updateQuota();
+  }
+  $('draw').onclick = () => draw(null);
+  $('edit-draw').onclick = () => {
+    const req = $('edit-input').value.trim();
+    if (!req) return showError('result-error', '무엇을 고칠지 적어 주세요.');
+    draw(req);
+  };
+
+  function summaryText(f) {
+    return [
+      `제목  ${f.title}`, f.oneLiner && `한 줄  ${f.oneLiner}`,
+      f.persona && `주인공  ${f.persona}`, f.now && `지금은  ${f.now}`,
+      `장면  ${f.scenes.map((s, i) => `${i + 1} ${s}`).join(' / ')}`,
+      f.benefits.length && `좋아지는 점  ${f.benefits.join(' · ')}`,
+      f.operators && `운영  ${f.operators}`,
+    ].filter(Boolean).join('\n');
+  }
+  function renderResult() {
+    if (busy) return;
+    const v = versions[current];
+    $('edit-box').hidden = !v; $('result-actions').hidden = !v; $('summary-box').hidden = !v;
+    $('versions').innerHTML = '';
+    if (!v) {
+      $('canvas').innerHTML = '<div class="drawing"><p>아직 그린 그림이 없어요.</p><p class="note">구성안을 채우고 \'이대로 그리기\'를 눌러 주세요.</p><p style="margin-top:16px"><button class="btn btn-primary" type="button" data-tab-go="plan">구성안 쓰러 가기</button></p></div>';
+      return;
+    }
+    $('canvas').innerHTML = '';
+    const img = new Image();
+    img.src = v.src; img.alt = `${v.fields.title} 인포그래픽`;
+    $('canvas').append(img);
+    $('summary').textContent = summaryText(v.fields);
+    if (versions.length > 1) versions.forEach((x, i) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.setAttribute('aria-current', String(i === current)); b.setAttribute('aria-label', `${i + 1}번째 그림`);
+      b.innerHTML = `<img src="${x.src}" alt="">`;
+      b.onclick = () => { current = i; renderResult(); };
+      $('versions').append(b);
+    });
+  }
+  $('download').onclick = async () => {
+    const v = versions[current];
+    if (!v) return;
+    const blob = await (await fetch(v.src)).blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `${(v.fields.title || '정책').replace(/[\\/:*?"<>|]/g, '')}_인포그래픽_${current + 1}.jpg`;
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  };
+
+  /* ---------- 시작 ---------- */
+  const saved = load();
+  if (saved) form = Object.assign(blank(), saved);
+  fillForm();
+  updateQuota();
+  if (saved && (saved.title || saved.scenes?.some(Boolean))) showTab('plan'); // 쓰던 내용이 있으면 구성안부터
+  if (MOCK) document.querySelector('footer').append(' · 시험 모드(가짜 응답)');
+})();
+</script>
+</body>
+</html>
