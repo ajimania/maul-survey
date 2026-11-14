@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>리얼 보이스 — 참여자 목소리를 2주 안에 보고서로</title>
+<meta name="description" content="AI 진행자가 사업 참여자 10~20명과 1:1 음성 인터뷰를 하고, 담당 연구자가 확인해 보고서를 냅니다. 견적서를 바로 받아 보세요.">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{
+    --ink:#1D1B2E; --soft:#55526B; --muted:#8B889E;
+    --indigo:#34308A; --indigo-deep:#231F63; --indigo-pale:#ECEBFA;
+    --coral:#F26B4E; --coral-pale:#FDEDE8;
+    --paper:#FAF9F6; --card:#FFFFFF; --line:#E3E1EC;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--ink);background:var(--paper);line-height:1.65;word-break:keep-all;}
+  button{font:inherit;cursor:pointer;color:inherit;}
+  input,textarea{font:inherit;color:inherit;}
+  a{color:inherit;}
+  [hidden]{display:none!important;}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 20px;}
+  header{padding:18px 0;}
+  .brand{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--indigo);}
+  .brand i{width:10px;height:10px;border-radius:50%;background:var(--coral);display:block;}
+  .brand span{margin-left:auto;font-weight:500;font-size:.88rem;color:var(--muted);}
+  .hero{padding:44px 0 56px;}
+  .hero h1{font-size:clamp(1.9rem,5.2vw,3rem);line-height:1.28;letter-spacing:-.03em;font-weight:800;max-width:17em;}
+  .hero h1 em{font-style:normal;color:var(--indigo);}
+  .hero p{margin-top:18px;font-size:1.12rem;color:var(--soft);max-width:34em;}
+  .cta{margin-top:28px;display:flex;gap:10px;flex-wrap:wrap;}
+  .btn{display:inline-block;border:0;border-radius:14px;padding:14px 22px;font-weight:700;font-size:1.02rem;text-decoration:none;background:var(--indigo);color:#fff;}
+  .btn:hover{background:var(--indigo-deep);}
+  .btn.line{background:#fff;border:1.5px solid var(--line);color:var(--ink);}
+  .btn.line:hover{border-color:var(--indigo);background:#fff;}
+  .btn.coral{background:var(--coral);}
+  .btn:disabled{opacity:.5;cursor:default;}
+  section{padding:44px 0;}
+  h2{font-size:1.5rem;letter-spacing:-.02em;margin-bottom:6px;}
+  .sub{color:var(--soft);margin-bottom:22px;}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;}
+  .card h3{font-size:1.08rem;margin-bottom:6px;}
+  .card p{color:var(--soft);font-size:.97rem;}
+  .step b{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--indigo-pale);color:var(--indigo);font-size:.9rem;margin-bottom:10px;}
+  .step small{display:block;margin-top:8px;font-weight:700;color:var(--coral);font-size:.85rem;}
+  /* 견적 */
+  .quote{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:20px;align-items:start;}
+  @media(max-width:880px){.quote{grid-template-columns:1fr;}}
+  .opt{margin-top:18px;}
+  .opt:first-child{margin-top:0;}
+  .opt > b{display:block;margin-bottom:8px;}
+  .stepper{display:flex;align-items:center;gap:14px;}
+  .stepper button{width:44px;height:44px;border-radius:12px;border:1.5px solid var(--line);background:#fff;font-size:1.3rem;font-weight:700;}
+  .stepper output{font-size:1.6rem;font-weight:800;min-width:3.2em;text-align:center;}
+  .choice{display:grid;gap:8px;}
+  .choice label{display:flex;gap:12px;align-items:flex-start;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff;cursor:pointer;}
+  .choice label:has(input:checked){border-color:var(--indigo);background:var(--indigo-pale);}
+  .choice input{margin-top:5px;accent-color:var(--indigo);}
+  .choice span{font-size:.97rem;}
+  .choice small{display:block;color:var(--soft);font-size:.86rem;}
+  .choice i{font-style:normal;margin-left:auto;font-weight:700;white-space:nowrap;font-size:.92rem;}
+  .field{display:block;margin-top:12px;}
+  .field span{display:block;font-weight:600;font-size:.92rem;margin-bottom:5px;}
+  .in{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;}
+  .in:focus{outline:2px solid var(--indigo);border-color:var(--indigo);}
+  .total{margin-top:18px;background:var(--ink);color:#fff;border-radius:14px;padding:16px 18px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  .total b{font-size:1.7rem;letter-spacing:-.02em;}
+  .total span{color:#C9C6E8;font-size:.9rem;}
+  .msg{font-size:.92rem;color:var(--soft);margin-top:8px;min-height:1.4em;}
+  .msg.err{color:#B5382A;}
+  /* 견적서 (PDF로 그대로 나간다) */
+  .sheet-box{overflow:auto;border:1px solid var(--line);border-radius:16px;background:#fff;}
+  .sheet{width:700px;padding:44px 44px 40px;background:#fff;color:#111;font-size:13px;line-height:1.55;}
+  .sheet h3{font-size:26px;letter-spacing:.5em;text-align:center;margin-bottom:26px;}
+  .sheet .top{display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start;}
+  .sheet .to{font-size:15px;line-height:1.9;}
+  .sheet .to b{font-size:17px;border-bottom:1px solid #111;padding-bottom:1px;}
+  .sheet table{width:100%;border-collapse:collapse;}
+  .sheet th,.sheet td{border:1px solid #111;padding:6px 8px;}
+  .sheet th{background:#F1F0F7;font-weight:600;white-space:nowrap;}
+  .sheet .sup th{width:74px;}
+  .sheet .sum{margin:22px 0 10px;border:2px solid #111;padding:10px 14px;font-size:15px;display:flex;gap:10px;align-items:baseline;}
+  .sheet .sum b{font-size:17px;}
+  .sheet .items td:nth-child(n+2){text-align:right;white-space:nowrap;}
+  .sheet .items td:first-child small{display:block;color:#555;font-size:11.5px;}
+  .sheet .items tfoot td{font-weight:700;background:#FAFAFD;}
+  .sheet .notes{margin-top:16px;font-size:12px;color:#333;}
+  .sheet .notes li{margin-left:16px;}
+  footer{padding:36px 0 60px;color:var(--muted);font-size:.88rem;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><div class="brand"><i></i>리얼 보이스<span>커먼즈웍스</span></div></header>
+
+  <div class="hero">
+    <h1>참여자 10~20명의 목소리를 <em>2주 안에</em> 보고서로 받아보세요.</h1>
+    <p>AI 진행자가 사업 참여자와 1:1로 음성 인터뷰를 합니다. 담당 연구자 한 명이 인터뷰를 모두 확인하고 보고서를 냅니다.</p>
+    <div class="cta">
+      <a class="btn" href="#quote">견적 바로 보기</a>
+      <a class="btn line" href="real-voice-interview.html?demo=1" id="demoLink">5분 체험 인터뷰 해 보기</a>
+    </div>
+  </div>
+
+  <section>
+    <h2>만족도 조사로는 알 수 없던 것을 듣습니다</h2>
+    <p class="sub">참여자는 문자로 받은 링크를 누르고 10분쯤 말하면 됩니다.</p>
+    <div class="cards">
+      <div class="card"><h3>약속을 잡지 않습니다</h3><p>참여자가 편한 시간에 자기 휴대폰으로 합니다. 섭외와 일정 조율에 쓰던 몇 주가 줄어듭니다.</p></div>
+      <div class="card"><h3>"왜 그러셨어요?"를 묻습니다</h3><p>"좋았어요"로 끝나는 답에 진행자가 장면과 이유를 다시 묻습니다. 참여자가 한 말은 인용문으로 보고서에 실립니다.</p></div>
+      <div class="card"><h3>연구자가 모두 확인합니다</h3><p>사업마다 연구자 한 명이 녹음을 듣고 받아쓰기를 확인합니다. 쓸 만한 자료만 골라 분석합니다.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>신청부터 보고서까지</h2>
+    <p class="sub">참여 기간이 대부분을 차지합니다.</p>
+    <div class="cards">
+      <div class="card step"><b>1</b><h3>질문 가이드 확정</h3><p>사업 개요와 알고 싶은 것을 보내 주시면 질문 초안을 드립니다. 담당자가 고치고 승인합니다.</p><small>2일</small></div>
+      <div class="card step"><b>2</b><h3>참여자 인터뷰</h3><p>참여자에게 링크를 보냅니다. 기관이 직접 보내도 되고, 명단을 주시면 저희가 연락합니다.</p><small>5~7일</small></div>
+      <div class="card step"><b>3</b><h3>연구자 확인</h3><p>담당 연구자가 인터뷰를 한 건씩 확인합니다. 답이 부족한 인터뷰는 분석에서 뺍니다.</p><small>인터뷰와 함께 진행</small></div>
+      <div class="card step"><b>4</b><h3>보고서</h3><p>핵심 발견, 질문별 정리, 인용문, 제언을 Word 파일로 드립니다.</p><small>2~3일</small></div>
+    </div>
+  </section>
+
+  <section id="quote">
+    <h2>견적</h2>
+    <p class="sub">고르는 대로 금액이 바뀝니다. 견적서는 바로 내려받을 수 있습니다.</p>
+    <div class="quote">
+      <div class="card">
+        <div class="opt"><b>인터뷰할 참여자 수</b>
+          <div class="stepper"><button id="minus" aria-label="한 명 줄이기">−</button><output id="people">10</output><button id="plus" aria-label="한 명 늘리기">+</button></div>
+          <p class="msg" id="rangeMsg"></p></div>
+        <div class="opt"><b>참여자 연락</b><div class="choice">
+          <label><input type="radio" name="recruit" value="0" checked><span>기관이 직접 링크를 보냅니다<small>이미 섭외한 참여자에게 링크만 전하면 됩니다.</small></span><i>0원</i></label>
+          <label><input type="radio" name="recruit" value="1"><span>리얼 보이스가 연락합니다<small>연락처 명단을 주시면 안내하고 참여를 챙깁니다.</small></span><i id="pRecruit"></i></label>
+        </div></div>
+        <div class="opt"><b>참여자 사례</b><div class="choice">
+          <label><input type="radio" name="payout" value="0" checked><span>기관이 직접 지급합니다</span><i>0원</i></label>
+          <label><input type="radio" name="payout" value="1"><span>리얼 보이스가 대신 지급합니다<small>사례비는 실비로 따로 청구합니다.</small></span><i id="pPayout"></i></label>
+        </div></div>
+        <div class="total"><b id="total"></b><span>부가세 포함</span></div>
+        <label class="field"><span>기관명</span><input class="in" id="org" placeholder="예: ○○구청 주민자치과"></label>
+        <label class="field"><span>사업명</span><input class="in" id="proj" placeholder="예: 2026 주민 텃밭 학교"></label>
+        <div style="margin-top:16px;display:grid;gap:8px">
+          <button class="btn coral" id="pdf">견적서 PDF 받기</button>
+          <button class="btn line" id="applyOpen">이 내용으로 신청하기</button>
+        </div>
+        <p class="msg" id="pdfMsg"></p>
+        <div id="apply" hidden>
+          <label class="field"><span>담당자 이름</span><input class="in" id="name"></label>
+          <label class="field"><span>연락처 (전화나 이메일)</span><input class="in" id="contact"></label>
+          <label class="field"><span>남기실 말</span><textarea class="in" id="note" rows="2" placeholder="희망 일정, 참여자 특성 등"></textarea></label>
+          <button class="btn" id="applySend" style="margin-top:12px;width:100%">신청 보내기</button>
+          <p class="msg" id="applyMsg"></p>
+        </div>
+      </div>
+
+      <div>
+        <div class="sheet-box"><div class="sheet" id="sheet">
+          <h3>견적서</h3>
+          <div class="top">
+            <div class="to"><b id="q-org">○○○</b> 귀하<br>건명: <span id="q-proj">○○ 사업</span> 참여자 음성 인터뷰 조사<br>견적일: <span id="q-date"></span><br>유효기간: 견적일부터 30일</div>
+            <table class="sup"><tr><th rowspan="5" style="width:26px;white-space:normal">공<br>급<br>자</th><th>상호</th><td id="q-name"></td></tr>
+              <tr><th>등록번호</th><td id="q-bizno"></td></tr><tr><th>대표자</th><td id="q-ceo"></td></tr>
+              <tr><th>주소</th><td id="q-addr"></td></tr><tr><th>연락처</th><td id="q-contact"></td></tr></table>
+          </div>
+          <div class="sum">합계 금액 <b id="q-korean"></b><span id="q-total"></span></div>
+          <table class="items"><thead><tr><th>항목</th><th>단가</th><th>수량</th><th>금액</th></tr></thead>
+            <tbody id="q-rows"></tbody>
+            <tfoot><tr><td colspan="3">공급가액</td><td id="q-supply"></td></tr><tr><td colspan="3">부가세 (10%)</td><td id="q-vat"></td></tr><tr><td colspan="3">합계</td><td id="q-sum"></td></tr></tfoot></table>
+          <ul class="notes" id="q-notes"></ul>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>이 조사가 맞지 않는 경우</h2>
+    <div class="cards">
+      <div class="card"><p>AI 진행자는 표정을 읽지 못합니다. 꺼내기 어려운 이야기를 깊이 들어야 하는 조사는 연구자가 직접 만나는 인터뷰가 맞습니다.</p></div>
+      <div class="card"><p>10~20명의 이야기로 사업 전체를 수치로 말할 수는 없습니다. 보고서에는 "12명 중 7명"처럼 센 수와 조사의 한계를 함께 적습니다.</p></div>
+      <div class="card"><p>인터뷰에서 눈에 띄는 참여자는 보고서에 따로 표시합니다. 필요하면 연구자가 그분들을 직접 만나는 인터뷰를 이어서 할 수 있습니다.</p></div>
+    </div>
+  </section>
+
+  <footer>리얼 보이스는 커먼즈웍스 주식회사가 운영합니다.</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
+<script>
+const $ = id => document.getElementById(id);
+const LOCAL = ['localhost', '127.0.0.1'].includes(location.hostname);
+const won = n => Math.round(n).toLocaleString('ko-KR') + '원';
+let P = {unit: 100000, recruit: 10000, payout: 10000, min: 10, max: 20, vat: 0.1};
+let SUP = {name: '커먼즈웍스 주식회사', bizno: '', ceo: '', addr: '', contact: '', bank: ''};
+let people = 10;
+
+async function api(action, body = {}) {
+  const r = await fetch('/api/real-voice', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({action, ...body})});
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.message || '문제가 생겼어요. 다시 시도해 주세요.');
+  return j;
+}
+// 1980000 → "일백구십팔만"
+function korean(n) {
+  const D = ['', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구'], U = ['', '십', '백', '천'], G = ['', '만', '억', '조'];
+  let out = '';
+  for (let g = 0; n > 0; g++, n = Math.floor(n / 10000)) {
+    const part = n % 10000;
+    if (!part) continue;
+    let s = '';
+    for (let i = 0, v = part; v > 0; i++, v = Math.floor(v / 10)) if (v % 10) s = D[v % 10] + U[i] + s;
+    out = s + G[g] + out;
+  }
+  return out || '영';
+}
+const pick = name => document.querySelector(`input[name="${name}"]:checked`).value === '1';
+
+function calc() {
+  const recruit = pick('recruit'), payout = pick('payout');
+  const rows = [{name: 'AI 음성 인터뷰와 분석', note: '질문 가이드 설계, 1:1 음성 인터뷰, 연구자 검증, 분석 보고서', unit: P.unit}];
+  if (recruit) rows.push({name: '참여자 섭외·연락 대행', note: '명단 기준 안내 발송과 참여 독려', unit: P.recruit});
+  if (payout) rows.push({name: '참여자 사례 지급 대행', note: '사례비는 실비로 따로 청구', unit: P.payout});
+  const supply = rows.reduce((s, r) => s + r.unit * people, 0), vat = Math.round(supply * P.vat);
+  return {recruit, payout, rows, supply, vat, total: supply + vat};
+}
+function draw() {
+  const c = calc();
+  $('people').textContent = `${people}명`;
+  $('minus').disabled = people <= P.min; $('plus').disabled = people >= P.max;
+  $('rangeMsg').textContent = people >= P.max ? `${P.max}명보다 많으면 신청하실 때 남겨 주세요. 따로 견적을 드립니다.` : '';
+  $('pRecruit').textContent = `인당 ${won(P.recruit)}`; $('pPayout').textContent = `인당 ${won(P.payout)}`;
+  $('total').textContent = won(c.total);
+  $('q-org').textContent = $('org').value.trim() || '○○○';
+  $('q-proj').textContent = $('proj').value.trim() || '○○ 사업';
+  $('q-date').textContent = new Date().toLocaleDateString('ko-KR', {year: 'numeric', month: 'long', day: 'numeric'});
+  for (const k of ['name', 'bizno', 'ceo', 'addr', 'contact']) $('q-' + k).textContent = SUP[k] || '';
+  $('q-korean').textContent = `일금 ${korean(c.total)}원정`;
+  $('q-total').textContent = `(₩${c.total.toLocaleString('ko-KR')}, 부가세 포함)`;
+  $('q-rows').innerHTML = c.rows.map(r => `<tr><td>${r.name}<small>${r.note}</small></td><td>${won(r.unit)}</td><td>${people}명</td><td>${won(r.unit * people)}</td></tr>`).join('');
+  $('q-supply').textContent = won(c.supply); $('q-vat').textContent = won(c.vat); $('q-sum').textContent = won(c.total);
+  $('q-notes').innerHTML = [
+    `참여자 ${people}명이 인터뷰를 마치는 것을 기준으로 한 금액입니다. 마친 인원이 이보다 적으면 마친 인원만큼만 청구합니다.`,
+    '진행자가 핵심 질문을 모두 마친 인터뷰를 마친 것으로 셉니다.',
+    '조사 기간은 질문 가이드 확정부터 보고서 제출까지 2주 안팎입니다.',
+    c.payout ? '참여자 사례비는 실제 지급한 금액을 따로 청구합니다.' : '참여자 사례는 기관이 직접 지급합니다.',
+    ...(SUP.bank ? [`입금 계좌: ${SUP.bank}`] : []),
+  ].map(t => `<li>${t}</li>`).join('');
+  return c;
+}
+$('minus').onclick = () => { people = Math.max(P.min, people - 1); draw(); };
+$('plus').onclick = () => { people = Math.min(P.max, people + 1); draw(); };
+for (const el of document.querySelectorAll('input[type="radio"]')) el.onchange = draw;
+$('org').oninput = $('proj').oninput = draw;
+
+$('pdf').onclick = async () => {
+  const msg = $('pdfMsg');
+  if (!$('org').value.trim()) { msg.className = 'msg err'; msg.textContent = '기관명을 적어 주세요. 견적서의 받는 곳에 들어갑니다.'; return $('org').focus(); }
+  if (!window.html2pdf) { msg.className = 'msg err'; msg.textContent = 'PDF 도구를 불러오지 못했어요. 새로고침한 뒤 다시 눌러 주세요.'; return; }
+  draw();
+  msg.className = 'msg'; msg.textContent = '견적서를 만들고 있어요.';
+  $('sheet').style.zoom = 1;   // 화면에 맞춰 줄여 둔 견적서를 원래 크기로 돌려 PDF로 만든다
+  await html2pdf().set({
+    margin: [8, 0, 8, 0], filename: `리얼보이스_견적서_${$('org').value.trim()}.pdf`,
+    image: {type: 'jpeg', quality: 0.98}, html2canvas: {scale: 2, windowWidth: 700}, jsPDF: {unit: 'mm', format: 'a4', orientation: 'portrait'},
+  }).from($('sheet')).save();
+  fit();
+  msg.textContent = '견적서를 내려받았습니다.';
+};
+$('applyOpen').onclick = () => { $('apply').hidden = false; $('applyOpen').hidden = true; $('name').focus(); };
+$('applySend').onclick = async e => {
+  const c = calc(), msg = $('applyMsg');
+  e.target.disabled = true;
+  try {
+    await api('lead', {org: $('org').value, project: $('proj').value, name: $('name').value, contact: $('contact').value, note: $('note').value, people, recruit: c.recruit, payout: c.payout, total: c.total});
+    msg.className = 'msg'; msg.textContent = '신청을 받았습니다. 영업일 하루 안에 연락드리겠습니다.';
+  } catch (err) { msg.className = 'msg err'; msg.textContent = err.message; e.target.disabled = false; }
+};
+if (LOCAL && !new URLSearchParams(location.search).has('ai')) $('demoLink').href += '&fast=0';
+
+// 견적서(가로 700px)를 칸 너비에 맞춰 줄여 보여 준다.
+function fit() { $('sheet').style.zoom = Math.min(1, $('sheet').parentElement.clientWidth / 700); }
+addEventListener('resize', fit);
+fit();
+draw();
+api('pricing').then(d => { P = d.price; SUP = d.supplier; people = Math.max(P.min, Math.min(P.max, people)); draw(); }).catch(() => {});
+</script>
+</body>
+</html>

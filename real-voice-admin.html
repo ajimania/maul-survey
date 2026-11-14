@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>리얼 보이스 — 운영자</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{
+    --ink:#1D1B2E; --soft:#55526B; --muted:#8B889E;
+    --indigo:#34308A; --indigo-deep:#231F63; --indigo-pale:#ECEBFA;
+    --coral:#F26B4E; --coral-pale:#FDEDE8;
+    --paper:#F6F5F1; --card:#FFFFFF; --line:#E3E1EC;
+    --ok:#1F8A5B; --ok-pale:#E4F4EC; --warn:#A8690A; --warn-pale:#FCF1DA; --bad:#B5382A; --bad-pale:#FBE7E4;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--ink);background:var(--paper);line-height:1.6;word-break:keep-all;font-size:15px;}
+  button{font:inherit;cursor:pointer;color:inherit;}
+  input,textarea,select{font:inherit;color:inherit;}
+  [hidden]{display:none!important;}
+  a{color:var(--indigo);}
+  .top{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;}
+  .top-in{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+  .brand{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--indigo);}
+  .brand i{width:10px;height:10px;border-radius:50%;background:var(--coral);display:block;}
+  .brand small{font-weight:500;color:var(--muted);}
+  .nav{display:flex;gap:4px;margin-left:auto;}
+  .nav button{border:0;background:none;padding:7px 12px;border-radius:9px;font-weight:600;color:var(--soft);}
+  .nav button.on{background:var(--indigo-pale);color:var(--indigo);}
+  .tag{font-size:.75rem;font-weight:700;padding:3px 9px;border-radius:99px;background:#FFE08A;color:#5A4500;}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 20px 80px;}
+  h1{font-size:1.5rem;letter-spacing:-.02em;}
+  h2{font-size:1.15rem;margin-bottom:10px;}
+  h3{font-size:1rem;margin-bottom:6px;}
+  .sub{color:var(--soft);margin-top:4px;}
+  .head{display:flex;align-items:flex-end;gap:14px;margin-bottom:18px;flex-wrap:wrap;}
+  .head .sp{margin-left:auto;display:flex;gap:8px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;}
+  .card + .card{margin-top:14px;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
+  .pcard{cursor:pointer;transition:border-color .15s;}
+  .pcard:hover{border-color:var(--indigo);}
+  .pcard h3{font-size:1.08rem;}
+  .nums{display:flex;gap:16px;margin-top:12px;font-size:.88rem;color:var(--soft);}
+  .nums b{display:block;font-size:1.3rem;color:var(--ink);line-height:1.2;}
+  .btn{border:0;border-radius:10px;padding:9px 15px;font-weight:600;background:var(--indigo);color:#fff;}
+  .btn:hover{background:var(--indigo-deep);}
+  .btn:disabled{opacity:.5;cursor:default;}
+  .btn.line{background:#fff;border:1px solid var(--line);color:var(--soft);}
+  .btn.line:hover{border-color:var(--soft);background:#fff;}
+  .btn.small{padding:5px 10px;font-size:.85rem;border-radius:8px;}
+  .btn.coral{background:var(--coral);}
+  .field{display:block;margin-top:14px;}
+  .field > span{display:block;font-weight:600;font-size:.92rem;margin-bottom:5px;}
+  .field em{font-style:normal;font-weight:400;color:var(--muted);margin-left:6px;}
+  .in{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px 11px;background:#fff;}
+  .in:focus{outline:2px solid var(--indigo);border-color:var(--indigo);}
+  textarea.in{resize:vertical;min-height:84px;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media(max-width:720px){.two,.three{grid-template-columns:1fr;}}
+  .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px;overflow:auto;}
+  .tabs button{border:0;background:none;padding:10px 14px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;}
+  .tabs button.on{color:var(--indigo);border-color:var(--indigo);}
+  table{width:100%;border-collapse:collapse;font-size:.92rem;}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{font-size:.82rem;color:var(--muted);font-weight:600;}
+  .pill{display:inline-block;font-size:.78rem;font-weight:700;padding:2px 9px;border-radius:99px;background:#EEEDF3;color:var(--soft);white-space:nowrap;}
+  .pill.ok{background:var(--ok-pale);color:var(--ok);} .pill.warn{background:var(--warn-pale);color:var(--warn);} .pill.bad{background:var(--bad-pale);color:var(--bad);} .pill.info{background:var(--indigo-pale);color:var(--indigo);}
+  .msg{margin-top:10px;font-size:.9rem;color:var(--soft);min-height:1.4em;}
+  .msg.err{color:var(--bad);}
+  .q{border:1px solid var(--line);border-radius:11px;padding:12px;margin-top:10px;background:#FCFCFE;display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:start;}
+  .q b{width:26px;height:26px;border-radius:50%;background:var(--indigo-pale);color:var(--indigo);display:grid;place-items:center;font-size:.85rem;margin-top:5px;}
+  .q .in + .in{margin-top:6px;font-size:.9rem;}
+  .q .ops{display:grid;gap:4px;}
+  .linkbox{display:flex;gap:8px;align-items:center;background:var(--indigo-pale);border-radius:10px;padding:10px 12px;font-size:.9rem;word-break:break-all;}
+  .linkbox code{flex:1;font-family:ui-monospace,Menlo,monospace;font-size:.82rem;}
+  /* 검증 */
+  .review{display:grid;grid-template-columns:270px 1fr;gap:16px;align-items:start;}
+  @media(max-width:860px){.review{grid-template-columns:1fr;}}
+  .ivlist{display:grid;gap:6px;max-height:76vh;overflow:auto;}
+  .ivrow{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 11px;text-align:left;display:grid;gap:3px;}
+  .ivrow.on{border-color:var(--indigo);box-shadow:0 0 0 1px var(--indigo);}
+  .ivrow span{font-size:.82rem;color:var(--muted);}
+  .check{display:grid;gap:8px;}
+  .check .row{display:grid;grid-template-columns:64px 1fr;gap:10px;font-size:.92rem;}
+  .flag{border-radius:10px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+  .flag.warn{background:var(--warn-pale);color:#6B4300;} .flag.bad{background:var(--bad-pale);color:#7D2318;}
+  .turn{display:grid;grid-template-columns:56px 1fr;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);}
+  .turn .who{font-size:.8rem;font-weight:700;color:var(--muted);padding-top:2px;}
+  .turn.p .who{color:var(--coral);}
+  .turn.p .said{font-weight:500;}
+  .turn .tools{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap;}
+  .turn .orig{font-size:.82rem;color:var(--muted);margin-top:3px;}
+  .verdict{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+  .verdict button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:9px 14px;font-weight:700;color:var(--soft);}
+  .verdict button.on.include{background:var(--ok-pale);border-color:var(--ok);color:var(--ok);}
+  .verdict button.on.fix{background:var(--warn-pale);border-color:var(--warn);color:var(--warn);}
+  .verdict button.on.exclude{background:var(--bad-pale);border-color:var(--bad);color:var(--bad);}
+  /* 보고서 */
+  .report{max-width:820px;}
+  .report h2{margin-top:28px;padding-bottom:6px;border-bottom:2px solid var(--ink);}
+  .report h3{margin-top:18px;font-size:1.02rem;}
+  .report p{margin-top:6px;}
+  .report blockquote{margin:8px 0 0;padding:8px 14px;border-left:3px solid var(--coral);background:#FFFAF8;font-size:.95rem;}
+  .report blockquote cite{font-style:normal;color:var(--muted);font-size:.82rem;margin-left:6px;}
+  .report .cnt{font-size:.82rem;font-weight:700;color:var(--indigo);margin-left:6px;white-space:nowrap;}
+  .report ul{margin:6px 0 0 18px;}
+  .kv{display:grid;grid-template-columns:120px 1fr;gap:4px 12px;font-size:.93rem;margin-top:8px;}
+  .kv dt{color:var(--muted);}
+  .login{max-width:360px;margin:12vh auto 0;}
+</style>
+</head>
+<body>
+<div class="top"><div class="top-in">
+  <div class="brand"><i></i>리얼 보이스 <small>운영자</small></div>
+  <span class="tag" id="mockTag" hidden>가짜 AI (비용 없음)</span>
+  <div class="nav" id="nav" hidden>
+    <button data-go="projects" class="on">사업</button>
+    <button data-go="leads">신청</button>
+    <button data-go="settings">설정</button>
+  </div>
+</div></div>
+<div class="wrap" id="view"></div>
+
+<script src="https://unpkg.com/docx@8.5.0/build/index.umd.js" defer></script>
+<script>
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+const Q = new URLSearchParams(location.search);
+const LOCAL = ['localhost', '127.0.0.1'].includes(location.hostname);
+const MOCK = Q.get('mock') === '1' || (LOCAL && Q.get('ai') !== '1');   // localhost 는 기본이 가짜 AI
+$('#mockTag').hidden = !MOCK;
+const view = $('#view');
+let PASS = sessionStorage.getItem('rv-pass') || '';
+let SETTINGS = null;
+
+async function api(action, body = {}) {
+  const r = await fetch('/api/real-voice', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({action, pass: PASS, mock: MOCK, ...body})});
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw Object.assign(new Error(j.message || '문제가 생겼어요.'), {code: j.error});
+  return j;
+}
+const fmtDate = s => (s ? new Date(s).toLocaleString('ko-KR', {month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'}) : '');
+const fmtDay = s => (s ? new Date(s).toLocaleDateString('ko-KR', {year: 'numeric', month: 'long', day: 'numeric'}) : '');
+const fmtSec = s => (s ? `${Math.floor(s / 60)}분 ${s % 60}초` : '-');
+const won = n => Number(n || 0).toLocaleString('ko-KR') + '원';
+const STATUS = {invited: ['미참여', ''], started: ['진행 중', 'info'], completed: ['완료', 'ok'], partial: ['중단', 'warn']};
+const VERDICT = {include: ['분석에 포함', 'ok'], fix: ['보완 필요', 'warn'], exclude: ['제외', 'bad']};
+const COMPLETE = {완결: 'ok', 일부: 'warn', 미흡: 'bad'};
+const pill = (text, cls) => `<span class="pill ${cls || ''}">${esc(text)}</span>`;
+const ivLink = token => `${location.origin}/real-voice-interview.html?t=${token}`;
+const openLink = p => `${location.origin}/real-voice-interview.html?${p.demo ? 'demo=1' : 'p=' + p.openToken}`;
+async function copy(text, btn) {
+  try { await navigator.clipboard.writeText(text); } catch { prompt('복사해서 쓰세요', text); return; }
+  if (btn) { const t = btn.textContent; btn.textContent = '복사했어요'; setTimeout(() => (btn.textContent = t), 1200); }
+}
+function busy(btn, on, label) {
+  if (on) { btn.dataset.t = btn.textContent; btn.textContent = label || '하는 중…'; btn.disabled = true; }
+  else { btn.textContent = btn.dataset.t; btn.disabled = false; }
+}
+
+/* ---------- 들어가기 ---------- */
+function loginView(msg = '') {
+  $('#nav').hidden = true;
+  view.innerHTML = `<div class="card login"><h2>운영자 화면</h2>
+    <label class="field"><span>비밀번호</span><input class="in" type="password" id="pw" autocomplete="current-password"></label>
+    <button class="btn" id="go" style="margin-top:14px;width:100%">들어가기</button><p class="msg err">${esc(msg)}</p></div>`;
+  const go = async () => {
+    PASS = $('#pw').value;
+    try { await api('admin.login'); sessionStorage.setItem('rv-pass', PASS); start(); }
+    catch (e) { loginView(e.message); }
+  };
+  $('#go').onclick = go;
+  $('#pw').onkeydown = e => { if (e.key === 'Enter') go(); };
+  $('#pw').focus();
+}
+async function start() {
+  try { SETTINGS = (await api('admin.settings.get')); } catch (e) { return loginView(e.code === 'pass' && PASS ? e.message : e.code === 'pass' ? '' : e.message); }
+  $('#nav').hidden = false;
+  route();
+}
+$$('#nav button').forEach(b => b.onclick = () => { location.hash = b.dataset.go; });
+addEventListener('hashchange', route);
+function route() {
+  if (!SETTINGS) return;
+  const [name, id, tab] = location.hash.slice(1).split('/');
+  $$('#nav button').forEach(b => b.classList.toggle('on', b.dataset.go === (name === 'p' || name === 'new' || !name ? 'projects' : name)));
+  if (name === 'p' && id) return projectView(id, tab || 'status');
+  if (name === 'new') return editView(null);
+  if (name === 'leads') return leadsView();
+  if (name === 'settings') return settingsView();
+  projectsView();
+}
+
+/* ---------- 사업 목록 ---------- */
+async function projectsView() {
+  view.innerHTML = '<p class="sub">불러오고 있어요.</p>';
+  const {projects} = await api('admin.projects');
+  view.innerHTML = `<div class="head"><div><h1>사업</h1><p class="sub">사업 하나가 인터뷰 조사 한 건입니다.</p></div>
+    <div class="sp"><button class="btn" id="new">새 사업 만들기</button></div></div>
+    <div class="grid">${projects.map(p => `<div class="card pcard" data-id="${esc(p.id)}">
+      <div style="display:flex;gap:8px;align-items:center">${p.demo ? pill('체험용', 'info') : pill({draft: '준비 중', open: '진행 중', closed: '마감'}[p.status] || '', p.status === 'open' ? 'ok' : '')}
+        <span class="sub" style="margin:0;font-size:.85rem">${esc(p.org)}</span></div>
+      <h3 style="margin-top:8px">${esc(p.title)}</h3>
+      <div class="nums"><div><b>${p.counts.completed}</b>완료${p.demo ? '' : ` / 목표 ${p.target}`}</div><div><b>${p.counts.waiting}</b>검증 대기</div><div><b>${p.counts.included}</b>분석 포함</div></div>
+    </div>`).join('')}</div>`;
+  $('#new').onclick = () => { location.hash = 'new'; };
+  $$('.pcard').forEach(c => c.onclick = () => { location.hash = `p/${c.dataset.id}`; });
+}
+
+/* ---------- 사업 만들기 · 고치기 ---------- */
+function editView(project, host = view) {
+  const p = project || {org: '', title: '', brief: '', goals: '', intro: '', questions: [], researcher: '', target: 10, mode: 'link', payout: 'org', incentive: '', status: 'draft', minutes: null, followups: null, extra: ''};
+  let questions = p.questions.map(q => ({...q}));
+  const r = SETTINGS.settings.rules;
+  host.innerHTML = `${project ? '' : `<div class="head"><div><h1>새 사업 만들기</h1><p class="sub">사업 개요와 알고 싶은 것을 적으면 AI가 질문 가이드 초안을 씁니다. 연구자가 고쳐서 확정합니다.</p></div></div>`}
+  <div class="card"><h2>1. 사업</h2>
+    <div class="two">
+      <label class="field"><span>기관명</span><input class="in" id="f-org" value="${esc(p.org)}" placeholder="예: ○○구 마을공동체지원센터"></label>
+      <label class="field"><span>사업명</span><input class="in" id="f-title" value="${esc(p.title)}" placeholder="예: 2026 주민 텃밭 학교"></label>
+    </div>
+    <label class="field"><span>사업 개요<em>누가, 누구에게, 무엇을, 언제 했는지</em></span><textarea class="in" id="f-brief" rows="4">${esc(p.brief)}</textarea></label>
+    <label class="field"><span>기관이 알고 싶은 것<em>평가 질문</em></span><textarea class="in" id="f-goals" rows="3">${esc(p.goals)}</textarea></label>
+  </div>
+  <div class="card"><h2>2. 질문 가이드</h2>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button class="btn coral" id="draft">AI로 초안 쓰기</button><span class="sub" style="margin:0">핵심 질문은 4~5개를 권합니다. 이미 적은 질문이 있으면 초안으로 바뀝니다.</span></div>
+    <p class="msg" id="draftMsg"></p>
+    <label class="field"><span>참여자 첫 화면 안내<em>두 문장</em></span><textarea class="in" id="f-intro" rows="2">${esc(p.intro)}</textarea></label>
+    <div id="qs"></div>
+    <button class="btn line small" id="addQ" style="margin-top:10px">질문 더하기</button>
+  </div>
+  <div class="card"><h2>3. 진행</h2>
+    <div class="three">
+      <label class="field"><span>담당 연구자</span><input class="in" id="f-researcher" value="${esc(p.researcher)}"></label>
+      <label class="field"><span>목표 인원</span><input class="in" id="f-target" type="number" min="1" value="${p.target}"></label>
+      <label class="field"><span>상태</span><select class="in" id="f-status">
+        <option value="draft"${p.status === 'draft' ? ' selected' : ''}>준비 중</option><option value="open"${p.status === 'open' ? ' selected' : ''}>진행 중</option><option value="closed"${p.status === 'closed' ? ' selected' : ''}>마감 (링크 닫힘)</option></select></label>
+    </div>
+    <div class="three">
+      <label class="field"><span>참여자 연락</span><select class="in" id="f-mode">
+        <option value="link"${p.mode === 'link' ? ' selected' : ''}>기관이 링크를 직접 보냄</option><option value="recruit"${p.mode === 'recruit' ? ' selected' : ''}>명단을 받아 우리가 연락</option></select></label>
+      <label class="field"><span>사례 지급</span><select class="in" id="f-payout">
+        <option value="org"${p.payout === 'org' ? ' selected' : ''}>기관이 직접 지급</option><option value="agent"${p.payout === 'agent' ? ' selected' : ''}>우리가 대행 (끝에 번호 받음)</option></select></label>
+      <label class="field"><span>사례 내용<em>참여자 안내에 표시</em></span><input class="in" id="f-incentive" value="${esc(p.incentive)}" placeholder="예: 커피 쿠폰 1만 원"></label>
+    </div>
+    <div class="three">
+      <label class="field"><span>목표 시간(분)<em>비우면 ${r.minutes}</em></span><input class="in" id="f-minutes" type="number" min="3" max="14" value="${p.minutes ?? ''}"></label>
+      <label class="field"><span>꼬리 질문 최대<em>비우면 ${r.followups}</em></span><input class="in" id="f-followups" type="number" min="0" max="3" value="${p.followups ?? ''}"></label>
+    </div>
+    <label class="field"><span>이 사업에서 진행자가 더 지킬 것<em>선택</em></span><textarea class="in" id="f-extra" rows="2" placeholder="예: 참여자 대부분이 70대 이상이다. 천천히 말한다.">${esc(p.extra)}</textarea></label>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center;margin-top:16px"><button class="btn" id="save">${project ? '저장' : '사업 만들기'}</button><p class="msg" id="saveMsg" style="margin:0"></p></div>`;
+
+  const drawQs = () => {
+    $('#qs', host).innerHTML = questions.map((q, i) => `<div class="q"><b>${i + 1}</b><div>
+      <textarea class="in" rows="2" data-i="${i}" data-k="text" placeholder="진행자가 소리 내어 물을 문장">${esc(q.text)}</textarea>
+      <input class="in" data-i="${i}" data-k="intent" value="${esc(q.intent)}" placeholder="이 질문으로 알고 싶은 것"></div>
+      <div class="ops"><button class="btn line small" data-up="${i}"${i ? '' : ' disabled'}>위로</button><button class="btn line small" data-del="${i}">빼기</button></div></div>`).join('');
+    $$('#qs [data-k]', host).forEach(el => el.oninput = () => { questions[el.dataset.i][el.dataset.k] = el.value; });
+    $$('#qs [data-up]', host).forEach(b => b.onclick = () => { const i = +b.dataset.up; [questions[i - 1], questions[i]] = [questions[i], questions[i - 1]]; drawQs(); });
+    $$('#qs [data-del]', host).forEach(b => b.onclick = () => { questions.splice(+b.dataset.del, 1); drawQs(); });
+  };
+  drawQs();
+  const numOrNull = v => (v === '' ? null : Number(v));
+  const read = () => ({
+    org: $('#f-org', host).value, title: $('#f-title', host).value, brief: $('#f-brief', host).value, goals: $('#f-goals', host).value,
+    intro: $('#f-intro', host).value, questions, researcher: $('#f-researcher', host).value, target: Number($('#f-target', host).value) || 10,
+    status: $('#f-status', host).value, mode: $('#f-mode', host).value, payout: $('#f-payout', host).value, incentive: $('#f-incentive', host).value,
+    minutes: numOrNull($('#f-minutes', host).value), followups: numOrNull($('#f-followups', host).value), extra: $('#f-extra', host).value,
+  });
+  $('#addQ', host).onclick = () => { questions.push({text: '', intent: ''}); drawQs(); };
+  $('#draft', host).onclick = async e => {
+    const msg = $('#draftMsg', host);
+    busy(e.target, true, 'AI가 쓰고 있어요…'); msg.className = 'msg'; msg.textContent = '20초쯤 걸립니다.';
+    try {
+      const g = await api('admin.guide.draft', {project: read()});
+      $('#f-intro', host).value = g.intro; questions = g.questions; drawQs();
+      msg.textContent = '초안을 썼습니다. 읽어 보고 고쳐 주세요.';
+    } catch (err) { msg.className = 'msg err'; msg.textContent = err.message; }
+    busy(e.target, false);
+  };
+  $('#save', host).onclick = async e => {
+    const msg = $('#saveMsg', host);
+    busy(e.target, true, '저장 중…');
+    try {
+      const data = read();
+      if (data.status !== 'draft' && data.questions.filter(q => q.text.trim()).length < 1) throw new Error('질문을 하나 이상 적어야 진행할 수 있어요.');
+      const {id} = await api('admin.project.save', {id: project?.id || '', project: data});
+      if (project) { msg.className = 'msg'; msg.textContent = '저장했습니다.'; busy(e.target, false); }
+      else location.hash = `p/${id}`;
+    } catch (err) { msg.className = 'msg err'; msg.textContent = err.message; busy(e.target, false); }
+  };
+}
+
+/* ---------- 사업 한 건 ---------- */
+async function projectView(id, tab) {
+  view.innerHTML = '<p class="sub">불러오고 있어요.</p>';
+  let data;
+  try { data = await api('admin.project.get', {id}); } catch (e) { view.innerHTML = `<p class="msg err">${esc(e.message)}</p>`; return; }
+  const {project: p, interviews} = data;
+  const done = interviews.filter(i => i.status === 'completed' || i.status === 'partial');
+  const waiting = done.filter(i => !i.verdict).length;
+  view.innerHTML = `<div class="head"><div><p class="sub" style="margin:0"><a href="#projects">사업</a> › ${esc(p.org)}</p><h1>${esc(p.title)}</h1></div></div>
+    <div class="tabs">${[['status', '참여 현황'], ['review', `검증${waiting ? ` (${waiting})` : ''}`], ['report', '분석·보고서'], ['edit', '사업 설정']]
+      .map(([k, label]) => `<button data-tab="${k}" class="${k === tab ? 'on' : ''}">${label}</button>`).join('')}</div><div id="tab"></div>`;
+  $$('.tabs button').forEach(b => b.onclick = () => { location.hash = `p/${id}/${b.dataset.tab}`; });
+  const host = $('#tab');
+  if (tab === 'review') return reviewTab(host, p, done);
+  if (tab === 'report') return reportTab(host, p, interviews, data.report);
+  if (tab === 'edit') return p.demo ? (host.innerHTML = '<div class="card">체험용 사업은 고칠 수 없습니다. 누구나 견적 화면에서 바로 해 볼 수 있는 인터뷰입니다.</div>') : editView(p, host);
+  statusTab(host, p, interviews);
+}
+
+function statusTab(host, p, ivs) {
+  const n = k => ivs.filter(i => i.status === k).length;
+  const included = ivs.filter(i => i.verdict === 'include').length;
+  const minutes = p.minutes || SETTINGS.settings.rules.minutes;
+  const sms = iv => `[${p.org}] ${iv.name ? iv.name + ' 님, ' : ''}「${p.title}」 참여 경험을 듣는 음성 인터뷰입니다. AI 진행자가 묻고 말로 답하시면 됩니다(${minutes}분쯤). ${ivLink(iv.token)}`;
+  host.innerHTML = `<div class="card"><div class="nums" style="margin:0;flex-wrap:wrap">
+      <div><b>${n('completed')}</b>완료${p.demo ? '' : ` / 목표 ${p.target}`}</div><div><b>${n('partial')}</b>중단</div><div><b>${n('started')}</b>진행 중</div><div><b>${n('invited')}</b>미참여</div><div><b>${included}</b>분석 포함</div></div>
+      <p class="sub" style="font-size:.88rem">청구는 '완료' 인원으로 셉니다. 진행자가 질문을 모두 마친 인터뷰가 완료입니다.</p></div>
+    <div class="card"><h2>함께 쓰는 링크</h2><p class="sub" style="margin:0 0 10px">기관이 참여자에게 직접 보낼 때 씁니다. 누가 열어도 새 인터뷰가 시작됩니다.</p>
+      <div class="linkbox"><code>${esc(openLink(p))}</code><button class="btn small" id="copyOpen">복사</button></div>
+      ${p.status === 'draft' ? '<p class="msg err">상태가 \'준비 중\'이어도 링크는 열립니다. 질문 가이드를 확정한 뒤에 보내 주세요.</p>' : ''}</div>
+    ${p.demo ? '' : `<div class="card"><h2>명단으로 참여자별 링크 만들기</h2><p class="sub" style="margin:0 0 10px">한 줄에 한 명씩 "이름, 연락처"로 적습니다. 사람마다 링크가 달라 누가 마쳤는지 보입니다.</p>
+      <textarea class="in" id="people" rows="3" placeholder="김영희, 010-1234-5678&#10;박철수, 010-2345-6789"></textarea>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:10px"><button class="btn" id="invite">링크 만들기</button><p class="msg" id="inviteMsg" style="margin:0"></p></div></div>`}
+    <div class="card"><h2>참여자 ${ivs.length}명</h2>
+      ${ivs.length ? `<div style="overflow:auto"><table><thead><tr><th>번호</th><th>이름</th><th>상태</th><th>자료</th><th>검증</th><th>시간</th><th>마친 때</th><th></th></tr></thead><tbody>
+      ${ivs.map(iv => `<tr><td>${iv.pid}</td><td>${esc(iv.name || '-')}${iv.contact ? `<br><span class="sub" style="font-size:.8rem">${esc(iv.contact)}</span>` : ''}${iv.phone ? `<br><span class="sub" style="font-size:.8rem">사례 받을 번호 ${esc(iv.phone)}</span>` : ''}</td>
+        <td>${pill(...STATUS[iv.status])}${iv.mock ? ' ' + pill('가짜') : ''}${iv.mode === 'text' ? ' ' + pill('글') : ''}</td>
+        <td>${iv.completeness ? pill(iv.completeness, COMPLETE[iv.completeness]) : ''}</td><td>${iv.verdict ? pill(...VERDICT[iv.verdict]) : ''}</td>
+        <td>${fmtSec(iv.sec)}</td><td>${fmtDate(iv.endedAt)}</td>
+        <td style="white-space:nowrap">${iv.status === 'completed' ? '' : `<button class="btn line small" data-link="${iv.token}">링크</button> <button class="btn line small" data-sms="${iv.token}">문자 문구</button>`}</td></tr>`).join('')}
+      </tbody></table></div>` : '<p class="sub">아직 참여자가 없습니다.</p>'}</div>`;
+  $('#copyOpen').onclick = e => copy(openLink(p), e.target);
+  $$('[data-link]', host).forEach(b => b.onclick = () => copy(ivLink(b.dataset.link), b));
+  $$('[data-sms]', host).forEach(b => b.onclick = () => copy(sms(ivs.find(i => i.token === b.dataset.sms)), b));
+  if ($('#invite')) $('#invite').onclick = async e => {
+    const people = $('#people').value.split('\n').map(l => l.trim()).filter(Boolean).map(l => { const [name, ...rest] = l.split(/[,\t]/); return {name: name.trim(), contact: rest.join(',').trim()}; });
+    busy(e.target, true);
+    try { await api('admin.invite', {id: p.id, people}); projectView(p.id, 'status'); }
+    catch (err) { $('#inviteMsg').className = 'msg err'; $('#inviteMsg').textContent = err.message; busy(e.target, false); }
+  };
+}
+
+/* ---------- 연구자 검증 ---------- */
+function reviewTab(host, p, done) {
+  if (!done.length) { host.innerHTML = '<div class="card">마친 인터뷰가 아직 없습니다. 참여자가 인터뷰를 마치면 여기에 나타납니다.</div>'; return; }
+  host.innerHTML = `<p class="sub" style="margin:0 0 14px">담당 연구자가 인터뷰를 한 건씩 읽고 듣습니다. 자료가 분석에 쓸 만큼 갖춰졌는지 판정합니다. '분석에 포함'으로 판정한 인터뷰만 분석에 들어갑니다.</p>
+    <div class="review"><div class="ivlist">${done.map(iv => `<button class="ivrow" data-token="${iv.token}">
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><b>참여자 ${iv.pid}</b>${iv.verdict ? pill(...VERDICT[iv.verdict]) : pill('검증 대기', 'info')}</div>
+      <span>${iv.completeness ? `AI 점검: ${iv.completeness}` : 'AI 점검 전'} · ${fmtSec(iv.sec)}${iv.status === 'partial' ? ' · 중단' : ''}${iv.concerns ? ' · 확인 필요' : ''}${iv.followup ? ' · 만나 볼 만함' : ''}</span></button>`).join('')}</div>
+    <div id="ivDetail"><div class="card">왼쪽에서 인터뷰를 고르세요.</div></div></div>`;
+  const pick = token => {
+    $$('.ivrow', host).forEach(b => b.classList.toggle('on', b.dataset.token === token));
+    interviewDetail($('#ivDetail'), p, token);
+  };
+  $$('.ivrow', host).forEach(b => b.onclick = () => pick(b.dataset.token));
+  pick((done.find(i => !i.verdict) || done[0]).token);
+}
+
+async function interviewDetail(host, p, token) {
+  host.innerHTML = '<div class="card">불러오고 있어요.</div>';
+  let d;
+  try { d = await api('admin.interview.get', {token}); } catch (e) { host.innerHTML = `<div class="card msg err">${esc(e.message)}</div>`; return; }
+  const {interview: iv, turns} = d, c = iv.coding, v = iv.review?.verdict || '';
+  host.innerHTML = `<div class="card"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><h2 style="margin:0">참여자 ${iv.pid}${iv.name ? ` · ${esc(iv.name)}` : ''}</h2>
+      ${pill(...STATUS[iv.status])}${iv.mode === 'text' ? pill('글로 답함') : ''}${iv.mock ? pill('가짜 진행') : ''}
+      <span class="sub" style="margin:0 0 0 auto;font-size:.85rem">${fmtDate(iv.startedAt)} · ${fmtSec(iv.sec)}${iv.resumes ? ` · 다시 연결 ${iv.resumes}번` : ''}</span></div>
+    ${c ? `<h3 style="margin-top:16px">AI 점검 ${pill(c.completeness, COMPLETE[c.completeness])}</h3><p style="font-size:.92rem">${esc(c.completeness_reason)}</p>
+      <div class="check" style="margin-top:10px">${c.answers.map(a => `<div class="row"><div>${pill(a.status, {충분: 'ok', 부족: 'warn', 없음: 'bad'}[a.status])}</div>
+        <div><b>${a.q}. ${esc(p.questions[a.q - 1]?.text || '')}</b><br>${esc(a.summary)}</div></div>`).join('')}</div>
+      ${c.interviewer_issues ? `<div class="flag warn"><b>진행자 문제</b> ${esc(c.interviewer_issues)}</div>` : ''}
+      ${c.concerns ? `<div class="flag bad"><b>확인 필요</b> ${esc(c.concerns)}</div>` : ''}
+      ${c.followup_worthy ? `<div class="flag warn"><b>직접 만나 볼 만함</b> ${esc(c.followup_reason)}</div>` : ''}
+      ${c.unverified?.length ? `<div class="flag bad"><b>받아쓰기에서 찾지 못해 뺀 인용문 ${c.unverified.length}개</b></div>` : ''}` : '<p class="sub">AI 점검이 아직 없습니다.</p>'}
+    <button class="btn line small" id="recode" style="margin-top:12px">AI 점검 다시 하기</button></div>
+    <div class="card"><h2>연구자 판정</h2>
+      <div class="verdict">${Object.entries(VERDICT).map(([k, [label]]) => `<button data-v="${k}" class="${k} ${v === k ? 'on' : ''}">${label}</button>`).join('')}</div>
+      <label class="field"><span>메모<em>보완할 점, 제외한 까닭</em></span><textarea class="in" id="note" rows="2">${esc(iv.review?.note || '')}</textarea></label>
+      <p class="msg" id="vMsg">${iv.review ? `${esc(iv.review.by || '연구자')} · ${fmtDate(iv.review.at)}` : ''}</p></div>
+    <div class="card"><h2>받아쓰기</h2><p class="sub" style="margin:0 0 6px;font-size:.88rem">참여자 말은 녹음을 들어 확인할 수 있습니다. 받아쓰기가 틀렸으면 고쳐 주세요. 분석과 인용문에는 고친 글이 쓰입니다.</p>
+      ${turns.map(t => `<div class="turn ${t.role}" data-seq="${t.seq}"><div class="who">${t.role === 'ai' ? '진행자' : '참여자'}</div><div>
+        <div class="said">${esc(t.text)}</div>${t.original != null ? `<div class="orig">처음 받아쓴 글: ${esc(t.original)}</div>` : ''}
+        ${t.role === 'p' ? `<div class="tools">${t.audio ? `<button class="btn line small" data-play="${t.seq}">녹음 듣기</button><button class="btn line small" data-re="${t.seq}">다시 받아쓰기</button>` : `<span class="sub" style="margin:0;font-size:.8rem">${t.typed ? '글로 답함' : '녹음 없음'}</span>`}
+          <button class="btn line small" data-edit="${t.seq}">고치기</button></div>` : ''}</div></div>`).join('')}</div>`;
+  let player = null;
+  $$('[data-play]', host).forEach(b => b.onclick = async () => {
+    if (player) { player.pause(); player = null; }
+    busy(b, true, '불러오는 중…');
+    try { const a = await api('admin.audio', {token, seq: +b.dataset.play}); player = new Audio(`data:${a.mime};base64,${a.b64}`); await player.play(); }
+    catch (e) { alert(e.message || '녹음을 재생하지 못했어요.'); }
+    busy(b, false);
+  });
+  const editTurn = (seq, text) => {
+    const row = $(`.turn[data-seq="${seq}"]`, host), said = $('.said', row);
+    said.innerHTML = `<textarea class="in" rows="3">${esc(text ?? said.textContent)}</textarea><div class="tools"><button class="btn small" data-ok>저장</button><button class="btn line small" data-no>취소</button></div>`;
+    $('[data-no]', said).onclick = () => interviewDetail(host, p, token);
+    $('[data-ok]', said).onclick = async () => { await api('admin.turn.edit', {token, seq, text: $('textarea', said).value}); interviewDetail(host, p, token); };
+  };
+  $$('[data-edit]', host).forEach(b => b.onclick = () => editTurn(+b.dataset.edit));
+  $$('[data-re]', host).forEach(b => b.onclick = async () => {
+    busy(b, true, '받아쓰는 중…');
+    try { const r = await api('admin.retranscribe', {token, seq: +b.dataset.re}); editTurn(+b.dataset.re, r.text); }
+    catch (e) { alert(e.message); busy(b, false); }
+  });
+  $('#recode').onclick = async e => {
+    busy(e.target, true, 'AI가 읽고 있어요…');
+    try { await api('admin.code', {token}); interviewDetail(host, p, token); } catch (err) { alert(err.message); busy(e.target, false); }
+  };
+  $$('.verdict button', host).forEach(b => b.onclick = async () => {
+    const verdict = b.classList.contains('on') ? '' : b.dataset.v;
+    try {
+      await api('admin.review', {token, verdict, note: $('#note').value, by: p.researcher});
+      $$('.verdict button', host).forEach(x => x.classList.toggle('on', x.dataset.v === verdict));
+      $('#vMsg').textContent = verdict ? '판정을 저장했습니다.' : '판정을 지웠습니다.';
+      const row = $(`.ivrow[data-token="${token}"] .pill`);
+      if (row) row.outerHTML = verdict ? pill(...VERDICT[verdict]) : pill('검증 대기', 'info');
+    } catch (err) { $('#vMsg').className = 'msg err'; $('#vMsg').textContent = err.message; }
+  });
+}
+
+/* ---------- 분석 · 보고서 ---------- */
+const who = pids => pids.map(n => `참여자 ${n}`).join(', ');
+function reportHtml(p, rep) {
+  const r = rep.report, s = rep.stats;
+  const quotes = qs => qs.map(q => `<blockquote>${esc(q.text)}<cite>참여자 ${q.pid}</cite></blockquote>`).join('');
+  return `<h1>${esc(p.title)} 참여자 인터뷰 분석</h1><p class="sub">${esc(p.org)} · ${fmtDay(rep.at)}${rep.mock ? ' · 가짜 분석' : ''}</p>
+    <h2>1. 조사 개요</h2>
+    <dl class="kv"><dt>조사 방법</dt><dd>AI 진행자가 참여자와 1:1 음성 인터뷰를 했다. 담당 연구자${p.researcher ? `(${esc(p.researcher)})` : ''}가 인터뷰마다 녹음과 받아쓰기를 확인하고 분석에 넣을 자료를 골랐다.</dd>
+      <dt>조사 기간</dt><dd>${fmtDay(s.from)} ~ ${fmtDay(s.to)}</dd>
+      <dt>참여 인원</dt><dd>완료 ${s.completed}명, 중단 ${s.partial}명. 이 가운데 ${s.included}명을 분석했다${s.excluded ? `(검증에서 ${s.excluded}명 제외)` : ''}.</dd>
+      <dt>평균 시간</dt><dd>${s.avgMin}분</dd></dl>
+    <p style="margin-top:12px">${esc(r.summary)}</p>
+    <h2>2. 핵심 발견</h2>${r.findings.map((f, i) => `<h3>${i + 1}) ${esc(f.title)}<span class="cnt">${s.included}명 중 ${f.count}명</span></h3><p>${esc(f.detail)}</p>${quotes(f.quotes)}`).join('')}
+    <h2>3. 질문별 정리</h2>${r.by_question.map(b => `<h3>질문 ${b.q}. ${esc(p.questions[b.q - 1]?.text || '')}</h3><p>${esc(b.overview)}</p>
+      ${b.themes.map(t => `<p style="margin-top:12px"><b>${esc(t.name)}</b><span class="cnt">${t.count}명</span><br>${esc(t.detail)}</p>${quotes(t.quotes)}`).join('')}`).join('')}
+    <h2>4. 눈여겨볼 목소리</h2>${r.voices.length ? `<ul>${r.voices.map(x => `<li><b>참여자 ${x.pid}</b> ${esc(x.why)}</li>`).join('')}</ul>` : '<p>따로 만나 볼 참여자를 꼽지 않았다.</p>'}
+    <h2>5. 제언</h2>${r.recommendations.map((x, i) => `<h3>${i + 1}) ${esc(x.title)}</h3><p>${esc(x.detail)}</p><p class="sub" style="font-size:.88rem">근거: ${esc(x.basis)}</p>`).join('')}
+    <h2>6. 이 조사의 한계</h2><ul>${r.limits.map(l => `<li>${esc(l)}</li>`).join('')}</ul>
+    <h2>부록. 질문 가이드</h2><ul style="list-style:decimal">${p.questions.map(q => `<li>${esc(q.text)}</li>`).join('')}</ul>`;
+}
+function reportTab(host, p, ivs, rep) {
+  const included = ivs.filter(i => i.verdict === 'include');
+  const waiting = ivs.filter(i => (i.status === 'completed' || i.status === 'partial') && !i.verdict).length;
+  host.innerHTML = `<div class="card"><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <div><h2 style="margin:0">분석</h2><p class="sub" style="margin:0">검증에서 '분석에 포함'으로 판정한 <b>${included.length}명</b>을 분석합니다.${waiting ? ` 검증을 기다리는 인터뷰가 ${waiting}건 있습니다.` : ''}</p></div>
+      <div style="margin-left:auto;display:flex;gap:8px"><button class="btn coral" id="run"${included.length ? '' : ' disabled'}>${rep ? '다시 분석하기' : '분석하기'}</button>
+        ${rep ? '<button class="btn" id="docx">Word 파일 받기</button>' : ''}</div></div>
+      <p class="msg" id="runMsg">${rep ? `마지막 분석: ${fmtDate(rep.at)} · 참여자 ${rep.pids.length}명${rep.pids.length !== included.length ? ' · 그 뒤로 판정이 바뀌었습니다. 다시 분석해 주세요.' : ''}` : ''}</p></div>
+    ${rep?.report.unverified?.length ? `<div class="card"><h3>받아쓰기에서 찾지 못해 뺀 인용문 ${rep.report.unverified.length}개</h3><p class="sub" style="margin:0 0 6px;font-size:.88rem">AI가 고른 인용문을 받아쓰기와 한 글자씩 맞춰 봅니다. 맞지 않는 인용문은 보고서에서 뺐습니다.</p>
+      <ul style="margin-left:18px;font-size:.9rem">${rep.report.unverified.map(u => `<li>${esc(u.where)} · 참여자 ${u.pid}: ${esc(u.text)}</li>`).join('')}</ul></div>` : ''}
+    ${rep ? `<div class="card report">${reportHtml(p, rep)}</div>` : ''}`;
+  $('#run').onclick = async e => {
+    busy(e.target, true, 'AI가 분석하고 있어요…');
+    $('#runMsg').className = 'msg'; $('#runMsg').textContent = '인터뷰를 모두 읽고 씁니다. 1~3분 걸립니다. 창을 닫지 마세요.';
+    try { await api('admin.analyze', {id: p.id}); projectView(p.id, 'report'); }
+    catch (err) { $('#runMsg').className = 'msg err'; $('#runMsg').textContent = err.message; busy(e.target, false); }
+  };
+  if ($('#docx')) $('#docx').onclick = () => downloadDocx(p, rep);
+}
+
+// 보고서를 정해진 양식의 Word 파일로 만든다.
+async function downloadDocx(p, rep) {
+  if (!window.docx) return alert('Word 파일을 만드는 도구를 불러오지 못했어요. 새로고침한 뒤 다시 눌러 주세요.');
+  const {Document, Packer, Paragraph, TextRun, HeadingLevel, Table, TableRow, TableCell, WidthType, BorderStyle, AlignmentType} = docx;
+  const r = rep.report, s = rep.stats, FONT = '맑은 고딕';
+  const run = (text, o = {}) => new TextRun({text, font: FONT, size: 21, ...o});
+  const para = (text, o = {}) => new Paragraph({children: [run(text, o.run)], spacing: {after: 120, line: 340}, ...o.p});
+  const h1 = text => new Paragraph({children: [run(text, {bold: true, size: 28})], heading: HeadingLevel.HEADING_1, spacing: {before: 360, after: 160}, border: {bottom: {style: BorderStyle.SINGLE, size: 8, color: '1D1B2E'}}});
+  const h2 = (text, tail) => new Paragraph({children: [run(text, {bold: true, size: 23}), ...(tail ? [run('  ' + tail, {bold: true, size: 19, color: '34308A'})] : [])], heading: HeadingLevel.HEADING_2, spacing: {before: 240, after: 100}});
+  const quote = q => new Paragraph({children: [run(`"${q.text}"`, {size: 20}), run(`  참여자 ${q.pid}`, {size: 17, color: '8B889E'})], indent: {left: 360}, spacing: {after: 100, line: 320}, border: {left: {style: BorderStyle.SINGLE, size: 18, color: 'F26B4E', space: 8}}});
+  const bullet = text => new Paragraph({children: [run(text)], bullet: {level: 0}, spacing: {after: 80, line: 320}});
+  const cell = (text, w, bold) => new TableCell({width: {size: w, type: WidthType.PERCENTAGE}, margins: {top: 80, bottom: 80, left: 120, right: 120}, shading: bold ? {fill: 'ECEBFA'} : undefined, children: [new Paragraph({children: [run(text, {bold, size: 20})]})]});
+  const overview = new Table({width: {size: 100, type: WidthType.PERCENTAGE}, rows: [
+    ['조사 방법', `AI 진행자가 참여자와 1:1 음성 인터뷰를 했다. 담당 연구자${p.researcher ? `(${p.researcher})` : ''}가 인터뷰마다 녹음과 받아쓰기를 확인하고 분석에 넣을 자료를 골랐다.`],
+    ['조사 기간', `${fmtDay(s.from)} ~ ${fmtDay(s.to)}`],
+    ['참여 인원', `완료 ${s.completed}명, 중단 ${s.partial}명. 이 가운데 ${s.included}명을 분석했다${s.excluded ? `(검증에서 ${s.excluded}명 제외)` : ''}.`],
+    ['평균 시간', `${s.avgMin}분`],
+  ].map(([k, v]) => new TableRow({children: [cell(k, 22, true), cell(v, 78)]}))});
+  const body = [
+    new Paragraph({children: [run(`${p.title} 참여자 인터뷰 분석`, {bold: true, size: 36})], spacing: {after: 120}}),
+    new Paragraph({children: [run(`${p.org} · ${fmtDay(rep.at)}`, {color: '55526B'})], spacing: {after: 240}}),
+    h1('1. 조사 개요'), overview, para(''), para(r.summary),
+    h1('2. 핵심 발견'),
+    ...r.findings.flatMap((f, i) => [h2(`${i + 1}) ${f.title}`, `${s.included}명 중 ${f.count}명`), para(f.detail), ...f.quotes.map(quote)]),
+    h1('3. 질문별 정리'),
+    ...r.by_question.flatMap(b => [h2(`질문 ${b.q}. ${p.questions[b.q - 1]?.text || ''}`), para(b.overview),
+      ...b.themes.flatMap(t => [new Paragraph({children: [run(t.name, {bold: true}), run(`  ${t.count}명`, {bold: true, size: 19, color: '34308A'})], spacing: {before: 160, after: 60}}), para(t.detail), ...t.quotes.map(quote)])]),
+    h1('4. 눈여겨볼 목소리'),
+    ...(r.voices.length ? r.voices.map(x => bullet(`참여자 ${x.pid}: ${x.why}`)) : [para('따로 만나 볼 참여자를 꼽지 않았다.')]),
+    h1('5. 제언'),
+    ...r.recommendations.flatMap((x, i) => [h2(`${i + 1}) ${x.title}`), para(x.detail), para(`근거: ${x.basis}`, {run: {size: 19, color: '55526B'}})]),
+    h1('6. 이 조사의 한계'), ...r.limits.map(bullet),
+    h1('부록. 질문 가이드'), ...p.questions.map((q, i) => para(`${i + 1}. ${q.text}`)),
+  ];
+  const doc = new Document({styles: {default: {document: {run: {font: FONT, size: 21}}}}, sections: [{properties: {page: {margin: {top: 1440, bottom: 1440, left: 1300, right: 1300}}}, children: body}]});
+  const blob = await Packer.toBlob(doc);
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${p.title}_인터뷰분석_${new Date(rep.at).toISOString().slice(0, 10)}.docx`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+}
+
+/* ---------- 신청 · 설정 ---------- */
+async function leadsView() {
+  const {leads} = await api('admin.leads');
+  view.innerHTML = `<div class="head"><div><h1>신청</h1><p class="sub">견적 화면에서 남긴 연락처입니다.</p></div></div>
+    <div class="card">${leads.length ? `<div style="overflow:auto"><table><thead><tr><th>받은 때</th><th>기관</th><th>사업</th><th>담당자</th><th>연락처</th><th>선택</th><th>견적</th><th>메모</th></tr></thead><tbody>
+    ${leads.map(l => `<tr><td>${fmtDate(l.at)}</td><td>${esc(l.org)}</td><td>${esc(l.project)}</td><td>${esc(l.name)}</td><td>${esc(l.contact)}</td>
+      <td>${l.people}명${l.recruit ? ' · 섭외 대행' : ''}${l.payout ? ' · 지급 대행' : ''}</td><td>${won(l.total)}</td><td>${esc(l.note)}</td></tr>`).join('')}</tbody></table></div>` : '<p class="sub">아직 신청이 없습니다.</p>'}</div>`;
+}
+function settingsView() {
+  const s = SETTINGS.settings;
+  const num = (id, label, v, hint = '') => `<label class="field"><span>${label}${hint ? `<em>${hint}</em>` : ''}</span><input class="in" type="number" id="${id}" value="${v}"></label>`;
+  const txt = (id, label, v) => `<label class="field"><span>${label}</span><input class="in" id="${id}" value="${esc(v)}"></label>`;
+  view.innerHTML = `<div class="head"><div><h1>설정</h1><p class="sub">단가와 견적서 정보, 진행자 규칙입니다. 모든 사업에 적용됩니다.</p></div></div>
+    <div class="card"><h2>단가 (부가세 별도)</h2><div class="three">
+      ${num('s-unit', 'AI 인터뷰와 분석', s.price.unit, '인당')}${num('s-recruit', '섭외·연락 대행', s.price.recruit, '인당')}${num('s-payout', '사례 지급 대행', s.price.payout, '인당')}
+      ${num('s-min', '최소 인원', s.price.min)}${num('s-max', '최대 인원', s.price.max, '넘으면 문의')}</div></div>
+    <div class="card"><h2>견적서에 적는 공급자</h2><div class="two">
+      ${txt('s-name', '상호', s.supplier.name)}${txt('s-bizno', '사업자등록번호', s.supplier.bizno)}${txt('s-ceo', '대표자', s.supplier.ceo)}${txt('s-contact', '연락처', s.supplier.contact)}</div>
+      ${txt('s-addr', '주소', s.supplier.addr)}${txt('s-bank', '입금 계좌 (선택)', s.supplier.bank)}</div>
+    <div class="card"><h2>진행자 규칙</h2><div class="three">
+      ${num('s-minutes', '목표 시간(분)', s.rules.minutes, '3~14')}${num('s-followups', '꼬리 질문 최대', s.rules.followups, '질문마다')}${num('s-silence', '말 끝으로 보는 침묵(초)', s.rules.silenceSec, '2~8')}
+      <label class="field"><span>목소리</span><select class="in" id="s-voice">${SETTINGS.voices.map(v => `<option${v === s.rules.voice ? ' selected' : ''}>${v}</option>`).join('')}</select></label>
+      ${num('s-retain', '자료 보관(개월)', s.rules.retainMonths, '동의문에 표시')}</div>
+      <label class="field"><span>진행자가 늘 지킬 것<em>기본 규칙에 덧붙입니다</em></span><textarea class="in" id="s-extra" rows="4" placeholder="예: 사투리를 쓰는 참여자에게 표준어로 고쳐 되묻지 않는다.">${esc(s.rules.extra)}</textarea></label>
+      <p class="sub" style="font-size:.88rem">기본 규칙: 한 번에 하나만 묻기, 짧은 답에는 장면 묻기, 평가·유도 금지, 무관한 이야기는 한 번 받고 돌아오기, 마지막에 더 할 말 묻기.</p></div>
+    <div style="display:flex;gap:10px;align-items:center;margin-top:16px"><button class="btn" id="saveSet">저장</button><p class="msg" id="setMsg" style="margin:0"></p></div>`;
+  const n = id => Number($('#' + id).value), t = id => $('#' + id).value;
+  $('#saveSet').onclick = async e => {
+    busy(e.target, true, '저장 중…');
+    try {
+      const r = await api('admin.settings.save', {settings: {
+        price: {unit: n('s-unit'), recruit: n('s-recruit'), payout: n('s-payout'), min: n('s-min'), max: n('s-max')},
+        supplier: {name: t('s-name'), bizno: t('s-bizno'), ceo: t('s-ceo'), addr: t('s-addr'), contact: t('s-contact'), bank: t('s-bank')},
+        rules: {minutes: n('s-minutes'), followups: n('s-followups'), silenceSec: n('s-silence'), voice: t('s-voice'), retainMonths: n('s-retain'), extra: t('s-extra')},
+      }});
+      SETTINGS.settings = r.settings; $('#setMsg').className = 'msg'; $('#setMsg').textContent = '저장했습니다.';
+    } catch (err) { $('#setMsg').className = 'msg err'; $('#setMsg').textContent = err.message; }
+    busy(e.target, false);
+  };
+}
+
+if (LOCAL && !PASS) PASS = 'dev';   // 로컬 서버의 기본 비밀번호
+start();
+</script>
+</body>
+</html>
