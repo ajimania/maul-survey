@@ -4,14 +4,15 @@
 -- 구조:
 --   rv_docs   : 문서 한 가지 모양 (kind, id, parent, data jsonb)
 --               kind = project(사업) · interview(인터뷰) · turn(발화) · audio(녹음) · lead(신청) · settings(단가·규칙)
---   rv_config : 서버만 아는 비밀값 (store_secret)
+--   rv_config : 서버 비밀값의 SHA-256 (store_secret_sha256)
 --   RPC rv_get / rv_put / rv_list : 비밀값이 맞을 때만 동작
 --
 -- RLS는 전부 차단. 브라우저는 이 표에 직접 닿지 않고, Vercel 함수(api/real-voice.js)만 RPC를 부릅니다.
--- 비밀값은 이 파일에 적지 않습니다. 실행 후 아래 한 줄을 따로 실행해 넣고,
--- 같은 값을 Vercel 환경변수 RV_STORE_SECRET 에 넣습니다.
---   insert into public.rv_config (key, value) values ('store_secret', '여기에-긴-무작위-문자열')
+-- 비밀값은 이 파일에도 DB에도 적지 않습니다. DB에는 비밀값의 SHA-256 값만 넣습니다.
+-- 비밀값 자체는 Vercel 환경변수 RV_STORE_SECRET 에 있습니다. 실행 후 아래 한 줄을 따로 실행합니다.
+--   insert into public.rv_config (key, value) values ('store_secret_sha256', '비밀값의-sha256-16진수')
 --     on conflict (key) do update set value = excluded.value;
+--   (값 구하기: printf '%s' "비밀값" | shasum -a 256)
 
 create table if not exists public.rv_docs (
   kind       text not null,
@@ -37,7 +38,8 @@ language sql
 security definer
 set search_path = public
 as $$
-  select exists (select 1 from public.rv_config where key = 'store_secret' and value = p_secret and length(value) >= 24);
+  select exists (select 1 from public.rv_config
+    where key = 'store_secret_sha256' and value = encode(sha256(convert_to(coalesce(p_secret, ''), 'UTF8')), 'hex'));
 $$;
 
 create or replace function public.rv_get(p_secret text, p_kind text, p_id text)
